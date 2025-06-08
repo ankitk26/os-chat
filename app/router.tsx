@@ -5,6 +5,7 @@ export function createRouter() {
   const router = createTanStackRouter({
     routeTree,
     scrollRestoration: true,
+    defaultNotFoundComponent: () => <p>Not found...</p>,
   });
 
   return router;
