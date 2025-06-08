@@ -1,11 +1,12 @@
-import type { ReactNode } from "react";
 import {
-  Outlet,
   createRootRoute,
   HeadContent,
+  Outlet,
   Scripts,
 } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 import appCss from "~/styles.css?url";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -18,13 +19,26 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "TanStack Start Starter",
+        title: "os.chat | Open Source Chat Application",
       },
     ],
     links: [
       {
+        rel: "preconnect",
+        href: "https://fonts.googleapis.com",
+      },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+      },
+      {
         rel: "stylesheet",
         href: appCss,
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap",
       },
     ],
   }),
@@ -45,10 +59,17 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       <head>
         <HeadContent />
       </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
+      <NextThemesProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <body className="bg-sidebar">
+          <div className="bg-background/40">{children}</div>
+          <Scripts />
+        </body>
+      </NextThemesProvider>
     </html>
   );
 }
