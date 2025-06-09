@@ -122,7 +122,9 @@
   font-family: "Geist", sans-serif;
 }
 
+code,
+pre,
 .font-mono,
-code {
+code span {
   font-family: "Geist Mono", monospace;
 }
