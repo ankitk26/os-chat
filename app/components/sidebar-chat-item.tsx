@@ -1,6 +1,6 @@
 export default function SidebarChatItem() {
   return (
-    <div className="truncate text-sm py-2 px-4 rounded hover:bg-secondary cursor-pointer">
+    <div className="px-4 py-2 text-sm truncate rounded cursor-pointer hover:bg-secondary">
       Code for Knapsack
     </div>
   );

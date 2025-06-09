@@ -30,7 +30,7 @@ export default function UserPromptInput(props: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full rounded-tl-lg border dark:border-0 mx-auto max-w-3xl p-4 rounded-tr-lg min-h-32 flex flex-col bg-secondary"
+      className="flex flex-col w-full max-w-3xl p-4 mx-auto border rounded-tl-lg rounded-tr-lg dark:border-0 min-h-32 bg-secondary"
     >
       <div className="flex-1">
         <AutoResizeTextarea
@@ -42,7 +42,7 @@ export default function UserPromptInput(props: Props) {
       </div>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="font-semibold text-sm">Gemini Flash 2.0</div>
+          <div className="text-sm font-semibold">Gemini Flash 2.0</div>
           <Button size="sm" variant="outline">
             <PaperclipIcon />
             <span>Attach</span>

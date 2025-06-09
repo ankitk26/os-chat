@@ -10,8 +10,8 @@ export default function EmptyChatContent({ messages }: Props) {
   }
 
   return (
-    <div className="h-full flex flex-col max-w-3xl mx-auto w-full justify-center">
-      <h2 className="text-3xl font-semibold mb-2">Welcome Ankit</h2>
+    <div className="flex flex-col justify-center w-full h-full max-w-3xl mx-auto">
+      <h2 className="mb-2 text-3xl font-semibold">Welcome Ankit</h2>
       <p>Start a conversation by typing a message below.</p>
     </div>
   );

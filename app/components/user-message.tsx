@@ -13,7 +13,7 @@ export default function UserMessage({ message }: Props) {
   return (
     <div className="flex flex-col items-end">
       <div
-        className="bg-secondary max-w-3xl py-3 px-4 rounded-lg whitespace-pre-wrap"
+        className="max-w-3xl px-4 py-3 whitespace-pre-wrap rounded-lg bg-secondary"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >

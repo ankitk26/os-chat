@@ -1,5 +1,7 @@
+@import "katex/dist/katex.min.css";
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -112,7 +114,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50 selection:bg-primary/60 selection:text-primary-foreground tracking-wide;
+    @apply tracking-wide border-border outline-ring/50 selection:bg-primary/60 selection:text-primary-foreground;
   }
   body {
     @apply bg-background text-foreground;

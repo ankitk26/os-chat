@@ -27,17 +27,20 @@ export default function CodeHighlight({
 
   if (isInline) {
     return (
-      <code className="bg-secondary px-2 py-1 rounded text-sm">{children}</code>
+      <code className="px-2 py-1 text-sm rounded bg-secondary not-prose">
+        {children}
+      </code>
     );
   }
 
   return (
-    <div className="border dark:border-none rounded-lg">
-      <div className="bg-card-foreground/10 dark:bg-secondary flex items-center justify-between text-sm px-4 rounded-tr-lg rounded-tl-lg">
+    <div className="border rounded-lg dark:border-none">
+      <div className="flex items-center justify-between px-4 text-sm rounded-tl-lg rounded-tr-lg text-secondary-foreground bg-card-foreground/10 dark:bg-secondary">
         <span className="font-mono font-light">{language}</span>
         <div className="flex items-center gap-4">
           <Button
             size="icon"
+            className="dark:hover:bg-background/20"
             variant="ghost"
             onClick={async () => {
               setIsCodeWrapped((prev) => !prev);

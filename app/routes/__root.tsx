@@ -35,12 +35,16 @@ export const Route = createRootRoute({
       },
       {
         rel: "stylesheet",
-        href: appCss,
+        href: "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap",
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap",
+        href: appCss,
       },
+      // {
+      //   rel: "stylesheet",
+      //   href: katexCss,
+      // },
     ],
   }),
   component: RootComponent,
@@ -66,7 +70,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         enableSystem
         disableTransitionOnChange
       >
-        <body className="bg-card text-foreground/70 dark:text-foreground/70">
+        <body className="leading-6 bg-card text-foreground/70 dark:text-foreground/70">
           <div>{children}</div>
           <Toaster duration={800} />
           <Scripts />
