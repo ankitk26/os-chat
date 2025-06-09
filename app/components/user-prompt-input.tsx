@@ -30,7 +30,7 @@ export default function UserPromptInput(props: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full rounded-tl-lg p-4 rounded-tr-lg min-h-32 flex flex-col bg-secondary"
+      className="w-full rounded-tl-lg border dark:border-0 mx-auto max-w-3xl p-4 rounded-tr-lg min-h-32 flex flex-col bg-secondary"
     >
       <div className="flex-1">
         <AutoResizeTextarea

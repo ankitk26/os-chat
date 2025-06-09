@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-router";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type { ReactNode } from "react";
+import { Toaster } from "~/components/ui/sonner";
 import appCss from "~/styles.css?url";
 
 export const Route = createRootRoute({
@@ -65,8 +66,9 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         enableSystem
         disableTransitionOnChange
       >
-        <body className="bg-card">
+        <body className="bg-card text-foreground/70 dark:text-foreground/70">
           <div>{children}</div>
+          <Toaster duration={800} />
           <Scripts />
         </body>
       </NextThemesProvider>

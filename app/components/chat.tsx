@@ -7,21 +7,26 @@ import { ScrollArea } from "./ui/scroll-area";
 import UserPromptInput from "./user-prompt-input";
 
 export default function Chat() {
-  const { messages, input, status, handleSubmit, setInput, stop } = useChat();
+  const { messages, input, status, handleSubmit, setInput, stop } = useChat({
+    onResponse: () => scrollToBottom(),
+  });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
   };
 
   return (
-    <div className="flex flex-col max-h-svh h-[calc(100svh-17px)] max-w-4xl w-full mx-auto">
+    <div className="flex flex-col max-h-svh h-[calc(100svh-17px)] w-full mx-auto">
       <div className="flex-1 overflow-hidden">
         <EmptyChatContent messages={messages} />
-        <ScrollArea className="h-full">
-          <ChatMessages messages={messages} />
-          <ChatLoadingIndicator status={status} />
+
+        <ScrollArea className="h-full w-full">
+          <div className="w-full max-w-3xl h-full mx-auto">
+            <ChatMessages messages={messages} />
+            <ChatLoadingIndicator status={status} />
+            <div ref={messagesEndRef} />
+          </div>
         </ScrollArea>
       </div>
 

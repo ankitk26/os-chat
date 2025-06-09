@@ -15,7 +15,7 @@ const ChatMessages = memo(function ChatMessages({ messages }: Props) {
   return (
     <div className="my-8 space-y-16">
       {messages.map((message) => (
-        <div key={message.id} className="space-y-2">
+        <div key={message.id} className="space-y-8">
           <div>
             {message.role === "user" ? (
               <UserMessage message={message.content} />
