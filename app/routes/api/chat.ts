@@ -10,9 +10,9 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
     const result = streamText({
       model: google("gemini-2.0-flash"),
       messages,
-      // experimental_transform: smoothStream({
-      //   chunking: "word",
-      // }),
+      experimental_transform: smoothStream({
+        chunking: "word",
+      }),
     });
     return result.toDataStreamResponse();
   },

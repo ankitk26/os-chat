@@ -1,14 +1,13 @@
 import { useChat } from "@ai-sdk/react";
 import { useRef } from "react";
+import ChatLoadingIndicator from "./chat-loading-indicator";
+import ChatMessages from "./chat-messages";
 import EmptyChatContent from "./empty-chat-content";
 import { ScrollArea } from "./ui/scroll-area";
 import UserPromptInput from "./user-prompt-input";
-import ChatMessages from "./chat-messages";
-import ChatLoadingIndicator from "./chat-loading-indicator";
 
 export default function Chat() {
-  const { messages, input, handleInputChange, status, handleSubmit } =
-    useChat();
+  const { messages, input, status, handleSubmit, setInput } = useChat();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -17,7 +16,7 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-17px)] max-w-4xl w-full mx-auto">
+    <div className="flex flex-col max-h-svh h-[calc(100svh-17px)] max-w-4xl w-full mx-auto">
       <div className="flex-1 overflow-hidden">
         <EmptyChatContent messages={messages} />
         <ScrollArea className="h-full">
@@ -26,10 +25,10 @@ export default function Chat() {
         </ScrollArea>
       </div>
 
-      <div className="sticky bottom-0 w-full">
+      <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <UserPromptInput
           input={input}
-          handleInputChange={handleInputChange}
+          setInput={setInput}
           handleSubmit={handleSubmit}
         />
       </div>

@@ -11,8 +11,10 @@ function RouteComponent() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div className="border-t border-l rounded-tl-lg bg-background/40 w-full mt-4">
-        <Chat />
+      <div className="w-full">
+        <div className="border-t border-l rounded-tl-lg bg-background/40 w-full mt-4">
+          <Chat />
+        </div>
       </div>
     </SidebarProvider>
   );

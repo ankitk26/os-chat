@@ -1,14 +1,12 @@
-import { ChatRequestOptions } from "ai";
+import type { ChatRequestOptions } from "ai";
 import { PaperclipIcon, SendIcon } from "lucide-react";
+import type React from "react";
+import { AutoResizeTextarea } from "./auto-resize-textarea";
 import { Button } from "./ui/button";
 
 type Props = {
   input: string;
-  handleInputChange: (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
-  ) => void;
+  setInput: React.Dispatch<React.SetStateAction<string>>;
   handleSubmit: (
     event?: {
       preventDefault?: () => void;
@@ -20,19 +18,26 @@ type Props = {
 export default function UserPromptInput({
   input,
   handleSubmit,
-  handleInputChange,
+  setInput,
 }: Props) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>);
+    }
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full rounded-tl-lg p-4 rounded-tr-lg h-32 flex flex-col bg-input/40"
+      className="w-full rounded-tl-lg p-4 rounded-tr-lg min-h-32 flex flex-col bg-input/40"
     >
       <div className="flex-1">
-        <input
+        <AutoResizeTextarea
           value={input}
-          placeholder="Ask here..."
-          onChange={handleInputChange}
-          className="resize-none focus:outline-none w-full"
+          placeholder="Start the conversation..."
+          onChange={(val) => setInput(val)}
+          onKeyDown={handleKeyDown}
         />
       </div>
       <div className="flex items-center justify-between">

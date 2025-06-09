@@ -13,7 +13,7 @@ export default function ChatMessages({ messages }: Props) {
   }
 
   return (
-    <div className="mt-8 space-y-16">
+    <div className="my-8 space-y-16">
       {messages.map((m) => (
         <div key={m.id} className="space-y-2">
           <div>
