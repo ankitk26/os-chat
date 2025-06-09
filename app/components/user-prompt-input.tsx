@@ -1,5 +1,5 @@
 import type { ChatRequestOptions } from "ai";
-import { PaperclipIcon, SendIcon } from "lucide-react";
+import { PaperclipIcon, SendIcon, SquareIcon } from "lucide-react";
 import type React from "react";
 import { AutoResizeTextarea } from "./auto-resize-textarea";
 import { Button } from "./ui/button";
@@ -13,13 +13,13 @@ type Props = {
     },
     chatRequestOptions?: ChatRequestOptions
   ) => void;
+  status: "submitted" | "streaming" | "ready" | "error";
+  stop: () => void;
 };
 
-export default function UserPromptInput({
-  input,
-  handleSubmit,
-  setInput,
-}: Props) {
+export default function UserPromptInput(props: Props) {
+  const { input, handleSubmit, setInput, status, stop } = props;
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -48,9 +48,15 @@ export default function UserPromptInput({
             <span>Attach</span>
           </Button>
         </div>
-        <Button size="icon" type="submit" className="size-9">
-          <SendIcon />
-        </Button>
+        {status === "streaming" || status === "submitted" ? (
+          <Button size="icon" type="submit" className="size-9" onClick={stop}>
+            <SquareIcon />
+          </Button>
+        ) : (
+          <Button size="icon" type="submit" className="size-9">
+            <SendIcon />
+          </Button>
+        )}
       </div>
     </form>
   );

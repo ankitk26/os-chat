@@ -7,7 +7,7 @@ import { ScrollArea } from "./ui/scroll-area";
 import UserPromptInput from "./user-prompt-input";
 
 export default function Chat() {
-  const { messages, input, status, handleSubmit, setInput } = useChat();
+  const { messages, input, status, handleSubmit, setInput, stop } = useChat();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -30,6 +30,8 @@ export default function Chat() {
           input={input}
           setInput={setInput}
           handleSubmit={handleSubmit}
+          stop={stop}
+          status={status}
         />
       </div>
     </div>
