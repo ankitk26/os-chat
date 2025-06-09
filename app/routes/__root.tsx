@@ -4,9 +4,9 @@ import {
   Outlet,
   Scripts,
 } from "@tanstack/react-router";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type { ReactNode } from "react";
 import appCss from "~/styles.css?url";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -65,8 +65,8 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         enableSystem
         disableTransitionOnChange
       >
-        <body className="bg-sidebar">
-          <div className="bg-background/40">{children}</div>
+        <body className="bg-card">
+          <div>{children}</div>
           <Scripts />
         </body>
       </NextThemesProvider>

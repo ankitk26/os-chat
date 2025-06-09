@@ -40,6 +40,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
+
 :root {
   --radius: 0.65rem;
   --background: oklch(1 0 0);
@@ -82,7 +83,7 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.21 0.006 285.885);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.52 0.2 4);
+  --primary: oklch(0.645 0.246 16.439);
   --primary-foreground: oklch(0.969 0.015 12.422);
   --secondary: oklch(0.274 0.006 286.033);
   --secondary-foreground: oklch(0.985 0 0);

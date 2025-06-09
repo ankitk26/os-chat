@@ -25,7 +25,7 @@ export default function Chat() {
         </ScrollArea>
       </div>
 
-      <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="backdrop-blur">
         <UserPromptInput
           input={input}
           setInput={setInput}
