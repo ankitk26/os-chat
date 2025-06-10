@@ -1,8 +1,19 @@
 import type { ChatRequestOptions } from "ai";
 import { PaperclipIcon, SendIcon, SquareIcon } from "lucide-react";
 import type React from "react";
+import { modelProviders } from "~/constants/model-providers";
+import { useModelStore } from "~/stores/model-store";
 import { AutoResizeTextarea } from "./auto-resize-textarea";
 import { Button } from "./ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 type Props = {
   input: string;
@@ -19,6 +30,7 @@ type Props = {
 
 export default function UserPromptInput(props: Props) {
   const { input, handleSubmit, setInput, status, stop } = props;
+  const { model, setModel } = useModelStore();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -42,7 +54,21 @@ export default function UserPromptInput(props: Props) {
       </div>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="text-sm font-semibold">Gemini Flash 2.0</div>
+          <Select value={model} onValueChange={(val) => setModel(val)}>
+            <SelectTrigger className="shadow-none dark:border-0 hover:bg-card">
+              <SelectValue placeholder="Select model" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Gemini</SelectLabel>
+                {modelProviders.map((model) => (
+                  <SelectItem key={model.modelId} value={model.modelId}>
+                    {model.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
           <Button size="sm" variant="outline">
             <PaperclipIcon />
             <span>Attach</span>

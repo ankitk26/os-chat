@@ -5,9 +5,13 @@ import ChatMessages from "./chat-messages";
 import EmptyChatContent from "./empty-chat-content";
 import { ScrollArea } from "./ui/scroll-area";
 import UserPromptInput from "./user-prompt-input";
+import { useModelStore } from "~/stores/model-store";
 
 export default function Chat() {
-  const { messages, input, status, handleSubmit, setInput, stop } = useChat();
+  const model = useModelStore((store) => store.model);
+  const { messages, input, status, handleSubmit, setInput, stop } = useChat({
+    body: { model },
+  });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollToBottom = () => {
