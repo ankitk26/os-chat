@@ -9,9 +9,10 @@ import { useModelStore } from "~/stores/model-store";
 
 export default function Chat() {
   const model = useModelStore((store) => store.model);
-  const { messages, input, status, handleSubmit, setInput, stop } = useChat({
-    body: { model },
-  });
+  const { messages, input, status, handleSubmit, setInput, stop, reload } =
+    useChat({
+      body: { model },
+    });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollToBottom = () => {
@@ -25,7 +26,7 @@ export default function Chat() {
 
         <ScrollArea className="w-full h-full">
           <div className="w-full h-full max-w-3xl mx-auto">
-            <ChatMessages messages={messages} />
+            <ChatMessages messages={messages} reload={reload} />
             <ChatLoadingIndicator status={status} />
             <div ref={messagesEndRef} />
           </div>

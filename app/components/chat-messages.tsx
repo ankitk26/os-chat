@@ -1,13 +1,16 @@
-import { UIMessage } from "ai";
+import { ChatRequestOptions, UIMessage } from "ai";
 import { memo } from "react";
 import AssistantMessage from "./assistant-message";
 import UserMessage from "./user-message";
 
 type Props = {
   messages: UIMessage[];
+  reload: (
+    chatRequestOptions?: ChatRequestOptions
+  ) => Promise<string | null | undefined>;
 };
 
-const ChatMessages = memo(function ChatMessages({ messages }: Props) {
+const ChatMessages = memo(function ChatMessages({ messages, reload }: Props) {
   if (messages.length === 0) {
     return null;
   }
@@ -19,7 +22,7 @@ const ChatMessages = memo(function ChatMessages({ messages }: Props) {
           {message.role === "user" ? (
             <UserMessage message={message.content} />
           ) : (
-            <AssistantMessage message={message.content} />
+            <AssistantMessage message={message.content} reload={reload} />
           )}
         </div>
       ))}

@@ -1,5 +1,10 @@
 import type { ChatRequestOptions } from "ai";
-import { PaperclipIcon, SendIcon, SquareIcon } from "lucide-react";
+import {
+  CrosshairIcon,
+  PaperclipIcon,
+  SendIcon,
+  SquareIcon,
+} from "lucide-react";
 import type React from "react";
 import { modelProviders } from "~/constants/model-providers";
 import { useModelStore } from "~/stores/model-store";
@@ -42,7 +47,7 @@ export default function UserPromptInput(props: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col w-full max-w-3xl p-4 mx-auto border rounded-tl-lg rounded-tr-lg dark:border-0 min-h-32 bg-secondary"
+      className="flex flex-col w-full max-w-3xl p-4 mx-auto border rounded-tl-lg rounded-tr-lg dark:border-0 min-h-32 bg-card"
     >
       <div className="flex-1">
         <AutoResizeTextarea
@@ -55,14 +60,21 @@ export default function UserPromptInput(props: Props) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Select value={model} onValueChange={(val) => setModel(val)}>
-            <SelectTrigger className="shadow-none dark:border-0 hover:bg-card">
+            <SelectTrigger className="font-medium shadow-none hover:bg-accent dark:border-0 dark:bg-transparent">
               <SelectValue placeholder="Select model" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Gemini</SelectLabel>
+                <SelectLabel className="flex items-center gap-2 py-3 text-sm">
+                  <CrosshairIcon className="size-4" />
+                  <span>Gemini</span>
+                </SelectLabel>
                 {modelProviders.map((model) => (
-                  <SelectItem key={model.modelId} value={model.modelId}>
+                  <SelectItem
+                    className="py-3"
+                    key={model.modelId}
+                    value={model.modelId}
+                  >
                     {model.name}
                   </SelectItem>
                 ))}

@@ -4,10 +4,6 @@ export const modelProviders = [
     modelId: "gemini-2.0-flash",
   },
   {
-    name: "Gemini 2.0 Flash (Thinking)",
-    modelId: "gemini-2.0-flash-thinking-exp-01-21",
-  },
-  {
     name: "Gemini 2.5 Flash (Preview)",
     modelId: "gemini-2.5-flash-preview-04-17",
   },
