@@ -4,7 +4,11 @@ import { Message, smoothStream, streamText } from "ai";
 
 export const APIRoute = createAPIFileRoute("/api/chat")({
   POST: async ({ request }) => {
-    const { messages, model }: { messages: Message[]; model: string } =
+    const {
+      messages,
+      model,
+      isWebSearchEnabled,
+    }: { messages: Message[]; model: string; isWebSearchEnabled: boolean } =
       await request.json();
 
     const systemMessage =
@@ -16,7 +20,9 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
       "- Use correct LaTeX for symbols (e.g., \\frac, \\sqrt, \\degree).";
 
     const result = streamText({
-      model: google(model),
+      model: google(model, {
+        useSearchGrounding: isWebSearchEnabled,
+      }),
       system: systemMessage,
       messages,
       experimental_transform: smoothStream({

@@ -1,12 +1,14 @@
 import type { ChatRequestOptions } from "ai";
 import {
   CrosshairIcon,
+  GlobeIcon,
   PaperclipIcon,
   SendIcon,
   SquareIcon,
 } from "lucide-react";
 import type React from "react";
 import { modelProviders } from "~/constants/model-providers";
+import { cn } from "~/lib/utils";
 import { useModelStore } from "~/stores/model-store";
 import { AutoResizeTextarea } from "./auto-resize-textarea";
 import { Button } from "./ui/button";
@@ -36,11 +38,18 @@ type Props = {
 export default function UserPromptInput(props: Props) {
   const { input, handleSubmit, setInput, status, stop } = props;
   const { model, setModel } = useModelStore();
+  const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
+  const toggleIsWebSearch = useModelStore((store) => store.toggleIsWebSearch);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>);
+      handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>, {
+        body: {
+          model,
+          isWebSearchEnabled,
+        },
+      });
     }
   };
 
@@ -81,7 +90,16 @@ export default function UserPromptInput(props: Props) {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <Button size="sm" variant="outline">
+          <Button
+            size="sm"
+            variant={isWebSearchEnabled ? "default" : "outline"}
+            className={cn("rounded-full", isWebSearchEnabled ? "border" : "")}
+            onClick={toggleIsWebSearch}
+          >
+            <GlobeIcon />
+            <span>Search</span>
+          </Button>
+          <Button size="sm" variant="outline" className="rounded-full">
             <PaperclipIcon />
             <span>Attach</span>
           </Button>
