@@ -1,3 +1,9 @@
 {
-  "typescript.preferences.autoImportFileExcludePatterns": ["**/radix-ui/**"]
+  "typescript.preferences.autoImportFileExcludePatterns": ["**/radix-ui/**"],
+  "search.exclude": {
+    "**/.git": true,
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/tmp": true
+  }
 }

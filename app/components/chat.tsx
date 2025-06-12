@@ -16,7 +16,7 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-col max-h-svh h-[calc(100svh-17px)] w-full mx-auto">
+    <div className="flex flex-col w-full mx-auto max-h-svh h-svh">
       <div className="flex-1 overflow-hidden">
         <EmptyChatContent messages={messages} />
 

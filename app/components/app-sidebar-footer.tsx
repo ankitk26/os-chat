@@ -19,10 +19,10 @@ export default function AppSidebarFooter() {
   }
 
   return (
-    <SidebarFooter>
+    <SidebarFooter className="border-t border-border/50">
       <Link
         to="/settings"
-        className="flex items-center justify-start gap-2 px-4 py-2 m-4 rounded cursor-pointer hover:bg-secondary"
+        className="flex items-center justify-start gap-4 px-4 py-2 m-4 text-sm rounded cursor-pointer hover:bg-secondary"
       >
         <Avatar>
           <AvatarImage src={user?.user.image || ""} alt={user?.user.name[0]} />

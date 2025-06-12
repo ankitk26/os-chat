@@ -1,26 +1,11 @@
 import type { ChatRequestOptions } from "ai";
-import {
-  CrosshairIcon,
-  GlobeIcon,
-  PaperclipIcon,
-  SendIcon,
-  SquareIcon,
-} from "lucide-react";
+import { GlobeIcon, PaperclipIcon, SendIcon, SquareIcon } from "lucide-react";
 import type React from "react";
-import { modelProviders } from "~/constants/model-providers";
 import { cn } from "~/lib/utils";
 import { useModelStore } from "~/stores/model-store";
 import { AutoResizeTextarea } from "./auto-resize-textarea";
+import ModelSelector from "./model-selector";
 import { Button } from "./ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
 
 type Props = {
   input: string;
@@ -37,7 +22,7 @@ type Props = {
 
 export default function UserPromptInput(props: Props) {
   const { input, handleSubmit, setInput, status, stop } = props;
-  const { model, setModel } = useModelStore();
+  const model = useModelStore((store) => store.model);
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
   const toggleIsWebSearch = useModelStore((store) => store.toggleIsWebSearch);
 
@@ -56,7 +41,7 @@ export default function UserPromptInput(props: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col w-full max-w-3xl p-4 mx-auto border rounded-tl-lg rounded-tr-lg dark:border-0 min-h-32 bg-card"
+      className="flex flex-col w-full max-w-3xl p-4 mx-auto border rounded-tl-lg rounded-tr-lg border-border/50 min-h-32 bg-card"
     >
       <div className="flex-1">
         <AutoResizeTextarea
@@ -68,28 +53,7 @@ export default function UserPromptInput(props: Props) {
       </div>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Select value={model} onValueChange={(val) => setModel(val)}>
-            <SelectTrigger className="font-medium shadow-none hover:bg-accent dark:border-0 dark:bg-transparent">
-              <SelectValue placeholder="Select model" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel className="flex items-center gap-2 py-3 text-sm">
-                  <CrosshairIcon className="size-4" />
-                  <span>Gemini</span>
-                </SelectLabel>
-                {modelProviders.map((model) => (
-                  <SelectItem
-                    className="py-3"
-                    key={model.modelId}
-                    value={model.modelId}
-                  >
-                    {model.name}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <ModelSelector />
           <Button
             type="button"
             size="sm"

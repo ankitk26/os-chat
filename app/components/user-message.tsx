@@ -15,7 +15,7 @@ export default React.memo(function UserMessage({ message }: Props) {
   return (
     <div className="flex flex-col items-end space-y-1">
       <div
-        className="flex flex-col gap-6 px-4 py-6 whitespace-pre-wrap border bg-card rounded-xl"
+        className="flex flex-col gap-6 px-4 py-4 whitespace-pre-wrap border bg-card rounded-xl"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >

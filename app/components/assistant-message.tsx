@@ -1,25 +1,15 @@
 import { ChatRequestOptions } from "ai";
-import { CopyIcon, RefreshCcwIcon } from "lucide-react";
+import { CopyIcon } from "lucide-react";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import { toast } from "sonner";
-import { modelProviders } from "~/constants/model-providers";
 import { cn } from "~/lib/utils";
 import CodeHighlight from "./code-highlight";
+import RetryModelDropdown from "./retry-model-dropdown";
 import { Button } from "./ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuPortal,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
@@ -45,6 +35,7 @@ export default React.memo(function AssistantMessage({
           }}
         />
       </div>
+
       <div className={cn("flex transition-opacity duration-200")}>
         <Tooltip>
           <TooltipTrigger>
@@ -62,37 +53,7 @@ export default React.memo(function AssistantMessage({
           <TooltipContent>Copy to clipboard</TooltipContent>
         </Tooltip>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button size="icon" variant="ghost">
-                  <RefreshCcwIcon />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Retry message</TooltipContent>
-            </Tooltip>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger>Gemini</DropdownMenuSubTrigger>
-              <DropdownMenuPortal>
-                <DropdownMenuSubContent>
-                  {modelProviders.map((model) => (
-                    <DropdownMenuItem
-                      key={model.modelId}
-                      onClick={() => {
-                        reload({ body: { model: model.modelId } });
-                      }}
-                    >
-                      {model.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuSubContent>
-              </DropdownMenuPortal>
-            </DropdownMenuSub>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <RetryModelDropdown reload={reload} />
       </div>
     </>
   );

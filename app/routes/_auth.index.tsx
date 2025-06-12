@@ -12,7 +12,7 @@ function RouteComponent() {
     <SidebarProvider>
       <AppSidebar />
       <div className="w-full bg-card">
-        <div className="w-full mt-4 border-t border-l rounded-tl-lg bg-background/60">
+        <div className="w-full border-l border-l-border/50">
           <Chat />
         </div>
       </div>
