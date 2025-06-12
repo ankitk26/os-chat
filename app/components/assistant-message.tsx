@@ -1,5 +1,6 @@
 import { ChatRequestOptions } from "ai";
 import { CopyIcon, RefreshCcwIcon } from "lucide-react";
+import React from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
@@ -28,7 +29,10 @@ type Props = {
   ) => Promise<string | null | undefined>;
 };
 
-export default function AssistantMessage({ message, reload }: Props) {
+export default React.memo(function AssistantMessage({
+  message,
+  reload,
+}: Props) {
   return (
     <>
       <div className="leading-6 prose prose-neutral dark:prose-invert prose-rose prose-pre:bg-transparent prose-pre:m-0 prose-pre:p-0">
@@ -92,4 +96,4 @@ export default function AssistantMessage({ message, reload }: Props) {
       </div>
     </>
   );
-}
+});

@@ -10,7 +10,7 @@ type Props = {
   ) => Promise<string | null | undefined>;
 };
 
-const ChatMessages = memo(function ChatMessages({ messages, reload }: Props) {
+export default memo(function ChatMessages({ messages, reload }: Props) {
   if (messages.length === 0) {
     return null;
   }
@@ -29,5 +29,3 @@ const ChatMessages = memo(function ChatMessages({ messages, reload }: Props) {
     </div>
   );
 });
-
-export default ChatMessages;

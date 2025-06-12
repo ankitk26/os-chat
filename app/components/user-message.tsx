@@ -1,5 +1,5 @@
 import { CopyIcon, Edit2Icon, RefreshCcwIcon } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 import { cn } from "~/lib/utils";
 import { Button } from "./ui/button";
@@ -9,13 +9,13 @@ type Props = {
   message: string;
 };
 
-export default function UserMessage({ message }: Props) {
+export default React.memo(function UserMessage({ message }: Props) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div className="flex flex-col items-end space-y-1">
       <div
-        className="max-w-3xl px-4 py-3 whitespace-pre-wrap rounded-lg bg-primary/20 dark:bg-card"
+        className="flex flex-col gap-6 px-4 py-6 whitespace-pre-wrap border bg-card rounded-xl"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -63,4 +63,4 @@ export default function UserMessage({ message }: Props) {
       </div>
     </div>
   );
-}
+});

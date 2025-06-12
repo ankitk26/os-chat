@@ -91,6 +91,7 @@ export default function UserPromptInput(props: Props) {
             </SelectContent>
           </Select>
           <Button
+            type="button"
             size="sm"
             variant={isWebSearchEnabled ? "default" : "outline"}
             className={cn("rounded-full", isWebSearchEnabled ? "border" : "")}
@@ -99,7 +100,12 @@ export default function UserPromptInput(props: Props) {
             <GlobeIcon />
             <span>Search</span>
           </Button>
-          <Button size="sm" variant="outline" className="rounded-full">
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            className="rounded-full"
+          >
             <PaperclipIcon />
             <span>Attach</span>
           </Button>
