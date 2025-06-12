@@ -11,60 +11,123 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
+import { Route as LoginImport } from './routes/login'
+import { Route as AuthImport } from './routes/_auth'
+import { Route as AuthIndexImport } from './routes/_auth.index'
+import { Route as AuthSettingsImport } from './routes/_auth.settings'
 
 // Create/Update Routes
 
-const IndexRoute = IndexImport.update({
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthRoute = AuthImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthIndexRoute = AuthIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthSettingsRoute = AuthSettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/_auth/settings': {
+      id: '/_auth/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthSettingsImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/': {
+      id: '/_auth/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthIndexImport
+      parentRoute: typeof AuthImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AuthRouteChildren {
+  AuthSettingsRoute: typeof AuthSettingsRoute
+  AuthIndexRoute: typeof AuthIndexRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthSettingsRoute: AuthSettingsRoute,
+  AuthIndexRoute: AuthIndexRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '': typeof AuthRouteWithChildren
+  '/login': typeof LoginRoute
+  '/settings': typeof AuthSettingsRoute
+  '/': typeof AuthIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/settings': typeof AuthSettingsRoute
+  '/': typeof AuthIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
+  '/_auth': typeof AuthRouteWithChildren
+  '/login': typeof LoginRoute
+  '/_auth/settings': typeof AuthSettingsRoute
+  '/_auth/': typeof AuthIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '' | '/login' | '/settings' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/login' | '/settings' | '/'
+  id: '__root__' | '/_auth' | '/login' | '/_auth/settings' | '/_auth/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRouteWithChildren
+  LoginRoute: typeof LoginRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AuthRoute: AuthRouteWithChildren,
+  LoginRoute: LoginRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +140,27 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/_auth",
+        "/login"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_auth": {
+      "filePath": "_auth.tsx",
+      "children": [
+        "/_auth/settings",
+        "/_auth/"
+      ]
+    },
+    "/login": {
+      "filePath": "login.tsx"
+    },
+    "/_auth/settings": {
+      "filePath": "_auth.settings.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/": {
+      "filePath": "_auth.index.tsx",
+      "parent": "/_auth"
     }
   }
 }

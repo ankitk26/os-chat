@@ -3,7 +3,7 @@ import { AppSidebar } from "~/components/app-sidebar";
 import Chat from "~/components/chat";
 import { SidebarProvider } from "~/components/ui/sidebar";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_auth/")({
   component: RouteComponent,
 });
 

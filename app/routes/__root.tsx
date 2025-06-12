@@ -1,5 +1,6 @@
+import type { QueryClient } from "@tanstack/react-query";
 import {
-  createRootRoute,
+  createRootRouteWithContext,
   HeadContent,
   Outlet,
   Scripts,
@@ -9,46 +10,48 @@ import type { ReactNode } from "react";
 import { Toaster } from "~/components/ui/sonner";
 import appCss from "~/styles.css?url";
 
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      {
-        charSet: "utf-8",
-      },
-      {
-        name: "viewport",
-        content: "width=device-width, initial-scale=1",
-      },
-      {
-        title: "os.chat | Open Source Chat Application",
-      },
-    ],
-    links: [
-      {
-        rel: "preconnect",
-        href: "https://fonts.googleapis.com",
-      },
-      {
-        rel: "preconnect",
-        href: "https://fonts.gstatic.com",
-        crossOrigin: "anonymous",
-      },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap",
-      },
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
-      // {
-      //   rel: "stylesheet",
-      //   href: katexCss,
-      // },
-    ],
-  }),
-  component: RootComponent,
-});
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
+  {
+    head: () => ({
+      meta: [
+        {
+          charSet: "utf-8",
+        },
+        {
+          name: "viewport",
+          content: "width=device-width, initial-scale=1",
+        },
+        {
+          title: "os.chat | Open Source Chat Application",
+        },
+      ],
+      links: [
+        {
+          rel: "preconnect",
+          href: "https://fonts.googleapis.com",
+        },
+        {
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossOrigin: "anonymous",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap",
+        },
+        {
+          rel: "stylesheet",
+          href: appCss,
+        },
+        // {
+        //   rel: "stylesheet",
+        //   href: katexCss,
+        // },
+      ],
+    }),
+    component: RootComponent,
+  }
+);
 
 function RootComponent() {
   return (
