@@ -17,6 +17,9 @@ importers:
       '@better-auth-kit/convex':
         specifier: ^1.2.2
         version: 1.2.2(better-auth@1.2.9)(convex@1.24.8(react@19.1.0))(typescript@5.8.3)
+      '@convex-dev/react-query':
+        specifier: 0.0.0-alpha.8
+        version: 0.0.0-alpha.8(@tanstack/react-query@5.80.7(react@19.1.0))(convex@1.24.8(react@19.1.0))
       '@tailwindcss/postcss':
         specifier: ^4.1.8
         version: 4.1.8
@@ -95,6 +98,9 @@ importers:
       tailwindcss:
         specifier: ^4.1.8
         version: 4.1.8
+      uuidv7:
+        specifier: ^1.0.2
+        version: 1.0.2
       vinxi:
         specifier: ^0.5.6
         version: 0.5.6(@types/node@22.15.30)(db0@0.3.2)(ioredis@5.6.1)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.41.0)(tsx@4.19.4)
@@ -287,6 +293,12 @@ packages:
   '@colors/colors@1.6.0':
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
     engines: {node: '>=0.1.90'}
+
+  '@convex-dev/react-query@0.0.0-alpha.8':
+    resolution: {integrity: sha512-Rv/q7/CplU75f7ckBd2vh+HoeeQ0tOrjwMl14Hk7D/03e55oUIU0TV5JYYzC79ZQyyAtoj7CmCo5ZxcmtKNv1Q==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.0.0
+      convex: ^1.17.0
 
   '@dabh/diagnostics@2.0.3':
     resolution: {integrity: sha512-hrlQOIi7hAfzsMqlGSFyVucrx38O+j6wiGOf//H2ecvIEqYN4ADBSS2iLMh5UFyDunCNniUIPk/q3riFv45xRA==}
@@ -5110,6 +5122,10 @@ packages:
     resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
     hasBin: true
 
+  uuidv7@1.0.2:
+    resolution: {integrity: sha512-8JQkH4ooXnm1JCIhqTMbtmdnYEn6oKukBxHn1Ic9878jMkL7daTI7anTExfY18VRCX7tcdn5quzvCb6EWrR8PA==}
+    hasBin: true
+
   validate-npm-package-license@3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
 
@@ -5534,6 +5550,11 @@ snapshots:
       mime: 3.0.0
 
   '@colors/colors@1.6.0': {}
+
+  '@convex-dev/react-query@0.0.0-alpha.8(@tanstack/react-query@5.80.7(react@19.1.0))(convex@1.24.8(react@19.1.0))':
+    dependencies:
+      '@tanstack/react-query': 5.80.7(react@19.1.0)
+      convex: 1.24.8(react@19.1.0)
 
   '@dabh/diagnostics@2.0.3':
     dependencies:
@@ -11191,6 +11212,8 @@ snapshots:
   util-deprecate@1.0.2: {}
 
   uuid@11.1.0: {}
+
+  uuidv7@1.0.2: {}
 
   validate-npm-package-license@3.0.4:
     dependencies:
