@@ -1,6 +1,6 @@
-import { AlignLeftIcon, CopyIcon, WrapTextIcon } from "lucide-react";
+import { CopyIcon } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import ShikiHighlighter, { isInlineCode, type Element } from "react-shiki";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
@@ -18,7 +18,6 @@ export default function CodeHighlight({
   node,
 }: CodeHighlightProps) {
   const { theme } = useTheme();
-  const [isCodeWrapped, setIsCodeWrapped] = useState(false);
 
   const match = className?.match(/language-(\w+)/);
   const language = match ? match[1] : undefined;
@@ -28,7 +27,7 @@ export default function CodeHighlight({
 
   if (isInline) {
     return (
-      <code className="px-2 py-1 text-sm rounded bg-secondary not-prose">
+      <code className="px-2 py-1 my-10 text-sm rounded bg-secondary not-prose">
         {children}
       </code>
     );
@@ -40,24 +39,7 @@ export default function CodeHighlight({
         <span className="font-mono font-light">{language}</span>
         <div className="flex items-center gap-2 my-0.5">
           <Tooltip>
-            <TooltipTrigger>
-              <Button
-                size="icon"
-                className="dark:hover:bg-background/20"
-                variant="ghost"
-                onClick={async () => {
-                  setIsCodeWrapped((prev) => !prev);
-                }}
-              >
-                {isCodeWrapped ? <AlignLeftIcon /> : <WrapTextIcon />}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              {isCodeWrapped ? "Disable wrap" : "Enable wrap"}
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <Button
                 size="icon"
                 className="dark:hover:bg-background/20"
@@ -75,7 +57,7 @@ export default function CodeHighlight({
         </div>
       </div>
 
-      <div className={isCodeWrapped ? "my-shiki-container" : ""}>
+      <div>
         <ShikiHighlighter
           language={language}
           theme={theme === "light" ? "github-light" : "poimandres"}

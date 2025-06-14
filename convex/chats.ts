@@ -18,11 +18,12 @@ export const getChats = query({
 });
 
 export const createChat = mutation({
-  args: { sessionToken: v.string() },
+  args: { sessionToken: v.string(), uuid: v.string() },
   handler: async (ctx, args) => {
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
     const newChatId = await ctx.db.insert("chats", {
+      uuid: args.uuid,
       userId: userId,
       title: "Random title 1",
     });

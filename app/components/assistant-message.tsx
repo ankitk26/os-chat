@@ -25,7 +25,7 @@ export default React.memo(function AssistantMessage({
 }: Props) {
   return (
     <>
-      <div className="leading-6 prose prose-neutral dark:prose-invert prose-rose prose-pre:bg-transparent prose-pre:m-0 prose-pre:p-0">
+      <div className="leading-8 prose prose-neutral dark:prose-invert prose-rose prose-pre:bg-transparent prose-pre:m-0 prose-pre:p-0">
         <ReactMarkdown
           remarkPlugins={[remarkGfm, remarkMath]}
           rehypePlugins={[rehypeKatex]}
@@ -38,7 +38,7 @@ export default React.memo(function AssistantMessage({
 
       <div className={cn("flex transition-opacity duration-200")}>
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Button
               size="icon"
               variant="ghost"

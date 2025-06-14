@@ -30,7 +30,7 @@ export default React.memo(function UserMessage({ message }: Props) {
         onMouseLeave={() => setIsHovered(false)}
       >
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Button size="icon" variant="ghost">
               <RefreshCcwIcon />
             </Button>
@@ -38,7 +38,7 @@ export default React.memo(function UserMessage({ message }: Props) {
           <TooltipContent>Retry message</TooltipContent>
         </Tooltip>
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Button size="icon" variant="ghost">
               <Edit2Icon />
             </Button>
@@ -46,7 +46,7 @@ export default React.memo(function UserMessage({ message }: Props) {
           <TooltipContent>Edit message</TooltipContent>
         </Tooltip>
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Button
               size="icon"
               variant="ghost"

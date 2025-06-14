@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { PanelLeftIcon } from "lucide-react";
 import { ThemeToggler } from "./theme-toggle";
 import { Button } from "./ui/button";
@@ -10,9 +11,12 @@ export default function AppSidebarHeader() {
         <Button size="icon" variant="ghost">
           <PanelLeftIcon />
         </Button>
-        <h3 className="flex-grow text-lg font-medium tracking-wide text-center">
-          os.chat
-        </h3>
+        <Link
+          to="/"
+          className="flex-grow text-lg font-medium tracking-wide text-center"
+        >
+          <h3>os.chat</h3>
+        </Link>
         <ThemeToggler />
       </div>
     </SidebarHeader>

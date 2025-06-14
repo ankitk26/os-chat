@@ -1,5 +1,3 @@
-import { useChat } from "@ai-sdk/react";
-
 type Props = {
   status: "submitted" | "streaming" | "ready" | "error";
 };

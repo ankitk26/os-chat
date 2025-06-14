@@ -15,17 +15,13 @@ export default memo(function ChatMessages({ messages, reload }: Props) {
     return null;
   }
 
-  return (
-    <div className="my-8 space-y-8">
-      {messages.map((message) => (
-        <div key={message.id}>
-          {message.role === "user" ? (
-            <UserMessage message={message.content} />
-          ) : (
-            <AssistantMessage message={message.content} reload={reload} />
-          )}
-        </div>
-      ))}
+  return messages.map((message) => (
+    <div key={message.id}>
+      {message.role === "user" ? (
+        <UserMessage message={message.content} />
+      ) : (
+        <AssistantMessage message={message.content} reload={reload} />
+      )}
     </div>
-  );
+  ));
 });

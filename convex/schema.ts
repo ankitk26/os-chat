@@ -1,14 +1,6 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
-export const messageFields = {
-  chatId: v.id("chats"),
-  userId: v.id("user"),
-  content: v.string(),
-  role: v.union(v.literal("user"), v.literal("assistant")),
-  model: v.optional(v.string()),
-};
-
 export default defineSchema({
   account: defineTable({
     accessToken: v.string(),
@@ -18,6 +10,7 @@ export default defineSchema({
     updatedAt: v.string(),
     userId: v.id("user"),
   }),
+
   session: defineTable({
     expiresAt: v.string(),
     ipAddress: v.string(),
@@ -26,6 +19,7 @@ export default defineSchema({
     userAgent: v.string(),
     userId: v.id("user"),
   }),
+
   user: defineTable({
     email: v.string(),
     emailVerified: v.boolean(),
@@ -33,12 +27,20 @@ export default defineSchema({
     name: v.string(),
     updatedAt: v.string(),
   }),
+
   chats: defineTable({
+    uuid: v.string(),
     title: v.string(),
     userId: v.id("user"),
-  }).index("by_user", ["userId"]),
-  messages: defineTable(messageFields).index("by_user_chat", [
-    "chatId",
-    "userId",
-  ]),
+  })
+    .index("by_user", ["userId"])
+    .index("by_uuid_chatId", ["uuid"]),
+
+  messages: defineTable({
+    chatId: v.string(),
+    userId: v.id("user"),
+    content: v.string(),
+    role: v.union(v.literal("user"), v.literal("assistant")),
+    model: v.optional(v.string()),
+  }).index("by_user_chat", ["chatId", "userId"]),
 });

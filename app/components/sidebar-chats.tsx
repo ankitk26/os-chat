@@ -20,7 +20,7 @@ export default function SidebarChats() {
   }
 
   return (
-    <ScrollArea className="h-full mt-4 grow">
+    <ScrollArea className="w-full h-full mt-4 grow">
       <div className="flex flex-col w-full h-full gap-2 mb-4">
         {chatsData.map((chat) => (
           <SidebarChatItem key={chat._id} chat={chat} />
