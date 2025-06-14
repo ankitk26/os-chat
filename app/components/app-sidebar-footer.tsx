@@ -26,7 +26,13 @@ export default function AppSidebarFooter() {
       >
         <Avatar>
           <AvatarImage src={user?.user.image || ""} alt={user?.user.name[0]} />
-          <AvatarFallback>AK</AvatarFallback>
+          <AvatarFallback>
+            {user?.user.name
+              .split(" ")
+              .slice(0, 2)
+              .map((namePart) => namePart.charAt(0))
+              .join("")}
+          </AvatarFallback>
         </Avatar>
         <h3>{user?.user.name}</h3>
       </Link>

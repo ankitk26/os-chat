@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "@tanstack/react-router";
 import { ChatRequestOptions } from "ai";
 import { api } from "convex/_generated/api";
 import { Id } from "convex/_generated/dataModel";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react"; // Import useState
 import { authClient } from "~/lib/auth-client";
 import { getChatTitle } from "~/server-fns/get-chat-title";
 import { useModelStore } from "~/stores/model-store";
@@ -42,6 +42,9 @@ export default function AutoResizeTextarea(props: Props) {
   const { mutateAsync: createChat, isPending: isChatCreationPending } =
     useMutation({ mutationFn: useConvexMutation(api.chats.createChat) });
 
+  // Add a local state variable for textarea content
+  const [textareaValue, setTextareaValue] = useState(input);
+
   const handleChatTitleUpdate = async (newChatId: string) => {
     const title = await getChatTitle({ data: input });
     await updateChatTitle({
@@ -58,7 +61,8 @@ export default function AutoResizeTextarea(props: Props) {
         return;
       }
 
-      setInput(textareaRef.current.value);
+      // Use textareaValue instead of reading from the ref directly
+      setInput(textareaValue); // Update the external input state
 
       navigate({
         to: "/chat/$chatId",
@@ -76,7 +80,7 @@ export default function AutoResizeTextarea(props: Props) {
       await createMessage({
         messageBody: {
           chatId: props.chatId,
-          content: input,
+          content: textareaValue, // Use textareaValue here too
           role: "user",
         },
         sessionToken: data?.session.token ?? "",
@@ -101,20 +105,20 @@ export default function AutoResizeTextarea(props: Props) {
 
   useEffect(() => {
     resizeTextarea();
-  }, [textareaRef.current?.value]);
+  }, [textareaValue]); // Trigger resize on textareaValue change
 
   return (
     <textarea
-      // value={input}
+      value={textareaValue} // Controlled component
       ref={textareaRef}
       rows={1}
       placeholder="Start the conversation..."
       onKeyDown={handleKeyDown}
       disabled={isChatCreationPending || isMessageCreationPending}
-      // onChange={(e) => {
-      //   setInput(e.target.value);
-      //   resizeTextarea();
-      // }}
+      onChange={(e) => {
+        setTextareaValue(e.target.value); // Update local textareaValue
+        resizeTextarea(); // Resize immediately on change
+      }}
       className="w-full resize-none focus:outline-none min-h-4 max-h-80"
     />
   );
