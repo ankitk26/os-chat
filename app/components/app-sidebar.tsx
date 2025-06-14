@@ -40,6 +40,9 @@ export function AppSidebar() {
         </Link>
         <ScrollArea className="w-full h-full">
           <div className="flex flex-col items-start h-full gap-2 mt-4 mb-4 overflow-hidden grow">
+            <h3>Folders</h3>
+
+            <h3>Chats</h3>
             <Suspense
               fallback={
                 <div className="flex flex-col h-full gap-2 mt-4 grow">

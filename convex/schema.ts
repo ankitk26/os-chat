@@ -32,6 +32,7 @@ export default defineSchema({
     uuid: v.string(),
     title: v.string(),
     userId: v.id("user"),
+    folderId: v.optional(v.id("folders")),
   })
     .index("by_user", ["userId"])
     .index("by_uuid_chatId", ["uuid"]),
@@ -43,4 +44,8 @@ export default defineSchema({
     role: v.union(v.literal("user"), v.literal("assistant")),
     model: v.optional(v.string()),
   }).index("by_user_chat", ["chatId", "userId"]),
+
+  folders: defineTable({
+    title: v.string(),
+  }),
 });

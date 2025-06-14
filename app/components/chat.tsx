@@ -3,7 +3,7 @@ import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { Id } from "convex/_generated/dataModel";
-import { Suspense, useRef } from "react";
+import { useRef } from "react";
 import { authClient } from "~/lib/auth-client";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
 import ChatLoadingIndicator from "./chat-loading-indicator";
@@ -24,9 +24,14 @@ type Props = {
     userId: Id<"user">;
     role: "user" | "assistant";
   }[];
+  isMessagesPending?: boolean;
 };
 
-export default function Chat({ chatId, dbMessages }: Props) {
+export default function Chat({
+  chatId,
+  dbMessages,
+  isMessagesPending = false,
+}: Props) {
   const { data: authData } = authClient.useSession();
 
   const { mutateAsync } = useMutation({
@@ -66,22 +71,20 @@ export default function Chat({ chatId, dbMessages }: Props) {
   return (
     <div className="flex flex-col w-full mx-auto max-h-svh h-svh">
       <div className="flex-1 overflow-hidden">
-        {messages.length === 0 && <EmptyChatContent />}
+        {!isMessagesPending && messages.length === 0 && <EmptyChatContent />}
 
         {chatId && (
           <ScrollArea className="w-full h-full">
             <div className="w-full h-full max-w-3xl mx-auto">
               <div className="my-8 space-y-8">
-                <Suspense
-                  fallback={
-                    <>
-                      <UserMessageSkeleton />
-                      <AssistantMessageSkeleton />
-                    </>
-                  }
-                >
+                {isMessagesPending ? (
+                  <>
+                    <UserMessageSkeleton />
+                    <AssistantMessageSkeleton />
+                  </>
+                ) : (
                   <ChatMessages messages={messages} reload={reload} />
-                </Suspense>
+                )}
               </div>
               <ChatLoadingIndicator status={status} />
               <div ref={messagesEndRef} />

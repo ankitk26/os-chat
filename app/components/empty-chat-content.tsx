@@ -1,6 +1,12 @@
+import { useParams } from "@tanstack/react-router";
 import { authClient } from "~/lib/auth-client";
 
 export default function EmptyChatContent() {
+  const { chatId } = useParams({ strict: false });
+  if (chatId) {
+    return null;
+  }
+
   const { data } = authClient.useSession();
 
   return (

@@ -1,5 +1,6 @@
 import { convexQuery } from "@convex-dev/react-query";
-import { createFileRoute, notFound, rootRouteId } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import Chat from "~/components/chat";
 import { authQueryOptions } from "~/queries/auth";
@@ -9,23 +10,32 @@ export const Route = createFileRoute("/_auth/chat/$chatId")({
     const authData = await context.queryClient.ensureQueryData(
       authQueryOptions
     );
-    const messages = await context.queryClient.ensureQueryData(
+    context.queryClient.prefetchQuery(
       convexQuery(api.messages.getMessages, {
         chatId: params.chatId,
         sessionToken: authData?.session.token ?? "",
       })
     );
-    if (messages.length === 0) {
-      throw notFound({ routeId: rootRouteId });
-    }
-    return messages;
+    return authData;
   },
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const { chatId } = Route.useParams();
-  const messages = Route.useLoaderData();
+  const authData = Route.useLoaderData();
+  const { data: messages, isPending: isMessagesPending } = useQuery(
+    convexQuery(api.messages.getMessages, {
+      chatId,
+      sessionToken: authData?.session.token ?? "",
+    })
+  );
 
-  return <Chat chatId={chatId} dbMessages={messages} />;
+  return (
+    <Chat
+      chatId={chatId}
+      dbMessages={messages ?? []}
+      isMessagesPending={isMessagesPending}
+    />
+  );
 }
