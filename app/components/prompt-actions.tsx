@@ -25,7 +25,7 @@ export default function PromptActions({ status, stop }: Props) {
           onClick={toggleIsWebSearch}
         >
           <GlobeIcon />
-          <span>Search</span>
+          Search
         </Button>
 
         <Button
@@ -35,7 +35,7 @@ export default function PromptActions({ status, stop }: Props) {
           className="rounded-full"
         >
           <PaperclipIcon />
-          <span>Attach</span>
+          Attach
         </Button>
       </div>
 

@@ -13,9 +13,7 @@ export default function SidebarChats() {
   );
 
   if (chatsData.length === 0) {
-    return (
-      <p className="text-sm text-center text-muted-foreground">No chats</p>
-    );
+    return <p className="text-sm text-muted-foreground">No chats</p>;
   }
 
   return chatsData.map((chat) => (

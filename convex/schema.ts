@@ -47,5 +47,6 @@ export default defineSchema({
 
   folders: defineTable({
     title: v.string(),
-  }),
+    userId: v.id("user"),
+  }).index("by_user", ["userId"]),
 });

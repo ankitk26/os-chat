@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { PanelLeftIcon } from "lucide-react";
+import { FolderIcon, MessageSquareIcon, PanelLeftIcon } from "lucide-react";
 import { Suspense } from "react";
 import {
   Sidebar,
@@ -7,11 +7,14 @@ import {
   SidebarHeader,
   useSidebar,
 } from "~/components/ui/sidebar";
+import AddFolderButton from "./add-folder-button";
 import AppSidebarFooter from "./app-sidebar-footer";
 import SidebarChats from "./sidebar-chats";
+import SidebarFolders from "./sidebar-folders";
 import { ThemeToggler } from "./theme-toggle";
 import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
+import { Separator } from "./ui/separator";
 import { Skeleton } from "./ui/skeleton";
 
 export function AppSidebar() {
@@ -39,14 +42,39 @@ export function AppSidebar() {
           <Button className="w-full">New Chat</Button>
         </Link>
         <ScrollArea className="w-full h-full">
-          <div className="flex flex-col items-start h-full gap-2 mt-4 mb-4 overflow-hidden grow">
-            <h3>Folders</h3>
-
-            <h3>Chats</h3>
+          <div className="flex flex-col items-stretch h-full gap-2 mt-4 mb-20 overflow-hidden scroll-smooth grow">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <FolderIcon className="size-4" />
+                <h3>Folders</h3>
+              </div>
+              <AddFolderButton />
+            </div>
             <Suspense
               fallback={
                 <div className="flex flex-col h-full gap-2 mt-4 grow">
-                  {Array.from({ length: 5 }).map((_, index) => (
+                  {Array.from({ length: 3 }).map((_, index) => (
+                    <Skeleton
+                      key={"app_sidebar_folder_loading_" + index}
+                      className="w-full h-10"
+                    />
+                  ))}
+                </div>
+              }
+            >
+              <SidebarFolders />
+            </Suspense>
+
+            <Separator />
+
+            <div className="flex items-center gap-2 mt-4">
+              <MessageSquareIcon className="size-4" />
+              <h3>Chats</h3>
+            </div>
+            <Suspense
+              fallback={
+                <div className="flex flex-col h-full gap-2 mt-4 grow">
+                  {Array.from({ length: 3 }).map((_, index) => (
                     <Skeleton
                       key={"app_sidebar_chat_loading_" + index}
                       className="w-full h-10"

@@ -1,19 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { Doc } from "convex/_generated/dataModel";
 
 type Props = {
-  chat: {
-    uuid: string;
-    _creationTime: number;
-    userId: string;
-    title: string;
-  };
+  chat: Doc<"chats">;
 };
 
 export default function SidebarChatItem({ chat }: Props) {
   return (
-    // <Tooltip delayDuration={500}>
-    //   <TooltipTrigger asChild>
     <Link
       to="/chat/$chatId"
       params={{ chatId: chat.uuid }}
@@ -24,8 +17,5 @@ export default function SidebarChatItem({ chat }: Props) {
     >
       <span>{chat.title}</span>
     </Link>
-    //   </TooltipTrigger>
-    //   <TooltipContent>{chat.title}</TooltipContent>
-    // </Tooltip>
   );
 }
