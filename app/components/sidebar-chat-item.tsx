@@ -42,59 +42,56 @@ export default function SidebarChatItem({ chat }: Props) {
   );
 
   return (
-    <div className="flex items-center justify-between py-1 pl-2 text-sm rounded cursor-pointer hover:bg-primary/10 hover:text-primary dark:hover:bg-secondary dark:hover:text-secondary-foreground">
-      <Link
-        to="/chat/$chatId"
-        params={{ chatId: chat.uuid }}
-        className="line-clamp-1"
-      >
-        <h4>{chat.title}</h4>
-      </Link>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button size="icon" variant="ghost">
-            <EllipsisVerticalIcon />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem>
-            <EditIcon />
-            <span className="leading-0">Rename</span>
-          </DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger className="flex items-center gap-2">
-              <MoveIcon className="pointer-events-none size-4 shrink-0 text-muted-foreground" />
-              <span className="leading-0">Move to folder</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                {folders?.map((folder) => (
-                  <DropdownMenuItem key={chat._id + "move_to" + folder._id}>
-                    {folder.title}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-          <DropdownMenuItem>
-            <PinIcon />
-            <span className="leading-0">Pin</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              setChat({ _id: chat._id, title: chat.title, uuid: chat.uuid });
-              setIsToBeDeleted(true);
-            }}
-          >
-            <Trash2Icon />
-            <span className="leading-0">Delete</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Share2Icon />
-            <span className="leading-0">Share</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+    <Link to="/chat/$chatId" params={{ chatId: chat.uuid }}>
+      <div className="flex items-center justify-between py-1 pl-2 text-sm rounded cursor-pointer hover:bg-primary/10 hover:text-primary dark:hover:bg-secondary dark:hover:text-secondary-foreground">
+        <h4 className="line-clamp-1">{chat.title}</h4>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size="icon" variant="ghost">
+              <EllipsisVerticalIcon />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>
+              <EditIcon />
+              <span className="leading-0">Rename</span>
+            </DropdownMenuItem>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger className="flex items-center gap-2">
+                <MoveIcon className="pointer-events-none size-4 shrink-0 text-muted-foreground" />
+                <span className="leading-0">Move to folder</span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent>
+                  {folders?.map((folder) => (
+                    <DropdownMenuItem key={chat._id + "move_to" + folder._id}>
+                      {folder.title}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
+            <DropdownMenuItem>
+              <PinIcon />
+              <span className="leading-0">Pin</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                setChat({ _id: chat._id, title: chat.title, uuid: chat.uuid });
+                setIsToBeDeleted(true);
+              }}
+            >
+              <Trash2Icon />
+              <span className="leading-0">Delete</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Share2Icon />
+              <span className="leading-0">Share</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </Link>
   );
 }
