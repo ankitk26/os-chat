@@ -1,4 +1,4 @@
-import type { ChatRequestOptions } from "ai";
+import type { ChatRequestOptions, CreateMessage, Message } from "ai";
 import type React from "react";
 import AutoResizeTextarea from "./auto-resize-textarea";
 import PromptActions from "./prompt-actions";
@@ -7,30 +7,30 @@ type Props = {
   chatId: string;
   input: string;
   setInput: React.Dispatch<React.SetStateAction<string>>;
-  handleSubmit: (
-    event?: {
-      preventDefault?: () => void;
-    },
-    chatRequestOptions?: ChatRequestOptions
-  ) => void;
   status: "submitted" | "streaming" | "ready" | "error";
   stop: () => void;
+  append: (
+    message: Message | CreateMessage,
+    chatRequestOptions?: ChatRequestOptions
+  ) => Promise<string | null | undefined>;
 };
 
 export default function UserPromptInput(props: Props) {
-  const { chatId, input, setInput, handleSubmit, status, stop } = props;
+  const { chatId, input, setInput, status, stop, append } = props;
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={(e) => {
+        e.preventDefault();
+      }}
       className="flex flex-col w-full max-w-3xl p-4 mx-auto border rounded-tl-lg rounded-tr-lg border-border/50 min-h-32 bg-card"
     >
       <div className="flex-1">
         <AutoResizeTextarea
           chatId={chatId}
           input={input}
+          append={append}
           setInput={setInput}
-          handleSubmit={handleSubmit}
         />
       </div>
 

@@ -10,7 +10,11 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
       isWebSearchEnabled,
     }: { messages: Message[]; model: string; isWebSearchEnabled: boolean } =
       await request.json();
-    console.log(messages);
+    console.log({
+      messages: JSON.stringify(messages, null, 4),
+      model,
+      isWebSearchEnabled,
+    });
 
     const systemMessage =
       "You are a helpful assistant. Strictly adhere to LaTeX formatting:\n" +

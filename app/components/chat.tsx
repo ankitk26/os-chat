@@ -38,35 +38,36 @@ export default function Chat({
     mutationFn: useConvexMutation(api.messages.createMessage),
   });
 
-  const { messages, input, status, handleSubmit, setInput, stop, reload } =
-    useChat({
-      id: chatId,
-      initialMessages:
-        dbMessages?.map((message) => ({
-          id: message._id,
-          content: message.content,
-          role: message.role,
-          parts: [{ text: message.content, type: "text" }],
-        })) ?? [],
-      onFinish: async ({ content }) => {
-        if (chatId) {
-          await mutateAsync({
-            messageBody: {
-              chatId,
-              content,
-              role: "assistant",
-              model: "gemini",
-            },
-            sessionToken: authData?.session.token ?? "",
-          });
-        }
-      },
-    });
+  const { messages, input, status, setInput, stop, reload, append } = useChat({
+    id: chatId,
+    initialMessages:
+      dbMessages?.map((message) => ({
+        id: message._id,
+        content: message.content,
+        role: message.role,
+        parts: [{ text: message.content, type: "text" }],
+      })) ?? [],
+    onFinish: async ({ content }) => {
+      console.log("received ai message");
+      if (chatId) {
+        console.log("writing ai message");
+        await mutateAsync({
+          messageBody: {
+            chatId,
+            content,
+            role: "assistant",
+            model: "gemini",
+          },
+          sessionToken: authData?.session.token ?? "",
+        });
+      }
+    },
+  });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
-  };
+  // const scrollToBottom = () => {
+  //   messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
+  // };
 
   return (
     <div className="flex flex-col w-full mx-auto max-h-svh h-svh">
@@ -97,8 +98,8 @@ export default function Chat({
         <UserPromptInput
           chatId={chatId}
           input={input}
+          append={append}
           setInput={setInput}
-          handleSubmit={handleSubmit}
           stop={stop}
           status={status}
         />

@@ -1,10 +1,10 @@
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { ChatRequestOptions } from "ai";
+import { ChatRequestOptions, CreateMessage, Message } from "ai";
 import { api } from "convex/_generated/api";
 import { Id } from "convex/_generated/dataModel";
-import { useEffect, useRef, useState } from "react"; // Import useState
+import { useEffect, useRef, useState } from "react";
 import { authClient } from "~/lib/auth-client";
 import { getChatTitle } from "~/server-fns/get-chat-title";
 import { useModelStore } from "~/stores/model-store";
@@ -13,16 +13,14 @@ type Props = {
   chatId: string;
   input: string;
   setInput: React.Dispatch<React.SetStateAction<string>>;
-  handleSubmit: (
-    event?: {
-      preventDefault?: () => void;
-    },
+  append: (
+    message: Message | CreateMessage,
     chatRequestOptions?: ChatRequestOptions
-  ) => void;
+  ) => Promise<string | null | undefined>;
 };
 
 export default function AutoResizeTextarea(props: Props) {
-  const { input, setInput, handleSubmit } = props;
+  const { input, setInput, append } = props;
 
   const { data } = authClient.useSession();
   const navigate = useNavigate();
@@ -42,11 +40,10 @@ export default function AutoResizeTextarea(props: Props) {
   const { mutateAsync: createChat, isPending: isChatCreationPending } =
     useMutation({ mutationFn: useConvexMutation(api.chats.createChat) });
 
-  // Add a local state variable for textarea content
   const [textareaValue, setTextareaValue] = useState(input);
 
   const handleChatTitleUpdate = async (newChatId: string) => {
-    const title = await getChatTitle({ data: input });
+    const title = await getChatTitle({ data: textareaValue });
     await updateChatTitle({
       chat: { chatId: newChatId as Id<"chats">, title },
       sessionToken: data?.session.token ?? "",
@@ -61,8 +58,8 @@ export default function AutoResizeTextarea(props: Props) {
         return;
       }
 
-      // Use textareaValue instead of reading from the ref directly
       setInput(textareaValue); // Update the external input state
+      setInput(textareaRef.current.value);
 
       navigate({
         to: "/chat/$chatId",
@@ -80,18 +77,27 @@ export default function AutoResizeTextarea(props: Props) {
       await createMessage({
         messageBody: {
           chatId: props.chatId,
-          content: textareaValue, // Use textareaValue here too
+          content: textareaValue,
           role: "user",
         },
         sessionToken: data?.session.token ?? "",
       });
 
-      handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>, {
-        body: {
-          model,
-          isWebSearchEnabled,
+      append(
+        {
+          content: textareaValue,
+          role: "user",
+          parts: [{ type: "text", text: textareaValue }],
         },
-      });
+        {
+          body: {
+            model,
+            isWebSearchEnabled,
+          },
+        }
+      );
+
+      setTextareaValue("");
     }
   };
 
@@ -105,19 +111,19 @@ export default function AutoResizeTextarea(props: Props) {
 
   useEffect(() => {
     resizeTextarea();
-  }, [textareaValue]); // Trigger resize on textareaValue change
+  }, [textareaValue]);
 
   return (
     <textarea
-      value={textareaValue} // Controlled component
+      value={textareaValue}
       ref={textareaRef}
       rows={1}
       placeholder="Start the conversation..."
       onKeyDown={handleKeyDown}
       disabled={isChatCreationPending || isMessageCreationPending}
       onChange={(e) => {
-        setTextareaValue(e.target.value); // Update local textareaValue
-        resizeTextarea(); // Resize immediately on change
+        setTextareaValue(e.target.value);
+        resizeTextarea();
       }}
       className="w-full resize-none focus:outline-none min-h-4 max-h-80"
     />
