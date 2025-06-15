@@ -13,7 +13,20 @@ export const getFolders = query({
       .order("desc")
       .collect();
 
-    return folders;
+    const foldersWithChats = await Promise.all(
+      folders.map(async (folder) => {
+        const chats = await ctx.db
+          .query("chats")
+          .withIndex("by_folder_and_user", (q) =>
+            q.eq("folderId", folder._id).eq("userId", userId)
+          )
+          .collect();
+
+        return { ...folder, chats };
+      })
+    );
+
+    return foldersWithChats;
   },
 });
 

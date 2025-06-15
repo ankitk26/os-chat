@@ -34,8 +34,9 @@ export default defineSchema({
     userId: v.id("user"),
     folderId: v.optional(v.id("folders")),
   })
-    .index("by_user", ["userId"])
-    .index("by_uuid_chatId", ["uuid"]),
+    .index("by_chat_uuid", ["uuid"])
+    .index("by_folder_and_user", ["folderId", "userId"])
+    .index("by_user", ["userId"]),
 
   messages: defineTable({
     chatId: v.string(),

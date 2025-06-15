@@ -1,5 +1,5 @@
 import { Doc } from "convex/_generated/dataModel";
-import { ChevronRightIcon } from "lucide-react";
+import { EllipsisVerticalIcon } from "lucide-react";
 import { Button } from "./ui/button";
 
 type Props = {
@@ -8,9 +8,11 @@ type Props = {
 
 export default function SidebarFolderItem({ folder }: Props) {
   return (
-    <Button variant="ghost" className="items-center justify-start">
-      <ChevronRightIcon />
-      {folder.title}
-    </Button>
+    <div className="flex items-center justify-between pl-2 text-sm">
+      <h4 className="line-clamp-1">{folder.title}</h4>
+      <Button size="icon" variant="ghost">
+        <EllipsisVerticalIcon />
+      </Button>
+    </div>
   );
 }
