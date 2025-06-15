@@ -13,6 +13,21 @@ export const getFolders = query({
       .order("desc")
       .collect();
 
+    return folders;
+  },
+});
+
+export const getFoldersWithChats = query({
+  args: { sessionToken: v.string() },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+
+    const folders = await ctx.db
+      .query("folders")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .order("desc")
+      .collect();
+
     const foldersWithChats = await Promise.all(
       folders.map(async (folder) => {
         const chats = await ctx.db

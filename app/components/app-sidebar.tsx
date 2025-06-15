@@ -19,7 +19,7 @@ export function AppSidebar() {
         </Link>
 
         <ScrollArea className="w-full h-full">
-          <div className="flex flex-col items-stretch h-full gap-2 mt-4 mb-20 space-y-4 overflow-hidden scroll-smooth grow">
+          <div className="flex flex-col items-stretch h-full gap-2 pr-1 mt-4 mb-20 space-y-4 overflow-hidden scroll-smooth grow">
             <SidebarFolderSection />
             <Separator />
             <SidebarChatsSection />

@@ -7,13 +7,13 @@ import SidebarFolderItem from "./sidebar-folder-item";
 export default function SidebarFolders() {
   const { data: authData } = useSuspenseQuery(authQueryOptions);
   const { data: foldersData } = useSuspenseQuery(
-    convexQuery(api.folders.getFolders, {
+    convexQuery(api.folders.getFoldersWithChats, {
       sessionToken: authData?.session.token ?? "",
     })
   );
 
   if (foldersData.length === 0) {
-    return <p className="text-sm text-muted-foreground">No folders</p>;
+    return <p className="pl-2 text-sm text-muted-foreground">No folders</p>;
   }
 
   return foldersData.map((folder) => (

@@ -45,3 +45,24 @@ export const updateChatTitle = mutation({
     await ctx.db.patch(args.chat.chatId, { title: args.chat.title });
   },
 });
+
+export const deleteChat = mutation({
+  args: {
+    sessionToken: v.string(),
+    chatId: v.id("chats"),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+
+    const chat = await ctx.db.get(args.chatId);
+    if (!chat) {
+      throw new Error("Invalid chat");
+    }
+
+    if (chat.userId !== userId) {
+      throw new Error("Unauthorized request");
+    }
+
+    await ctx.db.delete(args.chatId);
+  },
+});
