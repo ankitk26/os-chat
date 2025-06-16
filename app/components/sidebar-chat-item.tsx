@@ -12,7 +12,7 @@ import {
   Trash2Icon,
 } from "lucide-react";
 import { authClient } from "~/lib/auth-client";
-import { useChatActionsStore } from "~/stores/chat-actions-store";
+import { useChatActionStore } from "~/stores/chat-actions-store";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -36,9 +36,12 @@ export default function SidebarChatItem({ chat }: Props) {
       sessionToken: authData?.session.token ?? "",
     })
   );
-  const setChat = useChatActionsStore((store) => store.setChat);
-  const setIsToBeDeleted = useChatActionsStore(
-    (store) => store.setIsToBeDeleted
+  const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
+  const setIsDeleteModalOpen = useChatActionStore(
+    (store) => store.setIsDeleteModalOpen
+  );
+  const setIsRenameModalOpen = useChatActionStore(
+    (store) => store.setIsRenameModalOpen
   );
 
   return (
@@ -52,7 +55,17 @@ export default function SidebarChatItem({ chat }: Props) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedChat({
+                  _id: chat._id,
+                  title: chat.title,
+                  uuid: chat.uuid,
+                });
+                setIsRenameModalOpen(true);
+              }}
+            >
               <EditIcon />
               <span className="leading-0">Rename</span>
             </DropdownMenuItem>
@@ -78,8 +91,12 @@ export default function SidebarChatItem({ chat }: Props) {
             <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
-                setChat({ _id: chat._id, title: chat.title, uuid: chat.uuid });
-                setIsToBeDeleted(true);
+                setSelectedChat({
+                  _id: chat._id,
+                  title: chat.title,
+                  uuid: chat.uuid,
+                });
+                setIsDeleteModalOpen(true);
               }}
             >
               <Trash2Icon />

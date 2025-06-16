@@ -2,6 +2,7 @@ import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { authQueryOptions } from "~/queries/auth";
+import ChatRenameDialog from "./chat-rename-dialog";
 import DeleteChatAlertDialog from "./delete-chat-alert-dialog";
 import SidebarChatItem from "./sidebar-chat-item";
 
@@ -23,6 +24,7 @@ export default function SidebarChats() {
         <SidebarChatItem key={chat._id} chat={chat} />
       ))}
       <DeleteChatAlertDialog />
+      <ChatRenameDialog />
     </>
   );
 }

@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { toast } from "sonner";
 import { authQueryOptions } from "~/queries/auth";
-import { useChatActionsStore } from "~/stores/chat-actions-store";
+import { useChatActionStore } from "~/stores/chat-actions-store";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,42 +20,44 @@ export default function DeleteChatAlertDialog() {
   const { chatId } = useParams({ strict: false });
   const navigate = useNavigate();
   const { data: authData } = useSuspenseQuery(authQueryOptions);
-  const chat = useChatActionsStore((store) => store.chat);
-  const isToBeDeleted = useChatActionsStore((store) => store.isToBeDeleted);
-  const setIsToBeDeleted = useChatActionsStore(
-    (store) => store.setIsToBeDeleted
+  const selectedChat = useChatActionStore((store) => store.selectedChat);
+  const isDeleteModalOpen = useChatActionStore(
+    (store) => store.isDeleteModalOpen
   );
-  const setChat = useChatActionsStore((store) => store.setChat);
+  const setIsDeleteModalOpen = useChatActionStore(
+    (store) => store.setIsDeleteModalOpen
+  );
+  const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
 
   const deleteChatMutation = useMutation({
     mutationFn: useConvexMutation(api.chats.deleteChat),
     onSuccess: async () => {
-      if (chat?.uuid === chatId) {
+      if (selectedChat?.uuid === chatId) {
         await navigate({ to: "/" });
       }
       toast.success("Chat was deleted");
-      setIsToBeDeleted(false);
-      setChat(null);
+      setIsDeleteModalOpen(false);
+      setSelectedChat(null);
     },
     onError: () => {
       toast.error("Chat was not deleted", {
         description: "Please try again later",
       });
-      setChat(null);
+      setSelectedChat(null);
     },
   });
 
   return (
     <AlertDialog
-      open={isToBeDeleted}
-      onOpenChange={(open) => setIsToBeDeleted(open)}
+      open={isDeleteModalOpen}
+      onOpenChange={(open) => setIsDeleteModalOpen(open)}
     >
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Delete chat</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete the chat "{chat?.title}"? This
-            action cannot be undone.
+            Are you sure you want to delete the chat "{selectedChat?.title}"?
+            This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -64,7 +66,7 @@ export default function DeleteChatAlertDialog() {
             disabled={deleteChatMutation.isPending}
             onClick={() =>
               deleteChatMutation.mutate({
-                chatId: chat?._id!,
+                chatId: selectedChat?._id!,
                 sessionToken: authData?.session.token ?? "",
               })
             }

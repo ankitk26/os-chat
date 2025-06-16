@@ -1,22 +1,26 @@
 import { Id } from "convex/_generated/dataModel";
 import { create } from "zustand";
 
-type ChatType = {
+type Chat = {
   _id: Id<"chats">;
   title: string;
   uuid: string;
 };
 
-type ChatActionsStore = {
-  chat: ChatType | null;
-  setChat: (chat: ChatType | null) => void;
-  isToBeDeleted: boolean;
-  setIsToBeDeleted: (value: boolean) => void;
+type ChatActionState = {
+  selectedChat: Chat | null;
+  setSelectedChat: (chat: Chat | null) => void;
+  isDeleteModalOpen: boolean;
+  setIsDeleteModalOpen: (value: boolean) => void;
+  isRenameModalOpen: boolean;
+  setIsRenameModalOpen: (value: boolean) => void;
 };
 
-export const useChatActionsStore = create<ChatActionsStore>()((set) => ({
-  chat: null,
-  setChat: (chat: ChatType | null) => set({ chat }),
-  isToBeDeleted: false,
-  setIsToBeDeleted: (value: boolean) => set({ isToBeDeleted: value }),
+export const useChatActionStore = create<ChatActionState>()((set) => ({
+  selectedChat: null,
+  setSelectedChat: (chat: Chat | null) => set({ selectedChat: chat }),
+  isDeleteModalOpen: false,
+  setIsDeleteModalOpen: (value: boolean) => set({ isDeleteModalOpen: value }),
+  isRenameModalOpen: false,
+  setIsRenameModalOpen: (value: boolean) => set({ isRenameModalOpen: value }),
 }));
