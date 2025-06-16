@@ -13,9 +13,9 @@ export default React.memo(function UserMessage({ message }: Props) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="flex flex-col items-end space-y-1">
+    <div className="flex flex-col items-end self-end w-3/4 space-y-1">
       <div
-        className="flex flex-col gap-6 px-4 py-4 whitespace-pre-wrap border bg-secondary rounded-xl"
+        className="flex flex-col gap-6 px-4 py-4 whitespace-pre-wrap border rounded-xl"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >

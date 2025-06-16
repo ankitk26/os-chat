@@ -16,7 +16,7 @@ export default memo(function ChatMessages({ messages, reload }: Props) {
   }
 
   return messages.map((message) => (
-    <div key={message.id}>
+    <div key={message.id} className="flex flex-col">
       {message.role === "user" ? (
         <UserMessage message={message.content} />
       ) : (

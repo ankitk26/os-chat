@@ -11,12 +11,14 @@ export default function AppSidebarHeader() {
         <Button size="icon" variant="ghost">
           <PanelLeftIcon />
         </Button>
-        <Link
-          to="/"
-          className="flex-grow text-lg font-medium tracking-wide text-center"
-        >
-          <h3>os.chat</h3>
-        </Link>
+        <div className="flex justify-center grow">
+          <Link
+            to="/"
+            className="text-lg font-medium tracking-wide text-center w-fit"
+          >
+            <h3>os.chat</h3>
+          </Link>
+        </div>
         <ThemeToggler />
       </div>
     </SidebarHeader>
