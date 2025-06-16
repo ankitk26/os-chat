@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Sidebar, SidebarContent } from "~/components/ui/sidebar";
 import AppSidebarFooter from "./app-sidebar-footer";
 import AppSidebarHeader from "./app-sidebar-header";
+import PinnedChats from "./pinned-chats";
 import SidebarChatsSection from "./sidebar-chats-section";
 import SidebarFolderSection from "./sidebar-folder-section";
 import { Button } from "./ui/button";
@@ -20,6 +21,7 @@ export function AppSidebar() {
 
         <ScrollArea className="w-full h-full">
           <div className="flex flex-col items-stretch h-full gap-2 pr-1 mt-4 mb-20 space-y-4 overflow-hidden scroll-smooth grow">
+            <PinnedChats />
             <SidebarFolderSection />
             <Separator />
             <SidebarChatsSection />

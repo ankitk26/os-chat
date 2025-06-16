@@ -33,10 +33,12 @@ export default defineSchema({
     title: v.string(),
     userId: v.id("user"),
     folderId: v.optional(v.id("folders")),
+    isPinned: v.union(v.literal(true), v.literal(false)),
   })
     .index("by_chat_uuid", ["uuid"])
     .index("by_folder_and_user", ["folderId", "userId"])
-    .index("by_user", ["userId"]),
+    .index("by_user", ["userId"])
+    .index("by_user_and_pinned", ["userId", "isPinned"]),
 
   messages: defineTable({
     chatId: v.string(),

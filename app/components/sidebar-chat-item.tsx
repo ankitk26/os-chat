@@ -6,7 +6,7 @@ import { Doc } from "convex/_generated/dataModel";
 import {
   EditIcon,
   EllipsisVerticalIcon,
-  MoveIcon,
+  FolderSymlinkIcon,
   PinIcon,
   Share2Icon,
   Trash2Icon,
@@ -57,6 +57,18 @@ export default function SidebarChatItem({ chat }: Props) {
     },
   });
 
+  const toggleChatPinMutation = useMutation({
+    mutationFn: useConvexMutation(api.chats.toggleChatPin),
+    onSuccess: (wasPinned) => {
+      toast.success(wasPinned ? "Chat unpinned" : "Chat pinned");
+    },
+    onError: () => {
+      toast.error("Could not pin chat", {
+        description: "Please try again later",
+      });
+    },
+  });
+
   return (
     <Link to="/chat/$chatId" params={{ chatId: chat.uuid }}>
       <div className="flex items-center justify-between py-1 pl-2 text-sm rounded cursor-pointer hover:bg-primary/10 hover:text-primary dark:hover:bg-secondary dark:hover:text-secondary-foreground">
@@ -80,7 +92,7 @@ export default function SidebarChatItem({ chat }: Props) {
             </DropdownMenuItem>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger className="flex items-center gap-2">
-                <MoveIcon className="pointer-events-none size-4 shrink-0 text-muted-foreground" />
+                <FolderSymlinkIcon className="pointer-events-none size-4 shrink-0 text-muted-foreground" />
                 <span className="leading-0">Move to folder</span>
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
@@ -88,7 +100,8 @@ export default function SidebarChatItem({ chat }: Props) {
                   {folders?.map((folder) => (
                     <DropdownMenuItem
                       key={chat._id + "move_to" + folder._id}
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         moveToFolderMutation.mutate({
                           chatId: chat._id,
                           targetFolderId: folder._id,
@@ -102,9 +115,19 @@ export default function SidebarChatItem({ chat }: Props) {
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
             </DropdownMenuSub>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleChatPinMutation.mutate({
+                  chatId: chat._id,
+                  sessionToken: authData?.session.token ?? "",
+                });
+              }}
+            >
               <PinIcon />
-              <span className="leading-0">Pin</span>
+              <span className="leading-0">
+                {chat.isPinned ? "Unpin" : "Pin"}
+              </span>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={(e) => {

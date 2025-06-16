@@ -6,10 +6,10 @@ import ChatRenameDialog from "./chat-rename-dialog";
 import DeleteChatAlertDialog from "./delete-chat-alert-dialog";
 import SidebarChatItem from "./sidebar-chat-item";
 
-export default function SidebarChats() {
+export default function SidebarChats({ pin = false }: { pin?: boolean }) {
   const { data: authData } = useSuspenseQuery(authQueryOptions);
   const { data: chatsData } = useSuspenseQuery(
-    convexQuery(api.chats.getChats, {
+    convexQuery(pin ? api.chats.getPinnedChats : api.chats.getUnpinnedChats, {
       sessionToken: authData?.session.token ?? "",
     })
   );

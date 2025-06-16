@@ -17,6 +17,40 @@ export const getChats = query({
   },
 });
 
+export const getUnpinnedChats = query({
+  args: { sessionToken: v.string() },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+
+    const chats = await ctx.db
+      .query("chats")
+      .withIndex("by_user_and_pinned", (q) =>
+        q.eq("userId", userId).eq("isPinned", false)
+      )
+      .order("desc")
+      .collect();
+
+    return chats;
+  },
+});
+
+export const getPinnedChats = query({
+  args: { sessionToken: v.string() },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+
+    const chats = await ctx.db
+      .query("chats")
+      .withIndex("by_user_and_pinned", (q) =>
+        q.eq("userId", userId).eq("isPinned", true)
+      )
+      .order("desc")
+      .collect();
+
+    return chats;
+  },
+});
+
 export const createChat = mutation({
   args: { sessionToken: v.string(), uuid: v.string() },
   handler: async (ctx, args) => {
@@ -25,7 +59,8 @@ export const createChat = mutation({
     const newChatId = await ctx.db.insert("chats", {
       uuid: args.uuid,
       userId: userId,
-      title: "Random title 1",
+      title: "Title for chat",
+      isPinned: false,
     });
 
     return newChatId;
@@ -43,6 +78,22 @@ export const updateChatTitle = mutation({
   handler: async (ctx, args) => {
     await getAuthUserIdOrThrow(ctx, args.sessionToken);
     await ctx.db.patch(args.chat.chatId, { title: args.chat.title });
+  },
+});
+
+export const toggleChatPin = mutation({
+  args: {
+    sessionToken: v.string(),
+    chatId: v.id("chats"),
+  },
+  handler: async (ctx, args) => {
+    await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const chat = await ctx.db.get(args.chatId);
+    if (!chat) {
+      throw new Error("Invalid chat request");
+    }
+    await ctx.db.patch(args.chatId, { isPinned: !chat.isPinned });
+    return chat.isPinned;
   },
 });
 
