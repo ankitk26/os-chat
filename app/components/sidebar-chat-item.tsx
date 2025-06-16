@@ -1,5 +1,5 @@
-import { convexQuery } from "@convex-dev/react-query";
-import { useQuery } from "@tanstack/react-query";
+import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { Doc } from "convex/_generated/dataModel";
@@ -11,6 +11,7 @@ import {
   Share2Icon,
   Trash2Icon,
 } from "lucide-react";
+import { toast } from "sonner";
 import { authClient } from "~/lib/auth-client";
 import { useChatActionStore } from "~/stores/chat-actions-store";
 import { Button } from "./ui/button";
@@ -44,6 +45,18 @@ export default function SidebarChatItem({ chat }: Props) {
     (store) => store.setIsRenameModalOpen
   );
 
+  const moveToFolderMutation = useMutation({
+    mutationFn: useConvexMutation(api.chats.moveToFolder),
+    onSuccess: () => {
+      toast.success("Moved to folder");
+    },
+    onError: () => {
+      toast.error("Could not move to folder", {
+        description: "Please try again later",
+      });
+    },
+  });
+
   return (
     <Link to="/chat/$chatId" params={{ chatId: chat.uuid }}>
       <div className="flex items-center justify-between py-1 pl-2 text-sm rounded cursor-pointer hover:bg-primary/10 hover:text-primary dark:hover:bg-secondary dark:hover:text-secondary-foreground">
@@ -58,11 +71,7 @@ export default function SidebarChatItem({ chat }: Props) {
             <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
-                setSelectedChat({
-                  _id: chat._id,
-                  title: chat.title,
-                  uuid: chat.uuid,
-                });
+                setSelectedChat(chat);
                 setIsRenameModalOpen(true);
               }}
             >
@@ -77,7 +86,16 @@ export default function SidebarChatItem({ chat }: Props) {
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
                   {folders?.map((folder) => (
-                    <DropdownMenuItem key={chat._id + "move_to" + folder._id}>
+                    <DropdownMenuItem
+                      key={chat._id + "move_to" + folder._id}
+                      onClick={() => {
+                        moveToFolderMutation.mutate({
+                          chatId: chat._id,
+                          targetFolderId: folder._id,
+                          sessionToken: authData?.session.token ?? "",
+                        });
+                      }}
+                    >
                       {folder.title}
                     </DropdownMenuItem>
                   ))}
@@ -91,11 +109,7 @@ export default function SidebarChatItem({ chat }: Props) {
             <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
-                setSelectedChat({
-                  _id: chat._id,
-                  title: chat.title,
-                  uuid: chat.uuid,
-                });
+                setSelectedChat(chat);
                 setIsDeleteModalOpen(true);
               }}
             >
