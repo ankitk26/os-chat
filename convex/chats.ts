@@ -117,15 +117,3 @@ export const deleteChat = mutation({
     await ctx.db.delete(args.chatId);
   },
 });
-
-export const moveToFolder = mutation({
-  args: {
-    sessionToken: v.string(),
-    chatId: v.id("chats"),
-    targetFolderId: v.id("folders"),
-  },
-  handler: async (ctx, args) => {
-    await getAuthUserIdOrThrow(ctx, args.sessionToken);
-    await ctx.db.patch(args.chatId, { folderId: args.targetFolderId });
-  },
-});

@@ -1,12 +1,11 @@
-import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useConvexMutation } from "@convex-dev/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { Doc } from "convex/_generated/dataModel";
 import {
   EditIcon,
   EllipsisVerticalIcon,
-  FolderSymlinkIcon,
   PinIcon,
   Share2Icon,
   Trash2Icon,
@@ -19,10 +18,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuPortal,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
@@ -32,11 +27,6 @@ type Props = {
 
 export default function SidebarChatItem({ chat }: Props) {
   const { data: authData } = authClient.useSession();
-  const { data: folders } = useQuery(
-    convexQuery(api.folders.getFolders, {
-      sessionToken: authData?.session.token ?? "",
-    })
-  );
   const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
   const setIsDeleteModalOpen = useChatActionStore(
     (store) => store.setIsDeleteModalOpen
@@ -44,18 +34,6 @@ export default function SidebarChatItem({ chat }: Props) {
   const setIsRenameModalOpen = useChatActionStore(
     (store) => store.setIsRenameModalOpen
   );
-
-  const moveToFolderMutation = useMutation({
-    mutationFn: useConvexMutation(api.chats.moveToFolder),
-    onSuccess: () => {
-      toast.success("Moved to folder");
-    },
-    onError: () => {
-      toast.error("Could not move to folder", {
-        description: "Please try again later",
-      });
-    },
-  });
 
   const toggleChatPinMutation = useMutation({
     mutationFn: useConvexMutation(api.chats.toggleChatPin),
@@ -90,31 +68,6 @@ export default function SidebarChatItem({ chat }: Props) {
               <EditIcon />
               <span className="leading-0">Rename</span>
             </DropdownMenuItem>
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger className="flex items-center gap-2">
-                <FolderSymlinkIcon className="pointer-events-none size-4 shrink-0 text-muted-foreground" />
-                <span className="leading-0">Move to folder</span>
-              </DropdownMenuSubTrigger>
-              <DropdownMenuPortal>
-                <DropdownMenuSubContent>
-                  {folders?.map((folder) => (
-                    <DropdownMenuItem
-                      key={chat._id + "move_to" + folder._id}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        moveToFolderMutation.mutate({
-                          chatId: chat._id,
-                          targetFolderId: folder._id,
-                          sessionToken: authData?.session.token ?? "",
-                        });
-                      }}
-                    >
-                      {folder.title}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuSubContent>
-              </DropdownMenuPortal>
-            </DropdownMenuSub>
             <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();

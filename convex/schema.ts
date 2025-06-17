@@ -32,11 +32,9 @@ export default defineSchema({
     uuid: v.string(),
     title: v.string(),
     userId: v.id("user"),
-    folderId: v.optional(v.id("folders")),
     isPinned: v.union(v.literal(true), v.literal(false)),
   })
     .index("by_chat_uuid", ["uuid"])
-    .index("by_folder_and_user", ["folderId", "userId"])
     .index("by_user", ["userId"])
     .index("by_user_and_pinned", ["userId", "isPinned"]),
 
@@ -47,9 +45,4 @@ export default defineSchema({
     role: v.union(v.literal("user"), v.literal("assistant")),
     model: v.optional(v.string()),
   }).index("by_user_chat", ["chatId", "userId"]),
-
-  folders: defineTable({
-    title: v.string(),
-    userId: v.id("user"),
-  }).index("by_user", ["userId"]),
 });
