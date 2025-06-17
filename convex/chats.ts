@@ -117,3 +117,65 @@ export const deleteChat = mutation({
     await ctx.db.delete(args.chatId);
   },
 });
+
+export const createSharedChat = mutation({
+  args: {
+    sessionToken: v.string(),
+    chatId: v.id("chats"),
+    sharedChatUuid: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+
+    const chat = await ctx.db.get(args.chatId);
+    if (!chat) {
+      throw new Error("Invalid request");
+    }
+
+    // check if an existing sharedChat already exists
+    const sharedChat = await ctx.db
+      .query("sharedChats")
+      .withIndex("by_parent_chat", (q) => q.eq("parentChatUuid", chat.uuid))
+      .first();
+    if (sharedChat) {
+      // if sharedChat is active, deactivate it
+      await ctx.db.patch(sharedChat._id, { isActive: !sharedChat.isActive });
+      if (sharedChat.isActive) {
+        return null;
+      } else {
+        return sharedChat.uuid;
+      }
+    }
+
+    // if no shared chat exists, then create one
+    await ctx.db.insert("sharedChats", {
+      parentChatUuid: chat.uuid,
+      isActive: true,
+      uuid: args.sharedChatUuid,
+    });
+
+    return args.sharedChatUuid;
+  },
+});
+
+export const getSharedChatStatus = query({
+  args: {
+    sessionToken: v.string(),
+    chatId: v.id("chats"),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+
+    const chat = await ctx.db.get(args.chatId);
+    if (!chat || chat.userId !== userId) {
+      throw new Error("Unauthorized");
+    }
+
+    const sharedChat = await ctx.db
+      .query("sharedChats")
+      .withIndex("by_parent_chat", (q) => q.eq("parentChatUuid", chat.uuid))
+      .first();
+
+    return sharedChat && sharedChat.isActive ? sharedChat.uuid : null;
+  },
+});

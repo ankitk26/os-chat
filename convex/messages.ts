@@ -19,6 +19,38 @@ export const getMessages = query({
   },
 });
 
+export const getSharedChatMessages = query({
+  args: {
+    sharedChatUuid: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const sharedChat = await ctx.db
+      .query("sharedChats")
+      .withIndex("by_uuid", (q) => q.eq("uuid", args.sharedChatUuid))
+      .first();
+
+    if (!sharedChat) {
+      throw new Error("Invalid request");
+    }
+
+    if (!sharedChat.isActive) {
+      return null;
+    }
+
+    const messages = await ctx.db
+      .query("messages")
+      .withIndex("by_chat_creation_time", (q) =>
+        q
+          .eq("chatId", sharedChat.parentChatUuid)
+          .lte("_creationTime", sharedChat._creationTime)
+      )
+      .order("asc")
+      .collect();
+
+    return messages;
+  },
+});
+
 export const createMessage = mutation({
   args: {
     sessionToken: v.string(),

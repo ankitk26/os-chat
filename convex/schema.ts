@@ -44,5 +44,15 @@ export default defineSchema({
     content: v.string(),
     role: v.union(v.literal("user"), v.literal("assistant")),
     model: v.optional(v.string()),
-  }).index("by_user_chat", ["chatId", "userId"]),
+  })
+    .index("by_user_chat", ["chatId", "userId"])
+    .index("by_chat_creation_time", ["chatId", "_creationTime"]),
+
+  sharedChats: defineTable({
+    parentChatUuid: v.string(),
+    uuid: v.string(),
+    isActive: v.boolean(),
+  })
+    .index("by_parent_chat", ["parentChatUuid"])
+    .index("by_uuid", ["uuid"]),
 });

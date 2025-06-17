@@ -34,6 +34,9 @@ export default function SidebarChatItem({ chat }: Props) {
   const setIsRenameModalOpen = useChatActionStore(
     (store) => store.setIsRenameModalOpen
   );
+  const setIsShareDialogOpen = useChatActionStore(
+    (store) => store.setIsShareDialogOpen
+  );
 
   const toggleChatPinMutation = useMutation({
     mutationFn: useConvexMutation(api.chats.toggleChatPin),
@@ -48,57 +51,64 @@ export default function SidebarChatItem({ chat }: Props) {
   });
 
   return (
-    <Link to="/chat/$chatId" params={{ chatId: chat.uuid }}>
-      <div className="flex items-center justify-between py-1 pl-2 text-sm rounded cursor-pointer hover:bg-primary/10 hover:text-primary dark:hover:bg-secondary dark:hover:text-secondary-foreground">
-        <h4 className="line-clamp-1">{chat.title}</h4>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="ghost">
-              <EllipsisVerticalIcon />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedChat(chat);
-                setIsRenameModalOpen(true);
-              }}
-            >
-              <EditIcon />
-              <span className="leading-0">Rename</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleChatPinMutation.mutate({
-                  chatId: chat._id,
-                  sessionToken: authData?.session.token ?? "",
-                });
-              }}
-            >
-              <PinIcon />
-              <span className="leading-0">
-                {chat.isPinned ? "Unpin" : "Pin"}
-              </span>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedChat(chat);
-                setIsDeleteModalOpen(true);
-              }}
-            >
-              <Trash2Icon />
-              <span className="leading-0">Delete</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Share2Icon />
-              <span className="leading-0">Share</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+    <Link
+      to="/chat/$chatId"
+      params={{ chatId: chat.uuid }}
+      className="flex items-center justify-between py-1 pl-2 text-sm rounded cursor-pointer hover:bg-primary/10 hover:text-primary dark:hover:bg-secondary dark:hover:text-secondary-foreground"
+      activeProps={{ className: "bg-secondary" }}
+    >
+      <h4 className="line-clamp-1">{chat.title}</h4>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button size="icon" variant="ghost">
+            <EllipsisVerticalIcon />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedChat(chat);
+              setIsRenameModalOpen(true);
+            }}
+          >
+            <EditIcon />
+            <span className="leading-0">Rename</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleChatPinMutation.mutate({
+                chatId: chat._id,
+                sessionToken: authData?.session.token ?? "",
+              });
+            }}
+          >
+            <PinIcon />
+            <span className="leading-0">{chat.isPinned ? "Unpin" : "Pin"}</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedChat(chat);
+              setIsDeleteModalOpen(true);
+            }}
+          >
+            <Trash2Icon />
+            <span className="leading-0">Delete</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedChat(chat);
+              setIsShareDialogOpen(true);
+            }}
+          >
+            <Share2Icon />
+            <span className="leading-0">Share</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </Link>
   );
 }

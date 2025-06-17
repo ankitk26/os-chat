@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthIndexImport } from './routes/_auth.index'
+import { Route as ShareChatIdImport } from './routes/share.$chatId'
 import { Route as AuthSettingsImport } from './routes/_auth.settings'
 import { Route as AuthChatChatIdImport } from './routes/_auth.chat.$chatId'
 
@@ -34,6 +35,12 @@ const AuthIndexRoute = AuthIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthRoute,
+} as any)
+
+const ShareChatIdRoute = ShareChatIdImport.update({
+  id: '/share/$chatId',
+  path: '/share/$chatId',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const AuthSettingsRoute = AuthSettingsImport.update({
@@ -73,6 +80,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSettingsImport
       parentRoute: typeof AuthImport
     }
+    '/share/$chatId': {
+      id: '/share/$chatId'
+      path: '/share/$chatId'
+      fullPath: '/share/$chatId'
+      preLoaderRoute: typeof ShareChatIdImport
+      parentRoute: typeof rootRoute
+    }
     '/_auth/': {
       id: '/_auth/'
       path: '/'
@@ -110,6 +124,7 @@ export interface FileRoutesByFullPath {
   '': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
   '/settings': typeof AuthSettingsRoute
+  '/share/$chatId': typeof ShareChatIdRoute
   '/': typeof AuthIndexRoute
   '/chat/$chatId': typeof AuthChatChatIdRoute
 }
@@ -117,6 +132,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/settings': typeof AuthSettingsRoute
+  '/share/$chatId': typeof ShareChatIdRoute
   '/': typeof AuthIndexRoute
   '/chat/$chatId': typeof AuthChatChatIdRoute
 }
@@ -126,20 +142,28 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
   '/_auth/settings': typeof AuthSettingsRoute
+  '/share/$chatId': typeof ShareChatIdRoute
   '/_auth/': typeof AuthIndexRoute
   '/_auth/chat/$chatId': typeof AuthChatChatIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/login' | '/settings' | '/' | '/chat/$chatId'
+  fullPaths:
+    | ''
+    | '/login'
+    | '/settings'
+    | '/share/$chatId'
+    | '/'
+    | '/chat/$chatId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/settings' | '/' | '/chat/$chatId'
+  to: '/login' | '/settings' | '/share/$chatId' | '/' | '/chat/$chatId'
   id:
     | '__root__'
     | '/_auth'
     | '/login'
     | '/_auth/settings'
+    | '/share/$chatId'
     | '/_auth/'
     | '/_auth/chat/$chatId'
   fileRoutesById: FileRoutesById
@@ -148,11 +172,13 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   LoginRoute: typeof LoginRoute
+  ShareChatIdRoute: typeof ShareChatIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   LoginRoute: LoginRoute,
+  ShareChatIdRoute: ShareChatIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -166,7 +192,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/_auth",
-        "/login"
+        "/login",
+        "/share/$chatId"
       ]
     },
     "/_auth": {
@@ -183,6 +210,9 @@ export const routeTree = rootRoute
     "/_auth/settings": {
       "filePath": "_auth.settings.tsx",
       "parent": "/_auth"
+    },
+    "/share/$chatId": {
+      "filePath": "share.$chatId.tsx"
     },
     "/_auth/": {
       "filePath": "_auth.index.tsx",

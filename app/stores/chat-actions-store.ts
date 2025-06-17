@@ -14,6 +14,8 @@ type ChatActionState = {
   setIsDeleteModalOpen: (value: boolean) => void;
   isRenameModalOpen: boolean;
   setIsRenameModalOpen: (value: boolean) => void;
+  isShareDialogOpen: boolean;
+  setIsShareDialogOpen: (value: boolean) => void;
 };
 
 export const useChatActionStore = create<ChatActionState>()((set) => ({
@@ -23,4 +25,6 @@ export const useChatActionStore = create<ChatActionState>()((set) => ({
   setIsDeleteModalOpen: (value: boolean) => set({ isDeleteModalOpen: value }),
   isRenameModalOpen: false,
   setIsRenameModalOpen: (value: boolean) => set({ isRenameModalOpen: value }),
+  isShareDialogOpen: false,
+  setIsShareDialogOpen: (value: boolean) => set({ isShareDialogOpen: value }),
 }));

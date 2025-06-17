@@ -173,7 +173,7 @@ code span {
   font-family: "Geist Mono", monospace;
 }
 
-.defaultStyles pre {
+#shiki-container {
   border-radius: 0px;
   text-wrap: wrap;
 }

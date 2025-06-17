@@ -4,6 +4,7 @@ import { api } from "convex/_generated/api";
 import { authQueryOptions } from "~/queries/auth";
 import ChatRenameDialog from "./chat-rename-dialog";
 import DeleteChatAlertDialog from "./delete-chat-alert-dialog";
+import ShareChatDialog from "./share-chat-dialog";
 import SidebarChatItem from "./sidebar-chat-item";
 
 export default function SidebarChats({ pin = false }: { pin?: boolean }) {
@@ -25,6 +26,7 @@ export default function SidebarChats({ pin = false }: { pin?: boolean }) {
       ))}
       <DeleteChatAlertDialog />
       <ChatRenameDialog />
+      <ShareChatDialog />
     </>
   );
 }

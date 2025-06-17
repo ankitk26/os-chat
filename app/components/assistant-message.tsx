@@ -14,15 +14,15 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
   message: string;
-  reload: (
+  reload?: (
     chatRequestOptions?: ChatRequestOptions
   ) => Promise<string | null | undefined>;
+  readOnly?: boolean;
 };
 
-export default React.memo(function AssistantMessage({
-  message,
-  reload,
-}: Props) {
+export default React.memo(function AssistantMessage(props: Props) {
+  const { message, reload, readOnly } = props;
+
   return (
     <>
       <div className="w-full max-w-full leading-8 prose prose-neutral dark:prose-invert prose-rose prose-pre:bg-transparent prose-pre:m-0 prose-pre:p-0">
@@ -53,7 +53,7 @@ export default React.memo(function AssistantMessage({
           <TooltipContent>Copy to clipboard</TooltipContent>
         </Tooltip>
 
-        <RetryModelDropdown reload={reload} />
+        {reload && !readOnly && <RetryModelDropdown reload={reload} />}
       </div>
     </>
   );

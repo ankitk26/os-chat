@@ -62,7 +62,6 @@ export default function CodeHighlight({
           language={language}
           theme={theme === "light" ? "github-light" : "poimandres"}
           showLanguage={false}
-          className="font-mono text-sm"
           delay={150}
         >
           {codeContent}

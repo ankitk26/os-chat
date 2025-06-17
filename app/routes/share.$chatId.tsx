@@ -1,0 +1,41 @@
+import { convexQuery } from "@convex-dev/react-query";
+import { createFileRoute } from "@tanstack/react-router";
+import { api } from "convex/_generated/api";
+import { AppSidebar } from "~/components/app-sidebar";
+import ReadOnlyChatMessages from "~/components/read-only-chat-messages";
+import { SidebarProvider } from "~/components/ui/sidebar";
+import { authQueryOptions } from "~/queries/auth";
+
+export const Route = createFileRoute("/share/$chatId")({
+  beforeLoad: async ({ context }) => {
+    const auth = await context.queryClient.fetchQuery(authQueryOptions);
+    return { auth };
+  },
+  loader: ({ context, params }) => {
+    context.queryClient.ensureQueryData(
+      convexQuery(api.messages.getSharedChatMessages, {
+        sharedChatUuid: params.chatId,
+      })
+    );
+  },
+  component: RouteComponent,
+});
+
+function RouteComponent() {
+  const { auth } = Route.useRouteContext();
+
+  if (auth?.session) {
+    return (
+      <SidebarProvider>
+        <AppSidebar />
+        <div className="w-full bg-card">
+          <div className="w-full border-l border-l-border/50">
+            <ReadOnlyChatMessages />
+          </div>
+        </div>
+      </SidebarProvider>
+    );
+  }
+
+  return <ReadOnlyChatMessages />;
+}

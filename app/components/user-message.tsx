@@ -7,9 +7,13 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
   message: string;
+  readOnly?: boolean;
 };
 
-export default React.memo(function UserMessage({ message }: Props) {
+export default React.memo(function UserMessage({
+  message,
+  readOnly = false,
+}: Props) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -29,22 +33,28 @@ export default React.memo(function UserMessage({ message }: Props) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button size="icon" variant="ghost">
-              <RefreshCcwIcon />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Retry message</TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button size="icon" variant="ghost">
-              <Edit2Icon />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Edit message</TooltipContent>
-        </Tooltip>
+        {!readOnly && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="icon" variant="ghost">
+                <RefreshCcwIcon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Retry message</TooltipContent>
+          </Tooltip>
+        )}
+
+        {!readOnly && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="icon" variant="ghost">
+                <Edit2Icon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Edit message</TooltipContent>
+          </Tooltip>
+        )}
+
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
