@@ -28,7 +28,7 @@ export default function PromptActions({ status, stop }: Props) {
           Search
         </Button>
 
-        <Button
+        {/* <Button
           type="button"
           size="sm"
           variant="outline"
@@ -36,7 +36,7 @@ export default function PromptActions({ status, stop }: Props) {
         >
           <PaperclipIcon />
           Attach
-        </Button>
+        </Button> */}
       </div>
 
       {status === "streaming" || status === "submitted" ? (

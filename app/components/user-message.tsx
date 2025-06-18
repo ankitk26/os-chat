@@ -33,7 +33,7 @@ export default React.memo(function UserMessage({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {!readOnly && (
+        {/* {!readOnly && (
           <Tooltip>
             <TooltipTrigger asChild>
               <Button size="icon" variant="ghost">
@@ -42,7 +42,7 @@ export default React.memo(function UserMessage({
             </TooltipTrigger>
             <TooltipContent>Retry message</TooltipContent>
           </Tooltip>
-        )}
+        )} */}
 
         {!readOnly && (
           <Tooltip>
