@@ -1,5 +1,5 @@
 import { useConvexMutation } from "@convex-dev/react-query";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { Doc } from "convex/_generated/dataModel";
@@ -11,7 +11,7 @@ import {
   Trash2Icon,
 } from "lucide-react";
 import { toast } from "sonner";
-import { authClient } from "~/lib/auth-client";
+import { authQueryOptions } from "~/queries/auth";
 import { useChatActionStore } from "~/stores/chat-actions-store";
 import { Button } from "./ui/button";
 import {
@@ -26,7 +26,7 @@ type Props = {
 };
 
 export default function SidebarChatItem({ chat }: Props) {
-  const { data: authData } = authClient.useSession();
+  const { data: authData } = useQuery(authQueryOptions);
   const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
   const setIsDeleteModalOpen = useChatActionStore(
     (store) => store.setIsDeleteModalOpen

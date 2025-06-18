@@ -1,11 +1,11 @@
 import { useConvexMutation } from "@convex-dev/react-query";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { ChatRequestOptions, CreateMessage, Message } from "ai";
 import { api } from "convex/_generated/api";
 import { Id } from "convex/_generated/dataModel";
 import { useEffect, useRef, useState } from "react";
-import { authClient } from "~/lib/auth-client";
+import { authQueryOptions } from "~/queries/auth";
 import { getChatTitle } from "~/server-fns/get-chat-title";
 import { useModelStore } from "~/stores/model-store";
 
@@ -22,7 +22,7 @@ type Props = {
 export default function AutoResizeTextarea(props: Props) {
   const { input, setInput, append } = props;
 
-  const { data } = authClient.useSession();
+  const { data } = useQuery(authQueryOptions);
   const navigate = useNavigate();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const model = useModelStore((store) => store.model);

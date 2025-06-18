@@ -1,5 +1,6 @@
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
-import { authClient } from "~/lib/auth-client";
+import { authQueryOptions } from "~/queries/auth";
 
 export default function EmptyChatContent() {
   const { chatId } = useParams({ strict: false });
@@ -7,7 +8,7 @@ export default function EmptyChatContent() {
     return null;
   }
 
-  const { data } = authClient.useSession();
+  const { data } = useQuery(authQueryOptions);
 
   return (
     <div className="flex flex-col justify-center w-full h-full max-w-3xl mx-auto">

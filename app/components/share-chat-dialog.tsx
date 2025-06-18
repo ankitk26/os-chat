@@ -4,8 +4,8 @@ import { api } from "convex/_generated/api";
 import { CheckIcon, CopyIcon, Link2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { authClient } from "~/lib/auth-client";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
+import { authQueryOptions } from "~/queries/auth";
 import { useChatActionStore } from "~/stores/chat-actions-store";
 import { Button } from "./ui/button";
 import {
@@ -22,7 +22,7 @@ import { Label } from "./ui/label";
 import { Switch } from "./ui/switch";
 
 export default function ShareChatDialog() {
-  const { data: authData } = authClient.useSession();
+  const { data: authData } = useQuery(authQueryOptions);
   const [copied, setCopied] = useState(false);
 
   const selectedChat = useChatActionStore((store) => store.selectedChat);

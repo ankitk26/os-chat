@@ -1,10 +1,10 @@
 import { useChat } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { Id } from "convex/_generated/dataModel";
 import { useRef } from "react";
-import { authClient } from "~/lib/auth-client";
+import { authQueryOptions } from "~/queries/auth";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
 import ChatLoadingIndicator from "./chat-loading-indicator";
 import ChatMessages from "./chat-messages";
@@ -32,7 +32,7 @@ export default function Chat({
   dbMessages,
   isMessagesPending = false,
 }: Props) {
-  const { data: authData } = authClient.useSession();
+  const { data: authData } = useQuery(authQueryOptions);
 
   const { mutateAsync } = useMutation({
     mutationFn: useConvexMutation(api.messages.createMessage),

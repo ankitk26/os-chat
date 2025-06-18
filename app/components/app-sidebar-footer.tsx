@@ -1,11 +1,12 @@
-import { authClient } from "~/lib/auth-client";
-import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
+import { authQueryOptions } from "~/queries/auth";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { SidebarFooter } from "./ui/sidebar";
 import { Skeleton } from "./ui/skeleton";
-import { Link } from "@tanstack/react-router";
 
 export default function AppSidebarFooter() {
-  const { isPending, data: user } = authClient.useSession();
+  const { isPending, data: user } = useQuery(authQueryOptions);
 
   if (isPending) {
     return (
