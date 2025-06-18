@@ -93,7 +93,6 @@ export const deleteMessage = mutation({
       )
       .first();
 
-    console.log(message);
     if (!message) {
       throw new Error("Invalid message");
     }

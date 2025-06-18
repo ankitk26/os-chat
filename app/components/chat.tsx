@@ -37,6 +37,7 @@ export default function Chat({
         id: message.sourceMessageId ?? message._id,
         content: message.content,
         role: message.role,
+        annotations: message.model ? [{ model: message.model }] : [],
         parts: [{ text: message.content, type: "text" }],
       })) ?? [],
     onFinish: async (newMessage) => {
