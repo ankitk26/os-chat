@@ -3,8 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { Link2OffIcon } from "lucide-react";
-import AssistantMessage from "./assistant-message";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
+import ReadOnlyAssistantMessage from "./read-only-assistant-message";
 import { ScrollArea } from "./ui/scroll-area";
 import UserMessage from "./user-message";
 import UserMessageSkeleton from "./user-message-skeleton";
@@ -52,7 +52,7 @@ export default function ReadOnlyChatMessages() {
                     {message.role === "user" ? (
                       <UserMessage message={message.content} readOnly />
                     ) : (
-                      <AssistantMessage message={message.content} readOnly />
+                      <ReadOnlyAssistantMessage message={message} />
                     )}
                   </div>
                 ))

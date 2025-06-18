@@ -1,35 +1,22 @@
-import { ChatRequestOptions, UIMessage } from "ai";
+import { Doc } from "convex/_generated/dataModel";
 import { CopyIcon } from "lucide-react";
-import React from "react";
 import { toast } from "sonner";
-import { cn } from "~/lib/utils";
 import MemoizedMarkdown from "./memoized-markdown";
-import RetryModelDropdown from "./retry-model-dropdown";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
-  message: UIMessage;
-  reload?: (
-    chatRequestOptions?: ChatRequestOptions
-  ) => Promise<string | null | undefined>;
+  message: Doc<"messages">;
 };
 
-export default React.memo(function AssistantMessage(props: Props) {
-  const { message, reload } = props;
-
-  const modelUsed =
-    message.annotations &&
-    message.annotations.length > 0 &&
-    (message as any).annotations[0].model;
-
+export default function ReadOnlyAssistantMessage({ message }: Props) {
   return (
     <>
       <div className="w-full max-w-full leading-8 prose prose-neutral dark:prose-invert prose-rose prose-pre:bg-transparent prose-pre:m-0 prose-pre:p-0">
-        <MemoizedMarkdown content={message.content} id={message.id} />
+        <MemoizedMarkdown content={message.content} id={message._id} />
       </div>
 
-      <div className={cn("flex items-center transition-opacity duration-200")}>
+      <div className="flex items-center transition-opacity duration-200">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -46,10 +33,8 @@ export default React.memo(function AssistantMessage(props: Props) {
           <TooltipContent>Copy to clipboard</TooltipContent>
         </Tooltip>
 
-        {reload && <RetryModelDropdown message={message} reload={reload} />}
-
-        <span className="text-muted-foreground text-xs">{modelUsed}</span>
+        <span className="text-muted-foreground text-xs">{message.model}</span>
       </div>
     </>
   );
-});
+}
