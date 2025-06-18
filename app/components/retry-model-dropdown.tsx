@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { useModelStore } from "~/stores/model-store";
 
 type Props = {
   reload: (
@@ -21,6 +22,8 @@ type Props = {
 };
 
 export default function RetryModelDropdown({ reload }: Props) {
+  const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -44,8 +47,10 @@ export default function RetryModelDropdown({ reload }: Props) {
                 <DropdownMenuItem
                   className="py-3"
                   key={model.modelId}
-                  onClick={() => {
-                    reload({ body: { model: model.modelId } });
+                  onClick={async () => {
+                    await reload({
+                      body: { model: model.modelId, isWebSearchEnabled },
+                    });
                   }}
                 >
                   {model.name}

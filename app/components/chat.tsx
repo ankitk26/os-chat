@@ -2,9 +2,10 @@ import { useChat } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
-import { Id } from "convex/_generated/dataModel";
+import { Doc } from "convex/_generated/dataModel";
 import { useRef } from "react";
 import { authQueryOptions } from "~/queries/auth";
+import { useModelStore } from "~/stores/model-store";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
 import ChatLoadingIndicator from "./chat-loading-indicator";
 import ChatMessages from "./chat-messages";
@@ -15,15 +16,7 @@ import UserPromptInput from "./user-prompt-input";
 
 type Props = {
   chatId: string;
-  dbMessages: {
-    _id: Id<"messages">;
-    _creationTime: number;
-    model?: string | undefined;
-    content: string;
-    chatId: string;
-    userId: Id<"user">;
-    role: "user" | "assistant";
-  }[];
+  dbMessages: Doc<"messages">[];
   isMessagesPending?: boolean;
 };
 
@@ -33,13 +26,15 @@ export default function Chat({
   isMessagesPending = false,
 }: Props) {
   const { data: authData } = useQuery(authQueryOptions);
+  const model = useModelStore((store) => store.model);
 
-  const { mutateAsync } = useMutation({
+  const { mutateAsync: insertAIMessage } = useMutation({
     mutationFn: useConvexMutation(api.messages.createMessage),
   });
 
   const { messages, input, status, setInput, stop, reload, append } = useChat({
     id: chatId,
+    experimental_throttle: 400,
     initialMessages:
       dbMessages?.map((message) => ({
         id: message._id,
@@ -48,16 +43,11 @@ export default function Chat({
         parts: [{ text: message.content, type: "text" }],
       })) ?? [],
     onFinish: async ({ content }) => {
-      console.log("received ai message");
+      console.log("received ai message", new Date().toISOString());
       if (chatId) {
-        console.log("writing ai message");
-        await mutateAsync({
-          messageBody: {
-            chatId,
-            content,
-            role: "assistant",
-            model: "gemini",
-          },
+        console.log("writing ai message", new Date().toISOString());
+        await insertAIMessage({
+          messageBody: { chatId, content, role: "assistant", model },
           sessionToken: authData?.session.token ?? "",
         });
       }

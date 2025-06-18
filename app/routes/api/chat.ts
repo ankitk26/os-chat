@@ -10,19 +10,33 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
       isWebSearchEnabled,
     }: { messages: Message[]; model: string; isWebSearchEnabled: boolean } =
       await request.json();
-    console.log({
-      messages: JSON.stringify(messages, null, 4),
-      model,
-      isWebSearchEnabled,
-    });
 
     const systemMessage =
-      "You are a helpful assistant. Strictly adhere to LaTeX formatting:\n" +
-      "- Inline math: Always use \\( content \\). Example: \\( E=mc^2 \\).\n" +
-      "- Display math: Always use $$ content $$.\n" +
-      "- Never use single dollar signs ($) for math.\n" +
-      "- Never use plain parentheses for math variables (e.g., (a)); always use \\(a\\).\n" +
-      "- Use correct LaTeX for symbols (e.g., \\frac, \\sqrt, \\degree).";
+      "You are a helpful and concise assistant. Your primary goal is to provide clear and direct answers to the user's questions.\n" +
+      "\n" +
+      "**All mathematical expressions and equations in your response MUST be rendered as high-quality LaTeX. Follow these specific formatting guidelines for math:**\n" +
+      "- **Inline math:** Use `\\( content \\)`. Example: `\\( E=mc^2 \\)`.\n" +
+      "- **Display math:** Use `$$ content $$`.\n" +
+      "- **Avoid single dollars:** Never use `$` for math.\n" +
+      "- **Math variables:** Always wrap single variables in inline math, e.g., for `a`, use `\\(a\\)`, not `(a)`.\n" +
+      "- **Correct LaTeX commands:** Use `\\frac`, `\\sqrt`, `\\degree`, etc.\n" +
+      "- **Conditional/Piecewise functions (e.g., if/else logic):** ALWAYS use the `cases` environment, ensuring it is syntactically COMPLETE.\n" +
+      "  - **Start** every `cases` block with `$$\\begin{cases}`.\n" +
+      "  - **End** every `cases` block with `\\end{cases}$$`.\n" +
+      "  - Use `&` to separate columns (expression and condition).\n" +
+      "  - Use `\\\\` for new lines within `cases`.\n" +
+      "  - Wrap descriptive text (like 'if condition') within `cases` using `\\text{...}`. Example: `\\text{if condition}`.\n" +
+      "  - Full `cases` example:\n" +
+      "    ```latex\n" +
+      "    $$\n" +
+      "    f(x) = \\begin{cases}\n" +
+      "    x^2 & \\text{if } x \\ge 0 \\\\\n" +
+      "    -x & \\text{otherwise}\n" +
+      "    \\end{cases}\n" +
+      "    $$\n" +
+      "    ```\n" +
+      "\n" + // Crucial newline to visually separate constraints from negative constraint
+      "**IMPORTANT: UNDER NO CIRCUMSTANCES should you mention LaTeX, formatting rules, code, commands, or any technical implementation details in your response to the user. Your response should read as if you are directly providing information, not explaining how it's formatted. For instance, say 'Here is the formula:' instead of 'Here is the LaTeX code for the formula:'.**";
 
     const result = streamText({
       model: google(model, {
