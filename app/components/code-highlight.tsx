@@ -60,7 +60,7 @@ export default function CodeHighlight({
       <div>
         <ShikiHighlighter
           language={language}
-          theme={theme === "light" ? "github-light" : "poimandres"}
+          theme={theme === "light" ? "github-light" : "vesper"}
           showLanguage={false}
           delay={150}
         >
