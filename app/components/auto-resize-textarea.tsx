@@ -91,7 +91,7 @@ export default function AutoResizeTextarea(props: Props) {
         },
         {
           body: {
-            model: selectedModel.id,
+            model: selectedModel,
             isWebSearchEnabled,
             apiKeys: localStorage.getItem("apiKeys"),
             useOpenRouter: localStorage.getItem("useOpenRouter"),

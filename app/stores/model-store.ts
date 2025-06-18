@@ -1,13 +1,9 @@
 import { create } from "zustand";
-
-export type ModelStore = {
-  id: string;
-  name: string;
-};
+import { Model } from "~/types";
 
 type ModelStoreState = {
-  selectedModel: ModelStore;
-  setSelectedModel: (model: ModelStore) => void;
+  selectedModel: Model;
+  setSelectedModel: (model: Model) => void;
   isWebSearchEnabled: boolean;
   toggleIsWebSearch: () => void;
   retryModel: string | null;
@@ -16,10 +12,12 @@ type ModelStoreState = {
 
 export const useModelStore = create<ModelStoreState>()((set) => ({
   selectedModel: {
-    id: "deepseek/deepseek-chat:free",
+    modelId: "deepseek/deepseek-chat:free",
+    openRouterModelId: "deepseek/deepseek-chat:free",
+    isFree: true,
     name: "DeepSeek V3",
   },
-  setSelectedModel: (model: ModelStore) => set({ selectedModel: model }),
+  setSelectedModel: (model: Model) => set({ selectedModel: model }),
   isWebSearchEnabled: false,
   toggleIsWebSearch: () =>
     set((prev) => ({ isWebSearchEnabled: !prev.isWebSearchEnabled })),

@@ -10,20 +10,14 @@ import {
   streamText,
 } from "ai";
 import { systemMessage } from "~/constants/system-message";
+import { ApiKeys, Model } from "~/types";
 
 type ChatRequestBody = {
   messages: Message[];
-  model: string;
+  model: Model;
   isWebSearchEnabled: boolean;
   apiKeys: string | null;
   useOpenRouter: string | null;
-};
-
-type ParsedApiKeys = {
-  gemini: string;
-  openai: string;
-  anthropic: string;
-  openrouter: string;
 };
 
 // Helper function to safely parse JSON from string
@@ -31,38 +25,38 @@ function safeJSONParse<T>(jsonString: string | null, defaultValue: T): T {
   if (!jsonString) {
     return defaultValue;
   }
+
   try {
+    // try parsing the string to JSON
     const parsed = JSON.parse(jsonString);
     if (typeof parsed === typeof defaultValue) {
       return parsed;
     }
-    console.warn(
-      `Parsed value had unexpected type, using default value. Parsed:`,
-      parsed
-    );
     return defaultValue;
   } catch (e) {
-    console.error(`Failed to parse JSON string, using default value:`, e);
     return defaultValue;
   }
 }
 
-function getModelToUse(
-  requestedModelId: string,
-  parsedApiKeys: ParsedApiKeys,
+const getModelToUse = (
+  requestModel: Model,
+  parsedApiKeys: ApiKeys,
   useOpenRouter: boolean,
   isWebSearchEnabled: boolean
-) {
-  // Option 1: useOpenRouter is true AND client provided an OpenRouter key
+) => {
+  const defaultOpenRouterApiKey = process.env.OPENROUTER_API_KEY;
+
+  // useOpenRouter is true AND client provided an OpenRouter key
+  // All models can be accessed and powered by OpenRouter API Key given by user
   if (useOpenRouter && parsedApiKeys.openrouter.trim() !== "") {
-    console.log("Using OpenRouter model with client's API key.");
     const openRouter = createOpenRouter({
       apiKey: parsedApiKeys.openrouter,
     });
-    return openRouter.chat(requestedModelId);
+    return openRouter.chat(requestModel.openRouterModelId);
   }
 
-  // Option 2: useOpenRouter is false and no API keys provided
+  // useOpenRouter is false and no API keys provided
+  // No keys provided - use default DeepSeek model
   if (
     !useOpenRouter &&
     !parsedApiKeys.gemini &&
@@ -70,77 +64,60 @@ function getModelToUse(
     !parsedApiKeys.anthropic &&
     !parsedApiKeys.openrouter
   ) {
-    console.log("Using server's default OpenRouter key for models.");
     const myOpenRouter = createOpenRouter({
-      apiKey: process.env.OPENROUTER_API_KEY,
+      apiKey: defaultOpenRouterApiKey,
     });
-    return myOpenRouter.chat(requestedModelId);
+    return myOpenRouter.chat(requestModel.openRouterModelId);
   }
 
-  // Option 3: useOpenRouter is false, but specific provider keys might be present
+  // useOpenRouter is false, but specific provider keys might be present
+  // Use specific provider's keys provided by user
   if (!useOpenRouter) {
-    console.log("Using specific model provider based on API keys.");
-
-    // Determine provider based on model ID
-    if (
-      requestedModelId.startsWith("gemini") ||
-      requestedModelId.includes("google")
-    ) {
-      if (parsedApiKeys.gemini.trim() !== "") {
-        const googleModel = createGoogleGenerativeAI({
-          apiKey: parsedApiKeys.gemini,
-        });
-        return googleModel(requestedModelId, {
-          useSearchGrounding: isWebSearchEnabled,
-        });
-      } else {
+    // Handle GEMINI model
+    if (requestModel.openRouterModelId.startsWith("google")) {
+      if (parsedApiKeys.gemini.trim() === "") {
         throw new Error("API Key for Google Gemini not provided.");
       }
+
+      const googleModel = createGoogleGenerativeAI({
+        apiKey: parsedApiKeys.gemini,
+      });
+      return googleModel(requestModel.modelId, {
+        useSearchGrounding: isWebSearchEnabled,
+      });
     }
 
-    if (
-      requestedModelId.startsWith("gpt") ||
-      requestedModelId.includes("openai")
-    ) {
-      if (parsedApiKeys.openai.trim() !== "") {
-        const openAiModel = createOpenAI({
-          apiKey: parsedApiKeys.openai,
-        });
-        return openAiModel(requestedModelId);
-      } else {
+    // Handle OPENAI model
+    if (requestModel.openRouterModelId.startsWith("openai")) {
+      if (parsedApiKeys.openai.trim() === "") {
         throw new Error("API Key for OpenAI not provided.");
       }
+
+      const openAiModel = createOpenAI({
+        apiKey: parsedApiKeys.openai,
+      });
+      return openAiModel(requestModel.modelId);
     }
 
-    if (
-      requestedModelId.startsWith("claude") ||
-      requestedModelId.includes("anthropic")
-    ) {
-      if (parsedApiKeys.anthropic.trim() !== "") {
-        const anthropicModel = createAnthropic({
-          apiKey: parsedApiKeys.anthropic,
-        });
-        return anthropicModel(requestedModelId);
-      } else {
+    // Handle ANTHROPIC model
+    if (requestModel.openRouterModelId.startsWith("anthropic")) {
+      if (parsedApiKeys.gemini.trim() === "") {
         throw new Error("API Key for Anthropic not provided.");
       }
-    }
 
-    // Fallback to server's OpenRouter for unknown models
-    console.log("Unknown model, falling back to server's OpenRouter.");
-    const myOpenRouter = createOpenRouter({
-      apiKey: process.env.OPENROUTER_API_KEY,
-    });
-    return myOpenRouter.chat(requestedModelId);
+      const anthropicModel = createAnthropic({
+        apiKey: parsedApiKeys.anthropic,
+      });
+      return anthropicModel(requestModel.modelId);
+    }
   }
 
-  // Final fallback case
-  console.log("Fallback to server's OpenRouter.");
+  // Default any other case to DeepSeek model
   const myOpenRouter = createOpenRouter({
-    apiKey: process.env.OPENROUTER_API_KEY,
+    apiKey: defaultOpenRouterApiKey,
   });
-  return myOpenRouter.chat(requestedModelId);
-}
+  return myOpenRouter.chat(requestModel.openRouterModelId);
+};
 
 export const APIRoute = createAPIFileRoute("/api/chat")({
   POST: async ({ request }) => {
@@ -148,7 +125,7 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
 
     const {
       messages,
-      model: requestedModelId,
+      model: requestModel,
       isWebSearchEnabled,
       apiKeys: apiKeysString,
       useOpenRouter: useOpenRouterString,
@@ -161,11 +138,10 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
       anthropic: "",
       openrouter: "",
     });
-
     const useOpenRouter = safeJSONParse(useOpenRouterString, false);
 
     const modelToUse = getModelToUse(
-      requestedModelId,
+      requestModel,
       parsedApiKeys,
       useOpenRouter,
       isWebSearchEnabled
@@ -183,14 +159,14 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
           abortSignal: request.signal,
           onFinish: () => {
             dataStream.writeMessageAnnotation({
-              model: requestedModelId,
+              model: requestModel.name,
             });
           },
           onError: ({ error }) => {
             console.error("Error during streaming:", error);
             dataStream.writeData({
               type: "error",
-              message: "An unknown error occurred.",
+              message: (error as any).message,
             });
           },
         });

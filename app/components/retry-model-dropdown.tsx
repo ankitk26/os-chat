@@ -68,7 +68,7 @@ export default function RetryModelDropdown({ message, reload }: Props) {
                       });
                       await reload({
                         body: {
-                          model: model.modelId,
+                          model: model,
                           isWebSearchEnabled,
                           apiKeys: localStorage.getItem("apiKeys"),
                           useOpenRouter: localStorage.getItem("useOpenRouter"),

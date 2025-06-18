@@ -1,8 +1,6 @@
 import { ChatRequestOptions, UIMessage } from "ai";
-import { TerminalIcon } from "lucide-react";
 import { memo } from "react";
 import AssistantMessage from "./assistant-message";
-import { Alert, AlertDescription } from "./ui/alert";
 import UserMessage from "./user-message";
 
 type Props = {
@@ -10,10 +8,9 @@ type Props = {
   reload: (
     chatRequestOptions?: ChatRequestOptions
   ) => Promise<string | null | undefined>;
-  error: Error | undefined;
 };
 
-export default memo(function ChatMessages({ messages, error, reload }: Props) {
+export default memo(function ChatMessages({ messages, reload }: Props) {
   if (messages.length === 0) {
     return null;
   }
@@ -29,15 +26,6 @@ export default memo(function ChatMessages({ messages, error, reload }: Props) {
           )}
         </div>
       ))}
-      {error && (
-        <Alert variant="destructive">
-          <TerminalIcon />
-          <AlertDescription>
-            Something went wrong! Please check your API keys and network
-            connectivity
-          </AlertDescription>
-        </Alert>
-      )}
     </>
   );
 });

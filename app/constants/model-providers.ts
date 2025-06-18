@@ -1,36 +1,5 @@
-export interface Model {
-  name: string;
-  modelId: string;
-  isFree: boolean;
-}
+import { ProviderGroup } from "~/types";
 
-export interface ModelWithAvailability extends Model {
-  // Original Model properties
-  // name: string;
-  // modelId: string;
-  // isFree: boolean;
-  isAvailable: boolean; // <-- New property
-}
-
-export interface ProviderGroup {
-  provider: string; // e.g.: "Google", "DeepSeek", etc.
-  key: string; // e.g.: "google", "deepseek", "openai", "anthropic"
-  models: Model[]; // Original models array
-}
-
-// New type for the return structure
-export interface ProviderGroupWithAvailability
-  extends Omit<ProviderGroup, "models"> {
-  models: ModelWithAvailability[]; // Models array now contains ModelWithAvailability
-}
-
-export interface ApiKeys {
-  gemini: string;
-  openai: string;
-  anthropic: string;
-  openrouter: string;
-}
-// Example arrays provided by you:
 export const openRouterModelProviders: ProviderGroup[] = [
   {
     provider: "Google",
@@ -38,22 +7,20 @@ export const openRouterModelProviders: ProviderGroup[] = [
     models: [
       {
         name: "Gemini 2.0 Flash",
-        modelId: "google/gemini-2.0-flash-001",
+        modelId: "gemini-2.0-flash-001",
+        openRouterModelId: "google/gemini-2.0-flash-001",
         isFree: false,
       },
       {
         name: "Gemini 2.5 Flash",
-        modelId: "google/gemini-2.5-flash",
-        isFree: false,
-      },
-      {
-        name: "Gemini 2.5 Flash Lite",
-        modelId: "google/gemini-2.5-flash-lite-preview-06-17",
+        openRouterModelId: "google/gemini-2.5-flash",
+        modelId: "gemini-2.5-flash-preview-04-17",
         isFree: false,
       },
       {
         name: "Gemini 2.5 Pro",
-        modelId: "google/gemini-2.5-pro",
+        openRouterModelId: "google/gemini-2.5-pro",
+        modelId: "gemini-2.5-pro-preview-05-06",
         isFree: false,
       },
     ],
@@ -64,16 +31,19 @@ export const openRouterModelProviders: ProviderGroup[] = [
     models: [
       {
         name: "DeepSeek R1 0528",
+        openRouterModelId: "deepseek/deepseek-r1-0528:free",
         modelId: "deepseek/deepseek-r1-0528:free",
         isFree: true,
       },
       {
         name: "DeepSeek R1",
+        openRouterModelId: "deepseek/deepseek-r1:free",
         modelId: "deepseek/deepseek-r1:free",
         isFree: true,
       },
       {
         name: "DeepSeek V3 (0324)",
+        openRouterModelId: "deepseek/deepseek-chat-v3-0324:free",
         modelId: "deepseek/deepseek-chat-v3-0324:free",
         isFree: true,
       },
@@ -85,27 +55,26 @@ export const openRouterModelProviders: ProviderGroup[] = [
     models: [
       {
         name: "o3",
-        modelId: "openai/o3",
+        openRouterModelId: "openai/o3",
+        modelId: "o3",
         isFree: false,
       },
       {
         name: "o3 Mini",
-        modelId: "openai/o3-mini",
-        isFree: false,
-      },
-      {
-        name: "o3 Pro",
-        modelId: "openai/o3-pro",
+        openRouterModelId: "openai/o3-mini",
+        modelId: "o3-mini",
         isFree: false,
       },
       {
         name: "GPT 4o Mini",
-        modelId: "openai/gpt-4o-mini",
+        openRouterModelId: "openai/gpt-4o-mini",
+        modelId: "gpt-4o-mini",
         isFree: false,
       },
       {
         name: "GPT 4o",
-        modelId: "openai/gpt-4o",
+        openRouterModelId: "openai/gpt-4o",
+        modelId: "gpt-4o",
         isFree: false,
       },
     ],
@@ -116,22 +85,26 @@ export const openRouterModelProviders: ProviderGroup[] = [
     models: [
       {
         name: "Claude 3.5 Sonnet",
-        modelId: "anthropic/claude-3.5-sonnet",
+        openRouterModelId: "anthropic/claude-3.5-sonnet",
+        modelId: "claude-3-5-sonnet-latest",
         isFree: false,
       },
       {
         name: "Claude 3.7 Sonnet",
-        modelId: "anthropic/claude-3.7-sonnet",
+        openRouterModelId: "anthropic/claude-3.7-sonnet",
+        modelId: "claude-3-7-sonnet-20250219",
         isFree: false,
       },
       {
         name: "Claude Sonnet 4",
-        modelId: "anthropic/claude-sonnet-4",
+        openRouterModelId: "anthropic/claude-sonnet-4",
+        modelId: "claude-4-sonnet-20250514",
         isFree: false,
       },
       {
         name: "Claude Opus 4",
-        modelId: "anthropic/claude-opus-4",
+        openRouterModelId: "anthropic/claude-opus-4",
+        modelId: "claude-4-opus-20250514",
         isFree: false,
       },
     ],

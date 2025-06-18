@@ -45,7 +45,7 @@ export default function ModelSelector() {
                     key={model.modelId}
                     disabled={!model.isAvailable}
                     onClick={() => {
-                      setSelectedModel({ id: model.modelId, name: model.name });
+                      setSelectedModel(model);
                     }}
                   >
                     {model.name}
