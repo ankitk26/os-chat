@@ -1,5 +1,5 @@
 import { ChevronDownIcon } from "lucide-react";
-import { openRouterModelProviders } from "~/constants/model-providers";
+import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { useModelStore } from "~/stores/model-store";
 import ModelProviderIcon from "./model-provider-icon";
 import { Button } from "./ui/button";
@@ -18,6 +18,10 @@ export default function ModelSelector() {
   const selectedModel = useModelStore((store) => store.selectedModel);
   const setSelectedModel = useModelStore((store) => store.setSelectedModel);
 
+  const apiKeys = localStorage.getItem("apiKeys");
+  const useOpenRouter = localStorage.getItem("useOpenRouter");
+  const accessibleModels = getAccessibleModels(apiKeys, useOpenRouter);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -27,7 +31,7 @@ export default function ModelSelector() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {openRouterModelProviders.map((provider) => (
+        {accessibleModels.map((provider) => (
           <DropdownMenuSub key={provider.key}>
             <DropdownMenuSubTrigger className="py-3 flex items-center gap-3">
               <ModelProviderIcon provider={provider.key} />
@@ -39,7 +43,7 @@ export default function ModelSelector() {
                   <DropdownMenuItem
                     className="py-3"
                     key={model.modelId}
-                    disabled={!model.isFree}
+                    disabled={!model.isAvailable}
                     onClick={() => {
                       setSelectedModel({ id: model.modelId, name: model.name });
                     }}

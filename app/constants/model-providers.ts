@@ -1,4 +1,37 @@
-export const openRouterModelProviders = [
+export interface Model {
+  name: string;
+  modelId: string;
+  isFree: boolean;
+}
+
+export interface ModelWithAvailability extends Model {
+  // Original Model properties
+  // name: string;
+  // modelId: string;
+  // isFree: boolean;
+  isAvailable: boolean; // <-- New property
+}
+
+export interface ProviderGroup {
+  provider: string; // e.g.: "Google", "DeepSeek", etc.
+  key: string; // e.g.: "google", "deepseek", "openai", "anthropic"
+  models: Model[]; // Original models array
+}
+
+// New type for the return structure
+export interface ProviderGroupWithAvailability
+  extends Omit<ProviderGroup, "models"> {
+  models: ModelWithAvailability[]; // Models array now contains ModelWithAvailability
+}
+
+export interface ApiKeys {
+  gemini: string;
+  openai: string;
+  anthropic: string;
+  openrouter: string;
+}
+// Example arrays provided by you:
+export const openRouterModelProviders: ProviderGroup[] = [
   {
     provider: "Google",
     key: "google",

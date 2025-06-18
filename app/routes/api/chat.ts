@@ -12,6 +12,13 @@ type ChatRequestBody = {
   messages: Message[];
   model: string;
   isWebSearchEnabled: boolean;
+  apiKeys: {
+    gemini: string;
+    openai: string;
+    anthropic: string;
+    openrouter: string;
+  };
+  useOpenRouter: boolean;
 };
 
 export const APIRoute = createAPIFileRoute("/api/chat")({
@@ -21,6 +28,8 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
     const openrouter = createOpenRouter({
       apiKey: process.env.OPENROUTER_API_KEY,
     });
+
+    console.log(chatRequestBody);
 
     return createDataStreamResponse({
       execute: (dataStream) => {
@@ -37,9 +46,6 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
           abortSignal: request.signal,
           onFinish: () => {
             dataStream.writeMessageAnnotation({ model: chatRequestBody.model });
-          },
-          onError: ({ error }) => {
-            console.log(error);
           },
         });
 

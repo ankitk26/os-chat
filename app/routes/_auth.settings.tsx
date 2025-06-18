@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { LogOutIcon, SaveIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"; // Removed useRef
 import { toast } from "sonner";
 import ApiKeyInput, { Provider } from "~/components/api-key-input";
 import { Button } from "~/components/ui/button";
@@ -36,28 +36,48 @@ function RouteComponent() {
   // State for OpenRouter toggle.
   const [useOpenRouter, setUseOpenRouter] = useState(false);
 
+  // State to store the initial loaded state from localStorage for comparison
+  const [initialApiKeys, setInitialApiKeys] = useState<ApiKeys | null>(null);
+  const [initialUseOpenRouter, setInitialUseOpenRouter] = useState<
+    boolean | null
+  >(null);
+
   // Load saved settings from localStorage when the component mounts.
   useEffect(() => {
     const storedKeys = localStorage.getItem("apiKeys");
     const storedToggle = localStorage.getItem("useOpenRouter");
 
+    let loadedApiKeys: ApiKeys = {
+      gemini: "",
+      openai: "",
+      anthropic: "",
+      openrouter: "",
+    };
     if (storedKeys) {
       try {
-        const parsedKeys = JSON.parse(storedKeys) as ApiKeys;
-        setApiKeys(parsedKeys);
+        loadedApiKeys = JSON.parse(storedKeys) as ApiKeys;
       } catch (e) {
         console.error("Failed to parse stored apiKeys:", e);
       }
     }
 
+    let loadedUseOpenRouter = false;
     if (storedToggle) {
       try {
         const parsedToggle = JSON.parse(storedToggle) as boolean;
-        setUseOpenRouter(parsedToggle);
+        loadedUseOpenRouter = parsedToggle;
       } catch (e) {
         console.error("Failed to parse stored useOpenRouter:", e);
       }
     }
+
+    // Set current states
+    setApiKeys(loadedApiKeys);
+    setUseOpenRouter(loadedUseOpenRouter);
+
+    // Set initial states (which will cause a re-render, necessary for `hasChanges`)
+    setInitialApiKeys(loadedApiKeys);
+    setInitialUseOpenRouter(loadedUseOpenRouter);
   }, []);
 
   // Handler that updates a specific API key.
@@ -71,7 +91,22 @@ function RouteComponent() {
     localStorage.setItem("useOpenRouter", JSON.stringify(useOpenRouter));
     console.log("Saving API keys:", { apiKeys, useOpenRouter });
     toast.success("API keys saved!");
+
+    // Update the initial states to reflect the newly saved state.
+    // This will trigger a re-render, causing `hasChanges` to be re-evaluated.
+    setInitialApiKeys({ ...apiKeys }); // Deep copy the object for state update
+    setInitialUseOpenRouter(useOpenRouter);
   };
+
+  // Determine if there are any pending changes to save
+  const hasChanges =
+    // Ensure initial states are populated (component has finished initial load)
+    initialApiKeys !== null &&
+    initialUseOpenRouter !== null &&
+    // Deep compare apiKeys object
+    (JSON.stringify(apiKeys) !== JSON.stringify(initialApiKeys) ||
+      // Compare useOpenRouter boolean
+      useOpenRouter !== initialUseOpenRouter);
 
   return (
     <div className="mx-auto py-6 space-y-6 max-w-3xl w-full">
@@ -151,7 +186,11 @@ function RouteComponent() {
           </div>
 
           <div className="flex justify-end pt-4">
-            <Button onClick={handleSave} className="flex items-center gap-2">
+            <Button
+              onClick={handleSave}
+              className="flex items-center gap-2"
+              disabled={!hasChanges} // Disable button if no changes
+            >
               <SaveIcon className="size-4" />
               <span className="leading-0">Save Settings</span>
             </Button>
