@@ -3,9 +3,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { ChatRequestOptions, UIMessage } from "ai";
 import { api } from "convex/_generated/api";
 import { RefreshCcwIcon } from "lucide-react";
-import { modelProviders } from "~/constants/model-providers";
+import { openRouterModelProviders } from "~/constants/model-providers";
 import { authQueryOptions } from "~/queries/auth";
 import { useModelStore } from "~/stores/model-store";
+import ModelProviderIcon from "./model-provider-icon";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -29,8 +30,6 @@ type Props = {
 export default function RetryModelDropdown({ message, reload }: Props) {
   const { data: authData } = useQuery(authQueryOptions);
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
-  const setRetryModel = useModelStore((store) => store.setRetryModel);
-  const retryModel = useModelStore((store) => store.retryModel);
 
   const deleteMessageMutation = useMutation({
     mutationFn: useConvexMutation(api.messages.deleteMessage),
@@ -49,32 +48,36 @@ export default function RetryModelDropdown({ message, reload }: Props) {
         </Tooltip>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger className="py-3">
-            Gemini
-          </DropdownMenuSubTrigger>
-          <DropdownMenuPortal>
-            <DropdownMenuSubContent>
-              {modelProviders.map((model) => (
-                <DropdownMenuItem
-                  className="py-3"
-                  key={model.modelId}
-                  onClick={async () => {
-                    await deleteMessageMutation.mutateAsync({
-                      sessionToken: authData?.session.token ?? "",
-                      sourceMessageId: message.id,
-                    });
-                    await reload({
-                      body: { model: model.modelId, isWebSearchEnabled },
-                    });
-                  }}
-                >
-                  {model.name}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuSubContent>
-          </DropdownMenuPortal>
-        </DropdownMenuSub>
+        {openRouterModelProviders.map((provider) => (
+          <DropdownMenuSub key={provider.key}>
+            <DropdownMenuSubTrigger className="py-3 flex items-center gap-3">
+              <ModelProviderIcon provider={provider.key} />
+              {provider.provider}
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                {provider.models.map((model) => (
+                  <DropdownMenuItem
+                    className="py-3"
+                    key={model.modelId}
+                    disabled={!model.isFree}
+                    onClick={async () => {
+                      await deleteMessageMutation.mutateAsync({
+                        sessionToken: authData?.session.token ?? "",
+                        sourceMessageId: message.id,
+                      });
+                      await reload({
+                        body: { model: model.modelId, isWebSearchEnabled },
+                      });
+                    }}
+                  >
+                    {model.name}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

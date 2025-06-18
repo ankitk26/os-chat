@@ -25,7 +25,7 @@ export default function AutoResizeTextarea(props: Props) {
   const { data } = useQuery(authQueryOptions);
   const navigate = useNavigate();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const model = useModelStore((store) => store.model);
+  const selectedModel = useModelStore((store) => store.selectedModel);
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
 
   const { chatId: paramsChatId } = useParams({ strict: false });
@@ -91,7 +91,7 @@ export default function AutoResizeTextarea(props: Props) {
         },
         {
           body: {
-            model,
+            model: selectedModel.id,
             isWebSearchEnabled,
           },
         }

@@ -1,4 +1,4 @@
-import { CopyIcon, Edit2Icon, RefreshCcwIcon } from "lucide-react";
+import { CopyIcon, Edit2Icon } from "lucide-react";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import { cn } from "~/lib/utils";

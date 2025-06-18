@@ -1,42 +1,57 @@
-import { CrosshairIcon } from "lucide-react";
-import { modelProviders } from "~/constants/model-providers";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectGroup,
-  SelectLabel,
-  SelectItem,
-} from "./ui/select";
+import { ChevronDownIcon } from "lucide-react";
+import { openRouterModelProviders } from "~/constants/model-providers";
 import { useModelStore } from "~/stores/model-store";
-import GeminiIcon from "./gemini-icon";
+import ModelProviderIcon from "./model-provider-icon";
+import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 export default function ModelSelector() {
-  const { model, setModel } = useModelStore();
+  const selectedModel = useModelStore((store) => store.selectedModel);
+  const setSelectedModel = useModelStore((store) => store.setSelectedModel);
 
   return (
-    <Select value={model} onValueChange={(val) => setModel(val)}>
-      <SelectTrigger className="font-medium shadow-none hover:bg-accent dark:border-0 dark:bg-transparent">
-        <SelectValue placeholder="Select model" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel className="flex items-center gap-2 py-3 text-sm">
-            <GeminiIcon />
-            <span>Gemini</span>
-          </SelectLabel>
-          {modelProviders.map((model) => (
-            <SelectItem
-              className="py-3"
-              key={model.modelId}
-              value={model.modelId}
-            >
-              {model.name}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <Button variant="outline">
+          {selectedModel.name}
+          <ChevronDownIcon />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        {openRouterModelProviders.map((provider) => (
+          <DropdownMenuSub key={provider.key}>
+            <DropdownMenuSubTrigger className="py-3 flex items-center gap-3">
+              <ModelProviderIcon provider={provider.key} />
+              {provider.provider}
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                {provider.models.map((model) => (
+                  <DropdownMenuItem
+                    className="py-3"
+                    key={model.modelId}
+                    disabled={!model.isFree}
+                    onClick={() => {
+                      setSelectedModel({ id: model.modelId, name: model.name });
+                    }}
+                  >
+                    {model.name}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

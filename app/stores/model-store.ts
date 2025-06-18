@@ -1,8 +1,13 @@
 import { create } from "zustand";
 
+export type ModelStore = {
+  id: string;
+  name: string;
+};
+
 type ModelStoreState = {
-  model: string;
-  setModel: (model: string) => void;
+  selectedModel: ModelStore;
+  setSelectedModel: (model: ModelStore) => void;
   isWebSearchEnabled: boolean;
   toggleIsWebSearch: () => void;
   retryModel: string | null;
@@ -10,8 +15,11 @@ type ModelStoreState = {
 };
 
 export const useModelStore = create<ModelStoreState>()((set) => ({
-  model: "gemini-2.0-flash",
-  setModel: (model: string) => set({ model: model }),
+  selectedModel: {
+    id: "deepseek/deepseek-chat:free",
+    name: "DeepSeek V3",
+  },
+  setSelectedModel: (model: ModelStore) => set({ selectedModel: model }),
   isWebSearchEnabled: false,
   toggleIsWebSearch: () =>
     set((prev) => ({ isWebSearchEnabled: !prev.isWebSearchEnabled })),
