@@ -39,7 +39,7 @@ export const getSharedChatMessages = query({
 
     const messages = await ctx.db
       .query("messages")
-      .withIndex("by_chat_creation_time", (q) =>
+      .withIndex("by_chat", (q) =>
         q
           .eq("chatId", sharedChat.parentChatUuid)
           .lte("_creationTime", sharedChat._creationTime)
@@ -55,6 +55,7 @@ export const createMessage = mutation({
   args: {
     sessionToken: v.string(),
     messageBody: v.object({
+      sourceMessageId: v.optional(v.string()),
       chatId: v.string(),
       content: v.string(),
       role: v.union(v.literal("user"), v.literal("assistant")),
@@ -65,6 +66,7 @@ export const createMessage = mutation({
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
     await ctx.db.insert("messages", {
+      sourceMessageId: args.messageBody.sourceMessageId,
       chatId: args.messageBody.chatId,
       content: args.messageBody.content,
       model: args.messageBody.model,
@@ -73,5 +75,30 @@ export const createMessage = mutation({
     });
 
     return args.messageBody.chatId;
+  },
+});
+
+export const deleteMessage = mutation({
+  args: {
+    sessionToken: v.string(),
+    sourceMessageId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+
+    const message = await ctx.db
+      .query("messages")
+      .withIndex("by_source_id", (q) =>
+        q.eq("sourceMessageId", args.sourceMessageId)
+      )
+      .first();
+
+    console.log(message);
+    if (!message) {
+      throw new Error("Invalid message");
+    }
+
+    const messageId = message._id;
+    await ctx.db.delete(messageId);
   },
 });

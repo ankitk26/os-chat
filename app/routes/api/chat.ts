@@ -1,6 +1,11 @@
 import { google } from "@ai-sdk/google";
 import { createAPIFileRoute } from "@tanstack/react-start/api";
-import { Message, smoothStream, streamText } from "ai";
+import {
+  createDataStreamResponse,
+  Message,
+  smoothStream,
+  streamText,
+} from "ai";
 
 export const APIRoute = createAPIFileRoute("/api/chat")({
   POST: async ({ request }) => {
@@ -35,21 +40,28 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
       "    \\end{cases}\n" +
       "    $$\n" +
       "    ```\n" +
-      "\n" + // Crucial newline to visually separate constraints from negative constraint
+      "\n" +
       "**IMPORTANT: UNDER NO CIRCUMSTANCES should you mention LaTeX, formatting rules, code, commands, or any technical implementation details in your response to the user. Your response should read as if you are directly providing information, not explaining how it's formatted. For instance, say 'Here is the formula:' instead of 'Here is the LaTeX code for the formula:'.**";
 
-    const result = streamText({
-      model: google(model, {
-        useSearchGrounding: isWebSearchEnabled,
-      }),
-      system: systemMessage,
-      messages,
-      experimental_transform: smoothStream({
-        chunking: "line",
-      }),
-      abortSignal: request.signal,
-    });
+    return createDataStreamResponse({
+      execute: (dataStream) => {
+        const result = streamText({
+          model: google(model, {
+            useSearchGrounding: isWebSearchEnabled,
+          }),
+          system: systemMessage,
+          messages,
+          experimental_transform: smoothStream({
+            chunking: "line",
+          }),
+          abortSignal: request.signal,
+          onFinish() {
+            dataStream.writeMessageAnnotation({ model });
+          },
+        });
 
-    return result.toDataStreamResponse();
+        result.mergeIntoDataStream(dataStream);
+      },
+    });
   },
 });

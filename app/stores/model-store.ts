@@ -5,6 +5,8 @@ type ModelStoreState = {
   setModel: (model: string) => void;
   isWebSearchEnabled: boolean;
   toggleIsWebSearch: () => void;
+  retryModel: string | null;
+  setRetryModel: (model: string | null) => void;
 };
 
 export const useModelStore = create<ModelStoreState>()((set) => ({
@@ -13,4 +15,6 @@ export const useModelStore = create<ModelStoreState>()((set) => ({
   isWebSearchEnabled: false,
   toggleIsWebSearch: () =>
     set((prev) => ({ isWebSearchEnabled: !prev.isWebSearchEnabled })),
+  retryModel: null,
+  setRetryModel: (model: string | null) => set({ retryModel: model }),
 }));

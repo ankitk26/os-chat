@@ -3,9 +3,7 @@ import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { Doc } from "convex/_generated/dataModel";
-import { useRef } from "react";
 import { authQueryOptions } from "~/queries/auth";
-import { useModelStore } from "~/stores/model-store";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
 import ChatLoadingIndicator from "./chat-loading-indicator";
 import ChatMessages from "./chat-messages";
@@ -26,7 +24,6 @@ export default function Chat({
   isMessagesPending = false,
 }: Props) {
   const { data: authData } = useQuery(authQueryOptions);
-  const model = useModelStore((store) => store.model);
 
   const { mutateAsync: insertAIMessage } = useMutation({
     mutationFn: useConvexMutation(api.messages.createMessage),
@@ -37,27 +34,32 @@ export default function Chat({
     experimental_throttle: 400,
     initialMessages:
       dbMessages?.map((message) => ({
-        id: message._id,
+        id: message.sourceMessageId ?? message._id,
         content: message.content,
         role: message.role,
         parts: [{ text: message.content, type: "text" }],
       })) ?? [],
-    onFinish: async ({ content }) => {
-      console.log("received ai message", new Date().toISOString());
-      if (chatId) {
-        console.log("writing ai message", new Date().toISOString());
-        await insertAIMessage({
-          messageBody: { chatId, content, role: "assistant", model },
-          sessionToken: authData?.session.token ?? "",
-        });
-      }
+    onFinish: async (newMessage) => {
+      if (!chatId) return;
+      if (!newMessage.content) return;
+
+      const modelUsed =
+        newMessage.annotations &&
+        newMessage.annotations?.length > 0 &&
+        (newMessage as any).annotations[0].model;
+
+      await insertAIMessage({
+        messageBody: {
+          chatId,
+          content: newMessage.content.trim(),
+          role: "assistant",
+          model: modelUsed,
+          sourceMessageId: newMessage.id,
+        },
+        sessionToken: authData?.session.token ?? "",
+      });
     },
   });
-
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  // const scrollToBottom = () => {
-  //   messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
-  // };
 
   return (
     <div className="flex flex-col w-full mx-auto max-h-svh h-svh">
@@ -78,22 +80,19 @@ export default function Chat({
                 )}
               </div>
               <ChatLoadingIndicator status={status} />
-              <div ref={messagesEndRef} />
             </div>
           </ScrollArea>
         )}
       </div>
 
-      <div>
-        <UserPromptInput
-          chatId={chatId}
-          input={input}
-          append={append}
-          setInput={setInput}
-          stop={stop}
-          status={status}
-        />
-      </div>
+      <UserPromptInput
+        chatId={chatId}
+        input={input}
+        append={append}
+        setInput={setInput}
+        stop={stop}
+        status={status}
+      />
     </div>
   );
 }

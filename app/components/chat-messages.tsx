@@ -20,7 +20,7 @@ export default memo(function ChatMessages({ messages, reload }: Props) {
       {message.role === "user" ? (
         <UserMessage message={message.content} />
       ) : (
-        <AssistantMessage message={message.content} reload={reload} />
+        <AssistantMessage message={message} reload={reload} />
       )}
     </div>
   ));

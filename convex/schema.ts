@@ -39,6 +39,7 @@ export default defineSchema({
     .index("by_user_and_pinned", ["userId", "isPinned"]),
 
   messages: defineTable({
+    sourceMessageId: v.optional(v.string()),
     chatId: v.string(),
     userId: v.id("user"),
     content: v.string(),
@@ -46,7 +47,8 @@ export default defineSchema({
     model: v.optional(v.string()),
   })
     .index("by_user_chat", ["chatId", "userId"])
-    .index("by_chat_creation_time", ["chatId", "_creationTime"]),
+    .index("by_chat", ["chatId"])
+    .index("by_source_id", ["sourceMessageId"]),
 
   sharedChats: defineTable({
     parentChatUuid: v.string(),
