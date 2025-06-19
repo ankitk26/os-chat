@@ -37,6 +37,11 @@ export const getSharedChatMessages = query({
       return null;
     }
 
+    const parentChat = await ctx.db
+      .query("chats")
+      .withIndex("by_chat_uuid", (q) => q.eq("uuid", sharedChat.parentChatUuid))
+      .first();
+
     const messages = await ctx.db
       .query("messages")
       .withIndex("by_chat", (q) =>
@@ -47,7 +52,7 @@ export const getSharedChatMessages = query({
       .order("asc")
       .collect();
 
-    return messages;
+    return { sharedChat, messages, parentChat };
   },
 });
 

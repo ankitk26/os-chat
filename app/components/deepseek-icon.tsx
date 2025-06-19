@@ -1,7 +1,7 @@
 export default function DeepSeekIcon() {
   return (
     <svg
-      className="size-4 fill-primary stroke-primary"
+      className="size-4 fill-foreground stroke-foreground"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
     >

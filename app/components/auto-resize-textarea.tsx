@@ -44,7 +44,6 @@ export default function AutoResizeTextarea(props: Props) {
 
   const handleChatTitleUpdate = async (dbGeneratedChatId: Id<"chats">) => {
     const title = await getChatTitle({ data: textareaValue });
-    console.log("from db", dbGeneratedChatId, "title", title);
     await updateChatTitleMutation.mutateAsync({
       chat: { chatId: dbGeneratedChatId, title },
       sessionToken: data?.session.token ?? "",

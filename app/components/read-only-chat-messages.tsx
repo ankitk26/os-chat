@@ -40,14 +40,22 @@ export default function ReadOnlyChatMessages() {
       <div className="flex-1 overflow-hidden">
         <ScrollArea className="w-full h-full">
           <div className="w-full h-full max-w-3xl mx-auto">
-            <div className="my-8 space-y-8">
+            <div className="my-8 space-y-8 flex flex-col">
+              <small className="text-center text-muted-foreground">
+                This is a copy of a conversation between os-chat & Anonymous
+              </small>
+
+              <h2 className="text-3xl font-semibold text-center -mt-3">
+                {data?.parentChat?.title}
+              </h2>
+
               {isPending ? (
                 <>
                   <UserMessageSkeleton />
                   <AssistantMessageSkeleton />
                 </>
               ) : (
-                data?.map((message) => (
+                data?.messages.map((message) => (
                   <div key={message._id} className="flex flex-col">
                     {message.role === "user" ? (
                       <ReadOnlyUserMessage message={message} />

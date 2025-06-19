@@ -35,7 +35,7 @@ export default function ApiKeyInput({
       <Label>
         <div className="flex items-center space-x-2">
           {provider === "openrouter" ? (
-            <KeyIcon className="size-4 stroke-primary" />
+            <KeyIcon className="size-4 stroke-foreground" />
           ) : (
             <ModelProviderIcon
               provider={provider === "gemini" ? "google" : provider}

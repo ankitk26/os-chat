@@ -80,8 +80,6 @@ export default function Chat({
     },
   });
 
-  console.log(messages);
-
   return (
     <div className="flex flex-col w-full mx-auto max-h-svh h-svh">
       <div className="flex-1 overflow-hidden">

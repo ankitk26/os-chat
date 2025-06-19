@@ -1,7 +1,7 @@
 export default function QwenIcon() {
   return (
     <svg
-      className="size-4 stroke-primary fill-primary"
+      className="size-4 stroke-foreground fill-foreground"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
     >

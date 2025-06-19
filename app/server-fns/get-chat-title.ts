@@ -6,8 +6,6 @@ import { z } from "zod";
 export const getChatTitle = createServerFn({ method: "GET" })
   .validator((userMessage: string) => userMessage)
   .handler(async ({ data: userMessage }) => {
-    console.log(userMessage);
-
     const { object } = await generateObject({
       model: google("gemini-2.0-flash-lite"),
       schema: z.object({
