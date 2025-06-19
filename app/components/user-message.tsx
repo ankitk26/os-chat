@@ -1,4 +1,4 @@
-import { CopyIcon, Edit2Icon } from "lucide-react";
+import { CopyIcon } from "lucide-react";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import { cn } from "~/lib/utils";
@@ -44,7 +44,7 @@ export default React.memo(function UserMessage({
           </Tooltip>
         )} */}
 
-        {!readOnly && (
+        {/* {!readOnly && (
           <Tooltip>
             <TooltipTrigger asChild>
               <Button size="icon" variant="ghost">
@@ -53,7 +53,7 @@ export default React.memo(function UserMessage({
             </TooltipTrigger>
             <TooltipContent>Edit message</TooltipContent>
           </Tooltip>
-        )}
+        )} */}
 
         <Tooltip>
           <TooltipTrigger asChild>
