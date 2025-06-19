@@ -1,4 +1,4 @@
-import { google } from "@ai-sdk/google";
+import { openrouter } from "@openrouter/ai-sdk-provider";
 import { createServerFn } from "@tanstack/react-start";
 import { generateText } from "ai";
 
@@ -6,7 +6,7 @@ export const getChatTitle = createServerFn({ method: "GET" })
   .validator((userMessage: string) => userMessage)
   .handler(async ({ data: userMessage }) => {
     const { text } = await generateText({
-      model: google("gemini-2.0-flash-lite"),
+      model: openrouter.chat("deepseek/deepseek-chat:free"),
       system:
         "You are a professional writer. " +
         "You write simple, clear, and concise content. " +
@@ -22,14 +22,12 @@ export const getChatTitle = createServerFn({ method: "GET" })
         // Scenario 1 Example
         "User message: 'I need to submit a request to extend the deadline for the Q3 project. Can you tell me the process for that?'" +
         "\n" +
-        'Title: "Q3 Project Deadline Extension Request"' +
+        "Title: Q3 Project Deadline Extension Request" +
         "\n\n" +
         // Scenario 2 Example
         "User message: 'I'm thinking about how we can add a new photo editing filter to the app. What are your thoughts on integrating AI for this?'" +
         "\n" +
-        'Title: "New Photo Editing Feature Brainstorming"' +
-        "\n\n" +
-        "Title:",
+        "Title: New Photo Editing Feature Brainstorming",
     });
 
     return text;

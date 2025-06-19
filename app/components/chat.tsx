@@ -55,6 +55,8 @@ export default function Chat({
       if (!chatId) return;
       if (!newMessage.content) return;
 
+      console.log(newMessage);
+
       const modelUsed =
         newMessage.annotations &&
         newMessage.annotations?.length > 0 &&
@@ -70,6 +72,9 @@ export default function Chat({
         },
         sessionToken: authData?.session.token ?? "",
       });
+    },
+    onError: ({ message }) => {
+      console.log(message);
     },
   });
 

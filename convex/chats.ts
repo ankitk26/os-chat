@@ -116,16 +116,11 @@ export const deleteChat = mutation({
 
     await ctx.db.delete(args.chatId);
 
-    const chatMessages = await ctx.db
+    for await (const message of ctx.db
       .query("messages")
-      .withIndex("by_chat", (q) => q.eq("chatId", args.chatId))
-      .collect();
-
-    await Promise.all(
-      chatMessages.map(async (message) => {
-        await ctx.db.delete(message._id);
-      })
-    );
+      .withIndex("by_chat", (q) => q.eq("chatId", chat.uuid))) {
+      await ctx.db.delete(message._id);
+    }
   },
 });
 

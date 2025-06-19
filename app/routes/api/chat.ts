@@ -52,6 +52,7 @@ const getModelToUse = (
     const openRouter = createOpenRouter({
       apiKey: parsedApiKeys.openrouter,
     });
+    console.log("using open router key for all models");
     return openRouter.chat(requestModel.openRouterModelId);
   }
 
@@ -67,6 +68,7 @@ const getModelToUse = (
     const myOpenRouter = createOpenRouter({
       apiKey: defaultOpenRouterApiKey,
     });
+    console.log("using my own open router key");
     return myOpenRouter.chat(requestModel.openRouterModelId);
   }
 
@@ -82,6 +84,7 @@ const getModelToUse = (
       const googleModel = createGoogleGenerativeAI({
         apiKey: parsedApiKeys.gemini,
       });
+      console.log("using google sdk");
       return googleModel(requestModel.modelId, {
         useSearchGrounding: isWebSearchEnabled,
       });
@@ -96,6 +99,7 @@ const getModelToUse = (
       const openAiModel = createOpenAI({
         apiKey: parsedApiKeys.openai,
       });
+      console.log("using OpenAI sdk");
       return openAiModel(requestModel.modelId);
     }
 
@@ -108,14 +112,18 @@ const getModelToUse = (
       const anthropicModel = createAnthropic({
         apiKey: parsedApiKeys.anthropic,
       });
+      console.log("using anthropic sdk");
       return anthropicModel(requestModel.modelId);
     }
   }
+
+  console.log("end game");
 
   // Default any other case to DeepSeek model
   const myOpenRouter = createOpenRouter({
     apiKey: defaultOpenRouterApiKey,
   });
+  console.log("use again my own router key");
   return myOpenRouter.chat(requestModel.openRouterModelId);
 };
 
@@ -131,6 +139,8 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
       useOpenRouter: useOpenRouterString,
     } = chatRequestBody;
 
+    console.log(chatRequestBody);
+
     // Parse the string values safely
     const parsedApiKeys = safeJSONParse(apiKeysString, {
       gemini: "",
@@ -140,12 +150,14 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
     });
     const useOpenRouter = safeJSONParse(useOpenRouterString, false);
 
+    console.log("getting model");
     const modelToUse = getModelToUse(
       requestModel,
       parsedApiKeys,
       useOpenRouter,
       isWebSearchEnabled
     );
+    console.log("got model");
 
     return createDataStreamResponse({
       execute: (dataStream) => {
@@ -162,6 +174,7 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
               model: requestModel.name,
             });
           },
+          maxRetries: 2,
           onError: ({ error }) => {
             console.error("Error during streaming:", error);
             dataStream.writeData({
