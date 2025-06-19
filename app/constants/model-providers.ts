@@ -109,4 +109,40 @@ export const openRouterModelProviders: ProviderGroup[] = [
       },
     ],
   },
+  {
+    provider: "xAI",
+    key: "xai",
+    models: [
+      {
+        name: "Grok 3",
+        openRouterModelId: "x-ai/grok-3-beta",
+        modelId: "grok-3-latest",
+        isFree: false,
+      },
+      {
+        name: "Grok 3 Mini",
+        openRouterModelId: "x-ai/grok-3-mini-beta",
+        modelId: "grok-3-mini-latest",
+        isFree: false,
+      },
+    ],
+  },
+  {
+    provider: "Qwen",
+    key: "qwen",
+    models: [
+      {
+        name: "QwQ 32B",
+        openRouterModelId: "qwen/qwq-32b:free",
+        modelId: "qwen/qwq-32b:free",
+        isFree: true,
+      },
+      {
+        name: "2.5 32b",
+        openRouterModelId: "qwen/qwen-2.5-coder-32b-instruct:free",
+        modelId: "qwen/qwen-2.5-coder-32b-instruct:free",
+        isFree: true,
+      },
+    ],
+  },
 ];

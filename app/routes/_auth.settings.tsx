@@ -9,14 +9,7 @@ import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
 import { Switch } from "~/components/ui/switch";
 import { authClient } from "~/lib/auth-client";
-
-// Define the full API keys type.
-type ApiKeys = {
-  gemini: string;
-  openai: string;
-  anthropic: string;
-  openrouter: string;
-};
+import { ApiKeys } from "~/types";
 
 export const Route = createFileRoute("/_auth/settings")({
   component: RouteComponent,
@@ -31,6 +24,7 @@ function RouteComponent() {
     openai: "",
     anthropic: "",
     openrouter: "",
+    xai: "",
   });
 
   // State for OpenRouter toggle.
@@ -52,6 +46,7 @@ function RouteComponent() {
       openai: "",
       anthropic: "",
       openrouter: "",
+      xai: "",
     };
     if (storedKeys) {
       try {
@@ -181,6 +176,13 @@ function RouteComponent() {
               label="Gemini API Key"
               placeholder="AI..."
               value={apiKeys.gemini}
+              onChange={handleApiKeyChange}
+            />
+            <ApiKeyInput
+              provider="xai"
+              label="xAI API Key"
+              placeholder="xai..."
+              value={apiKeys.xai}
               onChange={handleApiKeyChange}
             />
           </div>

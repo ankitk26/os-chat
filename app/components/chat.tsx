@@ -26,14 +26,14 @@ export default function Chat({
 }: Props) {
   const { data: authData } = useQuery(authQueryOptions);
 
-  const { mutateAsync: insertAIMessage } = useMutation({
+  const insertAiMessageMutation = useMutation({
     mutationFn: useConvexMutation(api.messages.createMessage),
   });
 
   const { messages, input, status, setInput, stop, reload, append, error } =
     useChat({
       id: chatId,
-      experimental_throttle: 400,
+      experimental_throttle: 200,
       initialMessages:
         dbMessages?.map((message) => ({
           id: message.sourceMessageId ?? message._id,
@@ -42,7 +42,7 @@ export default function Chat({
           annotations: message.model ? [{ model: message.model }] : [],
           parts: [{ text: message.content, type: "text" }],
         })) ?? [],
-      onFinish: async (newMessage) => {
+      onFinish: (newMessage) => {
         if (!chatId) return;
         if (!newMessage.content) return;
 
@@ -51,7 +51,7 @@ export default function Chat({
           newMessage.annotations?.length > 0 &&
           (newMessage as any).annotations[0].model;
 
-        await insertAIMessage({
+        insertAiMessageMutation.mutate({
           messageBody: {
             chatId,
             content: newMessage.content.trim(),
@@ -82,7 +82,10 @@ export default function Chat({
                   <ChatMessages messages={messages} reload={reload} />
                 )}
               </div>
-              <ChatLoadingIndicator status={status} />
+              <ChatLoadingIndicator
+                status={status}
+                insertPending={insertAiMessageMutation.isPending}
+              />
               {error && <AiResponseAlert error={error} />}
             </div>
           </ScrollArea>

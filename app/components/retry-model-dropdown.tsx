@@ -3,7 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { ChatRequestOptions, UIMessage } from "ai";
 import { api } from "convex/_generated/api";
 import { RefreshCcwIcon } from "lucide-react";
-import { openRouterModelProviders } from "~/constants/model-providers";
+import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { authQueryOptions } from "~/queries/auth";
 import { useModelStore } from "~/stores/model-store";
 import ModelProviderIcon from "./model-provider-icon";
@@ -35,6 +35,10 @@ export default function RetryModelDropdown({ message, reload }: Props) {
     mutationFn: useConvexMutation(api.messages.deleteMessage),
   });
 
+  const apiKeys = localStorage.getItem("apiKeys");
+  const useOpenRouter = localStorage.getItem("useOpenRouter");
+  const accessibleModels = getAccessibleModels(apiKeys, useOpenRouter);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -48,7 +52,7 @@ export default function RetryModelDropdown({ message, reload }: Props) {
         </Tooltip>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {openRouterModelProviders.map((provider) => (
+        {accessibleModels.map((provider) => (
           <DropdownMenuSub key={provider.key}>
             <DropdownMenuSubTrigger className="py-3 flex items-center gap-3">
               <ModelProviderIcon provider={provider.key} />
@@ -60,7 +64,7 @@ export default function RetryModelDropdown({ message, reload }: Props) {
                   <DropdownMenuItem
                     className="py-3"
                     key={model.modelId}
-                    disabled={!model.isFree}
+                    disabled={!model.isAvailable}
                     onClick={async () => {
                       await deleteMessageMutation.mutateAsync({
                         sessionToken: authData?.session.token ?? "",

@@ -1,10 +1,21 @@
 type Props = {
   status: "submitted" | "streaming" | "ready" | "error";
+  insertPending: boolean;
 };
 
-export default function ChatLoadingIndicator({ status }: Props) {
+export default function ChatLoadingIndicator({ status, insertPending }: Props) {
   if (status !== "submitted") {
     return null;
+  }
+
+  if (insertPending) {
+    return (
+      <div className="space-y-2 mb-12">
+        <div className="flex items-center space-x-2 text-muted-foreground">
+          <div className="animate-pulse">Thinking...</div>
+        </div>
+      </div>
+    );
   }
 
   return (

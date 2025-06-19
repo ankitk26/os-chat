@@ -1,6 +1,7 @@
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
+import { createXai } from "@ai-sdk/xai";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { createAPIFileRoute } from "@tanstack/react-start/api";
 import {
@@ -52,7 +53,13 @@ const getModelToUse = (
     const openRouter = createOpenRouter({
       apiKey: parsedApiKeys.openrouter,
     });
-    console.log("using open router key for all models");
+    // if using OpenRouter and it's gemini model + webSearch, append :online to modelId
+    if (
+      requestModel.openRouterModelId.startsWith("google") &&
+      isWebSearchEnabled
+    ) {
+      return openRouter.chat(requestModel.openRouterModelId + ":online");
+    }
     return openRouter.chat(requestModel.openRouterModelId);
   }
 
@@ -68,7 +75,6 @@ const getModelToUse = (
     const myOpenRouter = createOpenRouter({
       apiKey: defaultOpenRouterApiKey,
     });
-    console.log("using my own open router key");
     return myOpenRouter.chat(requestModel.openRouterModelId);
   }
 
@@ -84,7 +90,6 @@ const getModelToUse = (
       const googleModel = createGoogleGenerativeAI({
         apiKey: parsedApiKeys.gemini,
       });
-      console.log("using google sdk");
       return googleModel(requestModel.modelId, {
         useSearchGrounding: isWebSearchEnabled,
       });
@@ -99,31 +104,38 @@ const getModelToUse = (
       const openAiModel = createOpenAI({
         apiKey: parsedApiKeys.openai,
       });
-      console.log("using OpenAI sdk");
       return openAiModel(requestModel.modelId);
     }
 
     // Handle ANTHROPIC model
     if (requestModel.openRouterModelId.startsWith("anthropic")) {
-      if (parsedApiKeys.gemini.trim() === "") {
+      if (parsedApiKeys.anthropic.trim() === "") {
         throw new Error("API Key for Anthropic not provided.");
       }
 
       const anthropicModel = createAnthropic({
         apiKey: parsedApiKeys.anthropic,
       });
-      console.log("using anthropic sdk");
       return anthropicModel(requestModel.modelId);
     }
-  }
 
-  console.log("end game");
+    // Handle XAI model
+    if (requestModel.openRouterModelId.startsWith("x-ai")) {
+      if (parsedApiKeys.xai.trim() === "") {
+        throw new Error("API Key for xAI not provided.");
+      }
+
+      const xaiModel = createXai({
+        apiKey: parsedApiKeys.xai,
+      });
+      return xaiModel(requestModel.modelId);
+    }
+  }
 
   // Default any other case to DeepSeek model
   const myOpenRouter = createOpenRouter({
     apiKey: defaultOpenRouterApiKey,
   });
-  console.log("use again my own router key");
   return myOpenRouter.chat(requestModel.openRouterModelId);
 };
 
@@ -140,29 +152,28 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
     } = chatRequestBody;
 
     // Parse the string values safely
-    const parsedApiKeys = safeJSONParse(apiKeysString, {
+    const parsedApiKeys: ApiKeys = safeJSONParse(apiKeysString, {
       gemini: "",
       openai: "",
       anthropic: "",
       openrouter: "",
+      xai: "",
     });
     const useOpenRouter = safeJSONParse(useOpenRouterString, false);
 
-    console.log("getting model");
     const modelToUse = getModelToUse(
       requestModel,
       parsedApiKeys,
       useOpenRouter,
       isWebSearchEnabled
     );
-    console.log("got model");
 
     return createDataStreamResponse({
       execute: (dataStream) => {
         const result = streamText({
           model: modelToUse,
           system: systemMessage,
-          messages: chatRequestBody.messages,
+          messages,
           experimental_transform: smoothStream({
             chunking: "line",
           }),

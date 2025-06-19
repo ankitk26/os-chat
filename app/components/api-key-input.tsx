@@ -3,10 +3,10 @@ import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { ApiKeys } from "~/types";
 import ModelProviderIcon from "./model-provider-icon";
 
-// Define the allowed provider names.
-export type Provider = "gemini" | "openai" | "anthropic" | "openrouter";
+export type Provider = keyof ApiKeys;
 
 interface ApiKeyInputProps {
   provider: Provider;
