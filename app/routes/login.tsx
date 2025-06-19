@@ -27,7 +27,7 @@ function RouteComponent() {
           <div className="mx-auto w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
             <MessageSquareIcon className="w-6 h-6 text-primary-foreground" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">os.chat</h1>
+          <h1 className="text-2xl font-bold tracking-tight">os-chat</h1>
           <p className="text-muted-foreground">
             Your intelligent conversation companion
           </p>

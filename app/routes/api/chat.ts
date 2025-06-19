@@ -53,6 +53,7 @@ const getModelToUse = (
     const openRouter = createOpenRouter({
       apiKey: parsedApiKeys.openrouter,
     });
+    console.log("[LOG] Using user's OpenRouter API Key");
     // if using OpenRouter and it's gemini model + webSearch, append :online to modelId
     if (
       requestModel.openRouterModelId.startsWith("google") &&
@@ -75,6 +76,7 @@ const getModelToUse = (
     const myOpenRouter = createOpenRouter({
       apiKey: defaultOpenRouterApiKey,
     });
+    console.log("[LOG] Using provisioned OpenRouter API Key");
     // if using OpenRouter and it's gemini model + webSearch, append :online to modelId
     if (
       requestModel.openRouterModelId.startsWith("google") &&

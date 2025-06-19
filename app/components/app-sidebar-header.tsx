@@ -16,7 +16,7 @@ export default function AppSidebarHeader() {
             to="/"
             className="text-lg font-medium tracking-wide text-center w-fit"
           >
-            <h3>os.chat</h3>
+            <h3>os-chat</h3>
           </Link>
         </div>
         <ThemeToggler />

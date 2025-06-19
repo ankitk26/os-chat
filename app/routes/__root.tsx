@@ -23,7 +23,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           content: "width=device-width, initial-scale=1",
         },
         {
-          title: "os.chat | Open Source Chat Application",
+          title: "os-chat",
         },
       ],
       links: [
@@ -44,10 +44,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           rel: "stylesheet",
           href: appCss,
         },
-        // {
-        //   rel: "stylesheet",
-        //   href: katexCss,
-        // },
       ],
     }),
     component: RootComponent,

@@ -1,4 +1,4 @@
-# os.chat
+# os-chat
 
 A versatile AI chatbot application built with TanStack Start and Vercel AI SDK
 
@@ -8,8 +8,8 @@ Follow these steps to get the project up and running locally:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/ankitk26/os.chat.git # Replace with your actual repo URL
-    cd os.chat
+    git clone https://github.com/ankitk26/os-chat.git # Replace with your actual repo URL
+    cd os-chat
     ```
 2.  **Install dependencies:**
     ```bash
