@@ -1,4 +1,4 @@
-import { openrouter } from "@openrouter/ai-sdk-provider";
+import { google } from "@ai-sdk/google";
 import { createServerFn } from "@tanstack/react-start";
 import { generateText } from "ai";
 
@@ -6,7 +6,7 @@ export const getChatTitle = createServerFn({ method: "GET" })
   .validator((userMessage: string) => userMessage)
   .handler(async ({ data: userMessage }) => {
     const { text } = await generateText({
-      model: openrouter.chat("deepseek/deepseek-chat:free"),
+      model: google("gemini-2.0-flash-lite"),
       system:
         "You are a professional writer. " +
         "You write simple, clear, and concise content. " +
