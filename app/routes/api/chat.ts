@@ -75,6 +75,13 @@ const getModelToUse = (
     const myOpenRouter = createOpenRouter({
       apiKey: defaultOpenRouterApiKey,
     });
+    // if using OpenRouter and it's gemini model + webSearch, append :online to modelId
+    if (
+      requestModel.openRouterModelId.startsWith("google") &&
+      isWebSearchEnabled
+    ) {
+      return myOpenRouter.chat(requestModel.openRouterModelId + ":online");
+    }
     return myOpenRouter.chat(requestModel.openRouterModelId);
   }
 
@@ -142,6 +149,8 @@ const getModelToUse = (
 export const APIRoute = createAPIFileRoute("/api/chat")({
   POST: async ({ request }) => {
     const chatRequestBody: ChatRequestBody = await request.json();
+
+    console.log("[LOG]: API hit~~~~~~~~~~~");
 
     const {
       messages,
