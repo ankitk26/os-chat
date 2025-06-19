@@ -139,8 +139,6 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
       useOpenRouter: useOpenRouterString,
     } = chatRequestBody;
 
-    console.log(chatRequestBody);
-
     // Parse the string values safely
     const parsedApiKeys = safeJSONParse(apiKeysString, {
       gemini: "",
@@ -164,7 +162,7 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
         const result = streamText({
           model: modelToUse,
           system: systemMessage,
-          messages: messages,
+          messages: chatRequestBody.messages,
           experimental_transform: smoothStream({
             chunking: "line",
           }),
@@ -175,17 +173,11 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
             });
           },
           maxRetries: 2,
-          onError: ({ error }) => {
-            console.error("Error during streaming:", error);
-            dataStream.writeData({
-              type: "error",
-              message: (error as any).message,
-            });
-          },
         });
 
         result.mergeIntoDataStream(dataStream);
       },
+      onError: (error) => (error as any).message,
     });
   },
 });

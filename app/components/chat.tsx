@@ -30,53 +30,39 @@ export default function Chat({
     mutationFn: useConvexMutation(api.messages.createMessage),
   });
 
-  const {
-    messages,
-    input,
-    status,
-    setInput,
-    stop,
-    reload,
-    append,
-    error,
-    data,
-  } = useChat({
-    id: chatId,
-    experimental_throttle: 400,
-    initialMessages:
-      dbMessages?.map((message) => ({
-        id: message.sourceMessageId ?? message._id,
-        content: message.content,
-        role: message.role,
-        annotations: message.model ? [{ model: message.model }] : [],
-        parts: [{ text: message.content, type: "text" }],
-      })) ?? [],
-    onFinish: async (newMessage) => {
-      if (!chatId) return;
-      if (!newMessage.content) return;
+  const { messages, input, status, setInput, stop, reload, append, error } =
+    useChat({
+      id: chatId,
+      experimental_throttle: 400,
+      initialMessages:
+        dbMessages?.map((message) => ({
+          id: message.sourceMessageId ?? message._id,
+          content: message.content,
+          role: message.role,
+          annotations: message.model ? [{ model: message.model }] : [],
+          parts: [{ text: message.content, type: "text" }],
+        })) ?? [],
+      onFinish: async (newMessage) => {
+        if (!chatId) return;
+        if (!newMessage.content) return;
 
-      console.log(newMessage);
+        const modelUsed =
+          newMessage.annotations &&
+          newMessage.annotations?.length > 0 &&
+          (newMessage as any).annotations[0].model;
 
-      const modelUsed =
-        newMessage.annotations &&
-        newMessage.annotations?.length > 0 &&
-        (newMessage as any).annotations[0].model;
-
-      await insertAIMessage({
-        messageBody: {
-          chatId,
-          content: newMessage.content.trim(),
-          role: "assistant",
-          model: modelUsed,
-          sourceMessageId: newMessage.id,
-        },
-        sessionToken: authData?.session.token ?? "",
-      });
-    },
-    onError: ({ message }) => {
-      console.log(message);
-    },
-  });
+        await insertAIMessage({
+          messageBody: {
+            chatId,
+            content: newMessage.content.trim(),
+            role: "assistant",
+            model: modelUsed,
+            sourceMessageId: newMessage.id,
+          },
+          sessionToken: authData?.session.token ?? "",
+        });
+      },
+    });
 
   return (
     <div className="flex flex-col w-full mx-auto max-h-svh h-svh">
@@ -97,7 +83,7 @@ export default function Chat({
                 )}
               </div>
               <ChatLoadingIndicator status={status} />
-              {data && <AiResponseAlert data={data} />}
+              {error && <AiResponseAlert error={error} />}
             </div>
           </ScrollArea>
         )}

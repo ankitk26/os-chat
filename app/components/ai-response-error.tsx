@@ -1,17 +1,15 @@
-import { JSONValue } from "ai";
 import { TerminalIcon } from "lucide-react";
 import { Alert, AlertDescription } from "./ui/alert";
 
 type Props = {
-  data: JSONValue[];
+  error: Error;
 };
 
-export default function AiResponseAlert({ data }: Props) {
+export default function AiResponseAlert({ error }: Props) {
   return (
-    <Alert className="mb-6 -mt-16">
+    <Alert className="mb-8 -mt-10">
       <TerminalIcon className="stroke-destructive" />
-      <AlertDescription>{JSON.stringify(data)}</AlertDescription>
-      {/* <AlertDescription>{(data as any)[0].message}</AlertDescription> */}
+      <AlertDescription>{error.message}</AlertDescription>
     </Alert>
   );
 }

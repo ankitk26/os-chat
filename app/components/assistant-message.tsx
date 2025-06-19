@@ -32,7 +32,7 @@ export default React.memo(function AssistantMessage(props: Props) {
         <MemoizedMarkdown content={message.content} id={message.id} />
       </div>
 
-      <div className="flex items-center transition-opacity duration-200">
+      <div className="flex items-center gap-1 transition-opacity duration-200">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button

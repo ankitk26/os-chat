@@ -1,4 +1,4 @@
-import { GlobeIcon, PaperclipIcon, SendIcon, SquareIcon } from "lucide-react";
+import { GlobeIcon, SendIcon, SquareIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { useModelStore } from "~/stores/model-store";
 import ModelSelector from "./model-selector";
@@ -12,21 +12,25 @@ type Props = {
 export default function PromptActions({ status, stop }: Props) {
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
   const toggleIsWebSearch = useModelStore((store) => store.toggleIsWebSearch);
+  const selectedModel = useModelStore((store) => store.selectedModel);
 
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-4">
         <ModelSelector />
-        <Button
-          type="button"
-          size="sm"
-          variant={isWebSearchEnabled ? "default" : "outline"}
-          className={cn("rounded-full", isWebSearchEnabled ? "border" : "")}
-          onClick={toggleIsWebSearch}
-        >
-          <GlobeIcon />
-          Search
-        </Button>
+
+        {selectedModel.openRouterModelId.startsWith("google") && (
+          <Button
+            type="button"
+            size="sm"
+            variant={isWebSearchEnabled ? "default" : "outline"}
+            className={cn("rounded-full", isWebSearchEnabled ? "border" : "")}
+            onClick={toggleIsWebSearch}
+          >
+            <GlobeIcon />
+            Search
+          </Button>
+        )}
 
         {/* <Button
           type="button"

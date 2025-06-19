@@ -61,12 +61,11 @@ export default function AutoResizeTextarea(props: Props) {
       setInput(textareaValue); // Update the external input state
       setInput(textareaRef.current.value);
 
-      navigate({
-        to: "/chat/$chatId",
-        params: { chatId: props.chatId },
-      });
-
       if (!paramsChatId) {
+        navigate({
+          to: "/chat/$chatId",
+          params: { chatId: props.chatId },
+        });
         const newChatId = await createChat({
           sessionToken: data?.session.token ?? "",
           uuid: props.chatId,

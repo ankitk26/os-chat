@@ -109,7 +109,7 @@ function RouteComponent() {
       useOpenRouter !== initialUseOpenRouter);
 
   return (
-    <div className="mx-auto py-6 space-y-6 max-w-3xl w-full">
+    <div className="mx-auto py-6 space-y-6 max-w-5xl w-full">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Settings</h1>
         <Button

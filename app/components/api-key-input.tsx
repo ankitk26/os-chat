@@ -1,4 +1,4 @@
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon, KeyIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -34,9 +34,13 @@ export default function ApiKeyInput({
     <div className="space-y-2">
       <Label>
         <div className="flex items-center space-x-2">
-          <ModelProviderIcon
-            provider={provider === "gemini" ? "google" : provider}
-          />
+          {provider === "openrouter" ? (
+            <KeyIcon className="size-4" />
+          ) : (
+            <ModelProviderIcon
+              provider={provider === "gemini" ? "google" : provider}
+            />
+          )}
           <span>{label}</span>
         </div>
       </Label>

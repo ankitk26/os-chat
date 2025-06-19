@@ -9,7 +9,7 @@ export const openRouterModelProviders: ProviderGroup[] = [
         name: "Gemini 2.0 Flash",
         modelId: "gemini-2.0-flash-001",
         openRouterModelId: "google/gemini-2.0-flash-001",
-        isFree: false,
+        isFree: true,
       },
       {
         name: "Gemini 2.5 Flash",
