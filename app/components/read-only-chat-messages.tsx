@@ -5,8 +5,8 @@ import { api } from "convex/_generated/api";
 import { Link2OffIcon } from "lucide-react";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
 import ReadOnlyAssistantMessage from "./read-only-assistant-message";
+import ReadOnlyUserMessage from "./read-only-user-message";
 import { ScrollArea } from "./ui/scroll-area";
-import UserMessage from "./user-message";
 import UserMessageSkeleton from "./user-message-skeleton";
 
 export default function ReadOnlyChatMessages() {
@@ -50,7 +50,7 @@ export default function ReadOnlyChatMessages() {
                 data?.map((message) => (
                   <div key={message._id} className="flex flex-col">
                     {message.role === "user" ? (
-                      <UserMessage message={message.content} readOnly />
+                      <ReadOnlyUserMessage message={message} />
                     ) : (
                       <ReadOnlyAssistantMessage message={message} />
                     )}

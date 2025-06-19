@@ -30,22 +30,23 @@ export default function AutoResizeTextarea(props: Props) {
 
   const { chatId: paramsChatId } = useParams({ strict: false });
 
-  const { mutateAsync: updateChatTitle } = useMutation({
+  const updateChatTitleMutation = useMutation({
     mutationFn: useConvexMutation(api.chats.updateChatTitle),
   });
-
-  const { mutateAsync: createMessage, isPending: isMessageCreationPending } =
-    useMutation({ mutationFn: useConvexMutation(api.messages.createMessage) });
-
-  const { mutateAsync: createChat, isPending: isChatCreationPending } =
-    useMutation({ mutationFn: useConvexMutation(api.chats.createChat) });
+  const createMessageMutation = useMutation({
+    mutationFn: useConvexMutation(api.messages.createMessage),
+  });
+  const createChatMutation = useMutation({
+    mutationFn: useConvexMutation(api.chats.createChat),
+  });
 
   const [textareaValue, setTextareaValue] = useState(input);
 
-  const handleChatTitleUpdate = async (newChatId: string) => {
+  const handleChatTitleUpdate = async (dbGeneratedChatId: Id<"chats">) => {
     const title = await getChatTitle({ data: textareaValue });
-    await updateChatTitle({
-      chat: { chatId: newChatId as Id<"chats">, title },
+    console.log("from db", dbGeneratedChatId, "title", title);
+    await updateChatTitleMutation.mutateAsync({
+      chat: { chatId: dbGeneratedChatId, title },
       sessionToken: data?.session.token ?? "",
     });
   };
@@ -58,7 +59,7 @@ export default function AutoResizeTextarea(props: Props) {
         return;
       }
 
-      setInput(textareaValue); // Update the external input state
+      setInput(textareaValue);
       setInput(textareaRef.current.value);
 
       if (!paramsChatId) {
@@ -66,14 +67,14 @@ export default function AutoResizeTextarea(props: Props) {
           to: "/chat/$chatId",
           params: { chatId: props.chatId },
         });
-        const newChatId = await createChat({
+        const dbGeneratedChatId = await createChatMutation.mutateAsync({
           sessionToken: data?.session.token ?? "",
           uuid: props.chatId,
         });
-        handleChatTitleUpdate(newChatId);
+        handleChatTitleUpdate(dbGeneratedChatId);
       }
 
-      await createMessage({
+      createMessageMutation.mutate({
         messageBody: {
           chatId: props.chatId,
           content: textareaValue,
@@ -121,12 +122,12 @@ export default function AutoResizeTextarea(props: Props) {
       rows={1}
       placeholder="Start the conversation..."
       onKeyDown={handleKeyDown}
-      disabled={isChatCreationPending || isMessageCreationPending}
+      disabled={createChatMutation.isPending || createMessageMutation.isPending}
       onChange={(e) => {
         setTextareaValue(e.target.value);
         resizeTextarea();
       }}
-      className="w-full text-sm resize-none focus:outline-none min-h-4 max-h-80"
+      className="w-full resize-none focus:outline-none min-h-4 max-h-80"
     />
   );
 }

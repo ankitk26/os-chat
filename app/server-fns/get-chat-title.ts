@@ -1,12 +1,18 @@
 import { google } from "@ai-sdk/google";
 import { createServerFn } from "@tanstack/react-start";
-import { generateText } from "ai";
+import { generateObject } from "ai";
+import { z } from "zod";
 
 export const getChatTitle = createServerFn({ method: "GET" })
   .validator((userMessage: string) => userMessage)
   .handler(async ({ data: userMessage }) => {
-    const { text } = await generateText({
+    console.log(userMessage);
+
+    const { object } = await generateObject({
       model: google("gemini-2.0-flash-lite"),
+      schema: z.object({
+        title: z.string(),
+      }),
       system:
         "You are a professional writer. " +
         "You write simple, clear, and concise content. " +
@@ -14,7 +20,7 @@ export const getChatTitle = createServerFn({ method: "GET" })
       prompt:
         "Generate a concise and informative title for the following user message. The title should summarize the core subject or intent of the message. Avoid conversational phrases in the title." +
         "\n\n" +
-        "User Message: " +
+        "Here is the message - " +
         userMessage +
         "\n\n" +
         "Examples:" +
@@ -30,5 +36,5 @@ export const getChatTitle = createServerFn({ method: "GET" })
         "Title: New Photo Editing Feature Brainstorming",
     });
 
-    return text;
+    return object.title;
   });

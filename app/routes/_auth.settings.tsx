@@ -119,86 +119,85 @@ function RouteComponent() {
         </Button>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>API Keys Configuration</CardTitle>
-        </CardHeader>
+      <div className="flex items-center space-x-6">
+        <h2>API Keys Configuration</h2>
+        <h2>Chat History</h2>
+      </div>
 
-        <CardContent className="space-y-6">
-          {/* OpenRouter Toggle */}
-          <div className="flex items-center justify-between p-4 border rounded-lg">
-            <div className="space-y-1">
-              <Label
-                htmlFor="openrouter-toggle"
-                className="text-base font-medium"
-              >
-                Use OpenRouter
-              </Label>
-              <p className="text-sm text-muted-foreground">
-                Route all AI model requests through OpenRouter instead of direct
-                provider SDKs
-              </p>
-            </div>
-            <Switch
-              id="openrouter-toggle"
-              checked={useOpenRouter}
-              onCheckedChange={setUseOpenRouter}
-            />
-          </div>
-
-          <Separator />
-
-          {/* All API Keys are always visible */}
-          <div className="space-y-8">
-            <ApiKeyInput
-              provider="openrouter"
-              label="OpenRouter API Key"
-              placeholder="sk-or-..."
-              value={apiKeys.openrouter}
-              onChange={handleApiKeyChange}
-            />
-            <ApiKeyInput
-              provider="openai"
-              label="OpenAI API Key"
-              placeholder="sk-..."
-              value={apiKeys.openai}
-              onChange={handleApiKeyChange}
-            />
-            <ApiKeyInput
-              provider="anthropic"
-              label="Anthropic API Key"
-              placeholder="sk-ant-..."
-              value={apiKeys.anthropic}
-              onChange={handleApiKeyChange}
-            />
-            <ApiKeyInput
-              provider="gemini"
-              label="Gemini API Key"
-              placeholder="AI..."
-              value={apiKeys.gemini}
-              onChange={handleApiKeyChange}
-            />
-            <ApiKeyInput
-              provider="xai"
-              label="xAI API Key"
-              placeholder="xai..."
-              value={apiKeys.xai}
-              onChange={handleApiKeyChange}
-            />
-          </div>
-
-          <div className="flex justify-end pt-4">
-            <Button
-              onClick={handleSave}
-              className="flex items-center gap-2"
-              disabled={!hasChanges} // Disable button if no changes
+      <div className="space-y-6">
+        {/* OpenRouter Toggle */}
+        <div className="flex items-center justify-between p-4 border rounded-lg">
+          <div className="space-y-1">
+            <Label
+              htmlFor="openrouter-toggle"
+              className="text-base font-medium"
             >
-              <SaveIcon className="size-4" />
-              <span className="leading-0">Save Settings</span>
-            </Button>
+              Use OpenRouter
+            </Label>
+            <p className="text-sm text-muted-foreground">
+              Route all AI model requests through OpenRouter instead of direct
+              provider SDKs
+            </p>
           </div>
-        </CardContent>
-      </Card>
+          <Switch
+            id="openrouter-toggle"
+            checked={useOpenRouter}
+            onCheckedChange={setUseOpenRouter}
+          />
+        </div>
+
+        <Separator />
+
+        {/* All API Keys are always visible */}
+        <div className="space-y-8">
+          <ApiKeyInput
+            provider="openrouter"
+            label="OpenRouter API Key"
+            placeholder="sk-or-..."
+            value={apiKeys.openrouter}
+            onChange={handleApiKeyChange}
+          />
+          <ApiKeyInput
+            provider="openai"
+            label="OpenAI API Key"
+            placeholder="sk-..."
+            value={apiKeys.openai}
+            onChange={handleApiKeyChange}
+          />
+          <ApiKeyInput
+            provider="anthropic"
+            label="Anthropic API Key"
+            placeholder="sk-ant-..."
+            value={apiKeys.anthropic}
+            onChange={handleApiKeyChange}
+          />
+          <ApiKeyInput
+            provider="gemini"
+            label="Gemini API Key"
+            placeholder="AI..."
+            value={apiKeys.gemini}
+            onChange={handleApiKeyChange}
+          />
+          <ApiKeyInput
+            provider="xai"
+            label="xAI API Key"
+            placeholder="xai..."
+            value={apiKeys.xai}
+            onChange={handleApiKeyChange}
+          />
+        </div>
+
+        <div className="flex justify-end pt-4">
+          <Button
+            onClick={handleSave}
+            className="flex items-center gap-2"
+            disabled={!hasChanges} // Disable button if no changes
+          >
+            <SaveIcon className="size-4" />
+            <span className="leading-0">Save Settings</span>
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

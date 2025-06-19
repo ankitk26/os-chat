@@ -121,6 +121,12 @@ export const deleteChat = mutation({
       .withIndex("by_chat", (q) => q.eq("chatId", chat.uuid))) {
       await ctx.db.delete(message._id);
     }
+
+    for await (const sharedChat of ctx.db
+      .query("sharedChats")
+      .withIndex("by_parent_chat", (q) => q.eq("parentChatUuid", chat.uuid))) {
+      await ctx.db.delete(sharedChat._id);
+    }
   },
 });
 

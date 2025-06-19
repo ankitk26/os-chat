@@ -2,7 +2,7 @@ export default function XAIIcon() {
   return (
     <svg
       viewBox="0 0 33 32"
-      className="size-4 stroke-foreground fill-foreground"
+      className="size-4 stroke-primary fill-primary"
       xmlns="http://www.w3.org/2000/svg"
     >
       <g>

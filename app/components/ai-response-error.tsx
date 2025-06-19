@@ -7,7 +7,7 @@ type Props = {
 
 export default function AiResponseAlert({ error }: Props) {
   return (
-    <Alert className="mb-8 -mt-10">
+    <Alert className="mb-8">
       <TerminalIcon className="stroke-destructive" />
       <AlertDescription>{error.message}</AlertDescription>
     </Alert>

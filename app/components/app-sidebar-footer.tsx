@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
+import { SettingsIcon } from "lucide-react";
 import { authQueryOptions } from "~/queries/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { SidebarFooter } from "./ui/sidebar";
@@ -23,19 +24,25 @@ export default function AppSidebarFooter() {
     <SidebarFooter className="border-t border-border/50">
       <Link
         to="/settings"
-        className="flex items-center justify-start gap-4 px-4 py-2 m-4 text-sm rounded cursor-pointer hover:bg-secondary"
+        className="flex items-center justify-between px-4 py-2 m-4 text-sm rounded cursor-pointer hover:bg-secondary"
       >
-        <Avatar>
-          <AvatarImage src={user?.user.image || ""} alt={user?.user.name[0]} />
-          <AvatarFallback>
-            {user?.user.name
-              .split(" ")
-              .slice(0, 2)
-              .map((namePart) => namePart.charAt(0))
-              .join("")}
-          </AvatarFallback>
-        </Avatar>
-        <h3>{user?.user.name}</h3>
+        <div className="flex items-center gap-4">
+          <Avatar>
+            <AvatarImage
+              src={user?.user.image || ""}
+              alt={user?.user.name[0]}
+            />
+            <AvatarFallback>
+              {user?.user.name
+                .split(" ")
+                .slice(0, 2)
+                .map((namePart) => namePart.charAt(0))
+                .join("")}
+            </AvatarFallback>
+          </Avatar>
+          <h3>{user?.user.name}</h3>
+        </div>
+        <SettingsIcon className="size-4" />
       </Link>
     </SidebarFooter>
   );

@@ -68,7 +68,7 @@ export default function RetryModelDropdown({
               {provider.provider}
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
-              <DropdownMenuSubContent>
+              <DropdownMenuSubContent className="ml-2">
                 {provider.models.map((model) => (
                   <DropdownMenuItem
                     className="py-3"

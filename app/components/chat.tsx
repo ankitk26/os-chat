@@ -12,6 +12,7 @@ import EmptyChatContent from "./empty-chat-content";
 import { ScrollArea } from "./ui/scroll-area";
 import UserMessageSkeleton from "./user-message-skeleton";
 import UserPromptInput from "./user-prompt-input";
+import { generateRandomUUID } from "~/lib/generate-random-uuid";
 
 type Props = {
   chatId: string;
@@ -54,6 +55,7 @@ export default function Chat({
           createdAt: new Date(message._creationTime),
         };
       }) ?? [],
+    generateId: generateRandomUUID,
     onFinish: (newMessage) => {
       if (!chatId) return;
       if (!newMessage.content) return;
@@ -63,13 +65,15 @@ export default function Chat({
         newMessage.annotations?.length > 0 &&
         (newMessage as any).annotations[0].model;
 
+      const id = generateRandomUUID();
+
       insertAiMessageMutation.mutate({
         messageBody: {
           chatId,
           content: newMessage.content.trim(),
           role: "assistant",
           model: modelUsed,
-          sourceMessageId: newMessage.id,
+          sourceMessageId: id,
         },
         sessionToken: authData?.session.token ?? "",
       });

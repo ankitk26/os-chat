@@ -24,7 +24,7 @@ export default function ModelSelector() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
         <Button variant="outline">
           {selectedModel.name}
           <ChevronDownIcon />
@@ -38,7 +38,7 @@ export default function ModelSelector() {
               {provider.provider}
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
-              <DropdownMenuSubContent>
+              <DropdownMenuSubContent className="ml-2">
                 {provider.models.map((model) => (
                   <DropdownMenuItem
                     className="py-3"

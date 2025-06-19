@@ -57,7 +57,9 @@ export default function SidebarChatItem({ chat }: Props) {
       className="flex items-center justify-between py-1 pl-2 text-sm rounded cursor-pointer hover:bg-primary/10 hover:text-primary dark:hover:bg-secondary dark:hover:text-secondary-foreground"
       activeProps={{ className: "bg-secondary" }}
     >
-      <h4 className="line-clamp-1">{chat.title}</h4>
+      <h4 className="line-clamp-1" title={chat.title}>
+        {chat.title}
+      </h4>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button size="icon" variant="ghost">

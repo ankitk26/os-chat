@@ -70,7 +70,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         enableSystem
         disableTransitionOnChange
       >
-        <body className="leading-6 bg-sidebar dark:bg-card text-foreground/70 dark:text-foreground/70">
+        <body className="leading-6 bg-sidebar dark:bg-black text-foreground/70 dark:text-foreground/70">
           <div>{children}</div>
           <Toaster duration={800} />
           <ReactQueryDevtools buttonPosition="bottom-right" />

@@ -17,7 +17,7 @@ function RouteComponent() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div className="w-full bg-card">
+      <div className="w-full">
         <div className="w-full border-l border-l-border/50">
           <Outlet />
         </div>
