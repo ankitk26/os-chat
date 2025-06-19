@@ -78,26 +78,35 @@ export const createMessage = mutation({
   },
 });
 
-export const deleteMessage = mutation({
+export const deleteMessagesByTimestamp = mutation({
   args: {
     sessionToken: v.string(),
-    sourceMessageId: v.string(),
+    currentMessageSourceId: v.string(),
   },
   handler: async (ctx, args) => {
     const user = await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
-    const message = await ctx.db
+    const currentMessage = await ctx.db
       .query("messages")
       .withIndex("by_source_id", (q) =>
-        q.eq("sourceMessageId", args.sourceMessageId)
+        q.eq("sourceMessageId", args.currentMessageSourceId)
       )
       .first();
 
-    if (!message) {
+    if (!currentMessage) {
       throw new Error("Invalid message");
     }
 
-    const messageId = message._id;
-    await ctx.db.delete(messageId);
+    if (currentMessage.userId !== user) {
+      throw new Error("Unauthorized access");
+    }
+
+    for await (const message of ctx.db
+      .query("messages")
+      .withIndex("by_creation_time", (q) =>
+        q.gte("_creationTime", currentMessage._creationTime)
+      )) {
+      await ctx.db.delete(message._id);
+    }
   },
 });

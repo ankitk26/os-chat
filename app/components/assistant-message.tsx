@@ -1,4 +1,4 @@
-import { ChatRequestOptions, UIMessage } from "ai";
+import { ChatRequestOptions, Message, UIMessage } from "ai";
 import { CopyIcon } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
@@ -12,10 +12,14 @@ type Props = {
   reload?: (
     chatRequestOptions?: ChatRequestOptions
   ) => Promise<string | null | undefined>;
+  setMessages: (
+    messages: Message[] | ((messages: Message[]) => Message[])
+  ) => void;
+  messages: UIMessage[];
 };
 
 export default React.memo(function AssistantMessage(props: Props) {
-  const { message, reload } = props;
+  const { message, reload, setMessages, messages } = props;
 
   const modelUsed =
     message.annotations &&
@@ -49,7 +53,14 @@ export default React.memo(function AssistantMessage(props: Props) {
           <TooltipContent>Copy to clipboard</TooltipContent>
         </Tooltip>
 
-        {reload && <RetryModelDropdown message={message} reload={reload} />}
+        {reload && (
+          <RetryModelDropdown
+            message={message}
+            messages={messages}
+            reload={reload}
+            setMessages={setMessages}
+          />
+        )}
 
         <span className="text-muted-foreground text-xs">{modelUsed}</span>
       </div>

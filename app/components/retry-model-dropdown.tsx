@@ -1,6 +1,6 @@
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { ChatRequestOptions, UIMessage } from "ai";
+import { ChatRequestOptions, Message, UIMessage } from "ai";
 import { api } from "convex/_generated/api";
 import { RefreshCcwIcon } from "lucide-react";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
@@ -25,14 +25,23 @@ type Props = {
   reload: (
     chatRequestOptions?: ChatRequestOptions
   ) => Promise<string | null | undefined>;
+  setMessages: (
+    messages: Message[] | ((messages: Message[]) => Message[])
+  ) => void;
+  messages: UIMessage[];
 };
 
-export default function RetryModelDropdown({ message, reload }: Props) {
+export default function RetryModelDropdown({
+  message,
+  reload,
+  setMessages,
+  messages,
+}: Props) {
   const { data: authData } = useQuery(authQueryOptions);
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
 
-  const deleteMessageMutation = useMutation({
-    mutationFn: useConvexMutation(api.messages.deleteMessage),
+  const deleteMessagesMutation = useMutation({
+    mutationFn: useConvexMutation(api.messages.deleteMessagesByTimestamp),
   });
 
   const apiKeys = localStorage.getItem("apiKeys");
@@ -66,13 +75,21 @@ export default function RetryModelDropdown({ message, reload }: Props) {
                     key={model.modelId}
                     disabled={!model.isAvailable}
                     onClick={async () => {
-                      await deleteMessageMutation.mutateAsync({
+                      deleteMessagesMutation.mutate({
                         sessionToken: authData?.session.token ?? "",
-                        sourceMessageId: message.id,
+                        currentMessageSourceId: message.id,
                       });
+                      const currentMessage = messages.find(
+                        (m) => m.id === message.id
+                      );
+                      setMessages((prev) => [
+                        ...prev.filter(
+                          (m) => m.createdAt! < currentMessage?.createdAt!
+                        ),
+                      ]);
                       await reload({
                         body: {
-                          model: model,
+                          model,
                           isWebSearchEnabled,
                           apiKeys: localStorage.getItem("apiKeys"),
                           useOpenRouter: localStorage.getItem("useOpenRouter"),
