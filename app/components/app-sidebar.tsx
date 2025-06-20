@@ -1,27 +1,58 @@
 import { Link } from "@tanstack/react-router";
-import { Sidebar, SidebarContent } from "~/components/ui/sidebar";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "~/components/ui/sidebar";
 import AppSidebarFooter from "./app-sidebar-footer";
-import AppSidebarHeader from "./app-sidebar-header";
 import PinnedChats from "./pinned-chats";
-import SidebarChatsSection from "./sidebar-chats-section";
-import { Button } from "./ui/button";
+import { ThemeToggler } from "./theme-toggle";
 import { ScrollArea } from "./ui/scroll-area";
+import UnpinnedChats from "./unpinned-chats";
 
-export function AppSidebar() {
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar className="border-none" collapsible="icon">
-      <AppSidebarHeader />
+    <Sidebar collapsible="offcanvas" {...props}>
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem className="flex items-center">
+            {/* <SidebarTrigger /> */}
+            <SidebarMenuButton
+              className="data-[slot=sidebar-menu-button]:!p-1.5"
+              asChild
+            >
+              <Link to="/">
+                <span className="text-base font-medium">os-chat</span>
+              </Link>
+            </SidebarMenuButton>
+            <ThemeToggler />
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
 
-      <SidebarContent className="flex flex-col items-stretch h-full px-6 pt-2 overflow-y-hidden grow">
-        <Link to="/">
-          <Button className="w-full">New Chat</Button>
-        </Link>
+      <SidebarContent className="overflow-y-hidden">
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem className="flex items-center gap-2">
+              <SidebarMenuButton
+                className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear rounded font-semibold"
+                size="default"
+              >
+                <Link to="/" className="w-full text-center">
+                  New Chat
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
 
-        <ScrollArea className="w-full h-full">
-          <div className="flex flex-col items-stretch h-full gap-2 pr-1 mt-4 mb-20 space-y-4 overflow-hidden scroll-smooth grow">
-            <PinnedChats />
-            <SidebarChatsSection />
-          </div>
+        <ScrollArea className="w-full h-full space-y-4 pb-20">
+          <PinnedChats />
+          <UnpinnedChats />
         </ScrollArea>
       </SidebarContent>
 

@@ -3,7 +3,12 @@ import { Link } from "@tanstack/react-router";
 import { SettingsIcon } from "lucide-react";
 import { authQueryOptions } from "~/queries/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { SidebarFooter } from "./ui/sidebar";
+import {
+  SidebarFooter,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "./ui/sidebar";
 import { Skeleton } from "./ui/skeleton";
 
 export default function AppSidebarFooter() {
@@ -21,29 +26,36 @@ export default function AppSidebarFooter() {
   }
 
   return (
-    <SidebarFooter className="border-t border-border/50">
-      <Link
-        to="/settings"
-        className="flex items-center justify-between px-4 py-2 m-4 text-sm rounded cursor-pointer hover:bg-secondary"
-      >
-        <div className="flex items-center gap-4">
-          <Avatar>
-            <AvatarImage
-              src={user?.user.image || ""}
-              alt={user?.user.name[0]}
-            />
-            <AvatarFallback>
-              {user?.user.name
-                .split(" ")
-                .slice(0, 2)
-                .map((namePart) => namePart.charAt(0))
-                .join("")}
-            </AvatarFallback>
-          </Avatar>
-          <h3>{user?.user.name}</h3>
-        </div>
-        <SettingsIcon className="size-4" />
-      </Link>
-    </SidebarFooter>
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <Link to="/settings">
+          <SidebarMenuButton
+            size="lg"
+            className="data-[state=open]:bg-sidebar-accent cursor-pointer data-[state=open]:text-sidebar-accent-foreground"
+          >
+            <Avatar className="h-8 w-8 rounded-lg grayscale">
+              <AvatarImage
+                src={user?.user.image || ""}
+                alt={user?.user.name[0]}
+              />
+              <AvatarFallback className="rounded-lg">
+                {user?.user.name
+                  .split(" ")
+                  .slice(0, 2)
+                  .map((namePart) => namePart.charAt(0))
+                  .join("")}
+              </AvatarFallback>
+            </Avatar>
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <span className="truncate font-medium">{user?.user.name}</span>
+              <span className="text-muted-foreground truncate text-xs">
+                {user?.user.email}
+              </span>
+            </div>
+            <SettingsIcon />
+          </SidebarMenuButton>
+        </Link>
+      </SidebarMenuItem>
+    </SidebarMenu>
   );
 }

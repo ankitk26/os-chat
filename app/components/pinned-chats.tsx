@@ -4,8 +4,13 @@ import { api } from "convex/_generated/api";
 import { PinIcon } from "lucide-react";
 import { authQueryOptions } from "~/queries/auth";
 import SidebarChats from "./sidebar-chats";
-import { Separator } from "./ui/separator";
-import { Skeleton } from "./ui/skeleton";
+import {
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuSkeleton,
+} from "./ui/sidebar";
 
 export default function PinnedChats() {
   const { data: authData } = useQuery(authQueryOptions);
@@ -20,29 +25,24 @@ export default function PinnedChats() {
   }
 
   return (
-    <>
-      <section>
-        <div className="flex items-center gap-2 px-2 text-sm text-muted-foreground">
-          <PinIcon className="size-4" />
-          <h3>Pinned chats</h3>
-        </div>
-
+    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      <SidebarGroupLabel className="text-sm flex items-center gap-2">
+        <PinIcon />
+        Pinned chats
+      </SidebarGroupLabel>
+      <SidebarMenu className="mt-2">
         {isPending ? (
-          <div className="flex flex-col gap-2 mt-4">
-            {Array.from({ length: 3 }).map((_, index) => (
-              <Skeleton
-                key={"app_sidebar_pinned_chat_loading_" + index}
-                className="h-6"
-              />
+          <SidebarMenu>
+            {Array.from({ length: 4 }).map((_, index) => (
+              <SidebarMenuItem key={index}>
+                <SidebarMenuSkeleton />
+              </SidebarMenuItem>
             ))}
-          </div>
+          </SidebarMenu>
         ) : (
-          <div className="flex flex-col gap-2 mt-3">
-            <SidebarChats pin={true} />
-          </div>
+          <SidebarChats pin={true} />
         )}
-      </section>
-      <Separator />
-    </>
+      </SidebarMenu>
+    </SidebarGroup>
   );
 }

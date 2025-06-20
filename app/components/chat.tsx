@@ -3,6 +3,7 @@ import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { Doc } from "convex/_generated/dataModel";
+import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { authQueryOptions } from "~/queries/auth";
 import AiResponseAlert from "./ai-response-error";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
@@ -12,7 +13,6 @@ import EmptyChatContent from "./empty-chat-content";
 import { ScrollArea } from "./ui/scroll-area";
 import UserMessageSkeleton from "./user-message-skeleton";
 import UserPromptInput from "./user-prompt-input";
-import { generateRandomUUID } from "~/lib/generate-random-uuid";
 
 type Props = {
   chatId: string;
@@ -81,12 +81,12 @@ export default function Chat({
   });
 
   return (
-    <div className="flex flex-col w-full mx-auto max-h-svh h-svh">
-      <div className="flex-1 overflow-hidden">
-        {!isMessagesPending && messages.length === 0 && <EmptyChatContent />}
+    <div className="flex flex-col h-full">
+      <ScrollArea className="h-full max-h-[calc(100svh-150px)] grow">
+        <div className="flex-1 overflow-hidden">
+          {!isMessagesPending && messages.length === 0 && <EmptyChatContent />}
 
-        {chatId && (
-          <ScrollArea className="w-full h-full">
+          {chatId && (
             <div className="w-full h-full max-w-3xl mx-auto">
               <div className="my-8 space-y-8">
                 {isMessagesPending ? (
@@ -108,9 +108,9 @@ export default function Chat({
               />
               {error && <AiResponseAlert error={error} />}
             </div>
-          </ScrollArea>
-        )}
-      </div>
+          )}
+        </div>
+      </ScrollArea>
 
       <UserPromptInput
         chatId={chatId}

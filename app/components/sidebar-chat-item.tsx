@@ -13,13 +13,18 @@ import {
 import { toast } from "sonner";
 import { authQueryOptions } from "~/queries/auth";
 import { useChatActionStore } from "~/stores/chat-actions-store";
-import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import {
+  SidebarMenuAction,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "./ui/sidebar";
 
 type Props = {
   chat: Doc<"chats">;
@@ -27,6 +32,8 @@ type Props = {
 
 export default function SidebarChatItem({ chat }: Props) {
   const { data: authData } = useQuery(authQueryOptions);
+  const { isMobile } = useSidebar();
+
   const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
   const setIsDeleteModalOpen = useChatActionStore(
     (store) => store.setIsDeleteModalOpen
@@ -51,22 +58,31 @@ export default function SidebarChatItem({ chat }: Props) {
   });
 
   return (
-    <Link
-      to="/chat/$chatId"
-      params={{ chatId: chat.uuid }}
-      className="flex items-center justify-between py-1 pl-2 text-sm rounded cursor-pointer hover:bg-primary/10 hover:text-primary dark:hover:bg-secondary dark:hover:text-secondary-foreground"
-      activeProps={{ className: "bg-secondary" }}
-    >
-      <h4 className="line-clamp-1" title={chat.title}>
-        {chat.title}
-      </h4>
+    <SidebarMenuItem>
+      <SidebarMenuButton asChild>
+        <Link
+          to="/chat/$chatId"
+          params={{ chatId: chat.uuid }}
+          activeProps={{
+            className: "active",
+          }}
+        >
+          <span className="line-clamp-1">{chat.title}</span>
+        </Link>
+      </SidebarMenuButton>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="icon" variant="ghost">
+          <SidebarMenuAction
+            showOnHover
+            className="data-[state=open]:bg-accent rounded-sm"
+          >
             <EllipsisVerticalIcon />
-          </Button>
+          </SidebarMenuAction>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent
+          side={isMobile ? "bottom" : "right"}
+          align={isMobile ? "end" : "start"}
+        >
           <DropdownMenuItem
             onClick={(e) => {
               e.stopPropagation();
@@ -75,7 +91,7 @@ export default function SidebarChatItem({ chat }: Props) {
             }}
           >
             <EditIcon />
-            <span className="leading-0">Rename</span>
+            <span>Rename</span>
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={(e) => {
@@ -87,7 +103,7 @@ export default function SidebarChatItem({ chat }: Props) {
             }}
           >
             <PinIcon />
-            <span className="leading-0">{chat.isPinned ? "Unpin" : "Pin"}</span>
+            <span>{chat.isPinned ? "Unpin" : "Pin"}</span>
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={(e) => {
@@ -97,7 +113,7 @@ export default function SidebarChatItem({ chat }: Props) {
             }}
           >
             <Trash2Icon />
-            <span className="leading-0">Delete</span>
+            <span>Delete</span>
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={(e) => {
@@ -107,10 +123,10 @@ export default function SidebarChatItem({ chat }: Props) {
             }}
           >
             <Share2Icon />
-            <span className="leading-0">Share</span>
+            <span>Share</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </Link>
+    </SidebarMenuItem>
   );
 }
