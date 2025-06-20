@@ -81,12 +81,12 @@ export default function Chat({
   });
 
   return (
-    <div className="flex flex-col h-full">
-      <ScrollArea className="h-full max-h-[calc(100svh-150px)] grow">
-        <div className="flex-1 overflow-hidden">
-          {!isMessagesPending && messages.length === 0 && <EmptyChatContent />}
+    <div className="flex flex-col w-full mx-auto max-h-svh h-svh">
+      <div className="flex-1 overflow-hidden">
+        {!isMessagesPending && messages.length === 0 && <EmptyChatContent />}
 
-          {chatId && (
+        {chatId && (
+          <ScrollArea className="w-full h-full">
             <div className="w-full h-full max-w-3xl mx-auto">
               <div className="my-8 space-y-8">
                 {isMessagesPending ? (
@@ -108,9 +108,9 @@ export default function Chat({
               />
               {error && <AiResponseAlert error={error} />}
             </div>
-          )}
-        </div>
-      </ScrollArea>
+          </ScrollArea>
+        )}
+      </div>
 
       <UserPromptInput
         chatId={chatId}

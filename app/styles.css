@@ -224,22 +224,14 @@
   }
 }
 
-* {
-  font-family: Geist, sans-serif;
-}
-
 code,
 pre,
 code span {
   font-family: "Geist Mono", monospace;
 }
 
-#shiki-container {
-  border-radius: 0px !important;
-  text-wrap: wrap !important;
-}
-
-pre.defaultStyles {
+pre.defaultStyles,
+.defaultStyles {
   border-radius: 0px !important;
   text-wrap: wrap !important;
 }
