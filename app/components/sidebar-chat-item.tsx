@@ -2,7 +2,7 @@ import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
-import { Doc } from "convex/_generated/dataModel";
+import type { Doc } from "convex/_generated/dataModel";
 import {
   EditIcon,
   EllipsisVerticalIcon,
@@ -59,15 +59,13 @@ export default function SidebarChatItem({ chat }: Props) {
 
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton asChild>
+      <SidebarMenuButton className="pr-0!">
         <Link
           to="/chat/$chatId"
           params={{ chatId: chat.uuid }}
-          activeProps={{
-            className: "active",
-          }}
+          className="truncate max-w-[calc(100%-2rem)]"
         >
-          <span className="line-clamp-1">{chat.title}</span>
+          <span>{chat.title}</span>
         </Link>
       </SidebarMenuButton>
       <DropdownMenu>

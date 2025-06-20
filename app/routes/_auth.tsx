@@ -17,7 +17,7 @@ function RouteComponent() {
   return (
     <SidebarProvider>
       <AppSidebar variant="inset" />
-      <SidebarInset className="!mb-0 !mr-0 !rounded-bl-none !rounded-tr-none">
+      <SidebarInset>
         <Outlet />
       </SidebarInset>
     </SidebarProvider>

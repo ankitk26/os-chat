@@ -89,7 +89,7 @@ export default function Chat({
           <ScrollArea className="w-full h-full">
             <div className="w-full h-full max-w-3xl mx-auto">
               <div className="my-8 space-y-8">
-                {isMessagesPending ? (
+                {isMessagesPending && status !== "submitted" ? (
                   <>
                     <UserMessageSkeleton />
                     <AssistantMessageSkeleton />
