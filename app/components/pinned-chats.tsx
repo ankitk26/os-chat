@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { PinIcon } from "lucide-react";
 import { authQueryOptions } from "~/queries/auth";
-import SidebarChats from "./sidebar-chats";
+import SidebarChatItem from "./sidebar-chat-item";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -20,7 +20,8 @@ export default function PinnedChats() {
     })
   );
 
-  if (!isPending && chatsData?.length === 0) {
+  // If no pinned chats, don't show anything
+  if (!isPending && chatsData && chatsData.length === 0) {
     return null;
   }
 
@@ -30,8 +31,9 @@ export default function PinnedChats() {
         <PinIcon />
         Pinned chats
       </SidebarGroupLabel>
+
       <SidebarMenu className="mt-2">
-        {isPending ? (
+        {isPending && (
           <SidebarMenu>
             {Array.from({ length: 4 }).map((_, index) => (
               <SidebarMenuItem key={index}>
@@ -39,9 +41,13 @@ export default function PinnedChats() {
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
-        ) : (
-          <SidebarChats pin={true} />
         )}
+        {!isPending &&
+          chatsData &&
+          chatsData.length > 0 &&
+          chatsData.map((chat) => (
+            <SidebarChatItem key={chat._id} chat={chat} />
+          ))}
       </SidebarMenu>
     </SidebarGroup>
   );

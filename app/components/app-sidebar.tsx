@@ -9,7 +9,10 @@ import {
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
 import AppSidebarFooter from "./app-sidebar-footer";
+import ChatRenameDialog from "./chat-rename-dialog";
+import DeleteChatAlertDialog from "./delete-chat-alert-dialog";
 import PinnedChats from "./pinned-chats";
+import ShareChatDialog from "./share-chat-dialog";
 import { ThemeToggler } from "./theme-toggle";
 import { ScrollArea } from "./ui/scroll-area";
 import UnpinnedChats from "./unpinned-chats";
@@ -50,9 +53,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenu>
         </SidebarGroup>
 
-        <ScrollArea className="w-full h-full space-y-4 pb-20">
-          <PinnedChats />
-          <UnpinnedChats />
+        <ScrollArea className="w-full h-full pb-20">
+          <div className="space-y-4">
+            <PinnedChats />
+            <UnpinnedChats />
+            <DeleteChatAlertDialog />
+            <ChatRenameDialog />
+            <ShareChatDialog />
+          </div>
         </ScrollArea>
       </SidebarContent>
 

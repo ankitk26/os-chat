@@ -63,7 +63,7 @@ export default function SidebarChatItem({ chat }: Props) {
         <Link
           to="/chat/$chatId"
           params={{ chatId: chat.uuid }}
-          className="truncate max-w-[calc(100%-2rem)]"
+          className="truncate w-full max-w-[calc(100%-2rem)]"
         >
           <span>{chat.title}</span>
         </Link>
@@ -72,7 +72,7 @@ export default function SidebarChatItem({ chat }: Props) {
         <DropdownMenuTrigger asChild>
           <SidebarMenuAction
             showOnHover
-            className="data-[state=open]:bg-accent rounded-sm"
+            className="data-[state=open]:bg-accent rounded-sm cursor-pointer"
           >
             <EllipsisVerticalIcon />
           </SidebarMenuAction>
@@ -82,6 +82,7 @@ export default function SidebarChatItem({ chat }: Props) {
           align={isMobile ? "end" : "start"}
         >
           <DropdownMenuItem
+            className="cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               setSelectedChat(chat);
@@ -92,6 +93,7 @@ export default function SidebarChatItem({ chat }: Props) {
             <span>Rename</span>
           </DropdownMenuItem>
           <DropdownMenuItem
+            className="cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               toggleChatPinMutation.mutate({
@@ -104,6 +106,7 @@ export default function SidebarChatItem({ chat }: Props) {
             <span>{chat.isPinned ? "Unpin" : "Pin"}</span>
           </DropdownMenuItem>
           <DropdownMenuItem
+            className="cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               setSelectedChat(chat);
@@ -114,6 +117,7 @@ export default function SidebarChatItem({ chat }: Props) {
             <span>Delete</span>
           </DropdownMenuItem>
           <DropdownMenuItem
+            className="cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               setSelectedChat(chat);
