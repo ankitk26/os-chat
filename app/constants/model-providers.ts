@@ -132,13 +132,13 @@ export const openRouterModelProviders: ProviderGroup[] = [
     key: "qwen",
     models: [
       {
-        name: "QwQ 32B",
+        name: "Qwen QwQ 32B",
         openRouterModelId: "qwen/qwq-32b:free",
         modelId: "qwen/qwq-32b:free",
         isFree: true,
       },
       {
-        name: "2.5 32b",
+        name: "Qwen 2.5 32b",
         openRouterModelId: "qwen/qwen-2.5-coder-32b-instruct:free",
         modelId: "qwen/qwen-2.5-coder-32b-instruct:free",
         isFree: true,

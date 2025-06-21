@@ -58,12 +58,12 @@ export default function SidebarChatItem({ chat }: Props) {
   });
 
   return (
-    <SidebarMenuItem className="flex! items-center!">
-      <SidebarMenuButton className="pr-0! p-0! flex items-stretch">
+    <SidebarMenuItem className="flex! items-center! relative">
+      <SidebarMenuButton className="pr-0! p-0! flex items-stretch h-full!">
         <Link
           to="/chat/$chatId"
           params={{ chatId: chat.uuid }}
-          className="truncate py-4! m-0! w-full flex items-center pl-2! max-w-[calc(100%-2rem)]"
+          className="truncate m-0! w-full flex items-center pl-2! max-w-[calc(100%-2.5rem)] h-full! py-3!"
         >
           <span className="w-full truncate">{chat.title}</span>
         </Link>
@@ -71,8 +71,8 @@ export default function SidebarChatItem({ chat }: Props) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <SidebarMenuAction
-            // showOnHover
-            className="data-[state=open]:bg-accent rounded-sm cursor-pointer"
+            showOnHover
+            className="data-[state=open]:bg-accent rounded-sm cursor-pointer !absolute !right-1 !top-1/2 !-translate-y-1/2 !w-8 !h-8 !p-0 !flex !items-center !justify-center"
           >
             <EllipsisVerticalIcon />
           </SidebarMenuAction>

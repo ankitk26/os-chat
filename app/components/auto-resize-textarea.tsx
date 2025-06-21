@@ -126,7 +126,7 @@ export default function AutoResizeTextarea(props: Props) {
         setTextareaValue(e.target.value);
         resizeTextarea();
       }}
-      className="w-full resize-none focus:outline-none min-h-8 max-h-80"
+      className="w-full resize-none focus:outline-none text-sm min-h-8 max-h-80"
     />
   );
 }

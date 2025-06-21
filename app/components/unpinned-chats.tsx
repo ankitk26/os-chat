@@ -26,7 +26,7 @@ export default function UnpinnedChats() {
         <MessageSquareIcon />
         Chats
       </SidebarGroupLabel>
-      <SidebarMenu className="mt-2 space-y-2">
+      <SidebarMenu className="mt-2 space-y-0.5">
         {isPending && (
           <SidebarMenu>
             {Array.from({ length: 4 }).map((_, index) => (

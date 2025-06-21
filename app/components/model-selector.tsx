@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "lucide-react";
+import { ChevronDownIcon, KeyIcon } from "lucide-react";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { useModelStore } from "~/stores/model-store";
 import ModelProviderIcon from "./model-provider-icon";
@@ -25,7 +25,7 @@ export default function ModelSelector() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost">
+        <Button variant="ghost" size="sm">
           {selectedModel.name}
           <ChevronDownIcon />
         </Button>
@@ -33,7 +33,7 @@ export default function ModelSelector() {
       <DropdownMenuContent>
         {accessibleModels.map((provider) => (
           <DropdownMenuSub key={provider.key}>
-            <DropdownMenuSubTrigger className="py-3 flex items-center gap-3">
+            <DropdownMenuSubTrigger className="py-3 flex items-center text-xs gap-3">
               <ModelProviderIcon provider={provider.key} />
               {provider.provider}
             </DropdownMenuSubTrigger>
@@ -41,7 +41,7 @@ export default function ModelSelector() {
               <DropdownMenuSubContent className="ml-2">
                 {provider.models.map((model) => (
                   <DropdownMenuItem
-                    className="py-3"
+                    className="py-3 text-xs"
                     key={model.modelId}
                     disabled={!model.isAvailable}
                     onClick={() => {
@@ -49,6 +49,9 @@ export default function ModelSelector() {
                     }}
                   >
                     {model.name}
+                    {!model.isAvailable && (
+                      <KeyIcon className="size-3 ml-auto" />
+                    )}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuSubContent>

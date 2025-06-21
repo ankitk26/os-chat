@@ -16,7 +16,7 @@ export default function PromptActions({ status, stop }: Props) {
 
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
         <ModelSelector />
 
         {selectedModel.openRouterModelId.startsWith("google") && (
@@ -24,7 +24,7 @@ export default function PromptActions({ status, stop }: Props) {
             type="button"
             size="sm"
             variant={isWebSearchEnabled ? "default" : "outline"}
-            className={cn("rounded-full", isWebSearchEnabled ? "border" : "")}
+            className={cn("text-xs", isWebSearchEnabled ? "border" : "")}
             onClick={toggleIsWebSearch}
           >
             <GlobeIcon />
