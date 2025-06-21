@@ -25,7 +25,7 @@ export default function ModelSelector() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">
+        <Button variant="ghost">
           {selectedModel.name}
           <ChevronDownIcon />
         </Button>

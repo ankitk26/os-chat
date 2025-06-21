@@ -2,7 +2,7 @@ export default function GithubIcon() {
   return (
     <svg
       role="img"
-      className="size-5 stroke-pink-50 fill-pink-50"
+      className="size-5 stroke-primary-foreground fill-primary-foreground"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
     >

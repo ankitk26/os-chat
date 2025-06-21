@@ -6,15 +6,6 @@ import Chat from "~/components/chat";
 import { authQueryOptions } from "~/queries/auth";
 
 export const Route = createFileRoute("/_auth/chat/$chatId")({
-  loader: async ({ context, params }) => {
-    const authData = await context.queryClient.fetchQuery(authQueryOptions);
-    context.queryClient.prefetchQuery(
-      convexQuery(api.messages.getMessages, {
-        chatId: params.chatId,
-        sessionToken: authData?.session.token ?? "",
-      })
-    );
-  },
   component: RouteComponent,
 });
 

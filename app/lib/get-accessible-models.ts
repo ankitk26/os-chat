@@ -1,15 +1,9 @@
+import { openRouterModelProviders } from "~/constants/model-providers";
 import {
-  ModelWithAvailability,
   ApiKeys,
-  openRouterModelProviders,
-  ProviderGroup,
-} from "~/constants/model-providers"; // Assuming this path is correct
-
-// New type for the return structure
-export interface ProviderGroupWithAvailability
-  extends Omit<ProviderGroup, "models"> {
-  models: ModelWithAvailability[];
-}
+  ModelWithAvailability,
+  ProviderGroupWithAvailability,
+} from "~/types";
 
 // Helper function to safely parse JSON from localStorage
 function safeJSONParse<T>(jsonString: string | null, defaultValue: T): T {
@@ -55,6 +49,7 @@ export function getAccessibleModels(
     openai: "",
     anthropic: "",
     openrouter: "",
+    xai: "",
   });
 
   // Safely parse the useOpenRouter flag, defaulting to false if null/invalid.
@@ -83,6 +78,9 @@ export function getAccessibleModels(
             break;
           case "google":
             hasSpecificProviderKey = parsedKeys.gemini.trim() !== "";
+            break;
+          case "xai":
+            hasSpecificProviderKey = parsedKeys.xai.trim() !== "";
             break;
           case "openrouter": // Special case: if OpenRouter toggle is off, but they *still* put an OpenRouter key, those models are still available via that key.
             hasSpecificProviderKey = parsedKeys.openrouter.trim() !== "";
