@@ -44,11 +44,11 @@ export default function PromptActions({ status, stop }: Props) {
       </div>
 
       {status === "streaming" || status === "submitted" ? (
-        <Button size="icon" type="submit" className="size-9" onClick={stop}>
+        <Button size="icon" type="button" onClick={stop}>
           <SquareIcon />
         </Button>
       ) : (
-        <Button size="icon" type="submit" className="size-9">
+        <Button size="icon" type="submit">
           <SendIcon />
         </Button>
       )}

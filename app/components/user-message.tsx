@@ -7,13 +7,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
   message: string;
-  readOnly?: boolean;
 };
 
-export default React.memo(function UserMessage({
-  message,
-  readOnly = false,
-}: Props) {
+export default React.memo(function UserMessage({ message }: Props) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (

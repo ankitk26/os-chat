@@ -7,6 +7,8 @@
     "skipLibCheck": true,
     "strictNullChecks": true,
     "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./app/*"]

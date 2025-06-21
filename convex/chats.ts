@@ -137,7 +137,7 @@ export const createSharedChat = mutation({
     sharedChatUuid: v.string(),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
     const chat = await ctx.db.get(args.chatId);
     if (!chat) {

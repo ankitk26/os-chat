@@ -1,16 +1,18 @@
 import { ProviderGroup } from "~/types";
 
+export const defaultSelectedModel = {
+  name: "Gemini 2.0 Flash",
+  modelId: "gemini-2.0-flash-001",
+  openRouterModelId: "google/gemini-2.0-flash-001",
+  isFree: true,
+};
+
 export const openRouterModelProviders: ProviderGroup[] = [
   {
     provider: "Google",
     key: "google",
     models: [
-      {
-        name: "Gemini 2.0 Flash",
-        modelId: "gemini-2.0-flash-001",
-        openRouterModelId: "google/gemini-2.0-flash-001",
-        isFree: true,
-      },
+      defaultSelectedModel,
       {
         name: "Gemini 2.5 Flash",
         openRouterModelId: "google/gemini-2.5-flash",
