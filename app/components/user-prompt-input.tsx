@@ -106,7 +106,7 @@ export default function UserPromptInput(props: Props) {
         e.preventDefault();
         handlePromptSubmit();
       }}
-      className="flex flex-col w-full max-w-3xl mb-2 p-4 mx-auto border rounded-tl-lg bg-popover rounded-tr-lg border-border min-h-36"
+      className="flex flex-col w-full max-w-3xl mb-2 p-4 mx-auto border rounded-tl-lg bg-popover rounded-tr-lg border-border min-h-30"
     >
       <div className="flex-1">
         <AutoResizeTextarea

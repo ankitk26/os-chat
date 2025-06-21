@@ -10,30 +10,25 @@ import {
   Share2Icon,
   Trash2Icon,
 } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { authQueryOptions } from "~/queries/auth";
 import { useChatActionStore } from "~/stores/chat-actions-store";
+import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import {
-  SidebarMenuAction,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "./ui/sidebar";
 
 type Props = {
   chat: Doc<"chats">;
 };
 
 export default function SidebarChatItem({ chat }: Props) {
+  const [isHovered, setIsHovered] = useState(false);
   const { data: authData } = useQuery(authQueryOptions);
-  const { isMobile } = useSidebar();
-
   const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
   const setIsDeleteModalOpen = useChatActionStore(
     (store) => store.setIsDeleteModalOpen
@@ -58,31 +53,31 @@ export default function SidebarChatItem({ chat }: Props) {
   });
 
   return (
-    <SidebarMenuItem className="flex! items-center! relative">
-      <SidebarMenuButton className="pr-0! p-0! flex items-stretch h-full!">
-        <Link
-          to="/chat/$chatId"
-          params={{ chatId: chat.uuid }}
-          className="truncate m-0! w-full flex items-center pl-2! max-w-[calc(100%-2.5rem)] h-full! py-3!"
-        >
-          <span className="w-full truncate">{chat.title}</span>
-        </Link>
-      </SidebarMenuButton>
+    <Link
+      to="/chat/$chatId"
+      params={{ chatId: chat.uuid }}
+      className="flex items-center justify-between py-2 px-2 text-sm rounded-md cursor-pointer hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground"
+      activeProps={{ className: "bg-secondary text-secondary-foreground" }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <h4 className="line-clamp-1 w-full" title={chat.title}>
+        {chat.title}
+      </h4>
+      {/* Always render button to maintain consistent height, but control visibility */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <SidebarMenuAction
-            showOnHover
-            className="data-[state=open]:bg-accent rounded-sm cursor-pointer !absolute !right-1 !top-1/2 !-translate-y-1/2 !w-8 !h-8 !p-0 !flex !items-center !justify-center"
+          <Button
+            size="icon"
+            className={`size-7 rounded-sm bg-secondary hover:bg-sidebar text-sidebar-foreground flex-shrink-0 transition-opacity duration-200 ${
+              isHovered ? "opacity-100" : "opacity-0"
+            }`}
           >
             <EllipsisVerticalIcon />
-          </SidebarMenuAction>
+          </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent
-          side={isMobile ? "bottom" : "right"}
-          align={isMobile ? "end" : "start"}
-        >
+        <DropdownMenuContent>
           <DropdownMenuItem
-            className="cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               setSelectedChat(chat);
@@ -90,10 +85,9 @@ export default function SidebarChatItem({ chat }: Props) {
             }}
           >
             <EditIcon />
-            <span>Rename</span>
+            <span className="leading-0">Rename</span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               toggleChatPinMutation.mutate({
@@ -103,10 +97,9 @@ export default function SidebarChatItem({ chat }: Props) {
             }}
           >
             <PinIcon />
-            <span>{chat.isPinned ? "Unpin" : "Pin"}</span>
+            <span className="leading-0">{chat.isPinned ? "Unpin" : "Pin"}</span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               setSelectedChat(chat);
@@ -114,10 +107,9 @@ export default function SidebarChatItem({ chat }: Props) {
             }}
           >
             <Trash2Icon />
-            <span>Delete</span>
+            <span className="leading-0">Delete</span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               setSelectedChat(chat);
@@ -125,10 +117,10 @@ export default function SidebarChatItem({ chat }: Props) {
             }}
           >
             <Share2Icon />
-            <span>Share</span>
+            <span className="leading-0">Share</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </SidebarMenuItem>
+    </Link>
   );
 }
