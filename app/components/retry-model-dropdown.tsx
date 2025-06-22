@@ -2,7 +2,7 @@ import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ChatRequestOptions, Message, UIMessage } from "ai";
 import { api } from "convex/_generated/api";
-import { RefreshCcwIcon } from "lucide-react";
+import { KeyIcon, RefreshCcwIcon } from "lucide-react";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { authQueryOptions } from "~/queries/auth";
 import { useModelStore } from "~/stores/model-store";
@@ -63,7 +63,7 @@ export default function RetryModelDropdown({
       <DropdownMenuContent>
         {accessibleModels.map((provider) => (
           <DropdownMenuSub key={provider.key}>
-            <DropdownMenuSubTrigger className="py-3 flex items-center gap-3">
+            <DropdownMenuSubTrigger className="py-3 flex items-center text-xs gap-3">
               <ModelProviderIcon provider={provider.key} />
               {provider.provider}
             </DropdownMenuSubTrigger>
@@ -71,7 +71,7 @@ export default function RetryModelDropdown({
               <DropdownMenuSubContent className="ml-2">
                 {provider.models.map((model) => (
                   <DropdownMenuItem
-                    className="py-3"
+                    className="py-3 text-xs"
                     key={model.modelId}
                     disabled={!model.isAvailable}
                     onClick={async () => {
@@ -98,6 +98,9 @@ export default function RetryModelDropdown({
                     }}
                   >
                     {model.name}
+                    {!model.isAvailable && (
+                      <KeyIcon className="size-3 ml-auto" />
+                    )}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuSubContent>
