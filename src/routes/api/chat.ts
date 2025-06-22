@@ -1,9 +1,9 @@
+import { createServerFileRoute } from "@tanstack/react-start/server"
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
 import { createXai } from "@ai-sdk/xai";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
-import { createAPIFileRoute } from "@tanstack/react-start/api";
 import {
   createDataStreamResponse,
   Message,
@@ -148,7 +148,7 @@ const getModelToUse = (
   return myOpenRouter.chat(requestModel.openRouterModelId);
 };
 
-export const APIRoute = createAPIFileRoute("/api/chat")({
+export const ServerRoute = createServerFileRoute("/api/chat").methods({
   POST: async ({ request }) => {
     const chatRequestBody: ChatRequestBody = await request.json();
 

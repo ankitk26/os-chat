@@ -2,9 +2,9 @@
   "name": "os-chat",
   "type": "module",
   "scripts": {
-    "dev": "vinxi dev",
-    "build": "vinxi build",
-    "start": "vinxi start"
+    "dev": "vite dev --port 3000",
+    "build": "vite build",
+    "start": "node .output/server/index.mjs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.2.12",
@@ -17,12 +17,11 @@
     "@openrouter/ai-sdk-provider": "^0.7.2",
     "@radix-ui/react-slot": "^1.2.3",
     "@tailwindcss/postcss": "^4.1.8",
-    "@tanstack/react-query": "^5.80.7",
+    "@tanstack/react-query": "^5.81.2",
     "@tanstack/react-query-devtools": "^5.80.7",
-    "@tanstack/react-router": "^1.120.18",
-    "@tanstack/react-router-with-query": "^1.120.18",
-    "@tanstack/react-start": "^1.120.18",
-    "@tanstack/start": "^1.120.18",
+    "@tanstack/react-router": "^1.121.27",
+    "@tanstack/react-router-with-query": "^1.121.27",
+    "@tanstack/react-start": "^1.121.32",
     "ai": "^4.3.16",
     "better-auth": "^1.2.9",
     "class-variance-authority": "^0.7.1",
@@ -45,7 +44,7 @@
     "tailwind-merge": "^3.3.0",
     "tailwindcss": "^4.1.8",
     "uuidv7": "^1.0.2",
-    "vinxi": "^0.5.6",
+    "vite": "^6.3.5",
     "zod": "^3.25.56",
     "zustand": "^5.0.5"
   },

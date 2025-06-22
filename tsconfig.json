@@ -11,7 +11,7 @@
     "noUnusedParameters": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"]
+      "~/*": ["./src/*"]
     }
   }
 }
