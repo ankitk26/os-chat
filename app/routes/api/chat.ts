@@ -162,6 +162,12 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
       useOpenRouter: useOpenRouterString,
     } = chatRequestBody;
 
+    // console.log({
+    //   requestModel,
+    //   isWebSearchEnabled,
+    //   lastMessage: messages[messages.length - 1],
+    // });
+
     // Parse the string values safely
     const parsedApiKeys: ApiKeys = safeJSONParse(apiKeysString, {
       gemini: "",

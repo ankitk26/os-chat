@@ -2,8 +2,7 @@ import { useChat } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
-import { Doc } from "convex/_generated/dataModel";
-import { generateRandomUUID } from "~/lib/generate-random-uuid";
+import type { Doc } from "convex/_generated/dataModel";
 import { authQueryOptions } from "~/queries/auth";
 import AiResponseAlert from "./ai-response-error";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
@@ -55,12 +54,9 @@ export default function Chat({
           createdAt: new Date(message._creationTime),
         };
       }) ?? [],
-    generateId: generateRandomUUID,
     onFinish: (newMessage) => {
       if (!chatId) return;
       if (!newMessage.content) return;
-
-      const id = generateRandomUUID();
 
       insertAiMessageMutation.mutate({
         messageBody: {
@@ -68,7 +64,7 @@ export default function Chat({
           annotations: JSON.stringify(newMessage.annotations),
           parts: JSON.stringify(newMessage.parts),
           role: "assistant",
-          sourceMessageId: id,
+          sourceMessageId: newMessage.id,
           content: newMessage.content,
         },
         sessionToken: authData?.session.token ?? "",
@@ -76,7 +72,7 @@ export default function Chat({
     },
   });
 
-  // console.log(messages);
+  console.log(messages);
 
   return (
     <div className="flex flex-col w-full mx-auto max-h-svh h-svh">

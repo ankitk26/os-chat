@@ -1,11 +1,12 @@
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { ChatRequestOptions, Message, UIMessage } from "ai";
+import type { ChatRequestOptions, Message, UIMessage } from "ai";
 import { api } from "convex/_generated/api";
 import { KeyIcon, RefreshCcwIcon } from "lucide-react";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { authQueryOptions } from "~/queries/auth";
 import { useModelStore } from "~/stores/model-store";
+import type { Model } from "~/types";
 import ModelProviderIcon from "./model-provider-icon";
 import { Button } from "./ui/button";
 import {
@@ -32,12 +33,8 @@ type Props = {
   messages: UIMessage[];
 };
 
-export default function RetryModelDropdown({
-  message,
-  reload,
-  setMessages,
-  messages,
-}: Props) {
+export default function RetryModelDropdown(props: Props) {
+  const { message, reload, setMessages, messages } = props;
   const { data: authData } = useQuery(authQueryOptions);
   const selectedModel = useModelStore((store) => store.selectedModel);
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
@@ -50,7 +47,7 @@ export default function RetryModelDropdown({
   const useOpenRouter = localStorage.getItem("useOpenRouter");
   const accessibleModels = getAccessibleModels(apiKeys, useOpenRouter);
 
-  const handleRetry = async (model: string) => {
+  const handleRetry = async (model: Model) => {
     deleteMessagesMutation.mutate({
       sessionToken: authData?.session.token ?? "",
       currentMessageSourceId: message.id,
@@ -84,9 +81,9 @@ export default function RetryModelDropdown({
       <DropdownMenuContent className="w-[200px]">
         <DropdownMenuItem
           className="flex items-center text-xs gap-3"
-          key={selectedModel.modelId}
           onClick={async () => {
-            await handleRetry(selectedModel.modelId);
+            console.log(selectedModel.modelId);
+            await handleRetry(selectedModel);
           }}
         >
           <RefreshCcwIcon className="size-4" />
@@ -111,7 +108,7 @@ export default function RetryModelDropdown({
                     key={model.modelId}
                     disabled={!model.isAvailable}
                     onClick={async () => {
-                      await handleRetry(model.modelId);
+                      await handleRetry(model);
                     }}
                   >
                     {model.name}
