@@ -33,7 +33,7 @@ export default React.memo(function AssistantMessage(props: Props) {
       <AIResponseReasoning message={message} />
       <AIResponseContent message={message} />
       <AIResponseSources message={message} />
-      <div className="flex items-center gap-1.5 mt-1.5 transition-opacity duration-200">
+      <div className="flex items-center gap-1.5 transition-opacity duration-200">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button

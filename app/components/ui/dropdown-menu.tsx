@@ -236,6 +236,23 @@ function DropdownMenuSubContent({
   );
 }
 
+// custom function
+function DropdownMenuSeparatorWithText({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center my-2">
+      <div className="flex-1 border-t border-border"></div>
+      <span className="px-3 text-xs text-muted-foreground font-medium">
+        {children}
+      </span>
+      <div className="flex-1 border-t border-border"></div>
+    </div>
+  );
+}
+
 export {
   DropdownMenu,
   DropdownMenuPortal,
@@ -252,4 +269,5 @@ export {
   DropdownMenuSub,
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
+  DropdownMenuSeparatorWithText,
 };

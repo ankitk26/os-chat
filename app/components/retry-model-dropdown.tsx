@@ -13,6 +13,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuPortal,
+  DropdownMenuSeparatorWithText,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -38,6 +39,7 @@ export default function RetryModelDropdown({
   messages,
 }: Props) {
   const { data: authData } = useQuery(authQueryOptions);
+  const selectedModel = useModelStore((store) => store.selectedModel);
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
 
   const deleteMessagesMutation = useMutation({
@@ -47,6 +49,25 @@ export default function RetryModelDropdown({
   const apiKeys = localStorage.getItem("apiKeys");
   const useOpenRouter = localStorage.getItem("useOpenRouter");
   const accessibleModels = getAccessibleModels(apiKeys, useOpenRouter);
+
+  const handleRetry = async (model: string) => {
+    deleteMessagesMutation.mutate({
+      sessionToken: authData?.session.token ?? "",
+      currentMessageSourceId: message.id,
+    });
+    const currentMessage = messages.find((m) => m.id === message.id);
+    setMessages((prev) => [
+      ...prev.filter((m) => m.createdAt! < currentMessage?.createdAt!),
+    ]);
+    await reload({
+      body: {
+        model,
+        isWebSearchEnabled,
+        apiKeys: localStorage.getItem("apiKeys"),
+        useOpenRouter: localStorage.getItem("useOpenRouter"),
+      },
+    });
+  };
 
   return (
     <DropdownMenu>
@@ -60,7 +81,22 @@ export default function RetryModelDropdown({
           <TooltipContent>Retry message</TooltipContent>
         </Tooltip>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent className="w-[200px]">
+        <DropdownMenuItem
+          className="flex items-center text-xs gap-3"
+          key={selectedModel.modelId}
+          onClick={async () => {
+            await handleRetry(selectedModel.modelId);
+          }}
+        >
+          <RefreshCcwIcon className="size-4" />
+          Retry same
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparatorWithText>
+          or switch model
+        </DropdownMenuSeparatorWithText>
+
         {accessibleModels.map((provider) => (
           <DropdownMenuSub key={provider.key}>
             <DropdownMenuSubTrigger className="py-3 flex items-center text-xs gap-3">
@@ -75,26 +111,7 @@ export default function RetryModelDropdown({
                     key={model.modelId}
                     disabled={!model.isAvailable}
                     onClick={async () => {
-                      deleteMessagesMutation.mutate({
-                        sessionToken: authData?.session.token ?? "",
-                        currentMessageSourceId: message.id,
-                      });
-                      const currentMessage = messages.find(
-                        (m) => m.id === message.id
-                      );
-                      setMessages((prev) => [
-                        ...prev.filter(
-                          (m) => m.createdAt! < currentMessage?.createdAt!
-                        ),
-                      ]);
-                      await reload({
-                        body: {
-                          model,
-                          isWebSearchEnabled,
-                          apiKeys: localStorage.getItem("apiKeys"),
-                          useOpenRouter: localStorage.getItem("useOpenRouter"),
-                        },
-                      });
+                      await handleRetry(model.modelId);
                     }}
                   >
                     {model.name}
