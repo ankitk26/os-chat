@@ -62,9 +62,10 @@ export const createMessage = mutation({
     messageBody: v.object({
       sourceMessageId: v.optional(v.string()),
       chatId: v.string(),
+      parts: v.string(),
       content: v.string(),
       role: v.union(v.literal("user"), v.literal("assistant")),
-      model: v.optional(v.string()),
+      annotations: v.string(),
     }),
   },
   handler: async (ctx, args) => {
@@ -73,8 +74,9 @@ export const createMessage = mutation({
     await ctx.db.insert("messages", {
       sourceMessageId: args.messageBody.sourceMessageId,
       chatId: args.messageBody.chatId,
+      parts: args.messageBody.parts,
       content: args.messageBody.content,
-      model: args.messageBody.model,
+      annotations: args.messageBody.annotations,
       role: args.messageBody.role,
       userId: userId,
     });

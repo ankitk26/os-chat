@@ -1,3 +1,4 @@
+import { JSONValue } from "ai";
 import { Doc } from "convex/_generated/dataModel";
 import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
@@ -10,6 +11,13 @@ type Props = {
 };
 
 export default function ReadOnlyAssistantMessage({ message }: Props) {
+  const annotations: JSONValue[] = JSON.parse(message.annotations);
+
+  const modelUsed =
+    annotations &&
+    annotations.length > 0 &&
+    annotations.find((a) => (a as any)["type"] === "model");
+
   return (
     <>
       <div className="w-full max-w-full leading-8 prose prose-neutral dark:prose-invert prose-rose prose-pre:bg-transparent prose-pre:m-0 prose-pre:p-0">
@@ -33,7 +41,9 @@ export default function ReadOnlyAssistantMessage({ message }: Props) {
           <TooltipContent>Copy to clipboard</TooltipContent>
         </Tooltip>
 
-        <span className="text-muted-foreground text-xs">{message.model}</span>
+        <span className="text-muted-foreground text-xs">
+          {(modelUsed as any)?.data}
+        </span>
       </div>
     </>
   );

@@ -77,6 +77,8 @@ export default function UserPromptInput(props: Props) {
         chatId: props.chatId,
         content: textareaValue,
         role: "user",
+        annotations: JSON.stringify([]),
+        parts: JSON.stringify([{ type: "text", text: textareaValue }]),
       },
       sessionToken: data?.session.token ?? "",
     });

@@ -13,11 +13,9 @@ type Props = {
   ) => void;
 };
 
-export default memo(function ChatMessages({
-  messages,
-  reload,
-  setMessages,
-}: Props) {
+export default memo(function ChatMessages(props: Props) {
+  const { messages, reload, setMessages } = props;
+
   if (messages.length === 0) {
     return null;
   }

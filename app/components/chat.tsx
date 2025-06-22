@@ -48,10 +48,10 @@ export default function Chat({
       dbMessages?.map((message) => {
         return {
           id: message.sourceMessageId ?? message._id,
-          content: message.content,
           role: message.role,
-          annotations: message.model ? [{ model: message.model }] : [],
-          parts: [{ text: message.content, type: "text" }],
+          annotations: JSON.parse(message.annotations),
+          content: message.content,
+          parts: JSON.parse(message.parts),
           createdAt: new Date(message._creationTime),
         };
       }) ?? [],
@@ -60,25 +60,23 @@ export default function Chat({
       if (!chatId) return;
       if (!newMessage.content) return;
 
-      const modelUsed =
-        newMessage.annotations &&
-        newMessage.annotations?.length > 0 &&
-        (newMessage as any).annotations[0].model;
-
       const id = generateRandomUUID();
 
       insertAiMessageMutation.mutate({
         messageBody: {
           chatId,
-          content: newMessage.content.trim(),
+          annotations: JSON.stringify(newMessage.annotations),
+          parts: JSON.stringify(newMessage.parts),
           role: "assistant",
-          model: modelUsed,
           sourceMessageId: id,
+          content: newMessage.content,
         },
         sessionToken: authData?.session.token ?? "",
       });
     },
   });
+
+  // console.log(messages);
 
   return (
     <div className="flex flex-col w-full mx-auto max-h-svh h-svh">

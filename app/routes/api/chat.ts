@@ -188,12 +188,18 @@ export const APIRoute = createAPIFileRoute("/api/chat")({
           experimental_transform: smoothStream({ chunking: "line" }),
           abortSignal: request.signal,
           onFinish: () => {
-            dataStream.writeMessageAnnotation({ model: requestModel.name });
+            dataStream.writeMessageAnnotation({
+              type: "model",
+              data: requestModel.name,
+            });
           },
           maxRetries: 2,
         });
 
-        result.mergeIntoDataStream(dataStream);
+        result.mergeIntoDataStream(dataStream, {
+          sendReasoning: true,
+          sendSources: true,
+        });
       },
       onError: (error) => (error as any).message,
     });
