@@ -17,6 +17,39 @@ const defaultApiKeys: ApiKeys = {
   xai: "",
 };
 
+const keysForm = [
+  {
+    provider: "openrouter",
+    label: "OpenRouter",
+    placeholder: "sk-or-...",
+    keyLink: "https://openrouter.ai/settings/keys",
+  },
+  {
+    provider: "openai",
+    label: "OpenAI",
+    placeholder: "sk-...",
+    keyLink: "https://platform.openai.com/api-keys",
+  },
+  {
+    provider: "anthropic",
+    label: "Anthropic",
+    placeholder: "sk-ant-...",
+    keyLink: "https://console.anthropic.com/settings/keys",
+  },
+  {
+    provider: "gemini",
+    label: "Gemini",
+    placeholder: "AI...",
+    keyLink: "https://aistudio.google.com/app/apikey",
+  },
+  {
+    provider: "xai",
+    label: "xAI",
+    placeholder: "xai...",
+    keyLink: "https://console.x.ai/",
+  },
+];
+
 export default function ApiKeysForm() {
   const [apiKeys, setApiKeys] = useState<ApiKeys>(defaultApiKeys);
   const [useOpenRouter, setUseOpenRouter] = useState(false);
@@ -81,28 +114,15 @@ export default function ApiKeysForm() {
 
         <Separator />
 
-        <div className="space-y-8">
-          {[
-            {
-              provider: "openrouter",
-              label: "OpenRouter",
-              placeholder: "sk-or-...",
-            },
-            { provider: "openai", label: "OpenAI", placeholder: "sk-..." },
-            {
-              provider: "anthropic",
-              label: "Anthropic",
-              placeholder: "sk-ant-...",
-            },
-            { provider: "gemini", label: "Gemini", placeholder: "AI..." },
-            { provider: "xai", label: "xAI", placeholder: "xai..." },
-          ].map(({ provider, label, placeholder }) => (
+        <div className="space-y-12">
+          {keysForm.map((keyItem) => (
             <ApiKeyInput
-              key={provider}
-              provider={provider as Provider}
-              label={`${label} API Key`}
-              placeholder={placeholder}
-              value={apiKeys[provider as keyof ApiKeys]}
+              key={keyItem.provider}
+              provider={keyItem.provider as Provider}
+              label={`${keyItem.label} API Key`}
+              keyLink={keyItem.keyLink}
+              placeholder={keyItem.placeholder}
+              value={apiKeys[keyItem.provider as keyof ApiKeys]}
               onChange={handleApiKeyChange}
             />
           ))}

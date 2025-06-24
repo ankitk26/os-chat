@@ -14,15 +14,12 @@ interface ApiKeyInputProps {
   placeholder?: string;
   value: string;
   onChange: (provider: Provider, value: string) => void;
+  keyLink: string;
 }
 
-export default function ApiKeyInput({
-  provider,
-  label,
-  placeholder = "",
-  value,
-  onChange,
-}: ApiKeyInputProps) {
+export default function ApiKeyInput(props: ApiKeyInputProps) {
+  const { provider, label, placeholder = "", value, onChange, keyLink } = props;
+
   // Local component state to toggle key visibility.
   const [showKey, setShowKey] = useState(false);
 
@@ -32,10 +29,10 @@ export default function ApiKeyInput({
 
   return (
     <div className="space-y-2">
-      <Label>
+      <Label className="text-muted-foreground">
         <div className="flex items-center space-x-2">
           {provider === "openrouter" ? (
-            <KeyIcon className="size-4 stroke-foreground" />
+            <KeyIcon className="size-4 stroke-muted-foreground" />
           ) : (
             <ModelProviderIcon
               provider={provider === "gemini" ? "google" : provider}
@@ -66,6 +63,17 @@ export default function ApiKeyInput({
           )}
         </Button>
       </div>
+      <small className="text-xs text-muted-foreground">
+        Get your{" "}
+        <a
+          href={keyLink}
+          className="text-primary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          API key
+        </a>
+      </small>
     </div>
   );
 }

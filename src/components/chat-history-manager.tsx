@@ -95,9 +95,6 @@ export default function ChatHistoryManager() {
           <div className="flex items-center gap-2">
             {selectedChats.size > 0 && (
               <>
-                <span className="text-sm text-muted-foreground">
-                  {selectedChats.size} selected
-                </span>
                 <Button
                   variant="destructive"
                   size="sm"
@@ -105,7 +102,7 @@ export default function ChatHistoryManager() {
                   disabled={deleteChatMutation.isPending}
                 >
                   <Trash2 className="h-4 w-4" />
-                  Delete
+                  Delete ({selectedChats.size} selected)
                 </Button>
               </>
             )}
