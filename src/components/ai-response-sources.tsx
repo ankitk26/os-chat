@@ -1,6 +1,7 @@
 import { UIMessage } from "ai";
 import { ChevronDownIcon, ChevronRightIcon, LinkIcon } from "lucide-react";
 import { useState } from "react";
+import ExternalLink from "./external-link";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 
@@ -42,14 +43,9 @@ export default function AIResponseSources({ message }: { message: UIMessage }) {
               className="my-2"
             >
               <LinkIcon />
-              <a
-                href={sourcePart.source.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              >
+              <ExternalLink href={sourcePart.source.url} className="underline">
                 {sourcePart.source.title}
-              </a>
+              </ExternalLink>
             </Badge>
           ))}
         </div>

@@ -4,6 +4,7 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { ApiKeys } from "~/types";
+import ExternalLink from "./external-link";
 import ModelProviderIcon from "./model-provider-icon";
 
 export type Provider = keyof ApiKeys;
@@ -65,14 +66,9 @@ export default function ApiKeyInput(props: ApiKeyInputProps) {
       </div>
       <small className="text-xs text-muted-foreground">
         Get your{" "}
-        <a
-          href={keyLink}
-          className="text-primary"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <ExternalLink href={keyLink} className="text-primary">
           API key
-        </a>
+        </ExternalLink>
       </small>
     </div>
   );
