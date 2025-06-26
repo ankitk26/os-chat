@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { AppSidebar } from "~/components/app-sidebar";
 import ReadOnlyChatMessages from "~/components/read-only-chat-messages";
-import { SidebarProvider } from "~/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
 import { authQueryOptions } from "~/queries/auth";
 
 export const Route = createFileRoute("/share/$chatId")({
@@ -27,12 +27,10 @@ function RouteComponent() {
   if (auth?.session) {
     return (
       <SidebarProvider>
-        <AppSidebar />
-        <div className="w-full bg-card">
-          <div className="w-full border-l border-l-border/50">
-            <ReadOnlyChatMessages />
-          </div>
-        </div>
+        <AppSidebar variant="inset" />
+        <SidebarInset>
+          <ReadOnlyChatMessages />
+        </SidebarInset>
       </SidebarProvider>
     );
   }

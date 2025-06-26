@@ -14,7 +14,7 @@ export default function AIResponseSources({ message }: { message: UIMessage }) {
   }
 
   return (
-    <div>
+    <div className="mt-8">
       <div className="space-x-2 flex items-center">
         <Button
           size="icon"

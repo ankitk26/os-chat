@@ -30,7 +30,7 @@ export const getSharedChatMessages = query({
       .first();
 
     if (!sharedChat) {
-      throw new Error("Invalid request");
+      return null;
     }
 
     if (!sharedChat.isActive) {
