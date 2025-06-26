@@ -1,12 +1,22 @@
 import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
-import { CheckIcon, CopyIcon, Link2Icon } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+  CheckIcon,
+  CopyIcon,
+  ExternalLinkIcon,
+  GlobeIcon,
+  Link2Icon,
+  LockIcon,
+  RefreshCwIcon,
+  ShareIcon,
+} from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { authQueryOptions } from "~/queries/auth";
 import { useChatActionStore } from "~/stores/chat-actions-store";
+import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -19,6 +29,7 @@ import {
 } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { Separator } from "./ui/separator";
 import { Switch } from "./ui/switch";
 
 export default function ShareChatDialog() {
@@ -50,100 +61,206 @@ export default function ShareChatDialog() {
     onError: () => toast.error("Failed to share chat"),
   });
 
+  const syncHistoryMutation = useMutation({
+    mutationFn: useConvexMutation(api.chats.syncSharedChat),
+    onSuccess: () => toast.success("Synced chat history"),
+    onError: () => toast.error("Failed to sync chat history"),
+  });
+
   const isPublic = Boolean(sharedUuid);
   const shareUrl = sharedUuid
     ? `${window.location.origin}/share/${sharedUuid}`
     : null;
 
-  const handleToggleShare = () => {
-    if (!selectedChat || !authData?.session.token) return;
+  const isLoading = isPending || shareMutation.isPending;
+  const canShare = Boolean(selectedChat && authData?.session.token);
 
+  function handleCopyLink() {
+    if (!shareUrl) return;
+    navigator.clipboard
+      .writeText(shareUrl)
+      .then(() => {
+        setCopied(true);
+        toast.success("Link copied to clipboard");
+        setTimeout(() => setCopied(false), 500);
+      })
+      .catch(() => toast.error("Failed to copy link"));
+  }
+
+  function handleToggleShare() {
+    if (!selectedChat || !authData?.session.token) return;
     shareMutation.mutate({
       chatId: selectedChat._id,
       sessionToken: authData.session.token,
       sharedChatUuid: generateRandomUUID(),
     });
-  };
+  }
 
-  const handleCopyLink = async () => {
-    if (!shareUrl) return;
+  function handleSyncHistory() {
+    if (!selectedChat || !authData?.session.token) return;
+    syncHistoryMutation.mutate({
+      sessionToken: authData.session.token,
+      chatId: selectedChat._id,
+    });
+  }
 
-    try {
-      await navigator.clipboard.writeText(shareUrl);
-      setCopied(true);
-      toast.success("Link copied to clipboard");
-    } catch {
-      toast.error("Failed to copy link");
-    }
-  };
+  function handleOpenInNewTab() {
+    if (shareUrl) window.open(shareUrl, "_blank");
+  }
 
-  useEffect(() => {
-    if (!isShareDialogOpen) setCopied(false);
-  }, [isShareDialogOpen]);
-
-  const isLoading = isPending || shareMutation.isPending;
-  const canShare = selectedChat && authData?.session.token;
+  function handleDialogOpenChange(open: boolean) {
+    if (!open) setCopied(false);
+    setIsShareDialogOpen(open);
+  }
 
   return (
-    <Dialog open={isShareDialogOpen} onOpenChange={setIsShareDialogOpen}>
-      <DialogContent key={selectedChat?._id}>
-        <DialogHeader>
-          <DialogTitle>Share chat</DialogTitle>
-          <DialogDescription>
-            Only messages up until now will be shared. Anyone with the link can
-            view this conversation.
-          </DialogDescription>
+    <Dialog open={isShareDialogOpen} onOpenChange={handleDialogOpenChange}>
+      <DialogContent key={selectedChat?._id} className="sm:max-w-md">
+        <DialogHeader className="space-y-3">
+          <div className="flex items-center gap-2">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+              <ShareIcon className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <DialogTitle className="text-left">Share Chat</DialogTitle>
+              <DialogDescription className="text-left">
+                Share this conversation with others
+              </DialogDescription>
+            </div>
+          </div>
         </DialogHeader>
 
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label>Make chat public</Label>
-              <p className="text-sm text-muted-foreground">
-                {isLoading
-                  ? "Checking status..."
-                  : isPublic
-                  ? "This chat is publicly accessible"
-                  : "This chat is private"}
-              </p>
+        <div className="space-y-6">
+          {/* Public/Private Toggle */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-4 rounded-lg border bg-card">
+              <div className="flex items-center gap-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-background">
+                  {isPublic ? (
+                    <GlobeIcon className="h-4 w-4 text-primary" />
+                  ) : (
+                    <LockIcon className="h-4 w-4 text-muted-foreground" />
+                  )}
+                </div>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <Label className="text-sm font-medium">Public Access</Label>
+                    <Badge
+                      variant={isPublic ? "default" : "secondary"}
+                      className="text-xs"
+                    >
+                      {isLoading
+                        ? "Updating..."
+                        : isPublic
+                        ? "Active"
+                        : "Disabled"}
+                    </Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {isPublic
+                      ? "Anyone with the link can view this chat"
+                      : "Only you can access this chat"}
+                  </p>
+                </div>
+              </div>
+              <Switch
+                checked={isPublic}
+                onCheckedChange={handleToggleShare}
+                disabled={!canShare || isLoading}
+              />
             </div>
-            <Switch
-              checked={isPublic}
-              onCheckedChange={handleToggleShare}
-              disabled={!canShare || isLoading}
-            />
+
+            {/* Share Link */}
+            {shareUrl && (
+              <div className="space-y-3">
+                <Label className="text-sm font-medium">Share Link</Label>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <Input
+                      value={shareUrl}
+                      readOnly
+                      className="font-mono text-sm pr-10"
+                    />
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
+                      onClick={handleCopyLink}
+                      disabled={isLoading}
+                    >
+                      {copied ? (
+                        <CheckIcon className="h-3 w-3 text-primary" />
+                      ) : (
+                        <CopyIcon className="h-3 w-3" />
+                      )}
+                    </Button>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleOpenInNewTab}
+                    disabled={isLoading}
+                    className="shrink-0"
+                  >
+                    <ExternalLinkIcon className="h-4 w-4" />
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Messages up to this point will be visible to anyone with this
+                  link
+                </p>
+              </div>
+            )}
           </div>
 
-          {shareUrl && (
-            <div className="space-y-2">
-              <Label>Share link</Label>
-              <div className="flex gap-2">
-                <Input value={shareUrl} readOnly className="font-mono" />
-                <Button
-                  size="icon"
-                  variant="outline"
-                  onClick={handleCopyLink}
-                  disabled={isLoading}
-                >
-                  {copied ? (
-                    <CheckIcon className="size-4" />
-                  ) : (
-                    <CopyIcon className="size-4" />
-                  )}
-                </Button>
+          <Separator />
+
+          {/* Sync Section */}
+          <div className="space-y-3">
+            <Label className="text-sm font-medium">Chat History</Label>
+            <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
+              <div className="space-y-1">
+                <p className="text-sm font-medium">Sync Latest Messages</p>
+                <p className="text-xs text-muted-foreground">
+                  Update shared chat with recent messages
+                </p>
               </div>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleSyncHistory}
+                disabled={
+                  !canShare || syncHistoryMutation.isPending || !isPublic
+                }
+                className="shrink-0"
+              >
+                <RefreshCwIcon
+                  className={`h-4 w-4 ${
+                    syncHistoryMutation.isPending ? "animate-spin" : ""
+                  }`}
+                />
+                {syncHistoryMutation.isPending ? "Syncing..." : "Sync"}
+              </Button>
             </div>
-          )}
+          </div>
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="flex-col sm:flex-row gap-2">
           <DialogClose asChild>
-            <Button variant="ghost" disabled={isLoading}>
+            <Button
+              variant="outline"
+              disabled={isLoading}
+              className="w-full sm:w-auto"
+            >
               Close
             </Button>
           </DialogClose>
           {shareUrl && (
-            <Button onClick={handleCopyLink} disabled={isLoading}>
+            <Button
+              onClick={handleCopyLink}
+              disabled={isLoading}
+              className="w-full sm:w-auto"
+            >
               {copied ? (
                 <>
                   <CheckIcon className="size-4" />

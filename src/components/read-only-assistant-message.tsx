@@ -1,8 +1,10 @@
-import { JSONValue } from "ai";
+import { JSONValue, UIMessage } from "ai";
 import { Doc } from "convex/_generated/dataModel";
 import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
-import MemoizedMarkdown from "./memoized-markdown";
+import AIResponseContent from "./ai-response-content";
+import AIResponseReasoning from "./ai-response-reasoning";
+import AIResponseSources from "./ai-response-sources";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
@@ -18,13 +20,21 @@ export default function ReadOnlyAssistantMessage({ message }: Props) {
     annotations.length > 0 &&
     annotations.find((a) => (a as any)["type"] === "model");
 
-  return (
-    <>
-      <div className="w-full max-w-full leading-8 prose prose-neutral dark:prose-invert prose-rose prose-pre:bg-transparent prose-pre:m-0 prose-pre:p-0">
-        <MemoizedMarkdown content={message.content} id={message._id} />
-      </div>
+  const uiMessage = {
+    id: message.sourceMessageId ?? message._id,
+    role: message.role,
+    annotations: JSON.parse(message.annotations),
+    content: message.content,
+    parts: JSON.parse(message.parts),
+    createdAt: new Date(message._creationTime),
+  } satisfies UIMessage;
 
-      <div className="flex items-center transition-opacity duration-200">
+  return (
+    <div className="space-y-4">
+      <AIResponseReasoning message={uiMessage} />
+      <AIResponseContent message={uiMessage} />
+      <AIResponseSources message={uiMessage} />
+      <div className="flex items-center gap-1.5 transition-opacity duration-200">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -45,6 +55,6 @@ export default function ReadOnlyAssistantMessage({ message }: Props) {
           {(modelUsed as any)?.data}
         </span>
       </div>
-    </>
+    </div>
   );
 }

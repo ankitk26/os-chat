@@ -47,7 +47,7 @@ export const getSharedChatMessages = query({
       .withIndex("by_chat", (q) =>
         q
           .eq("chatId", sharedChat.parentChatUuid)
-          .lte("_creationTime", sharedChat._creationTime)
+          .lte("_creationTime", sharedChat.updatedTime)
       )
       .order("asc")
       .collect();

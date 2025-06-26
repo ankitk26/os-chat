@@ -29,7 +29,7 @@ export default React.memo(function AssistantMessage(props: Props) {
     message.annotations.find((a) => (a as any)["type"] === "model");
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       <AIResponseReasoning message={message} />
       <AIResponseContent message={message} />
       <AIResponseSources message={message} />

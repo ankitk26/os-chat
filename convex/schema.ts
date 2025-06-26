@@ -55,6 +55,7 @@ export default defineSchema({
     parentChatUuid: v.string(),
     uuid: v.string(),
     isActive: v.boolean(),
+    updatedTime: v.number(),
   })
     .index("by_parent_chat", ["parentChatUuid"])
     .index("by_uuid", ["uuid"]),

@@ -16,13 +16,12 @@ export default function ReadOnlyUserMessage({ message }: Props) {
   return (
     <div className="flex flex-col items-end self-end w-3/4 space-y-1">
       <div
-        className="flex flex-col gap-6 p-4 whitespace-pre-wrap border rounded-xl"
+        className="flex flex-col gap-6 px-4 py-4 max-w-full w-full wrap-break-word bg-popover whitespace-pre-wrap border rounded-xl"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         {message.content}
       </div>
-
       <div
         className={cn(
           "flex transition-opacity duration-200",
