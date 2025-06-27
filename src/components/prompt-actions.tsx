@@ -15,7 +15,7 @@ export default function PromptActions({ status, stop }: Props) {
   const selectedModel = useModelStore((store) => store.selectedModel);
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center mt-4 justify-between">
       <div className="flex items-center gap-2">
         <ModelSelector />
 

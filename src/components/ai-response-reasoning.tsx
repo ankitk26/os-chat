@@ -44,7 +44,7 @@ export default function AIResponseReasoning({
       </div>
 
       {showReasoning && (
-        <div className="w-full mt-3 max-w-full leading-8 prose prose-neutral dark:prose-invert prose-rose prose-pre:bg-transparent prose-pre:m-0 prose-pre:p-0 bg-popover border p-4 rounded-md text-sm font-mono">
+        <div className="w-full mt-3 max-w-full leading-6 prose prose-neutral dark:prose-invert prose-rose prose-pre:bg-transparent prose-pre:m-0 prose-pre:p-0 bg-popover border p-4 rounded-md text-sm font-mono">
           <MemoizedMarkdown
             id={message.id}
             content={reasoningPart.details
