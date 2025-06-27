@@ -10,7 +10,7 @@ export default function ChatLoadingIndicator({ status, insertPending }: Props) {
 
   if (insertPending) {
     return (
-      <div className="space-y-2 mb-12">
+      <div className="space-y-2">
         <div className="flex items-center space-x-2 text-muted-foreground">
           <div className="animate-pulse">Thinking...</div>
         </div>
@@ -19,7 +19,7 @@ export default function ChatLoadingIndicator({ status, insertPending }: Props) {
   }
 
   return (
-    <div className="space-y-2 mb-12">
+    <div className="space-y-2">
       <div className="flex items-center space-x-2 text-muted-foreground">
         <div className="animate-pulse">Thinking...</div>
       </div>

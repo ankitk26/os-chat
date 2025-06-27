@@ -103,26 +103,28 @@ export default function UserPromptInput(props: Props) {
   };
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handlePromptSubmit();
-      }}
-      className="flex flex-col w-full max-w-3xl mb-2 p-4 mx-auto border rounded-tl-lg bg-popover rounded-tr-lg border-border min-h-30"
-    >
-      <div className="flex-1">
-        <AutoResizeTextarea
-          textareaRef={textareaRef}
-          handlePromptSubmit={handlePromptSubmit}
-          textareaValue={textareaValue}
-          setTextareaValue={setTextareaValue}
-          isPending={
-            createChatMutation.isPending || createMessageMutation.isPending
-          }
-        />
-      </div>
+    <div className="backdrop-blur bg-background/80">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handlePromptSubmit();
+        }}
+        className="flex flex-col w-full max-w-3xl mb-2 p-4 mx-auto border rounded-tl-lg bg-popover/90 rounded-tr-lg border-border min-h-30"
+      >
+        <div className="flex-1">
+          <AutoResizeTextarea
+            textareaRef={textareaRef}
+            handlePromptSubmit={handlePromptSubmit}
+            textareaValue={textareaValue}
+            setTextareaValue={setTextareaValue}
+            isPending={
+              createChatMutation.isPending || createMessageMutation.isPending
+            }
+          />
+        </div>
 
-      <PromptActions status={props.status} stop={stop} />
-    </form>
+        <PromptActions status={props.status} stop={props.stop} />
+      </form>
+    </div>
   );
 }
