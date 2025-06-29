@@ -145,7 +145,7 @@ export default function ChatHistoryManager() {
                   className={`w-4 h-4 border rounded-sm flex items-center justify-center transition-all ${
                     isSelected
                       ? "bg-primary border-primary"
-                      : "border-border hover:border-muted-foreground"
+                      : "border-muted-foreground/40 bg-muted/20 hover:border-muted-foreground hover:bg-muted/40"
                   }`}
                 >
                   {isSelected && (

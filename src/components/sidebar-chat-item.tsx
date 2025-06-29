@@ -77,9 +77,12 @@ export default function SidebarChatItem({ chat }: Props) {
           </TooltipContent>
         </Tooltip>
       )}
-      <h4 className="line-clamp-1 w-full" title={chat.title}>
-        {chat.title}
-      </h4>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <h4 className="line-clamp-1 w-full">{chat.title}</h4>
+        </TooltipTrigger>
+        <TooltipContent>{chat.title}</TooltipContent>
+      </Tooltip>
       {/* Always render button to maintain consistent height, but control visibility */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
