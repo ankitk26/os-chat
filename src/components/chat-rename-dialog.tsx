@@ -1,9 +1,9 @@
 import { useConvexMutation } from "@convex-dev/react-query";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { authQueryOptions } from "~/queries/auth";
 import { useChatActionStore } from "~/stores/chat-actions-store";
 import { Button } from "./ui/button";
 import {
@@ -18,7 +18,7 @@ import {
 import { Input } from "./ui/input";
 
 export default function ChatRenameDialog() {
-  const { data: authData } = useQuery(authQueryOptions);
+  const { auth } = useRouteContext({ from: "/_auth" });
   const selectedChat = useChatActionStore((store) => store.selectedChat);
   const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
   const isRenameModalOpen = useChatActionStore(
@@ -62,7 +62,7 @@ export default function ChatRenameDialog() {
 
     renameChatMutation.mutate({
       chat: { chatId: selectedChat?._id!, title: newChatTitle },
-      sessionToken: authData?.session.token ?? "",
+      sessionToken: auth.session.token,
     });
   };
 

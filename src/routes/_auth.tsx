@@ -9,6 +9,7 @@ export const Route = createFileRoute("/_auth")({
     if (!auth?.session) {
       throw redirect({ to: "/login" });
     }
+    return { auth };
   },
   component: RouteComponent,
 });

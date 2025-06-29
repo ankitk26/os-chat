@@ -1,11 +1,14 @@
 import { useConvexMutation } from "@convex-dev/react-query";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import {
+  useNavigate,
+  useParams,
+  useRouteContext,
+} from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { KeyIcon, RefreshCcwIcon, SplitIcon } from "lucide-react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
-import { authQueryOptions } from "~/queries/auth";
 import { useModelStore } from "~/stores/model-store";
 import { Model } from "~/types";
 import ModelProviderIcon from "./model-provider-icon";
@@ -25,7 +28,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export default function BranchOffButton({ messageId }: { messageId: string }) {
   const { chatId } = useParams({ from: "/_auth/chat/$chatId" });
-  const { data: authData } = useQuery(authQueryOptions);
+  const { auth } = useRouteContext({ from: "/_auth" });
   const navigate = useNavigate();
 
   const setSelectedModel = useModelStore((store) => store.setSelectedModel);
@@ -39,7 +42,6 @@ export default function BranchOffButton({ messageId }: { messageId: string }) {
   });
 
   const handleBranchOff = async (model: Model | null = null) => {
-    if (!authData?.session?.token) return;
     const branchChatUuid = generateRandomUUID();
 
     navigate({ to: `/chat/${branchChatUuid}` });
@@ -48,7 +50,7 @@ export default function BranchOffButton({ messageId }: { messageId: string }) {
       branchedChatUuid: branchChatUuid,
       lastMessageId: messageId,
       parentChatUuid: chatId,
-      sessionToken: authData?.session.token,
+      sessionToken: auth.session.token,
     });
 
     if (model) {

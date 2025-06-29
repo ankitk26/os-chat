@@ -1,6 +1,6 @@
 import { useConvexMutation } from "@convex-dev/react-query";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import { Link, useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import type { FunctionReturnType } from "convex/server";
 import {
@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { authQueryOptions } from "~/queries/auth";
 import { useChatActionStore } from "~/stores/chat-actions-store";
 import { Button } from "./ui/button";
 import {
@@ -30,7 +29,7 @@ type Props = {
 
 export default function SidebarChatItem({ chat }: Props) {
   const [isHovered, setIsHovered] = useState(false);
-  const { data: authData } = useQuery(authQueryOptions);
+  const { auth } = useRouteContext({ from: "/_auth" });
   const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
   const setIsDeleteModalOpen = useChatActionStore(
     (store) => store.setIsDeleteModalOpen
@@ -109,7 +108,7 @@ export default function SidebarChatItem({ chat }: Props) {
               e.stopPropagation();
               toggleChatPinMutation.mutate({
                 chatId: chat._id,
-                sessionToken: authData?.session.token ?? "",
+                sessionToken: auth.session.token,
               });
             }}
           >

@@ -1,12 +1,15 @@
 import { useConvexMutation } from "@convex-dev/react-query";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import {
+  useNavigate,
+  useParams,
+  useRouteContext,
+} from "@tanstack/react-router";
 import type { ChatRequestOptions, CreateMessage, Message } from "ai";
 import { api } from "convex/_generated/api";
 import type { Id } from "convex/_generated/dataModel";
 import type React from "react";
 import { useRef, useState } from "react";
-import { authQueryOptions } from "~/queries/auth";
 import { getChatTitle } from "~/server-fns/get-chat-title";
 import { useModelStore } from "~/stores/model-store";
 import AutoResizeTextarea from "./auto-resize-textarea";
@@ -26,7 +29,7 @@ type Props = {
 
 export default function UserPromptInput(props: Props) {
   const { chatId: paramsChatId } = useParams({ strict: false });
-  const { data } = useQuery(authQueryOptions);
+  const { auth } = useRouteContext({ from: "/_auth" });
 
   const navigate = useNavigate();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -48,7 +51,7 @@ export default function UserPromptInput(props: Props) {
     const title = await getChatTitle({ data: textareaValue });
     await updateChatTitleMutation.mutateAsync({
       chat: { chatId: dbGeneratedChatId, title },
-      sessionToken: data?.session.token ?? "",
+      sessionToken: auth.session.token,
     });
   };
 
@@ -66,7 +69,7 @@ export default function UserPromptInput(props: Props) {
         params: { chatId: props.chatId },
       });
       const dbGeneratedChatId = await createChatMutation.mutateAsync({
-        sessionToken: data?.session.token ?? "",
+        sessionToken: auth.session.token,
         uuid: props.chatId,
       });
       handleChatTitleUpdate(dbGeneratedChatId);
@@ -80,7 +83,7 @@ export default function UserPromptInput(props: Props) {
         annotations: JSON.stringify([]),
         parts: JSON.stringify([{ type: "text", text: textareaValue }]),
       },
-      sessionToken: data?.session.token ?? "",
+      sessionToken: auth.session.token,
     });
 
     props.append(

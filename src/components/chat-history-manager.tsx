@@ -1,5 +1,6 @@
 import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import {
   Calendar,
@@ -10,7 +11,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { authQueryOptions } from "~/queries/auth";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Separator } from "./ui/separator";
@@ -18,11 +18,11 @@ import { TabsContent } from "./ui/tabs";
 
 export default function ChatHistoryManager() {
   const [selectedChats, setSelectedChats] = useState<Set<string>>(new Set());
-  const { data: authData } = useQuery(authQueryOptions);
+  const { auth } = useRouteContext({ from: "/_auth" });
 
   const { data: chats = [], isLoading } = useQuery(
     convexQuery(api.chats.getChats, {
-      sessionToken: authData?.session.token ?? "",
+      sessionToken: auth.session.token,
     })
   );
 
@@ -64,7 +64,7 @@ export default function ChatHistoryManager() {
       const chat = chats.find((c) => c._id === chatId);
       if (chat) {
         deleteChatMutation.mutate({
-          sessionToken: authData?.session.token ?? "",
+          sessionToken: auth?.session.token ?? "",
           chatId: chat._id,
         });
       }

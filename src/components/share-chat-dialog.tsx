@@ -1,5 +1,6 @@
 import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import {
   CheckIcon,
@@ -14,7 +15,6 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
-import { authQueryOptions } from "~/queries/auth";
 import { useChatActionStore } from "~/stores/chat-actions-store";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -33,7 +33,7 @@ import { Separator } from "./ui/separator";
 import { Switch } from "./ui/switch";
 
 export default function ShareChatDialog() {
-  const { data: authData } = useQuery(authQueryOptions);
+  const { auth } = useRouteContext({ from: "/_auth" });
   const [copied, setCopied] = useState(false);
 
   const selectedChat = useChatActionStore((store) => store.selectedChat);
@@ -47,10 +47,10 @@ export default function ShareChatDialog() {
   const { data: sharedUuid, isPending } = useQuery(
     convexQuery(
       api.chats.getSharedChatStatus,
-      selectedChat && authData?.session.token
+      selectedChat && auth.session.token
         ? {
             chatId: selectedChat._id,
-            sessionToken: authData.session.token,
+            sessionToken: auth.session.token,
           }
         : "skip"
     )
@@ -73,7 +73,7 @@ export default function ShareChatDialog() {
     : null;
 
   const isLoading = isPending || shareMutation.isPending;
-  const canShare = Boolean(selectedChat && authData?.session.token);
+  const canShare = Boolean(selectedChat && auth.session.token);
 
   function handleCopyLink() {
     if (!shareUrl) return;
@@ -88,18 +88,18 @@ export default function ShareChatDialog() {
   }
 
   function handleToggleShare() {
-    if (!selectedChat || !authData?.session.token) return;
+    if (!selectedChat || !auth.session.token) return;
     shareMutation.mutate({
       chatId: selectedChat._id,
-      sessionToken: authData.session.token,
+      sessionToken: auth.session.token,
       sharedChatUuid: generateRandomUUID(),
     });
   }
 
   function handleSyncHistory() {
-    if (!selectedChat || !authData?.session.token) return;
+    if (!selectedChat || !auth.session.token) return;
     syncHistoryMutation.mutate({
-      sessionToken: authData.session.token,
+      sessionToken: auth.session.token,
       chatId: selectedChat._id,
     });
   }

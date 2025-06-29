@@ -1,12 +1,12 @@
 import { useChat } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import type { Doc } from "convex/_generated/dataModel";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
-import { authQueryOptions } from "~/queries/auth";
 import AiResponseAlert from "./ai-response-error";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
 import ChatLoadingIndicator from "./chat-loading-indicator";
@@ -28,7 +28,7 @@ export default function Chat({
   dbMessages,
   isMessagesPending = false,
 }: Props) {
-  const { data: authData } = useQuery(authQueryOptions);
+  const { auth } = useRouteContext({ from: "/_auth" });
 
   const insertAiMessageMutation = useMutation({
     mutationFn: useConvexMutation(api.messages.createMessage),
@@ -72,7 +72,7 @@ export default function Chat({
           sourceMessageId: newMessage.id,
           content: newMessage.content,
         },
-        sessionToken: authData?.session.token ?? "",
+        sessionToken: auth.session.token,
       });
     },
   });
