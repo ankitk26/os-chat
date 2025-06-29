@@ -2,17 +2,10 @@ import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
-import {
-  Calendar,
-  CheckSquare,
-  MessageSquare,
-  Square,
-  Trash2,
-} from "lucide-react";
+import { Check, Minus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
-import { Card, CardContent } from "./ui/card";
 import { Separator } from "./ui/separator";
 import { TabsContent } from "./ui/tabs";
 
@@ -82,107 +75,103 @@ export default function ChatHistoryManager() {
   const isAllSelected = chats.length > 0 && selectedChats.size === chats.length;
 
   return (
-    <TabsContent value="chatHistory" className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-semibold">Chat History</h3>
-          <p className="text-sm text-muted-foreground">
-            Manage your conversation history
-          </p>
-        </div>
-
-        {chats.length > 0 && (
-          <div className="flex items-center gap-2">
-            {selectedChats.size > 0 && (
-              <>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={handleDeleteSelected}
-                  disabled={deleteChatMutation.isPending}
-                >
-                  <Trash2 className="h-4 w-4" />
-                  Delete ({selectedChats.size} selected)
-                </Button>
-              </>
-            )}
-
-            <Button variant="outline" size="sm" onClick={handleSelectAll}>
-              {isAllSelected ? (
-                <CheckSquare className="h-4 w-4" />
-              ) : (
-                <Square className="h-4 w-4" />
-              )}
-              {isAllSelected ? "None" : "All"}
-            </Button>
-          </div>
-        )}
+    <TabsContent value="chatHistory" className="space-y-6">
+      {/* Header */}
+      <div className="space-y-1">
+        <h3 className="text-lg font-medium text-foreground">Chat History</h3>
+        <p className="text-sm text-muted-foreground">
+          {chats.length} conversation{chats.length !== 1 ? "s" : ""}
+        </p>
       </div>
+
+      {/* Actions */}
+      {chats.length > 0 && (
+        <div className="flex items-center justify-between">
+          <Button onClick={handleSelectAll}>
+            {isAllSelected ? "Deselect all" : "Select all"}
+          </Button>
+
+          {selectedChats.size > 0 && (
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleDeleteSelected}
+              disabled={deleteChatMutation.isPending}
+            >
+              <Trash2 className="h-4 w-4 mr-1" />
+              Delete {selectedChats.size}
+            </Button>
+          )}
+        </div>
+      )}
 
       <Separator />
 
+      {/* Content */}
       {isLoading ? (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
-            <Card key={i} className="animate-pulse">
-              <CardContent className="p-3">
-                <div className="flex items-center gap-3">
-                  <div className="h-5 w-5 bg-muted rounded-full" />
-                  <div className="flex-1">
-                    <div className="h-4 bg-muted rounded w-3/4 mb-1" />
-                    <div className="h-3 bg-muted rounded w-1/3" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <div key={i} className="flex items-center gap-3 py-3 animate-pulse">
+              <div className="h-4 w-4 bg-muted rounded-sm" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 bg-muted rounded-md w-3/4" />
+                <div className="h-3 bg-muted rounded-md w-1/3" />
+              </div>
+            </div>
           ))}
         </div>
       ) : chats.length === 0 ? (
-        <Card className="border-dashed">
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <MessageSquare className="h-12 w-12 text-muted-foreground mb-4" />
-            <h4 className="text-lg font-medium mb-2">No chat history</h4>
-            <p className="text-sm text-muted-foreground text-center">
-              Your conversations will appear here once you start chatting
-            </p>
-          </CardContent>
-        </Card>
+        <div className="text-center py-12">
+          <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center mx-auto mb-4">
+            <Minus className="h-5 w-5 text-muted-foreground" />
+          </div>
+          <p className="text-sm text-muted-foreground">No conversations yet</p>
+        </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-1">
           {chats.map((chat) => {
             const isSelected = selectedChats.has(chat._id);
             return (
-              <Card
+              <div
                 key={chat._id}
-                className={`transition-all cursor-pointer hover:shadow-sm border-0 ${
-                  isSelected ? "bg-primary/10 shadow-sm" : "hover:bg-muted/30"
-                }`}
                 onClick={() => handleSelectChat(chat._id)}
+                className={`flex items-center gap-3 py-3 px-2 -mx-2 rounded-lg cursor-pointer transition-all ${
+                  isSelected
+                    ? "bg-accent text-accent-foreground"
+                    : "hover:bg-muted/50"
+                }`}
               >
-                <CardContent>
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`p-1.5 rounded-full transition-colors ${
-                        isSelected
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      <MessageSquare className="size-6" />
-                    </div>
+                <div
+                  className={`w-4 h-4 border rounded-sm flex items-center justify-center transition-all ${
+                    isSelected
+                      ? "bg-primary border-primary"
+                      : "border-border hover:border-muted-foreground"
+                  }`}
+                >
+                  {isSelected && (
+                    <Check className="h-3 w-3 text-primary-foreground" />
+                  )}
+                </div>
 
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-medium truncate text-sm mb-0.5">
-                        {chat.title}
-                      </h4>
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <Calendar className="h-3 w-3" />
-                        {formatDate(chat._creationTime)}
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                <div className="flex-1 min-w-0">
+                  <p
+                    className={`text-sm font-medium truncate mb-1 ${
+                      isSelected ? "text-accent-foreground" : "text-foreground"
+                    }`}
+                  >
+                    {chat.title}
+                  </p>
+                  <p
+                    className={`text-xs ${
+                      isSelected
+                        ? "text-accent-foreground/70"
+                        : "text-muted-foreground"
+                    }`}
+                  >
+                    {formatDate(chat._creationTime)}
+                  </p>
+                </div>
+              </div>
             );
           })}
         </div>
