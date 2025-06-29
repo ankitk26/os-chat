@@ -1,5 +1,13 @@
+import { useConvexMutation } from "@convex-dev/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useNavigate, useParams } from "@tanstack/react-router";
+import { api } from "convex/_generated/api";
 import { KeyIcon, RefreshCcwIcon, SplitIcon } from "lucide-react";
+import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
+import { authQueryOptions } from "~/queries/auth";
+import { useModelStore } from "~/stores/model-store";
+import { Model } from "~/types";
 import ModelProviderIcon from "./model-provider-icon";
 import { Button } from "./ui/button";
 import {
@@ -15,12 +23,38 @@ import {
 } from "./ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
-export default function BranchOffButton() {
-  // const selectedModel = useModelStore((store) => store.selectedModel);
+export default function BranchOffButton({ messageId }: { messageId: string }) {
+  const { chatId } = useParams({ from: "/_auth/chat/$chatId" });
+  const { data: authData } = useQuery(authQueryOptions);
+  const navigate = useNavigate();
+
+  const setSelectedModel = useModelStore((store) => store.setSelectedModel);
 
   const apiKeys = localStorage.getItem("apiKeys");
   const useOpenRouter = localStorage.getItem("useOpenRouter");
   const accessibleModels = getAccessibleModels(apiKeys, useOpenRouter);
+
+  const branchOffChatMutation = useMutation({
+    mutationFn: useConvexMutation(api.chats.branchOffChat),
+  });
+
+  const handleBranchOff = async (model: Model | null = null) => {
+    if (!authData?.session?.token) return;
+    const branchChatUuid = generateRandomUUID();
+
+    navigate({ to: `/chat/${branchChatUuid}` });
+
+    branchOffChatMutation.mutate({
+      branchedChatUuid: branchChatUuid,
+      lastMessageId: messageId,
+      parentChatUuid: chatId,
+      sessionToken: authData?.session.token,
+    });
+
+    if (model) {
+      setSelectedModel(model);
+    }
+  };
 
   return (
     <DropdownMenu>
@@ -38,7 +72,7 @@ export default function BranchOffButton() {
         <DropdownMenuItem
           className="flex items-center text-xs gap-3"
           onClick={async () => {
-            //
+            handleBranchOff();
           }}
         >
           <RefreshCcwIcon className="size-4" />
@@ -63,7 +97,7 @@ export default function BranchOffButton() {
                     key={model.modelId}
                     disabled={!model.isAvailable}
                     onClick={async () => {
-                      // await handleRetry(model);
+                      handleBranchOff(model);
                     }}
                   >
                     {model.name}

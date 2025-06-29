@@ -32,10 +32,9 @@ export default defineSchema({
     uuid: v.string(),
     title: v.string(),
     userId: v.id("user"),
-    isPinned: v.union(v.literal(true), v.literal(false)),
+    isPinned: v.boolean(),
     isBranched: v.boolean(),
     parentChatId: v.optional(v.id("chats")),
-    parentChatUuid: v.optional(v.string()),
   })
     .index("by_chat_uuid", ["uuid"])
     .index("by_user", ["userId"])

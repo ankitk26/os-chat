@@ -5,6 +5,7 @@ import { api } from "convex/_generated/api";
 import type { Doc } from "convex/_generated/dataModel";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { authQueryOptions } from "~/queries/auth";
 import AiResponseAlert from "./ai-response-error";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
@@ -57,6 +58,7 @@ export default function Chat({
           createdAt: new Date(message._creationTime),
         };
       }) ?? [],
+    generateId: generateRandomUUID,
     onFinish: (newMessage) => {
       if (!chatId) return;
       if (!newMessage.content) return;

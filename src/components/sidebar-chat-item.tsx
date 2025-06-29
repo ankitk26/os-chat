@@ -2,12 +2,13 @@ import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
-import type { Doc } from "convex/_generated/dataModel";
+import type { FunctionReturnType } from "convex/server";
 import {
   EditIcon,
   EllipsisVerticalIcon,
   PinIcon,
   Share2Icon,
+  SplitIcon,
   Trash2Icon,
 } from "lucide-react";
 import { useState } from "react";
@@ -21,9 +22,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
-  chat: Doc<"chats">;
+  chat: FunctionReturnType<typeof api.chats.getPinnedChats>[0];
 };
 
 export default function SidebarChatItem({ chat }: Props) {
@@ -61,6 +63,21 @@ export default function SidebarChatItem({ chat }: Props) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      {chat.isBranched && (
+        <Tooltip>
+          <TooltipTrigger>
+            <Link
+              to="/chat/$chatId"
+              params={{ chatId: chat.parentChat?.uuid ?? chat.uuid }}
+            >
+              <SplitIcon className="size-4 cursor-pointer mr-2 text-muted-foreground hover:text-secondary-foreground" />
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent>
+            Branched from {chat.parentChat?.title}
+          </TooltipContent>
+        </Tooltip>
+      )}
       <h4 className="line-clamp-1 w-full" title={chat.title}>
         {chat.title}
       </h4>

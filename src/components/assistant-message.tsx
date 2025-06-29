@@ -51,7 +51,7 @@ export default React.memo(function AssistantMessage(props: Props) {
           <TooltipContent>Copy to clipboard</TooltipContent>
         </Tooltip>
 
-        <BranchOffButton />
+        <BranchOffButton messageId={message.id} />
 
         {reload && (
           <RetryModelDropdown

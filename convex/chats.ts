@@ -1,4 +1,5 @@
 import { v } from "convex/values";
+import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { mutation, query } from "./_generated/server";
 import { getAuthUserIdOrThrow } from "./model/users";
 
@@ -30,7 +31,24 @@ export const getUnpinnedChats = query({
       .order("desc")
       .collect();
 
-    return chats;
+    const chatsWithParent = await Promise.all(
+      chats.map(async (chat) => {
+        if (chat.isBranched && chat.parentChatId) {
+          const parentChat = await ctx.db.get(chat.parentChatId);
+          return {
+            ...chat,
+            parentChat: {
+              id: parentChat?._id,
+              uuid: parentChat?.uuid,
+              title: parentChat?.title,
+            },
+          };
+        }
+        return { ...chat, parentChat: null };
+      })
+    );
+
+    return chatsWithParent;
   },
 });
 
@@ -47,7 +65,24 @@ export const getPinnedChats = query({
       .order("desc")
       .collect();
 
-    return chats;
+    const chatsWithParent = await Promise.all(
+      chats.map(async (chat) => {
+        if (chat.isBranched && chat.parentChatId) {
+          const parentChat = await ctx.db.get(chat.parentChatId);
+          return {
+            ...chat,
+            parentChat: {
+              id: parentChat?._id,
+              uuid: parentChat?.uuid,
+              title: parentChat?.title,
+            },
+          };
+        }
+        return { ...chat, parentChat: null };
+      })
+    );
+
+    return chatsWithParent;
   },
 });
 
@@ -117,12 +152,14 @@ export const deleteChat = mutation({
 
     await ctx.db.delete(args.chatId);
 
+    // delete messages of the chat
     for await (const message of ctx.db
       .query("messages")
       .withIndex("by_chat", (q) => q.eq("chatId", chat.uuid))) {
       await ctx.db.delete(message._id);
     }
 
+    // delete shared chats
     for await (const sharedChat of ctx.db
       .query("sharedChats")
       .withIndex("by_parent_chat", (q) => q.eq("parentChatUuid", chat.uuid))) {
@@ -218,5 +255,85 @@ export const syncSharedChat = mutation({
     }
 
     await ctx.db.patch(sharedChat._id, { updatedTime: Date.now() });
+  },
+});
+
+export const branchOffChat = mutation({
+  args: {
+    sessionToken: v.string(),
+    parentChatUuid: v.string(),
+    branchedChatUuid: v.string(),
+    lastMessageId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+
+    // get the chat being branched
+    const parentChat = await ctx.db
+      .query("chats")
+      .withIndex("by_chat_uuid", (q) => q.eq("uuid", args.parentChatUuid))
+      .first();
+
+    // check if chat exists
+    if (!parentChat) {
+      throw new Error("Invalid chat");
+    }
+
+    // create duplicate chat record with same details as original chat
+    const branchedChatId = await ctx.db.insert("chats", {
+      isBranched: true, // flag = true
+      isPinned: false,
+      title: parentChat.title,
+      userId: user,
+      uuid: args.branchedChatUuid,
+      parentChatId: parentChat._id,
+      // parentChatUuid: parentChat.uuid,
+    });
+
+    // get newly inserted branched chat
+    const branchedChat = await ctx.db.get(branchedChatId);
+
+    // throw error if not found
+    if (!branchedChat) {
+      throw new Error("Branched chat not found!");
+    }
+
+    // get message at which chat was branched off
+    const lastMessage = await ctx.db
+      .query("messages")
+      .withIndex("by_source_id", (q) =>
+        q.eq("sourceMessageId", args.lastMessageId)
+      )
+      .first();
+
+    // throw error if message not found
+    if (!lastMessage) {
+      throw new Error("Message not found");
+    }
+
+    // get all messages before the message on which chat was branched off
+    const messagesTillBranchedMessage = await ctx.db
+      .query("messages")
+      .withIndex("by_chat", (q) =>
+        q
+          .eq("chatId", parentChat.uuid)
+          .lte("_creationTime", lastMessage._creationTime)
+      )
+      .collect();
+
+    // insert parent chat's messages but for new branchedChat
+    for (const message of messagesTillBranchedMessage) {
+      const newMessageId = generateRandomUUID();
+
+      await ctx.db.insert("messages", {
+        annotations: message.annotations,
+        chatId: branchedChat.uuid,
+        content: message.content,
+        parts: message.parts,
+        role: message.role,
+        userId: user,
+        sourceMessageId: newMessageId,
+      });
+    }
   },
 });
