@@ -33,7 +33,7 @@ import { Separator } from "./ui/separator";
 import { Switch } from "./ui/switch";
 
 export default function ShareChatDialog() {
-  const { auth } = useRouteContext({ from: "/_auth" });
+  const { auth } = useRouteContext({ strict: false });
   const [copied, setCopied] = useState(false);
 
   const selectedChat = useChatActionStore((store) => store.selectedChat);
@@ -47,10 +47,10 @@ export default function ShareChatDialog() {
   const { data: sharedUuid, isPending } = useQuery(
     convexQuery(
       api.chats.getSharedChatStatus,
-      selectedChat && auth.session.token
+      selectedChat && auth?.session.token
         ? {
             chatId: selectedChat._id,
-            sessionToken: auth.session.token,
+            sessionToken: auth?.session.token,
           }
         : "skip"
     )
@@ -73,7 +73,7 @@ export default function ShareChatDialog() {
     : null;
 
   const isLoading = isPending || shareMutation.isPending;
-  const canShare = Boolean(selectedChat && auth.session.token);
+  const canShare = Boolean(selectedChat && auth?.session.token);
 
   function handleCopyLink() {
     if (!shareUrl) return;
@@ -88,18 +88,18 @@ export default function ShareChatDialog() {
   }
 
   function handleToggleShare() {
-    if (!selectedChat || !auth.session.token) return;
+    if (!selectedChat || !auth?.session.token) return;
     shareMutation.mutate({
       chatId: selectedChat._id,
-      sessionToken: auth.session.token,
+      sessionToken: auth?.session.token,
       sharedChatUuid: generateRandomUUID(),
     });
   }
 
   function handleSyncHistory() {
-    if (!selectedChat || !auth.session.token) return;
+    if (!selectedChat || !auth?.session.token) return;
     syncHistoryMutation.mutate({
-      sessionToken: auth.session.token,
+      sessionToken: auth?.session.token,
       chatId: selectedChat._id,
     });
   }

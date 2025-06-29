@@ -18,7 +18,7 @@ import {
 import { Input } from "./ui/input";
 
 export default function ChatRenameDialog() {
-  const { auth } = useRouteContext({ from: "/_auth" });
+  const { auth } = useRouteContext({ strict: false });
   const selectedChat = useChatActionStore((store) => store.selectedChat);
   const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
   const isRenameModalOpen = useChatActionStore(
@@ -62,7 +62,7 @@ export default function ChatRenameDialog() {
 
     renameChatMutation.mutate({
       chat: { chatId: selectedChat?._id!, title: newChatTitle },
-      sessionToken: auth.session.token,
+      sessionToken: auth?.session.token ?? "",
     });
   };
 

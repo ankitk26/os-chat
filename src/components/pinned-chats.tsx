@@ -13,10 +13,10 @@ import {
 } from "./ui/sidebar";
 
 export default function PinnedChats() {
-  const { auth } = useRouteContext({ from: "/_auth" });
+  const { auth } = useRouteContext({ strict: false });
   const { data: chatsData, isPending } = useQuery(
     convexQuery(api.chats.getPinnedChats, {
-      sessionToken: auth.session.token,
+      sessionToken: auth?.session.token ?? "",
     })
   );
 

@@ -29,7 +29,7 @@ type Props = {
 
 export default function SidebarChatItem({ chat }: Props) {
   const [isHovered, setIsHovered] = useState(false);
-  const { auth } = useRouteContext({ from: "/_auth" });
+  const { auth } = useRouteContext({ strict: false });
   const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
   const setIsDeleteModalOpen = useChatActionStore(
     (store) => store.setIsDeleteModalOpen
@@ -111,7 +111,7 @@ export default function SidebarChatItem({ chat }: Props) {
               e.stopPropagation();
               toggleChatPinMutation.mutate({
                 chatId: chat._id,
-                sessionToken: auth.session.token,
+                sessionToken: auth?.session.token ?? "",
               });
             }}
           >

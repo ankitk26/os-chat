@@ -22,7 +22,7 @@ import {
 export default function DeleteChatAlertDialog() {
   const { chatId } = useParams({ strict: false });
   const navigate = useNavigate();
-  const { auth } = useRouteContext({ from: "/_auth" });
+  const { auth } = useRouteContext({ strict: false });
   const selectedChat = useChatActionStore((store) => store.selectedChat);
   const isDeleteModalOpen = useChatActionStore(
     (store) => store.isDeleteModalOpen
@@ -70,7 +70,7 @@ export default function DeleteChatAlertDialog() {
             onClick={() =>
               deleteChatMutation.mutate({
                 chatId: selectedChat?._id!,
-                sessionToken: auth.session.token,
+                sessionToken: auth?.session.token ?? "",
               })
             }
           >
