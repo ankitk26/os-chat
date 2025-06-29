@@ -33,7 +33,7 @@ export default defineSchema({
     title: v.string(),
     userId: v.id("user"),
     isPinned: v.union(v.literal(true), v.literal(false)),
-    isBranched: v.optional(v.boolean()),
+    isBranched: v.boolean(),
     parentChatId: v.optional(v.id("chats")),
     parentChatUuid: v.optional(v.string()),
   })

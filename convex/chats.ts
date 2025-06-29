@@ -61,6 +61,7 @@ export const createChat = mutation({
       userId: userId,
       title: "Title for chat",
       isPinned: false,
+      isBranched: false,
     });
 
     return newChatId;
