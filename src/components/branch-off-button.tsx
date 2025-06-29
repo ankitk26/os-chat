@@ -1,6 +1,5 @@
-import { ChevronDownIcon, KeyIcon } from "lucide-react";
+import { KeyIcon, RefreshCcwIcon, SplitIcon } from "lucide-react";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
-import { useModelStore } from "~/stores/model-store";
 import ModelProviderIcon from "./model-provider-icon";
 import { Button } from "./ui/button";
 import {
@@ -8,15 +7,16 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuPortal,
+  DropdownMenuSeparatorWithText,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
-export default function ModelSelector() {
-  const selectedModel = useModelStore((store) => store.selectedModel);
-  const setSelectedModel = useModelStore((store) => store.setSelectedModel);
+export default function BranchOffButton() {
+  // const selectedModel = useModelStore((store) => store.selectedModel);
 
   const apiKeys = localStorage.getItem("apiKeys");
   const useOpenRouter = localStorage.getItem("useOpenRouter");
@@ -24,13 +24,31 @@ export default function ModelSelector() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm">
-          {selectedModel.name}
-          <ChevronDownIcon />
-        </Button>
+      <DropdownMenuTrigger>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button size="icon" variant="ghost">
+              <SplitIcon />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Branch off</TooltipContent>
+        </Tooltip>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[200px]">
+        <DropdownMenuItem
+          className="flex items-center text-xs gap-3"
+          onClick={async () => {
+            //
+          }}
+        >
+          <RefreshCcwIcon className="size-4" />
+          Branch off
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparatorWithText>
+          or switch model
+        </DropdownMenuSeparatorWithText>
+
         {accessibleModels.map((provider) => (
           <DropdownMenuSub key={provider.key}>
             <DropdownMenuSubTrigger className="py-3 flex items-center text-xs gap-3">
@@ -44,8 +62,8 @@ export default function ModelSelector() {
                     className="py-3 text-xs"
                     key={model.modelId}
                     disabled={!model.isAvailable}
-                    onClick={() => {
-                      setSelectedModel(model);
+                    onClick={async () => {
+                      // await handleRetry(model);
                     }}
                   >
                     {model.name}

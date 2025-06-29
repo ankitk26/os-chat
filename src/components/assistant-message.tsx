@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import AIResponseContent from "./ai-response-content";
 import AIResponseReasoning from "./ai-response-reasoning";
 import AIResponseSources from "./ai-response-sources";
+import BranchOffButton from "./branch-off-button";
 import RetryModelDropdown from "./retry-model-dropdown";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
@@ -49,6 +50,8 @@ export default React.memo(function AssistantMessage(props: Props) {
           </TooltipTrigger>
           <TooltipContent>Copy to clipboard</TooltipContent>
         </Tooltip>
+
+        <BranchOffButton />
 
         {reload && (
           <RetryModelDropdown
