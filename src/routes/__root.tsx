@@ -30,6 +30,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       ],
       links: [
         {
+          rel: "stylesheet",
+          fetchPriority: "high",
+          as: "style",
+          href: appCss,
+        },
+        {
           rel: "preconnect",
           href: "https://fonts.googleapis.com",
         },
@@ -41,10 +47,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         {
           rel: "stylesheet",
           href: "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap",
-        },
-        {
-          rel: "stylesheet",
-          href: appCss,
         },
       ],
     }),
