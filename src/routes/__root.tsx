@@ -31,8 +31,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       links: [
         {
           rel: "stylesheet",
-          fetchPriority: "high",
-          as: "style",
           href: appCss,
         },
         {
