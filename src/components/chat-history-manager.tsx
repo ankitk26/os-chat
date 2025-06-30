@@ -2,7 +2,7 @@ import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
-import { Check, Minus, Trash2 } from "lucide-react";
+import { CheckIcon, MinusIcon, SplitIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -106,7 +106,7 @@ export default function ChatHistoryManager() {
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="destructive" size="sm">
-                  <Trash2 className="size-4" />
+                  <Trash2Icon className="size-4" />
                   Delete {selectedChats.size}
                 </Button>
               </AlertDialogTrigger>
@@ -151,7 +151,7 @@ export default function ChatHistoryManager() {
       ) : chats.length === 0 ? (
         <div className="text-center py-12">
           <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center mx-auto mb-4">
-            <Minus className="h-5 w-5 text-muted-foreground" />
+            <MinusIcon className="h-5 w-5 text-muted-foreground" />
           </div>
           <p className="text-sm text-muted-foreground">No conversations yet</p>
         </div>
@@ -177,18 +177,19 @@ export default function ChatHistoryManager() {
                   }`}
                 >
                   {isSelected && (
-                    <Check className="h-3 w-3 text-primary-foreground" />
+                    <CheckIcon className="h-3 w-3 text-primary-foreground" />
                   )}
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <p
-                    className={`text-sm font-medium truncate mb-1 ${
+                  <div
+                    className={`text-sm flex gap-2 items-center font-medium truncate mb-1 ${
                       isSelected ? "text-accent-foreground" : "text-foreground"
                     }`}
                   >
+                    {chat.isBranched && <SplitIcon className="size-3" />}
                     {chat.title}
-                  </p>
+                  </div>
                   <p
                     className={`text-xs ${
                       isSelected
