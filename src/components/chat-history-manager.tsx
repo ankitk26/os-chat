@@ -5,6 +5,17 @@ import { api } from "convex/_generated/api";
 import { Check, Minus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 import { TabsContent } from "./ui/tabs";
@@ -92,15 +103,32 @@ export default function ChatHistoryManager() {
           </Button>
 
           {selectedChats.size > 0 && (
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={handleDeleteSelected}
-              disabled={deleteChatMutation.isPending}
-            >
-              <Trash2 className="h-4 w-4 mr-1" />
-              Delete {selectedChats.size}
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm">
+                  <Trash2 className="size-4" />
+                  Delete {selectedChats.size}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Confirm</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to delete these chats? This action
+                    cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    disabled={deleteChatMutation.isPending}
+                    onClick={() => handleDeleteSelected()}
+                  >
+                    {deleteChatMutation.isPending ? "Deleting..." : "Delete"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           )}
         </div>
       )}
