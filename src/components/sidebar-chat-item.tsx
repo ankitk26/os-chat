@@ -115,7 +115,7 @@ export default function SidebarChatItem({ chat }: Props) {
             <EllipsisVerticalIcon />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="w-[200px]">
           <DropdownMenuItem
             onClick={(e) => {
               e.stopPropagation();
@@ -158,44 +158,50 @@ export default function SidebarChatItem({ chat }: Props) {
             <Share2Icon />
             <span className="leading-0">Share</span>
           </DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger className="focus:bg-accent cursor-pointer focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:!text-destructive [&_svg:not([class*='text-'])]:text-muted-foreground relative flex items-center gap-2 rounded-sm px-2 py-2.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
-              <FolderArchiveIcon />
-              Move to folder
-            </DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent className="ml-2">
-                <DropdownMenuItem
-                  key={"null_" + chat._id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    updateChatFolderMutation.mutate({
-                      chatId: chat._id,
-                      folderId: undefined,
-                      sessionToken: auth?.session.token ?? "",
-                    });
-                  }}
-                >
-                  No folder
-                </DropdownMenuItem>
-                {folders?.map((folder) => (
-                  <DropdownMenuItem
-                    key={folder._id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      updateChatFolderMutation.mutate({
-                        chatId: chat._id,
-                        folderId: folder._id,
-                        sessionToken: auth?.session.token ?? "",
-                      });
-                    }}
-                  >
-                    {folder.title}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
+          {folders && folders?.length > 0 && (
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger className="focus:bg-accent cursor-pointer focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:!text-destructive [&_svg:not([class*='text-'])]:text-muted-foreground relative flex items-center gap-2 rounded-sm px-2 py-2.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
+                <FolderArchiveIcon />
+                Move to folder
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent className="ml-2">
+                  {chat.folderId && (
+                    <DropdownMenuItem
+                      key={"null_" + chat._id}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        updateChatFolderMutation.mutate({
+                          chatId: chat._id,
+                          folderId: undefined,
+                          sessionToken: auth?.session.token ?? "",
+                        });
+                      }}
+                    >
+                      No folder
+                    </DropdownMenuItem>
+                  )}
+                  {folders
+                    ?.filter((folder) => folder._id !== chat.folderId)
+                    ?.map((folder) => (
+                      <DropdownMenuItem
+                        key={folder._id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          updateChatFolderMutation.mutate({
+                            chatId: chat._id,
+                            folderId: folder._id,
+                            sessionToken: auth?.session.token ?? "",
+                          });
+                        }}
+                      >
+                        {folder.title}
+                      </DropdownMenuItem>
+                    ))}
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </Link>

@@ -2,7 +2,7 @@ import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { useFolderActionStore } from "~/stores/folder-actions-store";
 import { Button } from "./ui/button";
 import {
@@ -25,11 +25,15 @@ export default function AddFolderDialog() {
     (store) => store.setIsCreateModalOpen
   );
   const [folderTitle, setFolderTitle] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const createFolderMutation = useMutation({
     mutationFn: useConvexMutation(api.folders.createFolder),
     onSuccess: () => {
       setFolderTitle("");
+      setTimeout(() => {
+        if (inputRef.current) inputRef.current.focus();
+      }, 0);
     },
   });
 
@@ -63,6 +67,7 @@ export default function AddFolderDialog() {
             onChange={(e) => setFolderTitle(e.target.value)}
             disabled={createFolderMutation.isPending}
             placeholder="Project Ideas"
+            ref={inputRef}
           />
         </form>
         <DialogFooter>

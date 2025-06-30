@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { LogOutIcon } from "lucide-react";
 import ApiKeysForm from "~/components/api-keys-form";
+import AppearanceSettings from "~/components/appearance-settings";
 import ChatHistoryManager from "~/components/chat-history-manager";
 import ContactSection from "~/components/contact-section";
 import { Button } from "~/components/ui/button";
@@ -37,12 +38,14 @@ function RouteComponent() {
             <TabsList>
               <TabsTrigger value="apiKeys">API Keys</TabsTrigger>
               <TabsTrigger value="chatHistory">Chat History</TabsTrigger>
+              <TabsTrigger value="appearance">Appearance</TabsTrigger>
               <TabsTrigger value="about">Contact</TabsTrigger>
             </TabsList>
 
             <div className="mt-4">
               <ApiKeysForm />
               <ChatHistoryManager />
+              <AppearanceSettings />
               <ContactSection />
             </div>
           </Tabs>

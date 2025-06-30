@@ -151,7 +151,7 @@ export default function Chat({
         {chatId && (
           <ScrollArea className="w-full h-full" ref={scrollAreaRef}>
             <div className="w-full h-full max-w-3xl mx-auto">
-              <div className="my-8 space-y-4 pb-32">
+              <div className="my-8 space-y-8 pb-32">
                 {isMessagesPending && status !== "submitted" ? (
                   <>
                     <UserMessageSkeleton />

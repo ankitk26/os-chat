@@ -9,6 +9,8 @@ import {
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type { ReactNode } from "react";
 import { Toaster } from "~/components/ui/sonner";
+import { cn } from "~/lib/utils";
+import { useAppearanceStore } from "~/stores/appearance-store";
 import appCss from "~/styles.css?url";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
@@ -59,6 +61,8 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
+  const enableAllMono = useAppearanceStore((store) => store.enableAllMono);
+
   return (
     <html>
       <head>
@@ -70,7 +74,9 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         enableSystem
         disableTransitionOnChange
       >
-        <body className="overflow-hidden">
+        <body
+          className={cn("overflow-hidden", enableAllMono ? "font-mono" : "")}
+        >
           <div>{children}</div>
           <Toaster duration={800} />
           <ReactQueryDevtools buttonPosition="bottom-right" />
