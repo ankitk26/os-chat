@@ -1,6 +1,8 @@
 import { v } from "convex/values";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
-import { mutation, query } from "./_generated/server";
+import { internal } from "./_generated/api";
+import { query } from "./_generated/server";
+import { internalMutation, mutation } from "./functions";
 import { getAuthUserIdOrThrow } from "./model/users";
 
 export const getChats = query({
@@ -10,7 +12,7 @@ export const getChats = query({
 
     const chats = await ctx.db
       .query("chats")
-      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .withIndex("by_user_and_pinned_and_folder", (q) => q.eq("userId", userId))
       .order("desc")
       .collect();
 
@@ -25,8 +27,8 @@ export const getUnpinnedChats = query({
 
     const chats = await ctx.db
       .query("chats")
-      .withIndex("by_user_and_pinned", (q) =>
-        q.eq("userId", userId).eq("isPinned", false)
+      .withIndex("by_user_and_pinned_and_folder", (q) =>
+        q.eq("userId", userId).eq("isPinned", false).eq("folderId", undefined)
       )
       .order("desc")
       .collect();
@@ -59,8 +61,8 @@ export const getPinnedChats = query({
 
     const chats = await ctx.db
       .query("chats")
-      .withIndex("by_user_and_pinned", (q) =>
-        q.eq("userId", userId).eq("isPinned", true)
+      .withIndex("by_user_and_pinned_and_folder", (q) =>
+        q.eq("userId", userId).eq("isPinned", true).eq("folderId", undefined)
       )
       .order("desc")
       .collect();
@@ -151,19 +153,39 @@ export const deleteChat = mutation({
     }
 
     await ctx.db.delete(args.chatId);
+  },
+});
 
-    // delete messages of the chat
-    for await (const message of ctx.db
-      .query("messages")
-      .withIndex("by_chat", (q) => q.eq("chatId", chat.uuid))) {
-      await ctx.db.delete(message._id);
+export const deleteSharedChatsByParentChat = internalMutation({
+  args: {
+    chatId: v.string(),
+    cursor: v.union(v.string(), v.null()),
+  },
+  handler: async (ctx, args) => {
+    const BATCH_SIZE = 500;
+    const {
+      page: chats,
+      isDone,
+      continueCursor,
+    } = await ctx.db
+      .query("sharedChats")
+      .withIndex("by_parent_chat", (q) => q.eq("parentChatUuid", args.chatId))
+      .paginate({ numItems: BATCH_SIZE, cursor: args.cursor ?? null });
+
+    for (const chat of chats) {
+      await ctx.db.delete(chat._id);
     }
 
-    // delete shared chats
-    for await (const sharedChat of ctx.db
-      .query("sharedChats")
-      .withIndex("by_parent_chat", (q) => q.eq("parentChatUuid", chat.uuid))) {
-      await ctx.db.delete(sharedChat._id);
+    if (!isDone) {
+      // Schedule next batch using the continueCursor
+      await ctx.scheduler.runAfter(
+        0,
+        internal.chats.deleteSharedChatsByParentChat,
+        {
+          chatId: args.chatId,
+          cursor: continueCursor,
+        }
+      );
     }
   },
 });
@@ -333,6 +355,52 @@ export const branchOffChat = mutation({
         role: message.role,
         userId: user,
         sourceMessageId: newMessageId,
+      });
+    }
+  },
+});
+
+export const updateChatFolder = mutation({
+  args: {
+    sessionToken: v.string(),
+    chatId: v.id("chats"),
+    folderId: v.optional(v.id("folders")),
+  },
+  handler: async (ctx, args) => {
+    await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    await ctx.db.patch(args.chatId, { folderId: args.folderId });
+  },
+});
+
+export const deleteChatsByFolder = internalMutation({
+  args: {
+    userId: v.id("user"),
+    folderId: v.id("folders"),
+    cursor: v.union(v.string(), v.null()),
+  },
+  handler: async (ctx, args) => {
+    const BATCH_SIZE = 500;
+    const {
+      page: chats,
+      isDone,
+      continueCursor,
+    } = await ctx.db
+      .query("chats")
+      .withIndex("by_folder_and_user", (q) =>
+        q.eq("userId", args.userId).eq("folderId", args.folderId)
+      )
+      .paginate({ numItems: BATCH_SIZE, cursor: args.cursor ?? null });
+
+    for (const chat of chats) {
+      await ctx.db.delete(chat._id);
+    }
+
+    if (!isDone) {
+      // Schedule next batch
+      await ctx.scheduler.runAfter(0, internal.chats.deleteChatsByFolder, {
+        userId: args.userId,
+        folderId: args.folderId,
+        cursor: continueCursor,
       });
     }
   },

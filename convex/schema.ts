@@ -28,6 +28,15 @@ export default defineSchema({
     updatedAt: v.string(),
   }),
 
+  folders: defineTable({
+    title: v.string(),
+    userId: v.id("user"),
+    defaultModel: v.object({
+      id: v.string(),
+      name: v.string(),
+    }),
+  }).index("by_user", ["userId"]),
+
   chats: defineTable({
     uuid: v.string(),
     title: v.string(),
@@ -35,10 +44,12 @@ export default defineSchema({
     isPinned: v.boolean(),
     isBranched: v.boolean(),
     parentChatId: v.optional(v.id("chats")),
+    folderId: v.optional(v.id("folders")),
   })
     .index("by_chat_uuid", ["uuid"])
     .index("by_user", ["userId"])
-    .index("by_user_and_pinned", ["userId", "isPinned"]),
+    .index("by_user_and_pinned_and_folder", ["userId", "isPinned", "folderId"])
+    .index("by_folder_and_user", ["userId", "folderId"]),
 
   messages: defineTable({
     sourceMessageId: v.optional(v.string()),

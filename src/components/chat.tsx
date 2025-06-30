@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import type { Doc } from "convex/_generated/dataModel";
-import { ChevronDown } from "lucide-react";
+import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import AiResponseAlert from "./ai-response-error";
@@ -177,10 +177,14 @@ export default function Chat({
 
       {/* Scroll to bottom button - centered at top of prompt */}
       {showScrollToBottom && (
-        <div className="absolute bottom-36 left-1/2 transform -translate-x-1/2 z-20">
-          <Button onClick={scrollToBottom} size="sm" className="rounded-full">
-            <span className="text-xs">Scroll to bottom</span>
-            <ChevronDown className="h-4 w-4" />
+        <div className="absolute bottom-36 left-1/2 transform -translate-x-1/2 z-50">
+          <Button
+            onClick={scrollToBottom}
+            size="icon"
+            className="rounded-full"
+            variant="outline"
+          >
+            <ChevronDownIcon className="size-4" />
           </Button>
         </div>
       )}

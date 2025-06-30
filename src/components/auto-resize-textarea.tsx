@@ -1,3 +1,4 @@
+import { useParams } from "@tanstack/react-router";
 import { useEffect } from "react";
 
 type Props = {
@@ -17,6 +18,8 @@ export default function AutoResizeTextarea(props: Props) {
     isPending,
   } = props;
 
+  const { chatId } = useParams({ strict: false });
+
   const resizeTextarea = () => {
     const textarea = textareaRef.current;
     if (textarea) {
@@ -25,9 +28,17 @@ export default function AutoResizeTextarea(props: Props) {
     }
   };
 
+  // Resize when the textarea value changes.
   useEffect(() => {
     resizeTextarea();
   }, [textareaValue]);
+
+  // Focus the textarea when the chat ID changes or on initial load.
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [chatId]);
 
   return (
     <textarea

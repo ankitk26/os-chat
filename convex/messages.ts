@@ -1,5 +1,6 @@
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { internal } from "./_generated/api";
+import { internalMutation, mutation, query } from "./_generated/server";
 import { getAuthUserIdOrThrow } from "./model/users";
 
 export const getMessages = query({
@@ -91,7 +92,7 @@ export const deleteMessagesByTimestamp = mutation({
     currentMessageSourceId: v.string(),
   },
   handler: async (ctx, args) => {
-    const user = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
     const currentMessage = await ctx.db
       .query("messages")
@@ -104,7 +105,7 @@ export const deleteMessagesByTimestamp = mutation({
       throw new Error("Invalid message");
     }
 
-    if (currentMessage.userId !== user) {
+    if (currentMessage.userId !== userId) {
       throw new Error("Unauthorized access");
     }
 
@@ -114,6 +115,36 @@ export const deleteMessagesByTimestamp = mutation({
         q.gte("_creationTime", currentMessage._creationTime)
       )) {
       await ctx.db.delete(message._id);
+    }
+  },
+});
+
+export const deleteMessagesByChat = internalMutation({
+  args: {
+    chatId: v.string(),
+    cursor: v.union(v.string(), v.null()),
+  },
+  handler: async (ctx, args) => {
+    const BATCH_SIZE = 500;
+    const {
+      page: messages,
+      isDone,
+      continueCursor,
+    } = await ctx.db
+      .query("messages")
+      .withIndex("by_chat", (q) => q.eq("chatId", args.chatId))
+      .paginate({ numItems: BATCH_SIZE, cursor: args.cursor ?? null });
+
+    for (const message of messages) {
+      await ctx.db.delete(message._id);
+    }
+
+    if (!isDone) {
+      // Schedule next batch using the continueCursor
+      await ctx.scheduler.runAfter(0, internal.messages.deleteMessagesByChat, {
+        chatId: args.chatId,
+        cursor: continueCursor,
+      });
     }
   },
 });

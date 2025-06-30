@@ -27,6 +27,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "convex": "^1.24.8",
+    "convex-helpers": "^0.1.95",
     "katex": "^0.16.22",
     "lucide-react": "^0.513.0",
     "marked": "^15.0.12",

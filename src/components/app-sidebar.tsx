@@ -8,6 +8,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
+import AddFolderDialog from "./add-folder-dialog";
+import AppSidebarFolders from "./app-sidebar-folders";
 import AppSidebarFooter from "./app-sidebar-footer";
 import ChatRenameDialog from "./chat-rename-dialog";
 import DeleteChatAlertDialog from "./delete-chat-alert-dialog";
@@ -55,7 +57,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
         <ScrollArea className="w-full h-full pb-20">
           <div className="space-y-4">
+            <AppSidebarFolders />
             <PinnedChats />
+            <AddFolderDialog />
             <UnpinnedChats />
             <DeleteChatAlertDialog />
             <ChatRenameDialog />

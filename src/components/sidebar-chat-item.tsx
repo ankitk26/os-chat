@@ -1,11 +1,12 @@
-import { useConvexMutation } from "@convex-dev/react-query";
-import { useMutation } from "@tanstack/react-query";
+import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link, useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import type { FunctionReturnType } from "convex/server";
 import {
   EditIcon,
   EllipsisVerticalIcon,
+  FolderArchiveIcon,
   PinIcon,
   Share2Icon,
   SplitIcon,
@@ -19,6 +20,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
@@ -41,6 +46,12 @@ export default function SidebarChatItem({ chat }: Props) {
     (store) => store.setIsShareDialogOpen
   );
 
+  const { data: folders } = useQuery(
+    convexQuery(api.folders.getFolders, {
+      sessionToken: auth?.session.token ?? "",
+    })
+  );
+
   const toggleChatPinMutation = useMutation({
     mutationFn: useConvexMutation(api.chats.toggleChatPin),
     onSuccess: (wasPinned) => {
@@ -48,6 +59,18 @@ export default function SidebarChatItem({ chat }: Props) {
     },
     onError: () => {
       toast.error("Could not pin chat", {
+        description: "Please try again later",
+      });
+    },
+  });
+
+  const updateChatFolderMutation = useMutation({
+    mutationFn: useConvexMutation(api.chats.updateChatFolder),
+    // onSuccess: (wasPinned) => {
+    //   toast.success(wasPinned ? "Chat unpinned" : "Chat pinned");
+    // },
+    onError: () => {
+      toast.error("Could not update chat folder", {
         description: "Please try again later",
       });
     },
@@ -77,12 +100,9 @@ export default function SidebarChatItem({ chat }: Props) {
           </TooltipContent>
         </Tooltip>
       )}
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <h4 className="line-clamp-1 w-full">{chat.title}</h4>
-        </TooltipTrigger>
-        <TooltipContent>{chat.title}</TooltipContent>
-      </Tooltip>
+      <h4 className="line-clamp-1 w-full" title={chat.title}>
+        {chat.title}
+      </h4>
       {/* Always render button to maintain consistent height, but control visibility */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -138,6 +158,44 @@ export default function SidebarChatItem({ chat }: Props) {
             <Share2Icon />
             <span className="leading-0">Share</span>
           </DropdownMenuItem>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger className="focus:bg-accent cursor-pointer focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:!text-destructive [&_svg:not([class*='text-'])]:text-muted-foreground relative flex items-center gap-2 rounded-sm px-2 py-2.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
+              <FolderArchiveIcon />
+              Move to folder
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent className="ml-2">
+                <DropdownMenuItem
+                  key={"null_" + chat._id}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    updateChatFolderMutation.mutate({
+                      chatId: chat._id,
+                      folderId: undefined,
+                      sessionToken: auth?.session.token ?? "",
+                    });
+                  }}
+                >
+                  No folder
+                </DropdownMenuItem>
+                {folders?.map((folder) => (
+                  <DropdownMenuItem
+                    key={folder._id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      updateChatFolderMutation.mutate({
+                        chatId: chat._id,
+                        folderId: folder._id,
+                        sessionToken: auth?.session.token ?? "",
+                      });
+                    }}
+                  >
+                    {folder.title}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
         </DropdownMenuContent>
       </DropdownMenu>
     </Link>
