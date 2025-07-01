@@ -6,6 +6,7 @@ import { api } from "convex/_generated/api";
 import { KeyIcon, RefreshCcwIcon } from "lucide-react";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { useModelStore } from "~/stores/model-store";
+import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import type { Model } from "~/types";
 import ModelProviderIcon from "./model-provider-icon";
 import { Button } from "./ui/button";
@@ -43,9 +44,16 @@ export default function RetryModelDropdown(props: Props) {
     mutationFn: useConvexMutation(api.messages.deleteMessagesByTimestamp),
   });
 
-  const apiKeys = localStorage.getItem("apiKeys");
-  const useOpenRouter = localStorage.getItem("useOpenRouter");
-  const accessibleModels = getAccessibleModels(apiKeys, useOpenRouter);
+  const persistedApiKeys = usePersistedApiKeysStore(
+    (store) => store.persistedApiKeys
+  );
+  const persistedUseOpenRouter = usePersistedApiKeysStore(
+    (store) => store.persistedUseOpenRouter
+  );
+  const accessibleModels = getAccessibleModels(
+    persistedApiKeys,
+    persistedUseOpenRouter
+  );
 
   const handleRetry = async (model: Model) => {
     deleteMessagesMutation.mutate({
@@ -60,8 +68,8 @@ export default function RetryModelDropdown(props: Props) {
       body: {
         model,
         isWebSearchEnabled,
-        apiKeys: localStorage.getItem("apiKeys"),
-        useOpenRouter: localStorage.getItem("useOpenRouter"),
+        apiKeys: persistedApiKeys,
+        useOpenRouter: persistedUseOpenRouter,
       },
     });
   };

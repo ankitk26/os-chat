@@ -1,21 +1,14 @@
 import { SaveIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { ApiKeys } from "~/types";
+import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
+import { ApiKeys, defaultApiKeys } from "~/types";
 import ApiKeyInput, { Provider } from "./api-key-input";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Separator } from "./ui/separator";
 import { Switch } from "./ui/switch";
 import { TabsContent } from "./ui/tabs";
-
-const defaultApiKeys: ApiKeys = {
-  gemini: "",
-  openai: "",
-  anthropic: "",
-  openrouter: "",
-  xai: "",
-};
 
 const keysForm = [
   {
@@ -58,19 +51,19 @@ export default function ApiKeysForm() {
     useOpenRouter: boolean;
   } | null>(null);
 
-  useEffect(() => {
-    const loadedApiKeys = JSON.parse(
-      localStorage.getItem("apiKeys") || JSON.stringify(defaultApiKeys)
-    );
-    const loadedUseOpenRouter = JSON.parse(
-      localStorage.getItem("useOpenRouter") || "false"
-    );
+  const {
+    persistedApiKeys,
+    persistedUseOpenRouter,
+    setPersistedApiKeys,
+    setPersistedUseOpenRouter,
+  } = usePersistedApiKeysStore();
 
-    setApiKeys(loadedApiKeys);
-    setUseOpenRouter(loadedUseOpenRouter);
+  useEffect(() => {
+    setApiKeys(persistedApiKeys);
+    setUseOpenRouter(persistedUseOpenRouter);
     setInitialState({
-      apiKeys: loadedApiKeys,
-      useOpenRouter: loadedUseOpenRouter,
+      apiKeys: persistedApiKeys,
+      useOpenRouter: persistedUseOpenRouter,
     });
   }, []);
 
@@ -79,8 +72,8 @@ export default function ApiKeysForm() {
   };
 
   const handleSave = () => {
-    localStorage.setItem("apiKeys", JSON.stringify(apiKeys));
-    localStorage.setItem("useOpenRouter", JSON.stringify(useOpenRouter));
+    setPersistedApiKeys(apiKeys);
+    setPersistedUseOpenRouter(useOpenRouter);
     toast.success("API keys saved!");
     setInitialState({ apiKeys: { ...apiKeys }, useOpenRouter });
   };

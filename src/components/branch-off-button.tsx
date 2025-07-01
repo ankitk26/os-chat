@@ -10,6 +10,7 @@ import { KeyIcon, RefreshCcwIcon, SplitIcon } from "lucide-react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { useModelStore } from "~/stores/model-store";
+import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import { Model } from "~/types";
 import ModelProviderIcon from "./model-provider-icon";
 import { Button } from "./ui/button";
@@ -33,9 +34,16 @@ export default function BranchOffButton({ messageId }: { messageId: string }) {
 
   const setSelectedModel = useModelStore((store) => store.setSelectedModel);
 
-  const apiKeys = localStorage.getItem("apiKeys");
-  const useOpenRouter = localStorage.getItem("useOpenRouter");
-  const accessibleModels = getAccessibleModels(apiKeys, useOpenRouter);
+  const persistedApiKeys = usePersistedApiKeysStore(
+    (store) => store.persistedApiKeys
+  );
+  const persistedUseOpenRouter = usePersistedApiKeysStore(
+    (store) => store.persistedUseOpenRouter
+  );
+  const accessibleModels = getAccessibleModels(
+    persistedApiKeys,
+    persistedUseOpenRouter
+  );
 
   const branchOffChatMutation = useMutation({
     mutationFn: useConvexMutation(api.chats.branchOffChat),

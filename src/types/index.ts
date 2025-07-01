@@ -30,3 +30,11 @@ export type ApiKeys = {
   openrouter: string;
   xai: string;
 };
+
+export const defaultApiKeys: ApiKeys = {
+  gemini: "",
+  openai: "",
+  anthropic: "",
+  openrouter: "",
+  xai: "",
+};

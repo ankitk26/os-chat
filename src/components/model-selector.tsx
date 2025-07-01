@@ -1,6 +1,7 @@
 import { ChevronDownIcon, KeyIcon } from "lucide-react";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { useModelStore } from "~/stores/model-store";
+import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import ModelProviderIcon from "./model-provider-icon";
 import { Button } from "./ui/button";
 import {
@@ -18,9 +19,16 @@ export default function ModelSelector() {
   const selectedModel = useModelStore((store) => store.selectedModel);
   const setSelectedModel = useModelStore((store) => store.setSelectedModel);
 
-  const apiKeys = localStorage.getItem("apiKeys");
-  const useOpenRouter = localStorage.getItem("useOpenRouter");
-  const accessibleModels = getAccessibleModels(apiKeys, useOpenRouter);
+  const persistedApiKeys = usePersistedApiKeysStore(
+    (store) => store.persistedApiKeys
+  );
+  const persistedUseOpenRouter = usePersistedApiKeysStore(
+    (store) => store.persistedUseOpenRouter
+  );
+  const accessibleModels = getAccessibleModels(
+    persistedApiKeys,
+    persistedUseOpenRouter
+  );
 
   return (
     <DropdownMenu>

@@ -12,6 +12,7 @@ import type React from "react";
 import { useRef, useState } from "react";
 import { getChatTitle } from "~/server-fns/get-chat-title";
 import { useModelStore } from "~/stores/model-store";
+import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import AutoResizeTextarea from "./auto-resize-textarea";
 import PromptActions from "./prompt-actions";
 
@@ -36,6 +37,12 @@ export default function UserPromptInput(props: Props) {
   const [textareaValue, setTextareaValue] = useState(props.input);
   const selectedModel = useModelStore((store) => store.selectedModel);
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
+  const persistedApiKeys = usePersistedApiKeysStore(
+    (store) => store.persistedApiKeys
+  );
+  const persistedUseOpenRouter = usePersistedApiKeysStore(
+    (store) => store.persistedUseOpenRouter
+  );
 
   const updateChatTitleMutation = useMutation({
     mutationFn: useConvexMutation(api.chats.updateChatTitle),
@@ -96,8 +103,8 @@ export default function UserPromptInput(props: Props) {
         body: {
           model: selectedModel,
           isWebSearchEnabled,
-          apiKeys: localStorage.getItem("apiKeys"),
-          useOpenRouter: localStorage.getItem("useOpenRouter"),
+          apiKeys: persistedApiKeys,
+          useOpenRouter: persistedUseOpenRouter,
         },
       }
     );

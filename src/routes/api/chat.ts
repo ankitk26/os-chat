@@ -17,27 +17,9 @@ type ChatRequestBody = {
   messages: Message[];
   model: Model;
   isWebSearchEnabled: boolean;
-  apiKeys: string | null;
-  useOpenRouter: string | null;
+  apiKeys: ApiKeys;
+  useOpenRouter: boolean;
 };
-
-// Helper function to safely parse JSON from string
-function safeJSONParse<T>(jsonString: string | null, defaultValue: T): T {
-  if (!jsonString) {
-    return defaultValue;
-  }
-
-  try {
-    // try parsing the string to JSON
-    const parsed = JSON.parse(jsonString);
-    if (typeof parsed === typeof defaultValue) {
-      return parsed;
-    }
-    return defaultValue;
-  } catch (e) {
-    return defaultValue;
-  }
-}
 
 const getModelToUse = (
   requestModel: Model,
@@ -137,23 +119,13 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
       messages,
       model: requestModel,
       isWebSearchEnabled,
-      apiKeys: apiKeysString,
-      useOpenRouter: useOpenRouterString,
+      apiKeys,
+      useOpenRouter,
     } = chatRequestBody;
-
-    // Parse the string values safely
-    const parsedApiKeys: ApiKeys = safeJSONParse(apiKeysString, {
-      gemini: "",
-      openai: "",
-      anthropic: "",
-      openrouter: "",
-      xai: "",
-    });
-    const useOpenRouter = safeJSONParse(useOpenRouterString, false);
 
     const modelToUse = getModelToUse(
       requestModel,
-      parsedApiKeys,
+      apiKeys,
       useOpenRouter,
       isWebSearchEnabled
     );
@@ -162,7 +134,10 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
       execute: (dataStream) => {
         const result = streamText({
           model: modelToUse,
-          system: systemMessage,
+          system:
+            requestModel.modelId === "gemini-2.0-flash-exp"
+              ? undefined
+              : systemMessage,
           messages,
           providerOptions: {
             google: { responseModalities: ["TEXT", "IMAGE"] },
