@@ -2,8 +2,8 @@ import { ProviderGroup } from "~/types";
 
 export const defaultSelectedModel = {
   name: "Gemini 2.0 Flash",
-  modelId: "gemini-2.0-flash-001",
-  openRouterModelId: "google/gemini-2.0-flash-001",
+  modelId: "gemini-2.0-flash-exp",
+  openRouterModelId: "google/gemini-2.0-flash-exp:free",
   isFree: true,
 };
 

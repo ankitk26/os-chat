@@ -1,9 +1,9 @@
-import { createServerFileRoute } from "@tanstack/react-start/server"
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
 import { createXai } from "@ai-sdk/xai";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
+import { createServerFileRoute } from "@tanstack/react-start/server";
 import {
   createDataStreamResponse,
   Message,
@@ -47,6 +47,8 @@ const getModelToUse = (
 ) => {
   const defaultOpenRouterApiKey = process.env.OPENROUTER_API_KEY;
 
+  console.log(requestModel);
+
   // useOpenRouter is true AND client provided an OpenRouter key
   // All models can be accessed and powered by OpenRouter API Key given by user
   if (useOpenRouter && parsedApiKeys.openrouter.trim() !== "") {
@@ -62,29 +64,6 @@ const getModelToUse = (
       return openRouter.chat(requestModel.openRouterModelId + ":online");
     }
     return openRouter.chat(requestModel.openRouterModelId);
-  }
-
-  // useOpenRouter is false and no API keys provided
-  // No keys provided - use default DeepSeek model
-  if (
-    !useOpenRouter &&
-    !parsedApiKeys.gemini &&
-    !parsedApiKeys.openai &&
-    !parsedApiKeys.anthropic &&
-    !parsedApiKeys.openrouter
-  ) {
-    const myOpenRouter = createOpenRouter({
-      apiKey: defaultOpenRouterApiKey,
-    });
-    console.log("[LOG] Using provisioned OpenRouter API Key");
-    // if using OpenRouter and it's gemini model + webSearch, append :online to modelId
-    if (
-      requestModel.openRouterModelId.startsWith("google") &&
-      isWebSearchEnabled
-    ) {
-      return myOpenRouter.chat(requestModel.openRouterModelId + ":online");
-    }
-    return myOpenRouter.chat(requestModel.openRouterModelId);
   }
 
   // useOpenRouter is false, but specific provider keys might be present
@@ -162,12 +141,6 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
       useOpenRouter: useOpenRouterString,
     } = chatRequestBody;
 
-    // console.log({
-    //   requestModel,
-    //   isWebSearchEnabled,
-    //   lastMessage: messages[messages.length - 1],
-    // });
-
     // Parse the string values safely
     const parsedApiKeys: ApiKeys = safeJSONParse(apiKeysString, {
       gemini: "",
@@ -191,6 +164,9 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
           model: modelToUse,
           system: systemMessage,
           messages,
+          providerOptions: {
+            google: { responseModalities: ["TEXT", "IMAGE"] },
+          },
           experimental_transform: smoothStream({ chunking: "line" }),
           abortSignal: request.signal,
           onFinish: () => {
@@ -207,7 +183,10 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
           sendSources: true,
         });
       },
-      onError: (error) => (error as any).message,
+      onError: (error) => {
+        console.log((error as any).message);
+        return (error as any).message;
+      },
     });
   },
 });

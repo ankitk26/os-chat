@@ -77,8 +77,6 @@ export default function Chat({
     },
   });
 
-  console.log(messages);
-
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
 

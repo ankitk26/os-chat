@@ -82,7 +82,6 @@ export default function RetryModelDropdown(props: Props) {
         <DropdownMenuItem
           className="flex items-center text-xs gap-3"
           onClick={async () => {
-            console.log(selectedModel.modelId);
             await handleRetry(selectedModel);
           }}
         >
