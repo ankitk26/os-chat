@@ -29,7 +29,7 @@ const getModelToUse = (
 ) => {
   const defaultOpenRouterApiKey = process.env.OPENROUTER_API_KEY;
 
-  console.log(requestModel);
+  // console.log(requestModel);
 
   // useOpenRouter is true AND client provided an OpenRouter key
   // All models can be accessed and powered by OpenRouter API Key given by user
@@ -37,7 +37,7 @@ const getModelToUse = (
     const openRouter = createOpenRouter({
       apiKey: parsedApiKeys.openrouter,
     });
-    console.log("[LOG] Using user's OpenRouter API Key");
+    // console.log("[LOG] Using user's OpenRouter API Key");
     // if using OpenRouter and it's gemini model + webSearch, append :online to modelId
     if (
       requestModel.openRouterModelId.startsWith("google") &&
@@ -113,7 +113,7 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
   POST: async ({ request }) => {
     const chatRequestBody: ChatRequestBody = await request.json();
 
-    console.log("[LOG]: API hit~~~~~~~~~~~");
+    // console.log("[LOG]: API hit~~~~~~~~~~~");
 
     const {
       messages,
@@ -139,9 +139,9 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
               ? undefined
               : systemMessage,
           messages,
-          providerOptions: {
-            google: { responseModalities: ["TEXT", "IMAGE"] },
-          },
+          // providerOptions: {
+          //   google: { responseModalities: ["TEXT", "IMAGE"] },
+          // },
           experimental_transform: smoothStream({ chunking: "line" }),
           abortSignal: request.signal,
           onFinish: () => {
@@ -159,7 +159,7 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
         });
       },
       onError: (error) => {
-        console.log((error as any).message);
+        // console.log((error as any).message);
         return (error as any).message;
       },
     });
