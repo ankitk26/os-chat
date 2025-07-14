@@ -140,7 +140,7 @@ export default function Chat({
       }, 100);
       return () => clearTimeout(timer);
     }
-  }, [messages.length, status]);
+  }, [messages.length]);
 
   return (
     <div className="relative flex flex-col w-full mx-auto max-h-svh h-svh">
