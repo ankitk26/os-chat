@@ -83,6 +83,9 @@ export default function ApiKeysForm() {
     (JSON.stringify(apiKeys) !== JSON.stringify(initialState.apiKeys) ||
       useOpenRouter !== initialState.useOpenRouter);
 
+  // Determine if OpenRouter switch should be disabled
+  const isSwitchDisabled = apiKeys.openrouter.trim() === "";
+
   return (
     <TabsContent value="apiKeys">
       <div className="space-y-6">
@@ -97,11 +100,17 @@ export default function ApiKeysForm() {
             <p className="text-sm text-muted-foreground">
               Route all AI model requests through OpenRouter
             </p>
+            {isSwitchDisabled && (
+              <p className="text-xs">
+                Please provide an OpenRouter API Key to enable this option.
+              </p>
+            )}
           </div>
           <Switch
             id="openrouter-toggle"
-            checked={useOpenRouter}
+            checked={useOpenRouter && !isSwitchDisabled} // Ensure it's unchecked if disabled without a key
             onCheckedChange={setUseOpenRouter}
+            disabled={isSwitchDisabled} // Disable the switch
           />
         </div>
 

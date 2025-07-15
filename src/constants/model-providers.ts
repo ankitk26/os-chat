@@ -7,7 +7,7 @@ export const defaultSelectedModel = {
   isFree: true,
 };
 
-export const openRouterModelProviders: ProviderGroup[] = [
+export const allModelProviders: ProviderGroup[] = [
   {
     provider: "Google",
     key: "google",
@@ -35,19 +35,19 @@ export const openRouterModelProviders: ProviderGroup[] = [
         name: "DeepSeek R1 0528",
         openRouterModelId: "deepseek/deepseek-r1-0528:free",
         modelId: "deepseek/deepseek-r1-0528:free",
-        isFree: true,
+        isFree: false,
       },
       {
         name: "DeepSeek R1",
         openRouterModelId: "deepseek/deepseek-r1:free",
         modelId: "deepseek/deepseek-r1:free",
-        isFree: true,
+        isFree: false,
       },
       {
         name: "DeepSeek V3 (0324)",
         openRouterModelId: "deepseek/deepseek-chat-v3-0324:free",
         modelId: "deepseek/deepseek-chat-v3-0324:free",
-        isFree: true,
+        isFree: false,
       },
     ],
   },
@@ -137,13 +137,13 @@ export const openRouterModelProviders: ProviderGroup[] = [
         name: "Qwen QwQ 32B",
         openRouterModelId: "qwen/qwq-32b:free",
         modelId: "qwen/qwq-32b:free",
-        isFree: true,
+        isFree: false,
       },
       {
         name: "Qwen 2.5 32b",
         openRouterModelId: "qwen/qwen-2.5-coder-32b-instruct:free",
         modelId: "qwen/qwen-2.5-coder-32b-instruct:free",
-        isFree: true,
+        isFree: false,
       },
     ],
   },

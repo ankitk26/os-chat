@@ -10,6 +10,7 @@ import {
   smoothStream,
   streamText,
 } from "ai";
+import { defaultSelectedModel } from "~/constants/model-providers";
 import { systemMessage } from "~/constants/system-message";
 import { ApiKeys, Model } from "~/types";
 
@@ -27,9 +28,12 @@ const getModelToUse = (
   useOpenRouter: boolean,
   isWebSearchEnabled: boolean
 ) => {
-  const defaultOpenRouterApiKey = process.env.OPENROUTER_API_KEY;
-
-  // console.log(requestModel);
+  const myGeminiModel = createGoogleGenerativeAI({
+    apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+  });
+  const defaultModel = myGeminiModel(defaultSelectedModel.modelId, {
+    useSearchGrounding: isWebSearchEnabled,
+  });
 
   // useOpenRouter is true AND client provided an OpenRouter key
   // All models can be accessed and powered by OpenRouter API Key given by user
@@ -37,7 +41,6 @@ const getModelToUse = (
     const openRouter = createOpenRouter({
       apiKey: parsedApiKeys.openrouter,
     });
-    // console.log("[LOG] Using user's OpenRouter API Key");
     // if using OpenRouter and it's gemini model + webSearch, append :online to modelId
     if (
       requestModel.openRouterModelId.startsWith("google") &&
@@ -54,7 +57,7 @@ const getModelToUse = (
     // Handle GEMINI model
     if (requestModel.openRouterModelId.startsWith("google")) {
       if (parsedApiKeys.gemini.trim() === "") {
-        throw new Error("API Key for Google Gemini not provided.");
+        return defaultModel;
       }
 
       const googleModel = createGoogleGenerativeAI({
@@ -102,11 +105,8 @@ const getModelToUse = (
     }
   }
 
-  // Default any other case to DeepSeek model
-  const myOpenRouter = createOpenRouter({
-    apiKey: defaultOpenRouterApiKey,
-  });
-  return myOpenRouter.chat(requestModel.openRouterModelId);
+  // Default any other case to Gemini model
+  return defaultModel;
 };
 
 export const ServerRoute = createServerFileRoute("/api/chat").methods({

@@ -1,4 +1,4 @@
-import { openRouterModelProviders } from "~/constants/model-providers";
+import { allModelProviders } from "~/constants/model-providers";
 import {
   ApiKeys,
   ModelWithAvailability,
@@ -11,7 +11,7 @@ export function getAccessibleModels(
 ): ProviderGroupWithAvailability[] {
   const resultProviderGroups: ProviderGroupWithAvailability[] = [];
 
-  for (const group of openRouterModelProviders) {
+  for (const group of allModelProviders) {
     const modelsWithAvailability: ModelWithAvailability[] = [];
 
     for (const model of group.models) {
@@ -39,9 +39,6 @@ export function getAccessibleModels(
           case "openrouter": // Special case: if OpenRouter toggle is off, but they *still* put an OpenRouter key, those models are still available via that key.
             hasSpecificProviderKey = apiKeys.openrouter.trim() !== "";
             break;
-          case "deepseek":
-            // DeepSeek models are inherently free; their availability is solely based on `model.isFree`.
-            break; // No `hasSpecificProviderKey` from `apiKeys` is relevant here.
           default:
             // For any other unexpected group key, assume no direct provider key grants access.
             hasSpecificProviderKey = false;
