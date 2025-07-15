@@ -17,7 +17,7 @@ export const allModelProviders: ProviderGroup[] = [
         name: "Gemini 2.5 Flash",
         openRouterModelId: "google/gemini-2.5-flash",
         modelId: "gemini-2.5-flash-preview-04-17",
-        isFree: false,
+        isFree: true,
       },
       {
         name: "Gemini 2.5 Pro",
