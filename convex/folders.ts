@@ -93,6 +93,15 @@ export const deleteFolder = mutation({
   handler: async (ctx, args) => {
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
+    const folder = await ctx.db.get(args.folderId);
+    if (!folder) {
+      throw new Error("Not found!");
+    }
+
+    if (folder.userId !== userId) {
+      throw new Error("Unauthorized request");
+    }
+
     if (args.deleteChatsFlag) {
       await ctx.scheduler.runAfter(0, internal.chats.deleteChatsByFolder, {
         userId,
@@ -139,7 +148,14 @@ export const renameFolder = mutation({
     }),
   },
   handler: async (ctx, args) => {
-    await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const folder = await ctx.db.get(args.folder.id);
+    if (!folder) {
+      throw new Error("Not found!");
+    }
+    if (folder.userId !== userId) {
+      throw new Error("Unauthorized request");
+    }
     await ctx.db.patch(args.folder.id, { title: args.folder.title });
   },
 });

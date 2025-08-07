@@ -114,7 +114,14 @@ export const updateChatTitle = mutation({
     }),
   },
   handler: async (ctx, args) => {
-    await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const chat = await ctx.db.get(args.chat.chatId);
+    if (!chat) {
+      throw new Error("Not found!");
+    }
+    if (chat.userId !== userId) {
+      throw new Error("Unauthorized request");
+    }
     await ctx.db.patch(args.chat.chatId, { title: args.chat.title });
   },
 });
@@ -125,10 +132,13 @@ export const toggleChatPin = mutation({
     chatId: v.id("chats"),
   },
   handler: async (ctx, args) => {
-    await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
     const chat = await ctx.db.get(args.chatId);
     if (!chat) {
       throw new Error("Invalid chat request");
+    }
+    if (chat.userId !== userId) {
+      throw new Error("Unauthorized request");
     }
     await ctx.db.patch(args.chatId, { isPinned: !chat.isPinned });
     return chat.isPinned;
@@ -367,7 +377,14 @@ export const updateChatFolder = mutation({
     folderId: v.optional(v.id("folders")),
   },
   handler: async (ctx, args) => {
-    await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const chat = await ctx.db.get(args.chatId);
+    if (!chat) {
+      throw new Error("Not found!");
+    }
+    if (chat.userId !== userId) {
+      throw new Error("Unauthorized request");
+    }
     await ctx.db.patch(args.chatId, { folderId: args.folderId });
   },
 });
