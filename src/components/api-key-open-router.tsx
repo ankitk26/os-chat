@@ -21,7 +21,7 @@ export default function ApiKeyOpenRouter(props: Props) {
           Route all AI model requests through OpenRouter
         </p>
         {isSwitchDisabled && (
-          <p className="text-xs">
+          <p className="text-destructive text-xs">
             Please provide an OpenRouter API Key to enable this option.
           </p>
         )}
