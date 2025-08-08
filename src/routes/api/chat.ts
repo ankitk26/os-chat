@@ -6,13 +6,13 @@ import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { createServerFileRoute } from "@tanstack/react-start/server";
 import {
   createDataStreamResponse,
-  Message,
+  type Message,
   smoothStream,
   streamText,
 } from "ai";
 import { defaultSelectedModel } from "~/constants/model-providers";
 import { systemMessage } from "~/constants/system-message";
-import { ApiKeys, Model } from "~/types";
+import type { ApiKeys, Model } from "~/types";
 
 type ChatRequestBody = {
   messages: Message[];
@@ -27,6 +27,7 @@ const getModelToUse = (
   parsedApiKeys: ApiKeys,
   useOpenRouter: boolean,
   isWebSearchEnabled: boolean
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: To fix later
 ) => {
   const myGeminiModel = createGoogleGenerativeAI({
     apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
@@ -46,7 +47,7 @@ const getModelToUse = (
       requestModel.openRouterModelId.startsWith("google") &&
       isWebSearchEnabled
     ) {
-      return openRouter.chat(requestModel.openRouterModelId + ":online");
+      return openRouter.chat(`${requestModel.openRouterModelId}:online`);
     }
     return openRouter.chat(requestModel.openRouterModelId);
   }
@@ -160,6 +161,7 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
       },
       onError: (error) => {
         // console.log((error as any).message);
+        // biome-ignore lint/suspicious/noExplicitAny: Allow in this case
         return (error as any).message;
       },
     });
