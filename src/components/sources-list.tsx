@@ -8,8 +8,6 @@ type Props = {
 };
 
 export default function SourcesList(props: Props) {
-  console.log(props.sourceParts);
-
   return (
     <div className="mt-2 flex flex-wrap space-x-2 font-mono text-sm">
       {props.sourceParts.map((sourcePart) => (
