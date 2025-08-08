@@ -1,7 +1,7 @@
-import { v } from "convex/values";
-import { internal } from "./_generated/api";
-import { mutation, query } from "./_generated/server";
-import { getAuthUserIdOrThrow } from "./model/users";
+import { v } from 'convex/values';
+import { internal } from './_generated/api';
+import { mutation, query } from './_generated/server';
+import { getAuthUserIdOrThrow } from './model/users';
 
 export const getFolders = query({
   args: { sessionToken: v.string() },
@@ -9,9 +9,9 @@ export const getFolders = query({
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
     const folders = await ctx.db
-      .query("folders")
-      .withIndex("by_user", (q) => q.eq("userId", userId))
-      .order("desc")
+      .query('folders')
+      .withIndex('by_user', (q) => q.eq('userId', userId))
+      .order('desc')
       .collect();
 
     return folders;
@@ -24,17 +24,17 @@ export const getFoldersWithChats = query({
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
     const folders = await ctx.db
-      .query("folders")
-      .withIndex("by_user", (q) => q.eq("userId", userId))
-      .order("desc")
+      .query('folders')
+      .withIndex('by_user', (q) => q.eq('userId', userId))
+      .order('desc')
       .collect();
 
     const foldersWithChats = await Promise.all(
       folders.map(async (folder) => {
         const chats = await ctx.db
-          .query("chats")
-          .withIndex("by_folder_and_user", (q) =>
-            q.eq("userId", userId).eq("folderId", folder._id)
+          .query('chats')
+          .withIndex('by_folder_and_user', (q) =>
+            q.eq('userId', userId).eq('folderId', folder._id)
           )
           .collect();
 
@@ -72,11 +72,11 @@ export const createFolder = mutation({
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
     const defaultModel = {
-      id: "gemini-2.0-flash-001",
-      name: "Gemini 2.0 Flash",
+      id: 'gemini-2.0-flash-001',
+      name: 'Gemini 2.0 Flash',
     };
 
-    await ctx.db.insert("folders", {
+    await ctx.db.insert('folders', {
       defaultModel,
       title: args.title,
       userId,
@@ -87,7 +87,7 @@ export const createFolder = mutation({
 export const deleteFolder = mutation({
   args: {
     sessionToken: v.string(),
-    folderId: v.id("folders"),
+    folderId: v.id('folders'),
     deleteChatsFlag: v.boolean(),
   },
   handler: async (ctx, args) => {
@@ -95,11 +95,11 @@ export const deleteFolder = mutation({
 
     const folder = await ctx.db.get(args.folderId);
     if (!folder) {
-      throw new Error("Not found!");
+      throw new Error('Not found!');
     }
 
     if (folder.userId !== userId) {
-      throw new Error("Unauthorized request");
+      throw new Error('Unauthorized request');
     }
 
     if (args.deleteChatsFlag) {
@@ -119,16 +119,17 @@ export const deleteFolder = mutation({
           page: chats,
           isDone: batchDone,
           continueCursor,
+          // biome-ignore lint/nursery/noAwaitInLoop: Need async values to resolve for below operation
         } = await ctx.db
-          .query("chats")
-          .withIndex("by_folder_and_user", (q) =>
-            q.eq("userId", userId).eq("folderId", args.folderId)
+          .query('chats')
+          .withIndex('by_folder_and_user', (q) =>
+            q.eq('userId', userId).eq('folderId', args.folderId)
           )
           .paginate({ numItems: BATCH_SIZE, cursor });
 
-        for (const chat of chats) {
-          await ctx.db.patch(chat._id, { folderId: undefined });
-        }
+        await Promise.all(
+          chats.map((chat) => ctx.db.patch(chat._id, { folderId: undefined }))
+        );
 
         isDone = batchDone;
         cursor = continueCursor;
@@ -143,7 +144,7 @@ export const renameFolder = mutation({
   args: {
     sessionToken: v.string(),
     folder: v.object({
-      id: v.id("folders"),
+      id: v.id('folders'),
       title: v.string(),
     }),
   },
@@ -151,10 +152,10 @@ export const renameFolder = mutation({
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
     const folder = await ctx.db.get(args.folder.id);
     if (!folder) {
-      throw new Error("Not found!");
+      throw new Error('Not found!');
     }
     if (folder.userId !== userId) {
-      throw new Error("Unauthorized request");
+      throw new Error('Unauthorized request');
     }
     await ctx.db.patch(args.folder.id, { title: args.folder.title });
   },
