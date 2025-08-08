@@ -6,12 +6,12 @@ import { TabsContent } from "./ui/tabs";
 export default function ContactSection() {
   return (
     <TabsContent
-      className="space-y-10 rounded-xl border bg-card p-8"
+      className="space-y-6 rounded-xl border bg-card p-8" // Reduced spacing
       value="about"
     >
       <div className="space-y-3">
         <p className="text-muted-foreground text-sm">
-          This project is Open-Source
+          This project is Open-Source.
         </p>
         <CustomExternalLink href="https://github.com/ankitk26/os-chat">
           <Button className="w-32" size="sm">
@@ -23,10 +23,8 @@ export default function ContactSection() {
 
       <div className="space-y-3">
         <p className="text-muted-foreground text-sm">
-          Found any bug or want new features? Raise an issue in above repository
-          or contact me below
+          For bugs, features, or general inquiries:
         </p>
-
         <CustomExternalLink href="https://x.com/akcejia">
           <Button className="w-32" size="sm">
             <svg
