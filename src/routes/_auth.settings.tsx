@@ -19,9 +19,9 @@ function RouteComponent() {
   return (
     <section className="h-svh max-h-svh py-6 pb-12">
       <ScrollArea className="h-full w-full">
-        <div className="mx-auto space-y-6 max-w-5xl w-full">
+        <div className="mx-auto w-full max-w-5xl space-y-6">
           <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold">Settings</h1>
+            <h1 className="font-bold text-3xl">Settings</h1>
             <Button
               onClick={async () => {
                 await authClient.signOut();

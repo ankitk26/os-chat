@@ -20,14 +20,14 @@ function RouteComponent() {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 flex items-center justify-center p-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background to-muted/20 p-4">
       <div className="w-full max-w-md space-y-8">
         {/* Logo/Brand Section */}
-        <div className="text-center space-y-2">
-          <div className="mx-auto w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
-            <MessageSquareIcon className="w-6 h-6 text-primary-foreground" />
+        <div className="space-y-2 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
+            <MessageSquareIcon className="h-6 w-6 text-primary-foreground" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">os-chat</h1>
+          <h1 className="font-bold text-2xl tracking-tight">os-chat</h1>
           <p className="text-muted-foreground">
             Your intelligent conversation companion
           </p>
@@ -35,7 +35,7 @@ function RouteComponent() {
 
         {/* Login Card */}
         <Card className="border-0 shadow-lg">
-          <CardHeader className="text-center space-y-1">
+          <CardHeader className="space-y-1 text-center">
             <CardTitle className="text-xl">Welcome back</CardTitle>
             <CardDescription>
               Sign in to continue your conversations
@@ -43,20 +43,20 @@ function RouteComponent() {
           </CardHeader>
           <CardContent className="space-y-4">
             <Button
+              className="h-11 w-full"
+              disabled={isLoading}
               onClick={async () => {
                 setIsLoading(true);
                 try {
                   await authClient.signIn.social({ provider: "github" });
-                } catch (error) {
+                } catch {
                   setIsLoading(false);
                 }
               }}
-              disabled={isLoading}
-              className="w-full h-11"
               size="lg"
             >
               {isLoading ? (
-                <Loader2Icon className="w-4 h-4 animate-spin" />
+                <Loader2Icon className="h-4 w-4 animate-spin" />
               ) : (
                 <GithubIcon />
               )}

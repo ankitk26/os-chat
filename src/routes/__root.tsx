@@ -73,22 +73,19 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   const enableAllMono = useAppearanceStore((store) => store.enableAllMono);
 
   return (
-    <html>
-      <head>
-        <HeadContent />
-      </head>
+    <html lang="en">
+      <HeadContent />
       <NextThemesProvider
         attribute="class"
         defaultTheme="system"
-        enableSystem
         disableTransitionOnChange
+        enableSystem
       >
         <body
           className={cn("overflow-hidden", enableAllMono ? "font-mono" : "")}
         >
           <div>{children}</div>
           <Toaster duration={800} />
-          {/* <ReactQueryDevtools buttonPosition="bottom-right" /> */}
           <Scripts />
         </body>
       </NextThemesProvider>
