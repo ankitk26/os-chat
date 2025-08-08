@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: Ignore useEffect deps */
 import { useChat } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -60,8 +61,12 @@ export default function Chat({
       }) ?? [],
     generateId: generateRandomUUID,
     onFinish: (newMessage) => {
-      if (!chatId) return;
-      if (!newMessage.content) return;
+      if (!chatId) {
+        return;
+      }
+      if (!newMessage) {
+        return;
+      }
 
       insertAiMessageMutation.mutate({
         messageBody: {
@@ -84,12 +89,16 @@ export default function Chat({
 
   const checkScrollPosition = () => {
     const scrollArea = scrollAreaRef.current;
-    if (!scrollArea) return;
+    if (!scrollArea) {
+      return;
+    }
 
     const viewport = scrollArea.querySelector(
       "[data-radix-scroll-area-viewport]"
     );
-    if (!viewport) return;
+    if (!viewport) {
+      return;
+    }
 
     const { scrollTop, scrollHeight, clientHeight } = viewport;
     const isScrollable = scrollHeight > clientHeight;
@@ -100,12 +109,16 @@ export default function Chat({
 
   const scrollToBottom = () => {
     const scrollArea = scrollAreaRef.current;
-    if (!scrollArea) return;
+    if (!scrollArea) {
+      return;
+    }
 
     const viewport = scrollArea.querySelector(
       "[data-radix-scroll-area-viewport]"
     );
-    if (!viewport) return;
+    if (!viewport) {
+      return;
+    }
 
     viewport.scrollTo({
       top: viewport.scrollHeight,
@@ -115,12 +128,16 @@ export default function Chat({
 
   useEffect(() => {
     const scrollArea = scrollAreaRef.current;
-    if (!scrollArea) return;
+    if (!scrollArea) {
+      return;
+    }
 
     const viewport = scrollArea.querySelector(
       "[data-radix-scroll-area-viewport]"
     );
-    if (!viewport) return;
+    if (!viewport) {
+      return;
+    }
 
     viewport.addEventListener("scroll", checkScrollPosition);
 
@@ -143,14 +160,14 @@ export default function Chat({
   }, [messages.length]);
 
   return (
-    <div className="relative flex flex-col w-full mx-auto max-h-svh h-svh">
+    <div className="relative mx-auto flex h-svh max-h-svh w-full flex-col">
       {/* Full height scroll area that extends behind the prompt */}
       <div className="absolute inset-0">
         {!isMessagesPending && messages.length === 0 && <EmptyChatContent />}
 
         {chatId && (
-          <ScrollArea className="w-full h-full" ref={scrollAreaRef}>
-            <div className="w-full h-full max-w-3xl mx-auto">
+          <ScrollArea className="h-full w-full" ref={scrollAreaRef}>
+            <div className="mx-auto h-full w-full max-w-3xl">
               <div className="my-8 space-y-8 pb-32">
                 {isMessagesPending && status !== "submitted" ? (
                   <>
@@ -165,8 +182,8 @@ export default function Chat({
                   />
                 )}
                 <ChatLoadingIndicator
-                  status={status}
                   insertPending={insertAiMessageMutation.isPending}
+                  status={status}
                 />
                 {error && <AiResponseAlert error={error} />}
               </div>
@@ -177,11 +194,11 @@ export default function Chat({
 
       {/* Scroll to bottom button - centered at top of prompt */}
       {showScrollToBottom && (
-        <div className="absolute bottom-36 left-1/2 transform -translate-x-1/2 z-50">
+        <div className="-translate-x-1/2 absolute bottom-36 left-1/2 z-50 transform">
           <Button
+            className="rounded-full"
             onClick={scrollToBottom}
             size="icon"
-            className="rounded-full"
             variant="outline"
           >
             <ChevronDownIcon className="size-4" />
@@ -190,14 +207,14 @@ export default function Chat({
       )}
 
       {/* Fixed prompt input with backdrop blur */}
-      <div className="absolute bottom-0 left-0 right-0 z-10">
+      <div className="absolute right-0 bottom-0 left-0 z-10">
         <UserPromptInput
+          append={append}
           chatId={chatId}
           input={input}
-          append={append}
           setInput={setInput}
-          stop={stop}
           status={status}
+          stop={stop}
         />
       </div>
     </div>

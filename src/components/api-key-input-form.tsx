@@ -1,8 +1,8 @@
-import { EyeOffIcon, EyeIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { useState } from "react";
+import type { Provider } from "~/types";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { useState } from "react";
-import { Provider } from "~/types";
 
 type Props = {
   formValues: {
@@ -28,18 +28,18 @@ export default function ApiKeyInputForm(props: Props) {
   return (
     <div className="relative">
       <Input
-        type={showKey ? "text" : "password"}
-        placeholder={props.formValues.placeholder ?? ""}
-        value={props.formValues.value}
+        className="rounded-sm pr-10 font-mono"
         onChange={handleInputChange}
-        className="pr-10 rounded-sm font-mono"
+        placeholder={props.formValues.placeholder ?? ""}
+        type={showKey ? "text" : "password"}
+        value={props.formValues.value}
       />
       <Button
+        className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+        onClick={toggleKeyVisibility}
+        size="sm"
         type="button"
         variant="ghost"
-        size="sm"
-        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-        onClick={toggleKeyVisibility}
       >
         {showKey ? (
           <EyeOffIcon className="size-4" />

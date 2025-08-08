@@ -16,15 +16,15 @@ export default function ReadOnlyChatMessages() {
     convexQuery(api.messages.getSharedChatMessages, { sharedChatUuid: chatId })
   );
 
-  if (!isPending && !data) {
+  if (!(isPending || data)) {
     return (
-      <div className="flex flex-col items-center justify-center h-svh max-w-md mx-auto px-4">
-        <div className="text-center space-y-4">
-          <div className="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center">
-            <Link2OffIcon className="w-8 h-8 text-muted-foreground" />
+      <div className="mx-auto flex h-svh max-w-md flex-col items-center justify-center px-4">
+        <div className="space-y-4 text-center">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+            <Link2OffIcon className="h-8 w-8 text-muted-foreground" />
           </div>
           <div className="space-y-2">
-            <h1 className="text-xl font-semibold">Chat not available</h1>
+            <h1 className="font-semibold text-xl">Chat not available</h1>
             <p className="text-muted-foreground">
               This shared conversation is no longer available or has been made
               private.
@@ -36,16 +36,16 @@ export default function ReadOnlyChatMessages() {
   }
 
   return (
-    <div className="flex flex-col w-full mx-auto max-h-svh h-svh">
+    <div className="mx-auto flex h-svh max-h-svh w-full flex-col">
       <div className="flex-1 overflow-hidden">
-        <ScrollArea className="w-full h-full">
-          <div className="w-full h-full max-w-3xl mx-auto">
-            <div className="my-8 space-y-8 flex flex-col">
+        <ScrollArea className="h-full w-full">
+          <div className="mx-auto h-full w-full max-w-3xl">
+            <div className="my-8 flex flex-col space-y-8">
               <small className="text-center text-muted-foreground">
                 This is a copy of a conversation between os-chat & Anonymous
               </small>
 
-              <h2 className="text-3xl font-semibold text-center -mt-3">
+              <h2 className="-mt-3 text-center font-semibold text-3xl">
                 {data?.parentChat?.title}
               </h2>
 
@@ -56,7 +56,7 @@ export default function ReadOnlyChatMessages() {
                 </>
               ) : (
                 data?.messages.map((message) => (
-                  <div key={message._id} className="flex flex-col">
+                  <div className="flex flex-col" key={message._id}>
                     {message.role === "user" ? (
                       <ReadOnlyUserMessage message={message} />
                     ) : (

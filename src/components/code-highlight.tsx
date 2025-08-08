@@ -1,7 +1,7 @@
 import { CopyIcon } from "lucide-react";
 import { useTheme } from "next-themes";
-import { type ReactNode } from "react";
-import ShikiHighlighter, { isInlineCode, type Element } from "react-shiki";
+import type { ReactNode } from "react";
+import ShikiHighlighter, { type Element, isInlineCode } from "react-shiki";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
@@ -19,6 +19,7 @@ export default function CodeHighlight({
 }: CodeHighlightProps) {
   const { theme } = useTheme();
 
+  // biome-ignore lint/performance/useTopLevelRegex: Ignore
   const match = className?.match(/language-(\w+)/);
   const language = match ? match[1] : undefined;
 
@@ -27,27 +28,27 @@ export default function CodeHighlight({
 
   if (isInline) {
     return (
-      <code className="px-2 py-1 my-10 text-sm rounded bg-secondary not-prose">
+      <code className="not-prose my-10 rounded bg-secondary px-2 py-1 text-sm">
         {children}
       </code>
     );
   }
 
   return (
-    <div className="border rounded-lg dark:border-none">
-      <div className="flex items-center justify-between px-4 text-sm rounded-tl-lg rounded-tr-lg text-secondary-foreground bg-card-foreground/10 dark:bg-secondary">
-        <span className="font-mono font-light">{language}</span>
-        <div className="flex items-center gap-2 my-0.5">
+    <div className="rounded-lg border dark:border-none">
+      <div className="flex items-center justify-between rounded-tl-lg rounded-tr-lg bg-card-foreground/10 px-4 text-secondary-foreground text-sm dark:bg-secondary">
+        <span className="font-light font-mono">{language}</span>
+        <div className="my-0.5 flex items-center gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                size="icon"
                 className="dark:hover:bg-background/20"
-                variant="ghost"
                 onClick={async () => {
                   await navigator.clipboard.writeText(codeContent);
                   toast.success("Copied to clipboard");
                 }}
+                size="icon"
+                variant="ghost"
               >
                 <CopyIcon />
               </Button>
@@ -59,10 +60,10 @@ export default function CodeHighlight({
 
       <div>
         <ShikiHighlighter
-          language={language}
-          theme={theme === "light" ? "github-light" : "vesper"}
-          showLanguage={false}
           delay={150}
+          language={language}
+          showLanguage={false}
+          theme={theme === "light" ? "github-light" : "vesper"}
         >
           {codeContent}
         </ShikiHighlighter>

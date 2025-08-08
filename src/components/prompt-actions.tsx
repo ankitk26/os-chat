@@ -15,17 +15,17 @@ export default function PromptActions({ status, stop }: Props) {
   const selectedModel = useModelStore((store) => store.selectedModel);
 
   return (
-    <div className="flex items-center mt-4 justify-between">
+    <div className="mt-4 flex items-center justify-between">
       <div className="flex items-center gap-2">
         <ModelSelector />
 
         {selectedModel.openRouterModelId.startsWith("google") && (
           <Button
-            type="button"
-            size="sm"
-            variant={isWebSearchEnabled ? "default" : "outline"}
             className={cn("text-xs", isWebSearchEnabled ? "border" : "")}
             onClick={toggleIsWebSearch}
+            size="sm"
+            type="button"
+            variant={isWebSearchEnabled ? "default" : "outline"}
           >
             <GlobeIcon />
             Search
@@ -44,7 +44,7 @@ export default function PromptActions({ status, stop }: Props) {
       </div>
 
       {status === "streaming" || status === "submitted" ? (
-        <Button size="icon" type="button" onClick={stop}>
+        <Button onClick={stop} size="icon" type="button">
           <SquareIcon />
         </Button>
       ) : (

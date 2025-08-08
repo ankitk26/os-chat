@@ -1,4 +1,4 @@
-import { JSX } from "react";
+import type { JSX } from "react";
 import AnthropicIcon from "./anthropic-icon";
 import DeepSeekIcon from "./deepseek-icon";
 import GeminiIcon from "./gemini-icon";

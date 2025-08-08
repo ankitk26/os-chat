@@ -63,16 +63,21 @@ export default function RenameFolderDialog() {
       return;
     }
 
+    if (!selectedFolder?._id) {
+      toast.error("No folder selected to rename.");
+      return;
+    }
+
     renameFolderMutation.mutate({
-      folder: { id: selectedFolder?._id!, title: newFolderTitle },
+      folder: { id: selectedFolder._id, title: newFolderTitle },
       sessionToken: auth?.session.token ?? "",
     });
   };
 
   return (
     <Dialog
-      open={isRenameModalOpen}
       onOpenChange={(open) => setIsRenameModalOpen(open)}
+      open={isRenameModalOpen}
     >
       <DialogContent>
         <DialogHeader>
@@ -84,9 +89,9 @@ export default function RenameFolderDialog() {
 
         <form onSubmit={handleSubmit}>
           <Input
-            value={newFolderTitle}
-            onChange={(e) => setNewFolderTitle(e.target.value)}
             disabled={renameFolderMutation.isPending}
+            onChange={(e) => setNewFolderTitle(e.target.value)}
+            value={newFolderTitle}
           />
         </form>
 

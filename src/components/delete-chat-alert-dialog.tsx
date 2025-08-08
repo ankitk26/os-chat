@@ -52,8 +52,8 @@ export default function DeleteChatAlertDialog() {
 
   return (
     <AlertDialog
-      open={isDeleteModalOpen}
       onOpenChange={(open) => setIsDeleteModalOpen(open)}
+      open={isDeleteModalOpen}
     >
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -67,12 +67,16 @@ export default function DeleteChatAlertDialog() {
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             disabled={deleteChatMutation.isPending}
-            onClick={() =>
+            onClick={() => {
+              if (!selectedChat) {
+                toast.error("No chat selected to delete.");
+                return;
+              }
               deleteChatMutation.mutate({
-                chatId: selectedChat?._id!,
+                chatId: selectedChat._id,
                 sessionToken: auth?.session.token ?? "",
-              })
-            }
+              });
+            }}
           >
             {deleteChatMutation.isPending ? "Deleting..." : "Delete"}
           </AlertDialogAction>

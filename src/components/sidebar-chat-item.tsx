@@ -78,21 +78,21 @@ export default function SidebarChatItem({ chat }: Props) {
 
   return (
     <Link
-      to="/chat/$chatId"
-      params={{ chatId: chat.uuid }}
-      className="flex items-center justify-between py-2 px-2 text-sm rounded-md cursor-pointer hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground"
       activeProps={{ className: "bg-secondary text-secondary-foreground" }}
+      className="flex cursor-pointer items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      params={{ chatId: chat.uuid }}
+      to="/chat/$chatId"
     >
       {chat.isBranched && (
         <Tooltip>
           <TooltipTrigger>
             <Link
-              to="/chat/$chatId"
               params={{ chatId: chat.parentChat?.uuid ?? chat.uuid }}
+              to="/chat/$chatId"
             >
-              <SplitIcon className="size-4 cursor-pointer mr-2 text-muted-foreground hover:text-secondary-foreground" />
+              <SplitIcon className="mr-2 size-4 cursor-pointer text-muted-foreground hover:text-secondary-foreground" />
             </Link>
           </TooltipTrigger>
           <TooltipContent>
@@ -107,10 +107,10 @@ export default function SidebarChatItem({ chat }: Props) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            size="icon"
-            className={`size-7 rounded-sm bg-secondary hover:bg-sidebar text-sidebar-foreground flex-shrink-0 transition-opacity duration-200 ${
+            className={`size-7 flex-shrink-0 rounded-sm bg-secondary text-sidebar-foreground transition-opacity duration-200 hover:bg-sidebar ${
               isHovered ? "opacity-100" : "opacity-0"
             }`}
+            size="icon"
           >
             <EllipsisVerticalIcon />
           </Button>
@@ -160,7 +160,7 @@ export default function SidebarChatItem({ chat }: Props) {
           </DropdownMenuItem>
           {folders && folders?.length > 0 && (
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger className="focus:bg-accent cursor-pointer focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:!text-destructive [&_svg:not([class*='text-'])]:text-muted-foreground relative flex items-center gap-2 rounded-sm px-2 py-2.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
+              <DropdownMenuSubTrigger className="data-[variant=destructive]:*:[svg]:!text-destructive relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-2.5 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[inset]:pl-8 data-[variant=destructive]:text-destructive data-[disabled]:opacity-50 data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0">
                 <FolderArchiveIcon />
                 Move to folder
               </DropdownMenuSubTrigger>
@@ -168,7 +168,7 @@ export default function SidebarChatItem({ chat }: Props) {
                 <DropdownMenuSubContent className="ml-2">
                   {chat.folderId && (
                     <DropdownMenuItem
-                      key={"null_" + chat._id}
+                      key={`null_${chat._id}`}
                       onClick={(e) => {
                         e.stopPropagation();
                         updateChatFolderMutation.mutate({

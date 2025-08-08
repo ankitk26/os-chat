@@ -33,7 +33,7 @@ export default function ModelSelector() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button size="sm" variant="outline">
           {selectedModel.name}
           <ChevronDownIcon />
         </Button>
@@ -41,7 +41,7 @@ export default function ModelSelector() {
       <DropdownMenuContent className="w-[200px]">
         {accessibleModels.map((provider) => (
           <DropdownMenuSub key={provider.key}>
-            <DropdownMenuSubTrigger className="py-3 flex items-center text-xs gap-3">
+            <DropdownMenuSubTrigger className="flex items-center gap-3 py-3 text-xs">
               <ModelProviderIcon provider={provider.key} />
               {provider.provider}
             </DropdownMenuSubTrigger>
@@ -50,15 +50,15 @@ export default function ModelSelector() {
                 {provider.models.map((model) => (
                   <DropdownMenuItem
                     className="py-3 text-xs"
-                    key={model.modelId}
                     disabled={!model.isAvailable}
+                    key={model.modelId}
                     onClick={() => {
                       setSelectedModel(model);
                     }}
                   >
                     {model.name}
                     {!model.isAvailable && (
-                      <KeyIcon className="size-3 ml-auto" />
+                      <KeyIcon className="ml-auto size-3" />
                     )}
                   </DropdownMenuItem>
                 ))}

@@ -2,7 +2,7 @@ import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
-import { FormEvent, useRef, useState } from "react";
+import { type FormEvent, useRef, useState } from "react";
 import { useFolderActionStore } from "~/stores/folder-actions-store";
 import { Button } from "./ui/button";
 import {
@@ -32,7 +32,9 @@ export default function AddFolderDialog() {
     onSuccess: () => {
       setFolderTitle("");
       setTimeout(() => {
-        if (inputRef.current) inputRef.current.focus();
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
       }, 0);
     },
   });
@@ -41,7 +43,9 @@ export default function AddFolderDialog() {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!folderTitle) return;
+    if (!folderTitle) {
+      return;
+    }
 
     createFolderMutation.mutate({
       sessionToken: auth?.session.token ?? "",
@@ -51,8 +55,8 @@ export default function AddFolderDialog() {
 
   return (
     <Dialog
-      open={isCreateModalOpen}
       onOpenChange={(open) => setIsCreateModalOpen(open)}
+      open={isCreateModalOpen}
     >
       <DialogContent>
         <DialogHeader>
@@ -63,11 +67,11 @@ export default function AddFolderDialog() {
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <Input
-            value={folderTitle}
-            onChange={(e) => setFolderTitle(e.target.value)}
             disabled={createFolderMutation.isPending}
+            onChange={(e) => setFolderTitle(e.target.value)}
             placeholder="Project Ideas"
             ref={inputRef}
+            value={folderTitle}
           />
         </form>
         <DialogFooter>

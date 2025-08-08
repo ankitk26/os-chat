@@ -1,5 +1,5 @@
-import { api } from "convex/_generated/api";
-import { FunctionReturnType } from "convex/server";
+import type { api } from "convex/_generated/api";
+import type { FunctionReturnType } from "convex/server";
 import {
   ChevronDownIcon,
   ChevronRightIcon,
@@ -38,22 +38,19 @@ export default function AppSidebarFolderItem(props: {
   return (
     <>
       <div
-        className="flex items-center justify-between py-2 px-2 text-sm rounded-md cursor-pointer hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground"
+        className="flex cursor-pointer items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground"
+        onClick={() => setShowChats((prev) => !prev)}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onClick={() => setShowChats((prev) => !prev)}
       >
         <Tooltip>
           <TooltipTrigger>
-            {props.folder.chats.length > 0 && (
-              <>
-                {showChats ? (
-                  <ChevronDownIcon className="size-4 cursor-pointer mr-2 text-muted-foreground hover:text-secondary-foreground" />
-                ) : (
-                  <ChevronRightIcon className="size-4 cursor-pointer mr-2 text-muted-foreground hover:text-secondary-foreground" />
-                )}
-              </>
-            )}
+            {props.folder.chats.length > 0 &&
+              (showChats ? (
+                <ChevronDownIcon className="mr-2 size-4 cursor-pointer text-muted-foreground hover:text-secondary-foreground" />
+              ) : (
+                <ChevronRightIcon className="mr-2 size-4 cursor-pointer text-muted-foreground hover:text-secondary-foreground" />
+              ))}
           </TooltipTrigger>
           <TooltipContent>View chats</TooltipContent>
         </Tooltip>
@@ -67,10 +64,10 @@ export default function AppSidebarFolderItem(props: {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
-              size="icon"
-              className={`size-7 rounded-sm bg-secondary hover:bg-sidebar text-sidebar-foreground flex-shrink-0 transition-opacity duration-200 ${
+              className={`size-7 flex-shrink-0 rounded-sm bg-secondary text-sidebar-foreground transition-opacity duration-200 hover:bg-sidebar ${
                 isHovered ? "opacity-100" : "opacity-0"
               }`}
+              size="icon"
             >
               <EllipsisVerticalIcon />
             </Button>
@@ -103,7 +100,7 @@ export default function AppSidebarFolderItem(props: {
       {props.folder.chats.length > 0 && showChats && (
         <div className="ml-4 space-y-1">
           {props.folder.chats.map((chat) => (
-            <SidebarChatItem key={chat._id} chat={chat} />
+            <SidebarChatItem chat={chat} key={chat._id} />
           ))}
         </div>
       )}

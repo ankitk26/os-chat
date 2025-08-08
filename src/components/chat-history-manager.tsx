@@ -62,9 +62,11 @@ export default function ChatHistoryManager() {
   };
 
   const handleDeleteSelected = () => {
-    if (selectedChats.size === 0) return;
+    if (selectedChats.size === 0) {
+      return;
+    }
 
-    selectedChats.forEach((chatId) => {
+    for (const chatId of selectedChats) {
       const chat = chats.find((c) => c._id === chatId);
       if (chat) {
         deleteChatMutation.mutate({
@@ -72,7 +74,7 @@ export default function ChatHistoryManager() {
           chatId: chat._id,
         });
       }
-    });
+    }
   };
 
   const formatDate = (timestamp: number) => {
@@ -86,11 +88,11 @@ export default function ChatHistoryManager() {
   const isAllSelected = chats.length > 0 && selectedChats.size === chats.length;
 
   return (
-    <TabsContent value="chatHistory" className="space-y-6">
+    <TabsContent className="space-y-6" value="chatHistory">
       {/* Header */}
       <div className="space-y-1">
-        <h3 className="text-lg font-medium text-foreground">Chat History</h3>
-        <p className="text-sm text-muted-foreground">
+        <h3 className="font-medium text-foreground text-lg">Chat History</h3>
+        <p className="text-muted-foreground text-sm">
           {chats.length} conversation{chats.length !== 1 ? "s" : ""}
         </p>
       </div>
@@ -105,7 +107,7 @@ export default function ChatHistoryManager() {
           {selectedChats.size > 0 && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="sm">
+                <Button size="sm" variant="destructive">
                   <Trash2Icon className="size-4" />
                   Delete {selectedChats.size}
                 </Button>
@@ -136,75 +138,84 @@ export default function ChatHistoryManager() {
       <Separator />
 
       {/* Content */}
-      {isLoading ? (
+      {isLoading && (
         <div className="space-y-3">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="flex items-center gap-3 py-3 animate-pulse">
-              <div className="h-4 w-4 bg-muted rounded-sm" />
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div
+              className="flex animate-pulse items-center gap-3 py-3"
+              key={`loading-skeleton-${i + 1}`}
+            >
+              <div className="h-4 w-4 rounded-sm bg-muted" />
               <div className="flex-1 space-y-2">
-                <div className="h-4 bg-muted rounded-md w-3/4" />
-                <div className="h-3 bg-muted rounded-md w-1/3" />
+                <div className="h-4 w-3/4 rounded-md bg-muted" />
+                <div className="h-3 w-1/3 rounded-md bg-muted" />
               </div>
             </div>
           ))}
         </div>
-      ) : chats.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center mx-auto mb-4">
-            <MinusIcon className="h-5 w-5 text-muted-foreground" />
-          </div>
-          <p className="text-sm text-muted-foreground">No conversations yet</p>
-        </div>
-      ) : (
-        <div className="space-y-1">
-          {chats.map((chat) => {
-            const isSelected = selectedChats.has(chat._id);
-            return (
-              <div
-                key={chat._id}
-                onClick={() => handleSelectChat(chat._id)}
-                className={`flex items-center gap-3 py-3 px-2 -mx-2 rounded-lg cursor-pointer transition-all ${
-                  isSelected
-                    ? "bg-accent text-accent-foreground"
-                    : "hover:bg-muted/50"
-                }`}
-              >
-                <div
-                  className={`w-4 h-4 border rounded-sm flex items-center justify-center transition-all ${
-                    isSelected
-                      ? "bg-primary border-primary"
-                      : "border-muted-foreground/40 bg-muted/20 hover:border-muted-foreground hover:bg-muted/40"
-                  }`}
-                >
-                  {isSelected && (
-                    <CheckIcon className="h-3 w-3 text-primary-foreground" />
-                  )}
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div
-                    className={`text-sm flex gap-2 items-center font-medium truncate mb-1 ${
-                      isSelected ? "text-accent-foreground" : "text-foreground"
-                    }`}
-                  >
-                    {chat.isBranched && <SplitIcon className="size-3" />}
-                    {chat.title}
-                  </div>
-                  <p
-                    className={`text-xs ${
-                      isSelected
-                        ? "text-accent-foreground/70"
-                        : "text-muted-foreground"
-                    }`}
-                  >
-                    {formatDate(chat._creationTime)}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
       )}
+      {!isLoading &&
+        (chats.length === 0 ? (
+          <div className="py-12 text-center">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
+              <MinusIcon className="h-5 w-5 text-muted-foreground" />
+            </div>
+            <p className="text-muted-foreground text-sm">
+              No conversations yet
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-1">
+            {chats.map((chat) => {
+              const isSelected = selectedChats.has(chat._id);
+              return (
+                <div
+                  className={`-mx-2 flex cursor-pointer items-center gap-3 rounded-lg px-2 py-3 transition-all ${
+                    isSelected
+                      ? "bg-accent text-accent-foreground"
+                      : "hover:bg-muted/50"
+                  }`}
+                  key={chat._id}
+                  onClick={() => handleSelectChat(chat._id)}
+                >
+                  <div
+                    className={`flex h-4 w-4 items-center justify-center rounded-sm border transition-all ${
+                      isSelected
+                        ? "border-primary bg-primary"
+                        : "border-muted-foreground/40 bg-muted/20 hover:border-muted-foreground hover:bg-muted/40"
+                    }`}
+                  >
+                    {isSelected && (
+                      <CheckIcon className="h-3 w-3 text-primary-foreground" />
+                    )}
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <div
+                      className={`mb-1 flex items-center gap-2 truncate font-medium text-sm ${
+                        isSelected
+                          ? "text-accent-foreground"
+                          : "text-foreground"
+                      }`}
+                    >
+                      {chat.isBranched && <SplitIcon className="size-3" />}
+                      {chat.title}
+                    </div>
+                    <p
+                      className={`text-xs ${
+                        isSelected
+                          ? "text-accent-foreground/70"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      {formatDate(chat._creationTime)}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ))}
     </TabsContent>
   );
 }

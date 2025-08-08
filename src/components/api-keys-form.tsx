@@ -2,7 +2,7 @@ import { SaveIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
-import { ApiKeys, defaultApiKeys, Provider } from "~/types";
+import { type ApiKeys, defaultApiKeys, type Provider } from "~/types";
 import ApiKeyInput from "./api-key-input";
 import ApiKeyOpenRouter from "./api-key-open-router";
 import { Button } from "./ui/button";
@@ -79,6 +79,7 @@ export default function ApiKeysForm() {
       useOpenRouter !== initialState.useOpenRouter);
 
   // load all values from localStorage into local state
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Run only when component renders
   useEffect(() => {
     setApiKeys(persistedApiKeys);
     setUseOpenRouter(persistedUseOpenRouter);
@@ -93,8 +94,8 @@ export default function ApiKeysForm() {
       <div className="space-y-6">
         <ApiKeyOpenRouter
           apiKeys={apiKeys}
-          useOpenRouter={useOpenRouter}
           setUseOpenRouter={setUseOpenRouter}
+          useOpenRouter={useOpenRouter}
         />
 
         <Separator />
@@ -102,24 +103,24 @@ export default function ApiKeysForm() {
         <div className="space-y-12">
           {keysForm.map((keyItem) => (
             <ApiKeyInput
-              key={keyItem.provider}
-              provider={keyItem.provider as Provider}
-              keyLink={keyItem.keyLink}
               formValues={{
-                label: `$keyItem.label} API Key`,
+                label: `${keyItem.label} API Key`,
                 placeholder: keyItem.placeholder,
                 value: apiKeys[keyItem.provider as Provider],
                 onChange: handleApiKeyChange,
               }}
+              key={keyItem.provider}
+              keyLink={keyItem.keyLink}
+              provider={keyItem.provider as Provider}
             />
           ))}
         </div>
 
         <div className="flex justify-end pt-4">
           <Button
-            onClick={handleSave}
             className="flex items-center gap-2"
             disabled={!hasChanges}
+            onClick={handleSave}
           >
             <SaveIcon className="size-4" />
             Save Settings

@@ -2,7 +2,7 @@ import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
-import { FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useChatActionStore } from "~/stores/chat-actions-store";
 import { Button } from "./ui/button";
@@ -60,20 +60,26 @@ export default function ChatRenameDialog() {
       return;
     }
 
+    if (!selectedChat?._id) {
+      toast.error("No chat selected to rename.");
+      return;
+    }
+
     renameChatMutation.mutate({
-      chat: { chatId: selectedChat?._id!, title: newChatTitle },
+      chat: { chatId: selectedChat._id, title: newChatTitle },
       sessionToken: auth?.session.token ?? "",
     });
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Run on first render
   useEffect(() => {
     setNewChatTitle(selectedChat?.title ?? "");
   }, []);
 
   return (
     <Dialog
-      open={isRenameModalOpen}
       onOpenChange={(open) => setIsRenameModalOpen(open)}
+      open={isRenameModalOpen}
     >
       <DialogContent>
         <DialogHeader>
@@ -84,9 +90,11 @@ export default function ChatRenameDialog() {
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <Input
-            value={newChatTitle}
-            onChange={(e) => setNewChatTitle(e.target.value)}
+            aria-label="New chat title"
+            autoFocus
             disabled={renameChatMutation.isPending}
+            onChange={(event) => setNewChatTitle(event.currentTarget.value)}
+            value={newChatTitle}
           />
         </form>
         <DialogFooter>

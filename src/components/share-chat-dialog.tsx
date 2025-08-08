@@ -32,6 +32,7 @@ import { Label } from "./ui/label";
 import { Separator } from "./ui/separator";
 import { Switch } from "./ui/switch";
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: To fix later
 export default function ShareChatDialog() {
   const { auth } = useRouteContext({ strict: false });
   const [copied, setCopied] = useState(false);
@@ -76,7 +77,9 @@ export default function ShareChatDialog() {
   const canShare = Boolean(selectedChat && auth?.session.token);
 
   function handleCopyLink() {
-    if (!shareUrl) return;
+    if (!shareUrl) {
+      return;
+    }
     navigator.clipboard
       .writeText(shareUrl)
       .then(() => {
@@ -88,7 +91,9 @@ export default function ShareChatDialog() {
   }
 
   function handleToggleShare() {
-    if (!selectedChat || !auth?.session.token) return;
+    if (!(selectedChat && auth?.session.token)) {
+      return;
+    }
     shareMutation.mutate({
       chatId: selectedChat._id,
       sessionToken: auth?.session.token,
@@ -97,7 +102,9 @@ export default function ShareChatDialog() {
   }
 
   function handleSyncHistory() {
-    if (!selectedChat || !auth?.session.token) return;
+    if (!(selectedChat && auth?.session.token)) {
+      return;
+    }
     syncHistoryMutation.mutate({
       sessionToken: auth?.session.token,
       chatId: selectedChat._id,
@@ -105,17 +112,21 @@ export default function ShareChatDialog() {
   }
 
   function handleOpenInNewTab() {
-    if (shareUrl) window.open(shareUrl, "_blank");
+    if (shareUrl) {
+      window.open(shareUrl, "_blank");
+    }
   }
 
   function handleDialogOpenChange(open: boolean) {
-    if (!open) setCopied(false);
+    if (!open) {
+      setCopied(false);
+    }
     setIsShareDialogOpen(open);
   }
 
   return (
-    <Dialog open={isShareDialogOpen} onOpenChange={handleDialogOpenChange}>
-      <DialogContent key={selectedChat?._id} className="sm:max-w-md">
+    <Dialog onOpenChange={handleDialogOpenChange} open={isShareDialogOpen}>
+      <DialogContent className="sm:max-w-md" key={selectedChat?._id}>
         <DialogHeader className="space-y-3">
           <div className="flex items-center gap-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
@@ -133,7 +144,7 @@ export default function ShareChatDialog() {
         <div className="space-y-6">
           {/* Public/Private Toggle */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 rounded-lg border bg-card">
+            <div className="flex items-center justify-between rounded-lg border bg-card p-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-background">
                   {isPublic ? (
@@ -144,19 +155,16 @@ export default function ShareChatDialog() {
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <Label className="text-sm font-medium">Public Access</Label>
+                    <Label className="font-medium text-sm">Public Access</Label>
                     <Badge
-                      variant={isPublic ? "default" : "secondary"}
                       className="text-xs"
+                      variant={isPublic ? "default" : "secondary"}
                     >
-                      {isLoading
-                        ? "Updating..."
-                        : isPublic
-                        ? "Active"
-                        : "Disabled"}
+                      {isLoading && "Updating..."}
+                      {!isLoading && isPublic ? "Active" : "Disabled"}
                     </Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     {isPublic
                       ? "Anyone with the link can view this chat"
                       : "Only you can access this chat"}
@@ -165,28 +173,28 @@ export default function ShareChatDialog() {
               </div>
               <Switch
                 checked={isPublic}
-                onCheckedChange={handleToggleShare}
                 disabled={!canShare || isLoading}
+                onCheckedChange={handleToggleShare}
               />
             </div>
 
             {/* Share Link */}
             {shareUrl && (
               <div className="space-y-3">
-                <Label className="text-sm font-medium">Share Link</Label>
+                <Label className="font-medium text-sm">Share Link</Label>
                 <div className="flex gap-2">
                   <div className="relative flex-1">
                     <Input
-                      value={shareUrl}
+                      className="pr-10 font-mono text-sm"
                       readOnly
-                      className="font-mono text-sm pr-10"
+                      value={shareUrl}
                     />
                     <Button
+                      className="-translate-y-1/2 absolute top-1/2 right-1 h-7 w-7 p-0"
+                      disabled={isLoading}
+                      onClick={handleCopyLink}
                       size="sm"
                       variant="ghost"
-                      className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
-                      onClick={handleCopyLink}
-                      disabled={isLoading}
                     >
                       {copied ? (
                         <CheckIcon className="h-3 w-3 text-primary" />
@@ -196,16 +204,16 @@ export default function ShareChatDialog() {
                     </Button>
                   </div>
                   <Button
+                    className="shrink-0"
+                    disabled={isLoading}
+                    onClick={handleOpenInNewTab}
                     size="sm"
                     variant="outline"
-                    onClick={handleOpenInNewTab}
-                    disabled={isLoading}
-                    className="shrink-0"
                   >
                     <ExternalLinkIcon className="h-4 w-4" />
                   </Button>
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   Messages up to this point will be visible to anyone with this
                   link
                 </p>
@@ -217,22 +225,22 @@ export default function ShareChatDialog() {
 
           {/* Sync Section */}
           <div className="space-y-3">
-            <Label className="text-sm font-medium">Chat History</Label>
-            <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
+            <Label className="font-medium text-sm">Chat History</Label>
+            <div className="flex items-center justify-between rounded-lg border bg-muted/30 p-3">
               <div className="space-y-1">
-                <p className="text-sm font-medium">Sync Latest Messages</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="font-medium text-sm">Sync Latest Messages</p>
+                <p className="text-muted-foreground text-xs">
                   Update shared chat with recent messages
                 </p>
               </div>
               <Button
-                size="sm"
-                variant="outline"
-                onClick={handleSyncHistory}
+                className="shrink-0"
                 disabled={
                   !canShare || syncHistoryMutation.isPending || !isPublic
                 }
-                className="shrink-0"
+                onClick={handleSyncHistory}
+                size="sm"
+                variant="outline"
               >
                 <RefreshCwIcon
                   className={`h-4 w-4 ${
@@ -245,21 +253,21 @@ export default function ShareChatDialog() {
           </div>
         </div>
 
-        <DialogFooter className="flex-col sm:flex-row gap-2">
+        <DialogFooter className="flex-col gap-2 sm:flex-row">
           <DialogClose asChild>
             <Button
-              variant="outline"
-              disabled={isLoading}
               className="w-full sm:w-auto"
+              disabled={isLoading}
+              variant="outline"
             >
               Close
             </Button>
           </DialogClose>
           {shareUrl && (
             <Button
-              onClick={handleCopyLink}
-              disabled={isLoading}
               className="w-full sm:w-auto"
+              disabled={isLoading}
+              onClick={handleCopyLink}
             >
               {copied ? (
                 <>

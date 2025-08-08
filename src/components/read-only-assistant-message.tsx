@@ -1,5 +1,5 @@
-import { JSONValue, UIMessage } from "ai";
-import { Doc } from "convex/_generated/dataModel";
+import type { UIMessage } from "ai";
+import type { Doc } from "convex/_generated/dataModel";
 import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
 import AIResponseContent from "./ai-response-content";
@@ -13,12 +13,12 @@ type Props = {
 };
 
 export default function ReadOnlyAssistantMessage({ message }: Props) {
-  const annotations: JSONValue[] = JSON.parse(message.annotations);
+  // const annotations: JSONValue[] = JSON.parse(message.annotations);
 
-  const modelUsed =
-    annotations &&
-    annotations.length > 0 &&
-    annotations.find((a) => (a as any)["type"] === "model");
+  // const modelUsed =
+  //   annotations &&
+  //   annotations.length > 0 &&
+  //   annotations.find((a) => (a as any)["type"] === "model");
 
   const uiMessage = {
     id: message.sourceMessageId ?? message._id,
@@ -38,12 +38,12 @@ export default function ReadOnlyAssistantMessage({ message }: Props) {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              size="icon"
-              variant="ghost"
               onClick={async () => {
                 await navigator.clipboard.writeText(message.content);
                 toast.success("Copied to clipboard");
               }}
+              size="icon"
+              variant="ghost"
             >
               <CopyIcon />
             </Button>
@@ -52,7 +52,7 @@ export default function ReadOnlyAssistantMessage({ message }: Props) {
         </Tooltip>
 
         <span className="text-muted-foreground text-xs">
-          {(modelUsed as any)?.data}
+          {/* {(modelUsed as any)?.data} */}
         </span>
       </div>
     </div>

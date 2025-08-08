@@ -62,6 +62,7 @@ export default function RetryModelDropdown(props: Props) {
     });
     const currentMessage = messages.find((m) => m.id === message.id);
     setMessages((prev) => [
+      // biome-ignore lint/style/noNonNullAssertion: Ignore here
       ...prev.filter((m) => m.createdAt! < currentMessage?.createdAt!),
     ]);
     await reload({
@@ -88,7 +89,7 @@ export default function RetryModelDropdown(props: Props) {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[200px]">
         <DropdownMenuItem
-          className="flex items-center text-xs gap-3"
+          className="flex items-center gap-3 text-xs"
           onClick={async () => {
             await handleRetry(selectedModel);
           }}
@@ -103,7 +104,7 @@ export default function RetryModelDropdown(props: Props) {
 
         {accessibleModels.map((provider) => (
           <DropdownMenuSub key={provider.key}>
-            <DropdownMenuSubTrigger className="py-3 flex items-center text-xs gap-3">
+            <DropdownMenuSubTrigger className="flex items-center gap-3 py-3 text-xs">
               <ModelProviderIcon provider={provider.key} />
               {provider.provider}
             </DropdownMenuSubTrigger>
@@ -112,15 +113,15 @@ export default function RetryModelDropdown(props: Props) {
                 {provider.models.map((model) => (
                   <DropdownMenuItem
                     className="py-3 text-xs"
-                    key={model.modelId}
                     disabled={!model.isAvailable}
+                    key={model.modelId}
                     onClick={async () => {
                       await handleRetry(model);
                     }}
                   >
                     {model.name}
                     {!model.isAvailable && (
-                      <KeyIcon className="size-3 ml-auto" />
+                      <KeyIcon className="ml-auto size-3" />
                     )}
                   </DropdownMenuItem>
                 ))}

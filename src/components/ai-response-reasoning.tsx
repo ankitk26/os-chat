@@ -1,4 +1,4 @@
-import { UIMessage } from "ai";
+import type { UIMessage } from "ai";
 import { useState } from "react";
 import ReasoningIndicatorText from "./reasoning-indicator-text";
 import ReasoningMarkdown from "./reasoning-markdown";
@@ -26,10 +26,10 @@ export default function AIResponseReasoning({
 
   return (
     <div className="space-y-2">
-      <div className="space-x-2 flex items-center">
+      <div className="flex items-center space-x-2">
         <ReasoningToggleButton
-          toggleReasoningDisplay={toggleReasoningDisplay}
           showReasoning={showReasoning}
+          toggleReasoningDisplay={toggleReasoningDisplay}
         />
         <ReasoningIndicatorText messageContent={message.content} />
       </div>

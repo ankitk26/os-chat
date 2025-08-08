@@ -1,4 +1,4 @@
-import { UIMessage } from "ai";
+import type { UIMessage } from "ai";
 import { useState } from "react";
 import SourcesList from "./sources-list";
 import SourcesToggleButton from "./sources-toggle-button";
@@ -17,12 +17,12 @@ export default function AIResponseSources({ message }: { message: UIMessage }) {
 
   return (
     <div className="mt-8">
-      <div className="space-x-2 flex items-center">
+      <div className="flex items-center space-x-2">
         <SourcesToggleButton
-          toggleSourcesDisplay={toggleSourcesDisplay}
           showSources={showSources}
+          toggleSourcesDisplay={toggleSourcesDisplay}
         />
-        <div className="text-sm font-mono text-muted-foreground">Sources</div>
+        <div className="font-mono text-muted-foreground text-sm">Sources</div>
       </div>
 
       {showSources && <SourcesList sourceParts={sourceParts} />}

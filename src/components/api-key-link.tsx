@@ -1,4 +1,4 @@
-import ExternalLink from "./external-link";
+import CustomExternalLink from "./custom-external-link";
 
 type Props = {
   keyLink: string;
@@ -6,14 +6,14 @@ type Props = {
 
 export default function ApiKeyLink(props: Props) {
   return (
-    <small className="text-xs text-muted-foreground">
+    <small className="text-muted-foreground text-xs">
       Get your{" "}
-      <ExternalLink
-        href={props.keyLink}
+      <CustomExternalLink
         className="text-primary hover:underline"
+        href={props.keyLink}
       >
         API key
-      </ExternalLink>
+      </CustomExternalLink>
     </small>
   );
 }

@@ -9,10 +9,10 @@ type Props = {
 export default function ReasoningToggleButton(props: Props) {
   return (
     <Button
+      className="size-5 cursor-pointer rounded"
+      onClick={props.toggleReasoningDisplay}
       size="icon"
       variant="ghost"
-      onClick={props.toggleReasoningDisplay}
-      className="cursor-pointer size-5 rounded"
     >
       {props.showReasoning ? (
         <ChevronDownIcon className="size-4" />
