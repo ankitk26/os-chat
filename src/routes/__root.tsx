@@ -1,5 +1,4 @@
 import type { QueryClient } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   createRootRouteWithContext,
   HeadContent,
@@ -27,8 +26,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         {
           title: "os-chat",
         },
+        {
+          name: "color-scheme",
+          content: "light dark",
+        },
       ],
       links: [
+        // Preload critical styles early to reduce FOUC
+        {
+          rel: "preload",
+          href: appCss,
+          as: "style",
+        },
         {
           rel: "stylesheet",
           href: appCss,
@@ -79,7 +88,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         >
           <div>{children}</div>
           <Toaster duration={800} />
-          <ReactQueryDevtools buttonPosition="bottom-right" />
+          {/* <ReactQueryDevtools buttonPosition="bottom-right" /> */}
           <Scripts />
         </body>
       </NextThemesProvider>
