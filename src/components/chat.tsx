@@ -64,7 +64,7 @@ export default function Chat({
       if (!chatId) {
         return;
       }
-      if (!newMessage) {
+      if (!newMessage.content) {
         return;
       }
 

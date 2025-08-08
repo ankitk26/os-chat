@@ -24,10 +24,12 @@ type Props = {
 export default React.memo(function AssistantMessage(props: Props) {
   const { message, reload, setMessages, messages } = props;
 
-  // const modelUsed =
-  //   message.annotations &&
-  //   message.annotations.length > 0 &&
-  //   message.annotations.find((a) => (a as any)["type"] === "model");
+  const modelUsed =
+    message.annotations &&
+    message.annotations.length > 0 &&
+    // biome-ignore lint/complexity/useLiteralKeys: To be fixed later
+    // biome-ignore lint/suspicious/noExplicitAny: To be fixed later
+    message.annotations.find((a) => (a as any)["type"] === "model");
 
   return (
     <div className="space-y-4">
@@ -63,7 +65,8 @@ export default React.memo(function AssistantMessage(props: Props) {
         )}
 
         <span className="text-muted-foreground text-xs">
-          {/* {(modelUsed as any)?.data} */}
+          {/** biome-ignore lint/suspicious/noExplicitAny: To be fixed later */}
+          {(modelUsed as any)?.data}
         </span>
       </div>
     </div>
