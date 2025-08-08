@@ -38,3 +38,5 @@ export const defaultApiKeys: ApiKeys = {
   openrouter: "",
   xai: "",
 };
+
+export type Provider = keyof ApiKeys;
