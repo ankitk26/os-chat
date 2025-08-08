@@ -1,4 +1,4 @@
-import type { UIMessage } from "ai";
+import type { JSONValue, UIMessage } from "ai";
 import type { Doc } from "convex/_generated/dataModel";
 import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
@@ -13,12 +13,14 @@ type Props = {
 };
 
 export default function ReadOnlyAssistantMessage({ message }: Props) {
-  // const annotations: JSONValue[] = JSON.parse(message.annotations);
+  const annotations: JSONValue[] = JSON.parse(message.annotations);
 
-  // const modelUsed =
-  //   annotations &&
-  //   annotations.length > 0 &&
-  //   annotations.find((a) => (a as any)["type"] === "model");
+  const modelUsed =
+    annotations &&
+    annotations.length > 0 &&
+    // biome-ignore lint/complexity/useLiteralKeys: To be fixed later
+    // biome-ignore lint/suspicious/noExplicitAny: To be fixed later
+    annotations.find((a) => (a as any)["type"] === "model");
 
   const uiMessage = {
     id: message.sourceMessageId ?? message._id,
@@ -52,7 +54,8 @@ export default function ReadOnlyAssistantMessage({ message }: Props) {
         </Tooltip>
 
         <span className="text-muted-foreground text-xs">
-          {/* {(modelUsed as any)?.data} */}
+          {/* biome-ignore lint/suspicious/noExplicitAny: To be fixed later */}
+          {(modelUsed as any)?.data}
         </span>
       </div>
     </div>
