@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { ApiKeys, defaultApiKeys } from "~/types";
+import { type ApiKeys, defaultApiKeys } from "~/types";
 
 type ApiKeysStoreState = {
   persistedApiKeys: ApiKeys;
