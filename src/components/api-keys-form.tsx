@@ -2,12 +2,11 @@ import { SaveIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
-import { ApiKeys, defaultApiKeys } from "~/types";
-import ApiKeyInput, { Provider } from "./api-key-input";
+import { ApiKeys, defaultApiKeys, Provider } from "~/types";
+import ApiKeyInput from "./api-key-input";
+import ApiKeyOpenRouter from "./api-key-open-router";
 import { Button } from "./ui/button";
-import { Label } from "./ui/label";
 import { Separator } from "./ui/separator";
-import { Switch } from "./ui/switch";
 import { TabsContent } from "./ui/tabs";
 
 const keysForm = [
@@ -43,13 +42,15 @@ const keysForm = [
   },
 ];
 
+type FormState = {
+  apiKeys: ApiKeys;
+  useOpenRouter: boolean;
+} | null;
+
 export default function ApiKeysForm() {
   const [apiKeys, setApiKeys] = useState<ApiKeys>(defaultApiKeys);
   const [useOpenRouter, setUseOpenRouter] = useState(false);
-  const [initialState, setInitialState] = useState<{
-    apiKeys: ApiKeys;
-    useOpenRouter: boolean;
-  } | null>(null);
+  const [initialState, setInitialState] = useState<FormState>(null);
 
   const {
     persistedApiKeys,
@@ -58,6 +59,26 @@ export default function ApiKeysForm() {
     setPersistedUseOpenRouter,
   } = usePersistedApiKeysStore();
 
+  // update key value for all provider keys
+  const handleApiKeyChange = (provider: Provider, value: string) => {
+    setApiKeys((prev) => ({ ...prev, [provider]: value }));
+  };
+
+  // save keys and useOpenRouter setting in local storage
+  const handleSave = () => {
+    setPersistedApiKeys(apiKeys);
+    setPersistedUseOpenRouter(useOpenRouter);
+    toast.success("API keys saved!");
+    setInitialState({ apiKeys: { ...apiKeys }, useOpenRouter });
+  };
+
+  // check if form has changed after its original state
+  const hasChanges =
+    initialState &&
+    (JSON.stringify(apiKeys) !== JSON.stringify(initialState.apiKeys) ||
+      useOpenRouter !== initialState.useOpenRouter);
+
+  // load all values from localStorage into local state
   useEffect(() => {
     setApiKeys(persistedApiKeys);
     setUseOpenRouter(persistedUseOpenRouter);
@@ -67,52 +88,14 @@ export default function ApiKeysForm() {
     });
   }, []);
 
-  const handleApiKeyChange = (provider: Provider, value: string) => {
-    setApiKeys((prev) => ({ ...prev, [provider]: value }));
-  };
-
-  const handleSave = () => {
-    setPersistedApiKeys(apiKeys);
-    setPersistedUseOpenRouter(useOpenRouter);
-    toast.success("API keys saved!");
-    setInitialState({ apiKeys: { ...apiKeys }, useOpenRouter });
-  };
-
-  const hasChanges =
-    initialState &&
-    (JSON.stringify(apiKeys) !== JSON.stringify(initialState.apiKeys) ||
-      useOpenRouter !== initialState.useOpenRouter);
-
-  // Determine if OpenRouter switch should be disabled
-  const isSwitchDisabled = apiKeys.openrouter.trim() === "";
-
   return (
     <TabsContent value="apiKeys">
       <div className="space-y-6">
-        <div className="flex items-center justify-between p-4 border rounded-lg">
-          <div className="space-y-1">
-            <Label
-              htmlFor="openrouter-toggle"
-              className="text-base font-medium"
-            >
-              Use OpenRouter
-            </Label>
-            <p className="text-sm text-muted-foreground">
-              Route all AI model requests through OpenRouter
-            </p>
-            {isSwitchDisabled && (
-              <p className="text-xs">
-                Please provide an OpenRouter API Key to enable this option.
-              </p>
-            )}
-          </div>
-          <Switch
-            id="openrouter-toggle"
-            checked={useOpenRouter && !isSwitchDisabled} // Ensure it's unchecked if disabled without a key
-            onCheckedChange={setUseOpenRouter}
-            disabled={isSwitchDisabled} // Disable the switch
-          />
-        </div>
+        <ApiKeyOpenRouter
+          apiKeys={apiKeys}
+          useOpenRouter={useOpenRouter}
+          setUseOpenRouter={setUseOpenRouter}
+        />
 
         <Separator />
 
@@ -121,11 +104,13 @@ export default function ApiKeysForm() {
             <ApiKeyInput
               key={keyItem.provider}
               provider={keyItem.provider as Provider}
-              label={`${keyItem.label} API Key`}
               keyLink={keyItem.keyLink}
-              placeholder={keyItem.placeholder}
-              value={apiKeys[keyItem.provider as keyof ApiKeys]}
-              onChange={handleApiKeyChange}
+              formValues={{
+                label: `$keyItem.label} API Key`,
+                placeholder: keyItem.placeholder,
+                value: apiKeys[keyItem.provider as Provider],
+                onChange: handleApiKeyChange,
+              }}
             />
           ))}
         </div>
