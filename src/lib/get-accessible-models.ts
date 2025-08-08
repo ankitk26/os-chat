@@ -1,5 +1,5 @@
 import { allModelProviders } from "~/constants/model-providers";
-import {
+import type {
   ApiKeys,
   ModelWithAvailability,
   ProviderGroupWithAvailability,

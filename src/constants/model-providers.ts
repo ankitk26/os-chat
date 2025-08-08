@@ -1,4 +1,4 @@
-import { ProviderGroup } from "~/types";
+import type { ProviderGroup } from "~/types";
 
 export const defaultSelectedModel = {
   name: "Gemini 2.0 Flash",

@@ -1,5 +1,5 @@
-import { betterAuth } from "better-auth";
 import { convexAdapter } from "@better-auth-kit/convex";
+import { betterAuth } from "better-auth";
 import { ConvexHttpClient } from "convex/browser";
 
 const convexClient = new ConvexHttpClient(

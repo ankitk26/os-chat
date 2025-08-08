@@ -1,4 +1,4 @@
-import { Id } from "convex/_generated/dataModel";
+import type { Id } from "convex/_generated/dataModel";
 import { create } from "zustand";
 
 type Chat = {
