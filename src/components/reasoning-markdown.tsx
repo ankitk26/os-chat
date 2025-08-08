@@ -7,8 +7,8 @@ type Props = {
 
 export default function ReasoningMarkdown(props: Props) {
   return (
-    <div className="w-full mt-3 max-w-full leading-6 prose prose-neutral dark:prose-invert prose-rose prose-pre:bg-transparent prose-pre:m-0 prose-pre:p-0 bg-popover border p-4 rounded-md text-sm font-mono">
-      <MemoizedMarkdown id={props.messageId} content={props.reasoningContent} />
+    <div className="prose prose-neutral dark:prose-invert prose-rose prose-pre:m-0 mt-3 w-full max-w-full rounded-md border bg-popover prose-pre:bg-transparent p-4 prose-pre:p-0 font-mono text-sm leading-6">
+      <MemoizedMarkdown content={props.reasoningContent} id={props.messageId} />
     </div>
   );
 }

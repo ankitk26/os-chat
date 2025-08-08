@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { PinIcon } from "lucide-react";
+import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import SidebarChatItem from "./sidebar-chat-item";
 import {
   SidebarGroup,
@@ -27,7 +28,7 @@ export default function PinnedChats() {
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel className="text-sm flex items-center gap-2">
+      <SidebarGroupLabel className="flex items-center gap-2 text-sm">
         <PinIcon />
         Pinned chats
       </SidebarGroupLabel>
@@ -35,8 +36,8 @@ export default function PinnedChats() {
       <SidebarMenu className="mt-2">
         {isPending && (
           <SidebarMenu>
-            {Array.from({ length: 4 }).map((_, index) => (
-              <SidebarMenuItem key={index}>
+            {Array.from({ length: 4 }).map(() => (
+              <SidebarMenuItem key={generateRandomUUID()}>
                 <SidebarMenuSkeleton />
               </SidebarMenuItem>
             ))}
@@ -46,7 +47,7 @@ export default function PinnedChats() {
           chatsData &&
           chatsData.length > 0 &&
           chatsData.map((chat) => (
-            <SidebarChatItem key={chat._id} chat={chat} />
+            <SidebarChatItem chat={chat} key={chat._id} />
           ))}
       </SidebarMenu>
     </SidebarGroup>

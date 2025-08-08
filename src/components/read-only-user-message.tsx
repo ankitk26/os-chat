@@ -1,4 +1,4 @@
-import { Doc } from "convex/_generated/dataModel";
+import type { Doc } from "convex/_generated/dataModel";
 import { CopyIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -14,9 +14,9 @@ export default function ReadOnlyUserMessage({ message }: Props) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="flex flex-col items-end self-end w-3/4 space-y-1">
+    <div className="flex w-3/4 flex-col items-end space-y-1 self-end">
       <div
-        className="flex flex-col gap-6 px-4 py-4 max-w-full w-full wrap-break-word bg-popover whitespace-pre-wrap border rounded-xl"
+        className="wrap-break-word flex w-full max-w-full flex-col gap-6 whitespace-pre-wrap rounded-xl border bg-popover px-4 py-4"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -33,12 +33,12 @@ export default function ReadOnlyUserMessage({ message }: Props) {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              size="icon"
-              variant="ghost"
               onClick={async () => {
                 await navigator.clipboard.writeText(message.content);
                 toast.success("Copied to clipboard");
               }}
+              size="icon"
+              variant="ghost"
             >
               <CopyIcon />
             </Button>

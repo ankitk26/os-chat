@@ -1,5 +1,5 @@
 import { Label } from "~/components/ui/label";
-import { Provider } from "~/types";
+import type { Provider } from "~/types";
 import ApiKeyInputForm from "./api-key-input-form";
 import ApiKeyInputIcon from "./api-key-input-icon";
 import ApiKeyLink from "./api-key-link";

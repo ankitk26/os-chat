@@ -113,23 +113,23 @@ export default function UserPromptInput(props: Props) {
   };
 
   return (
-    <div className="backdrop-blur bg-background/80">
+    <div className="bg-background/80 backdrop-blur">
       <form
+        className="mx-auto mb-2 flex min-h-30 w-full max-w-3xl flex-col rounded-tl-lg rounded-tr-lg border border-border bg-popover/90 p-4"
         onSubmit={(e) => {
           e.preventDefault();
           handlePromptSubmit();
         }}
-        className="flex flex-col w-full max-w-3xl mb-2 p-4 mx-auto border rounded-tl-lg bg-popover/90 rounded-tr-lg border-border min-h-30"
       >
         <div className="flex-1">
           <AutoResizeTextarea
-            textareaRef={textareaRef}
             handlePromptSubmit={handlePromptSubmit}
-            textareaValue={textareaValue}
-            setTextareaValue={setTextareaValue}
             isPending={
               createChatMutation.isPending || createMessageMutation.isPending
             }
+            setTextareaValue={setTextareaValue}
+            textareaRef={textareaRef}
+            textareaValue={textareaValue}
           />
         </div>
 

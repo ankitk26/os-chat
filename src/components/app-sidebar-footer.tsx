@@ -11,13 +11,13 @@ export default function AppSidebarFooter() {
       <SidebarMenuItem>
         <Link to="/settings">
           <SidebarMenuButton
+            className="cursor-pointer data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             size="lg"
-            className="data-[state=open]:bg-sidebar-accent cursor-pointer data-[state=open]:text-sidebar-accent-foreground"
           >
             <Avatar className="h-8 w-8 rounded-lg grayscale">
               <AvatarImage
-                src={auth?.user.image || ""}
                 alt={auth?.user.name[0]}
+                src={auth?.user.image || ""}
               />
               <AvatarFallback className="rounded-lg">
                 {auth?.user.name
@@ -29,7 +29,7 @@ export default function AppSidebarFooter() {
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">{auth?.user.name}</span>
-              <span className="text-muted-foreground truncate text-xs">
+              <span className="truncate text-muted-foreground text-xs">
                 {auth?.user.email}
               </span>
             </div>

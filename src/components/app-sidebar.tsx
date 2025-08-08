@@ -27,11 +27,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem className="flex items-center">
             {/* <SidebarTrigger /> */}
             <SidebarMenuButton
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
               asChild
+              className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <Link to="/">
-                <span className="text-base font-medium">os-chat</span>
+                <span className="font-medium text-base">os-chat</span>
               </Link>
             </SidebarMenuButton>
             <ThemeToggler />
@@ -44,10 +44,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenu>
             <SidebarMenuItem className="flex items-center gap-2">
               <SidebarMenuButton
-                className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear font-semibold"
+                className="min-w-8 bg-primary font-semibold text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
                 size="default"
               >
-                <Link to="/" className="w-full text-center">
+                <Link className="w-full text-center" to="/">
                   New Chat
                 </Link>
               </SidebarMenuButton>
@@ -55,7 +55,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenu>
         </SidebarGroup>
 
-        <ScrollArea className="w-full h-full pb-20">
+        <ScrollArea className="h-full w-full pb-20">
           <div className="space-y-4">
             <AppSidebarFolders />
             <PinnedChats />

@@ -52,8 +52,8 @@ export default function DeleteFolderAlertDialog() {
 
   return (
     <AlertDialog
-      open={isDeleteModalOpen}
       onOpenChange={(open) => setIsDeleteModalOpen(open)}
+      open={isDeleteModalOpen}
     >
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -67,12 +67,12 @@ export default function DeleteFolderAlertDialog() {
         {selectedFolder?.chats && selectedFolder?.chats.length > 0 && (
           <div className="flex items-center space-x-2 py-2">
             <Switch
-              id="delete-chats"
               checked={deleteAllChats}
-              onCheckedChange={setDeleteAllChats}
               disabled={deleteFolderMutation.isPending}
+              id="delete-chats"
+              onCheckedChange={setDeleteAllChats}
             />
-            <Label htmlFor="delete-chats" className="text-sm">
+            <Label className="text-sm" htmlFor="delete-chats">
               Also delete all chats in this folder
             </Label>
           </div>
@@ -82,13 +82,19 @@ export default function DeleteFolderAlertDialog() {
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             disabled={deleteFolderMutation.isPending}
-            onClick={() =>
+            onClick={() => {
+              if (!selectedFolder?._id) {
+                toast.error("No folder selected", {
+                  description: "Please select a folder to delete.",
+                });
+                return;
+              }
               deleteFolderMutation.mutate({
-                folderId: selectedFolder?._id!,
+                folderId: selectedFolder._id,
                 sessionToken: auth?.session.token ?? "",
                 deleteChatsFlag: deleteAllChats,
-              })
-            }
+              });
+            }}
           >
             {deleteFolderMutation.isPending ? "Deleting..." : "Delete"}
           </AlertDialogAction>

@@ -7,27 +7,27 @@ import { Separator } from "./ui/separator";
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-10 p-6">
-      <div className="absolute right-4 top-4">
+    <div className="flex min-h-screen flex-col items-center justify-center gap-10 p-6">
+      <div className="absolute top-4 right-4">
         <ThemeToggler />
       </div>
 
       <Card className="w-full max-w-md text-center shadow-xl">
         <CardContent className="flex flex-col items-center gap-6 p-10">
-          <h1 className="font-extrabold tracking-tight text-7xl text-primary">
+          <h1 className="font-extrabold text-7xl text-primary tracking-tight">
             404
           </h1>
 
-          <Separator className="w-1/2 my-2" />
+          <Separator className="my-2 w-1/2" />
 
           <p className="text-muted-foreground">
             Oops! The page you are looking for doesn’t exist or was moved.
           </p>
 
-          <div className="flex flex-wrap justify-center mt-4">
+          <div className="mt-4 flex flex-wrap justify-center">
             <Button asChild>
-              <Link to="/" className="flex items-center">
-                <HomeIcon className="w-4 h-4" />
+              <Link className="flex items-center" to="/">
+                <HomeIcon className="h-4 w-4" />
                 Go Home
               </Link>
             </Button>

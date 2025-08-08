@@ -11,7 +11,7 @@ import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
-import { Model } from "~/types";
+import type { Model } from "~/types";
 import ModelProviderIcon from "./model-provider-icon";
 import { Button } from "./ui/button";
 import {
@@ -49,7 +49,7 @@ export default function BranchOffButton({ messageId }: { messageId: string }) {
     mutationFn: useConvexMutation(api.chats.branchOffChat),
   });
 
-  const handleBranchOff = async (model: Model | null = null) => {
+  const handleBranchOff = (model: Model | null = null) => {
     const branchChatUuid = generateRandomUUID();
 
     navigate({ to: `/chat/${branchChatUuid}` });
@@ -80,10 +80,8 @@ export default function BranchOffButton({ messageId }: { messageId: string }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[200px]">
         <DropdownMenuItem
-          className="flex items-center text-xs gap-3"
-          onClick={async () => {
-            handleBranchOff();
-          }}
+          className="flex items-center gap-3 text-xs"
+          onClick={() => handleBranchOff()}
         >
           <RefreshCcwIcon className="size-4" />
           Branch off
@@ -95,7 +93,7 @@ export default function BranchOffButton({ messageId }: { messageId: string }) {
 
         {accessibleModels.map((provider) => (
           <DropdownMenuSub key={provider.key}>
-            <DropdownMenuSubTrigger className="py-3 flex items-center text-xs gap-3">
+            <DropdownMenuSubTrigger className="flex items-center gap-3 py-3 text-xs">
               <ModelProviderIcon provider={provider.key} />
               {provider.provider}
             </DropdownMenuSubTrigger>
@@ -104,15 +102,13 @@ export default function BranchOffButton({ messageId }: { messageId: string }) {
                 {provider.models.map((model) => (
                   <DropdownMenuItem
                     className="py-3 text-xs"
-                    key={model.modelId}
                     disabled={!model.isAvailable}
-                    onClick={async () => {
-                      handleBranchOff(model);
-                    }}
+                    key={model.modelId}
+                    onClick={() => handleBranchOff(model)}
                   >
                     {model.name}
                     {!model.isAvailable && (
-                      <KeyIcon className="size-3 ml-auto" />
+                      <KeyIcon className="ml-auto size-3" />
                     )}
                   </DropdownMenuItem>
                 ))}

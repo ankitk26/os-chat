@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { FolderIcon, PlusIcon } from "lucide-react";
+import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { useFolderActionStore } from "~/stores/folder-actions-store";
 import AppSidebarFolderItem from "./app-sidebar-folder-item";
 import DeleteFolderDialog from "./delete-folder-dialog";
@@ -30,16 +31,16 @@ export default function AppSidebarFolders() {
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel className="text-sm justify-between flex items-center gap-2">
+      <SidebarGroupLabel className="flex items-center justify-between gap-2 text-sm">
         <div className="flex items-center gap-2">
           <FolderIcon className="size-4" />
           Folders
         </div>
         <Button
-          size="icon"
           className="size-7 rounded"
-          variant="ghost"
           onClick={() => setIsCreateModalOpen(true)}
+          size="icon"
+          variant="ghost"
         >
           <PlusIcon />
         </Button>
@@ -48,8 +49,8 @@ export default function AppSidebarFolders() {
       <SidebarMenu className="mt-2">
         {isPending && (
           <SidebarMenu>
-            {Array.from({ length: 4 }).map((_, index) => (
-              <SidebarMenuItem key={index}>
+            {Array.from({ length: 4 }).map(() => (
+              <SidebarMenuItem key={generateRandomUUID()}>
                 <SidebarMenuSkeleton />
               </SidebarMenuItem>
             ))}
@@ -63,7 +64,7 @@ export default function AppSidebarFolders() {
           folders &&
           folders.length > 0 &&
           folders.map((folder) => (
-            <AppSidebarFolderItem key={folder._id} folder={folder} />
+            <AppSidebarFolderItem folder={folder} key={folder._id} />
           ))}
       </SidebarMenu>
 

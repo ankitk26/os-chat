@@ -10,9 +10,9 @@ export default function AppearanceSettings() {
   );
 
   return (
-    <TabsContent value="appearance" className="space-y-6">
+    <TabsContent className="space-y-6" value="appearance">
       <div className="space-y-3">
-        <h2 className="text-lg font-semibold">Typography</h2>
+        <h2 className="font-semibold text-lg">Typography</h2>
         <p className="text-muted-foreground text-sm">
           Customize the font family used throughout the application
         </p>
@@ -20,13 +20,13 @@ export default function AppearanceSettings() {
 
       <div className="flex items-center space-x-3">
         <Switch
-          id="mono-font"
           checked={enableAllMono}
+          id="mono-font"
           onCheckedChange={toggleEnableAllMono}
         />
         <Label
+          className="flex cursor-pointer items-center space-x-2"
           htmlFor="mono-font"
-          className="flex items-center space-x-2 cursor-pointer"
         >
           <span>Enable Mono Font</span>
         </Label>

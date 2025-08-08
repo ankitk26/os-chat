@@ -1,4 +1,4 @@
-import { ApiKeys } from "~/types";
+import type { ApiKeys } from "~/types";
 import { Label } from "./ui/label";
 import { Switch } from "./ui/switch";
 
@@ -12,12 +12,12 @@ export default function ApiKeyOpenRouter(props: Props) {
   const isSwitchDisabled = props.apiKeys.openrouter.trim() === "";
 
   return (
-    <div className="flex items-center justify-between p-4 border rounded-lg">
+    <div className="flex items-center justify-between rounded-lg border p-4">
       <div className="space-y-1">
-        <Label htmlFor="openrouter-toggle" className="text-base font-medium">
+        <Label className="font-medium text-base" htmlFor="openrouter-toggle">
           Use OpenRouter
         </Label>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Route all AI model requests through OpenRouter
         </p>
         {isSwitchDisabled && (
@@ -27,10 +27,10 @@ export default function ApiKeyOpenRouter(props: Props) {
         )}
       </div>
       <Switch
+        checked={props.useOpenRouter && !isSwitchDisabled}
+        disabled={isSwitchDisabled} // Ensure it's unchecked if disabled without a key
         id="openrouter-toggle"
-        checked={props.useOpenRouter && !isSwitchDisabled} // Ensure it's unchecked if disabled without a key
-        onCheckedChange={props.setUseOpenRouter}
-        disabled={isSwitchDisabled} // Disable the switch
+        onCheckedChange={props.setUseOpenRouter} // Disable the switch
       />
     </div>
   );

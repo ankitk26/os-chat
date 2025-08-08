@@ -1,5 +1,5 @@
 import { KeyIcon } from "lucide-react";
-import { ApiKeys } from "~/types";
+import type { ApiKeys } from "~/types";
 import ModelProviderIcon from "./model-provider-icon";
 
 type Props = {

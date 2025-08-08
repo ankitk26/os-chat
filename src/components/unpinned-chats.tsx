@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { MessageSquareIcon } from "lucide-react";
+import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import SidebarChatItem from "./sidebar-chat-item";
 import {
   SidebarGroup,
@@ -22,15 +23,15 @@ export default function UnpinnedChats() {
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel className="text-sm flex items-center gap-2">
+      <SidebarGroupLabel className="flex items-center gap-2 text-sm">
         <MessageSquareIcon />
         Chats
       </SidebarGroupLabel>
       <SidebarMenu className="mt-2 space-y-0.5">
         {isPending && (
           <SidebarMenu>
-            {Array.from({ length: 4 }).map((_, index) => (
-              <SidebarMenuItem key={index}>
+            {Array.from({ length: 4 }).map(() => (
+              <SidebarMenuItem key={generateRandomUUID()}>
                 <SidebarMenuSkeleton />
               </SidebarMenuItem>
             ))}
@@ -38,14 +39,14 @@ export default function UnpinnedChats() {
         )}
 
         {!isPending && chatsData && chatsData.length === 0 && (
-          <p className="pl-2 text-sm text-muted-foreground">No chats</p>
+          <p className="pl-2 text-muted-foreground text-sm">No chats</p>
         )}
 
         {!isPending &&
           chatsData &&
           chatsData.length > 0 &&
           chatsData.map((chat) => (
-            <SidebarChatItem key={chat._id} chat={chat} />
+            <SidebarChatItem chat={chat} key={chat._id} />
           ))}
       </SidebarMenu>
     </SidebarGroup>

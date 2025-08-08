@@ -1,4 +1,4 @@
-import { ChatRequestOptions, Message, UIMessage } from "ai";
+import type { ChatRequestOptions, Message, UIMessage } from "ai";
 import { CopyIcon } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
@@ -24,10 +24,10 @@ type Props = {
 export default React.memo(function AssistantMessage(props: Props) {
   const { message, reload, setMessages, messages } = props;
 
-  const modelUsed =
-    message.annotations &&
-    message.annotations.length > 0 &&
-    message.annotations.find((a) => (a as any)["type"] === "model");
+  // const modelUsed =
+  //   message.annotations &&
+  //   message.annotations.length > 0 &&
+  //   message.annotations.find((a) => (a as any)["type"] === "model");
 
   return (
     <div className="space-y-4">
@@ -38,12 +38,12 @@ export default React.memo(function AssistantMessage(props: Props) {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              size="icon"
-              variant="ghost"
               onClick={async () => {
                 await navigator.clipboard.writeText(message.content);
                 toast.success("Copied to clipboard");
               }}
+              size="icon"
+              variant="ghost"
             >
               <CopyIcon />
             </Button>
@@ -63,7 +63,7 @@ export default React.memo(function AssistantMessage(props: Props) {
         )}
 
         <span className="text-muted-foreground text-xs">
-          {(modelUsed as any)?.data}
+          {/* {(modelUsed as any)?.data} */}
         </span>
       </div>
     </div>

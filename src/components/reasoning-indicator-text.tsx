@@ -4,7 +4,7 @@ type Props = {
 
 export default function ReasoningIndicatorText(props: Props) {
   return (
-    <div className="text-sm font-mono text-muted-foreground">
+    <div className="font-mono text-muted-foreground text-sm">
       {props.messageContent ? (
         <div>Reasoning</div>
       ) : (

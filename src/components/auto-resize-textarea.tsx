@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: Only run useEffect on first render */
 import { useParams } from "@tanstack/react-router";
 import { useEffect } from "react";
 
@@ -42,22 +43,22 @@ export default function AutoResizeTextarea(props: Props) {
 
   return (
     <textarea
-      value={textareaValue}
-      ref={textareaRef}
-      rows={1}
-      placeholder="Start the conversation..."
+      className="max-h-80 min-h-8 w-full resize-none text-sm focus:outline-none"
+      disabled={isPending}
+      onChange={(e) => {
+        setTextareaValue(e.target.value);
+        resizeTextarea();
+      }}
       onKeyDown={(e) => {
         if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
           handlePromptSubmit();
         }
       }}
-      disabled={isPending}
-      onChange={(e) => {
-        setTextareaValue(e.target.value);
-        resizeTextarea();
-      }}
-      className="w-full resize-none focus:outline-none text-sm min-h-8 max-h-80"
+      placeholder="Start the conversation..."
+      ref={textareaRef}
+      rows={1}
+      value={textareaValue}
     />
   );
 }

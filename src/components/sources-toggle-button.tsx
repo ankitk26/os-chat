@@ -9,10 +9,10 @@ type Props = {
 export default function SourcesToggleButton(props: Props) {
   return (
     <Button
+      className="size-5 cursor-pointer rounded"
+      onClick={props.toggleSourcesDisplay}
       size="icon"
       variant="ghost"
-      onClick={props.toggleSourcesDisplay}
-      className="cursor-pointer size-5 rounded"
     >
       {props.showSources ? (
         <ChevronDownIcon className="size-4" />

@@ -5,9 +5,13 @@ type Props = ComponentProps<"a"> & {
   href: string;
 };
 
-export default function ExternalLink({ children, href, ...props }: Props) {
+export default function CustomExternalLink({
+  children,
+  href,
+  ...props
+}: Props) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+    <a href={href} rel="noopener noreferrer" target="_blank" {...props}>
       {children}
     </a>
   );

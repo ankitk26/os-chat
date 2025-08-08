@@ -1,4 +1,4 @@
-import { ChatRequestOptions, Message, UIMessage } from "ai";
+import type { ChatRequestOptions, Message, UIMessage } from "ai";
 import { memo } from "react";
 import AssistantMessage from "./assistant-message";
 import UserMessage from "./user-message";
@@ -23,14 +23,14 @@ export default memo(function ChatMessages(props: Props) {
   return (
     <>
       {messages.map((message) => (
-        <div key={message.id} className="flex flex-col">
+        <div className="flex flex-col" key={message.id}>
           {message.role === "user" ? (
             <UserMessage message={message.content} />
           ) : (
             <AssistantMessage
               message={message}
-              reload={reload}
               messages={messages}
+              reload={reload}
               setMessages={setMessages}
             />
           )}
