@@ -1,9 +1,9 @@
-import { v } from 'convex/values';
-import { generateRandomUUID } from '~/lib/generate-random-uuid';
-import { internal } from './_generated/api';
-import { query } from './_generated/server';
-import { internalMutation, mutation } from './functions';
-import { getAuthUserIdOrThrow } from './model/users';
+import { v } from "convex/values";
+import { generateRandomUUID } from "~/lib/generate-random-uuid";
+import { internal } from "./_generated/api";
+import { query } from "./_generated/server";
+import { internalMutation, mutation } from "./functions";
+import { getAuthUserIdOrThrow } from "./model/users";
 
 export const getChats = query({
   args: { sessionToken: v.string() },
@@ -11,9 +11,9 @@ export const getChats = query({
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
     const chats = await ctx.db
-      .query('chats')
-      .withIndex('by_user_and_pinned_and_folder', (q) => q.eq('userId', userId))
-      .order('desc')
+      .query("chats")
+      .withIndex("by_user_and_pinned_and_folder", (q) => q.eq("userId", userId))
+      .order("desc")
       .collect();
 
     return chats;
@@ -26,11 +26,11 @@ export const getUnpinnedChats = query({
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
     const chats = await ctx.db
-      .query('chats')
-      .withIndex('by_user_and_pinned_and_folder', (q) =>
-        q.eq('userId', userId).eq('isPinned', false).eq('folderId', undefined)
+      .query("chats")
+      .withIndex("by_user_and_pinned_and_folder", (q) =>
+        q.eq("userId", userId).eq("isPinned", false).eq("folderId", undefined)
       )
-      .order('desc')
+      .order("desc")
       .collect();
 
     const chatsWithParent = await Promise.all(
@@ -60,11 +60,11 @@ export const getPinnedChats = query({
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
     const chats = await ctx.db
-      .query('chats')
-      .withIndex('by_user_and_pinned_and_folder', (q) =>
-        q.eq('userId', userId).eq('isPinned', true).eq('folderId', undefined)
+      .query("chats")
+      .withIndex("by_user_and_pinned_and_folder", (q) =>
+        q.eq("userId", userId).eq("isPinned", true).eq("folderId", undefined)
       )
-      .order('desc')
+      .order("desc")
       .collect();
 
     const chatsWithParent = await Promise.all(
@@ -93,10 +93,10 @@ export const createChat = mutation({
   handler: async (ctx, args) => {
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
-    const newChatId = await ctx.db.insert('chats', {
+    const newChatId = await ctx.db.insert("chats", {
       uuid: args.uuid,
       userId,
-      title: 'Title for chat',
+      title: "Title for chat",
       isPinned: false,
       isBranched: false,
     });
@@ -109,7 +109,7 @@ export const updateChatTitle = mutation({
   args: {
     sessionToken: v.string(),
     chat: v.object({
-      chatId: v.id('chats'),
+      chatId: v.id("chats"),
       title: v.string(),
     }),
   },
@@ -117,10 +117,10 @@ export const updateChatTitle = mutation({
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
     const chat = await ctx.db.get(args.chat.chatId);
     if (!chat) {
-      throw new Error('Not found!');
+      throw new Error("Not found!");
     }
     if (chat.userId !== userId) {
-      throw new Error('Unauthorized request');
+      throw new Error("Unauthorized request");
     }
     await ctx.db.patch(args.chat.chatId, { title: args.chat.title });
   },
@@ -129,16 +129,16 @@ export const updateChatTitle = mutation({
 export const toggleChatPin = mutation({
   args: {
     sessionToken: v.string(),
-    chatId: v.id('chats'),
+    chatId: v.id("chats"),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
     const chat = await ctx.db.get(args.chatId);
     if (!chat) {
-      throw new Error('Invalid chat request');
+      throw new Error("Invalid chat request");
     }
     if (chat.userId !== userId) {
-      throw new Error('Unauthorized request');
+      throw new Error("Unauthorized request");
     }
     await ctx.db.patch(args.chatId, { isPinned: !chat.isPinned });
     return chat.isPinned;
@@ -148,18 +148,18 @@ export const toggleChatPin = mutation({
 export const deleteChat = mutation({
   args: {
     sessionToken: v.string(),
-    chatId: v.id('chats'),
+    chatId: v.id("chats"),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
     const chat = await ctx.db.get(args.chatId);
     if (!chat) {
-      throw new Error('Invalid chat');
+      throw new Error("Invalid chat");
     }
 
     if (chat.userId !== userId) {
-      throw new Error('Unauthorized request');
+      throw new Error("Unauthorized request");
     }
 
     await ctx.db.delete(args.chatId);
@@ -178,8 +178,8 @@ export const deleteSharedChatsByParentChat = internalMutation({
       isDone,
       continueCursor,
     } = await ctx.db
-      .query('sharedChats')
-      .withIndex('by_parent_chat', (q) => q.eq('parentChatUuid', args.chatId))
+      .query("sharedChats")
+      .withIndex("by_parent_chat", (q) => q.eq("parentChatUuid", args.chatId))
       .paginate({ numItems: BATCH_SIZE, cursor: args.cursor ?? null });
 
     await Promise.all(chats.map((chat) => ctx.db.delete(chat._id)));
@@ -201,7 +201,7 @@ export const deleteSharedChatsByParentChat = internalMutation({
 export const createSharedChat = mutation({
   args: {
     sessionToken: v.string(),
-    chatId: v.id('chats'),
+    chatId: v.id("chats"),
     sharedChatUuid: v.string(),
   },
   handler: async (ctx, args) => {
@@ -209,13 +209,13 @@ export const createSharedChat = mutation({
 
     const chat = await ctx.db.get(args.chatId);
     if (!chat) {
-      throw new Error('Invalid request');
+      throw new Error("Invalid request");
     }
 
     // check if an existing sharedChat already exists
     const sharedChat = await ctx.db
-      .query('sharedChats')
-      .withIndex('by_parent_chat', (q) => q.eq('parentChatUuid', chat.uuid))
+      .query("sharedChats")
+      .withIndex("by_parent_chat", (q) => q.eq("parentChatUuid", chat.uuid))
       .first();
 
     if (sharedChat) {
@@ -228,7 +228,7 @@ export const createSharedChat = mutation({
     }
 
     // if no shared chat exists, then create one
-    await ctx.db.insert('sharedChats', {
+    await ctx.db.insert("sharedChats", {
       parentChatUuid: chat.uuid,
       isActive: true,
       uuid: args.sharedChatUuid,
@@ -242,19 +242,19 @@ export const createSharedChat = mutation({
 export const getSharedChatStatus = query({
   args: {
     sessionToken: v.string(),
-    chatId: v.id('chats'),
+    chatId: v.id("chats"),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
     const chat = await ctx.db.get(args.chatId);
     if (!chat || chat.userId !== userId) {
-      throw new Error('Unauthorized');
+      throw new Error("Unauthorized");
     }
 
     const sharedChat = await ctx.db
-      .query('sharedChats')
-      .withIndex('by_parent_chat', (q) => q.eq('parentChatUuid', chat.uuid))
+      .query("sharedChats")
+      .withIndex("by_parent_chat", (q) => q.eq("parentChatUuid", chat.uuid))
       .first();
 
     return sharedChat?.isActive ? sharedChat.uuid : null;
@@ -264,23 +264,23 @@ export const getSharedChatStatus = query({
 export const syncSharedChat = mutation({
   args: {
     sessionToken: v.string(),
-    chatId: v.id('chats'),
+    chatId: v.id("chats"),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
     const chat = await ctx.db.get(args.chatId);
     if (!chat || chat.userId !== userId) {
-      throw new Error('Unauthorized');
+      throw new Error("Unauthorized");
     }
 
     const sharedChat = await ctx.db
-      .query('sharedChats')
-      .withIndex('by_parent_chat', (q) => q.eq('parentChatUuid', chat.uuid))
+      .query("sharedChats")
+      .withIndex("by_parent_chat", (q) => q.eq("parentChatUuid", chat.uuid))
       .first();
 
     if (!sharedChat) {
-      throw new Error('No shared chat found');
+      throw new Error("No shared chat found");
     }
 
     await ctx.db.patch(sharedChat._id, { updatedTime: Date.now() });
@@ -299,17 +299,17 @@ export const branchOffChat = mutation({
 
     // get the chat being branched
     const parentChat = await ctx.db
-      .query('chats')
-      .withIndex('by_chat_uuid', (q) => q.eq('uuid', args.parentChatUuid))
+      .query("chats")
+      .withIndex("by_chat_uuid", (q) => q.eq("uuid", args.parentChatUuid))
       .first();
 
     // check if chat exists
     if (!parentChat) {
-      throw new Error('Invalid chat');
+      throw new Error("Invalid chat");
     }
 
     // create duplicate chat record with same details as original chat
-    const branchedChatId = await ctx.db.insert('chats', {
+    const branchedChatId = await ctx.db.insert("chats", {
       isBranched: true, // flag = true
       isPinned: false,
       title: parentChat.title,
@@ -324,29 +324,29 @@ export const branchOffChat = mutation({
 
     // throw error if not found
     if (!branchedChat) {
-      throw new Error('Branched chat not found!');
+      throw new Error("Branched chat not found!");
     }
 
     // get message at which chat was branched off
     const lastMessage = await ctx.db
-      .query('messages')
-      .withIndex('by_source_id', (q) =>
-        q.eq('sourceMessageId', args.lastMessageId)
+      .query("messages")
+      .withIndex("by_source_id", (q) =>
+        q.eq("sourceMessageId", args.lastMessageId)
       )
       .first();
 
     // throw error if message not found
     if (!lastMessage) {
-      throw new Error('Message not found');
+      throw new Error("Message not found");
     }
 
     // get all messages before the message on which chat was branched off
     const messagesTillBranchedMessage = await ctx.db
-      .query('messages')
-      .withIndex('by_chat', (q) =>
+      .query("messages")
+      .withIndex("by_chat", (q) =>
         q
-          .eq('chatId', parentChat.uuid)
-          .lte('_creationTime', lastMessage._creationTime)
+          .eq("chatId", parentChat.uuid)
+          .lte("_creationTime", lastMessage._creationTime)
       )
       .collect();
 
@@ -355,7 +355,7 @@ export const branchOffChat = mutation({
       messagesTillBranchedMessage.map(async (message) => {
         const newMessageId = generateRandomUUID();
 
-        await ctx.db.insert('messages', {
+        await ctx.db.insert("messages", {
           annotations: message.annotations,
           chatId: branchedChat.uuid,
           content: message.content,
@@ -372,17 +372,17 @@ export const branchOffChat = mutation({
 export const updateChatFolder = mutation({
   args: {
     sessionToken: v.string(),
-    chatId: v.id('chats'),
-    folderId: v.optional(v.id('folders')),
+    chatId: v.id("chats"),
+    folderId: v.optional(v.id("folders")),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
     const chat = await ctx.db.get(args.chatId);
     if (!chat) {
-      throw new Error('Not found!');
+      throw new Error("Not found!");
     }
     if (chat.userId !== userId) {
-      throw new Error('Unauthorized request');
+      throw new Error("Unauthorized request");
     }
     await ctx.db.patch(args.chatId, { folderId: args.folderId });
   },
@@ -390,8 +390,8 @@ export const updateChatFolder = mutation({
 
 export const deleteChatsByFolder = internalMutation({
   args: {
-    userId: v.id('user'),
-    folderId: v.id('folders'),
+    userId: v.id("user"),
+    folderId: v.id("folders"),
     cursor: v.union(v.string(), v.null()),
   },
   handler: async (ctx, args) => {
@@ -401,9 +401,9 @@ export const deleteChatsByFolder = internalMutation({
       isDone,
       continueCursor,
     } = await ctx.db
-      .query('chats')
-      .withIndex('by_folder_and_user', (q) =>
-        q.eq('userId', args.userId).eq('folderId', args.folderId)
+      .query("chats")
+      .withIndex("by_folder_and_user", (q) =>
+        q.eq("userId", args.userId).eq("folderId", args.folderId)
       )
       .paginate({ numItems: BATCH_SIZE, cursor: args.cursor ?? null });
 
