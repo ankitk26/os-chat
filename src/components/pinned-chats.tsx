@@ -1,8 +1,9 @@
 import { convexQuery } from "@convex-dev/react-query";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { PinIcon } from "lucide-react";
+import { Suspense } from "react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import AppSidebarChatItem from "./app-sidebar-chat-item";
 import {
@@ -15,14 +16,14 @@ import {
 
 export default function PinnedChats() {
   const { auth } = useRouteContext({ strict: false });
-  const { data: chatsData, isPending } = useQuery(
+  const { data: chatsData } = useSuspenseQuery(
     convexQuery(api.chats.getPinnedChats, {
       sessionToken: auth?.session.token ?? "",
     })
   );
 
   // If no pinned chats, don't show anything
-  if (!isPending && chatsData && chatsData.length === 0) {
+  if (chatsData.length === 0) {
     return null;
   }
 
@@ -34,21 +35,21 @@ export default function PinnedChats() {
       </SidebarGroupLabel>
 
       <SidebarMenu className="mt-2">
-        {isPending && (
-          <SidebarMenu>
-            {Array.from({ length: 4 }).map(() => (
-              <SidebarMenuItem key={generateRandomUUID()}>
-                <SidebarMenuSkeleton />
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        )}
-        {!isPending &&
-          chatsData &&
-          chatsData.length > 0 &&
-          chatsData.map((chat) => (
+        <Suspense
+          fallback={
+            <SidebarMenu>
+              {Array.from({ length: 4 }).map(() => (
+                <SidebarMenuItem key={generateRandomUUID()}>
+                  <SidebarMenuSkeleton />
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          }
+        >
+          {chatsData.map((chat) => (
             <AppSidebarChatItem chat={chat} key={chat._id} />
           ))}
+        </Suspense>
       </SidebarMenu>
     </SidebarGroup>
   );
