@@ -12,7 +12,6 @@ import {
   SplitIcon,
   Trash2Icon,
 } from "lucide-react";
-import { useState } from "react";
 import { toast } from "sonner";
 import { useChatActionStore } from "~/stores/chat-actions-store";
 import { Button } from "./ui/button";
@@ -32,8 +31,7 @@ type Props = {
   chat: FunctionReturnType<typeof api.chats.getPinnedChats>[0];
 };
 
-export default function SidebarChatItem({ chat }: Props) {
-  const [isHovered, setIsHovered] = useState(false);
+export default function AppSidebarChatItem({ chat }: Props) {
   const { auth } = useRouteContext({ strict: false });
   const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
   const setIsDeleteModalOpen = useChatActionStore(
@@ -79,9 +77,7 @@ export default function SidebarChatItem({ chat }: Props) {
   return (
     <Link
       activeProps={{ className: "bg-secondary text-secondary-foreground" }}
-      className="flex cursor-pointer items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      className="group/chats flex cursor-pointer items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground"
       params={{ chatId: chat.uuid }}
       to="/chat/$chatId"
     >
@@ -107,9 +103,7 @@ export default function SidebarChatItem({ chat }: Props) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            className={`size-7 flex-shrink-0 rounded-sm bg-secondary text-sidebar-foreground transition-opacity duration-200 hover:bg-sidebar ${
-              isHovered ? "opacity-100" : "opacity-0"
-            }`}
+            className="size-7 flex-shrink-0 rounded-sm bg-secondary text-sidebar-foreground opacity-0 transition-opacity duration-200 hover:bg-sidebar group-hover/chats:opacity-100"
             size="icon"
           >
             <EllipsisVerticalIcon />
