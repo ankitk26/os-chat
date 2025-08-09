@@ -1,3 +1,6 @@
+import type { api } from "convex/_generated/api";
+import type { FunctionReturnType } from "convex/server";
+
 // Create type for /api/chat request body's model
 export type Model = {
   name: string;
@@ -40,3 +43,7 @@ export const defaultApiKeys: ApiKeys = {
 };
 
 export type Provider = keyof ApiKeys;
+
+export type SidebarChatType = FunctionReturnType<
+  typeof api.chats.getPinnedChats
+>[0];
