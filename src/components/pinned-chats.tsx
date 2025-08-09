@@ -4,7 +4,7 @@ import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { PinIcon } from "lucide-react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
-import SidebarChatItem from "./sidebar-chat-item";
+import AppSidebarChatItem from "./app-sidebar-chat-item";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -47,7 +47,7 @@ export default function PinnedChats() {
           chatsData &&
           chatsData.length > 0 &&
           chatsData.map((chat) => (
-            <SidebarChatItem chat={chat} key={chat._id} />
+            <AppSidebarChatItem chat={chat} key={chat._id} />
           ))}
       </SidebarMenu>
     </SidebarGroup>

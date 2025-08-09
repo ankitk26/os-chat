@@ -6,7 +6,6 @@ import { type ApiKeys, defaultApiKeys, type Provider } from "~/types";
 import ApiKeyInput from "./api-key-input";
 import ApiKeyOpenRouter from "./api-key-open-router";
 import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
 import { TabsContent } from "./ui/tabs";
 
 const keysForm = [
@@ -97,8 +96,6 @@ export default function ApiKeysForm() {
           setUseOpenRouter={setUseOpenRouter}
           useOpenRouter={useOpenRouter}
         />
-
-        <Separator />
 
         <div className="space-y-12">
           {keysForm.map((keyItem) => (
