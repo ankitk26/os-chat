@@ -1,12 +1,11 @@
-import type { api } from "convex/_generated/api";
-import type { FunctionReturnType } from "convex/server";
 import { useState } from "react";
+import type { SidebarFolder } from "~/types";
 import AppSidebarChatItem from "./app-sidebar-chat-item";
 import AppSidebarFolderItemActions from "./app-sidebar-folder-item-actions";
 import AppSidebarFolderItemToggler from "./app-sidebar-folder-item-toggler";
 
 type Props = {
-  folder: FunctionReturnType<typeof api.folders.getFoldersWithChats>[0];
+  folder: SidebarFolder;
 };
 
 export default function AppSidebarFolderItem(props: Props) {

@@ -1,16 +1,13 @@
-import type { ChatRequestOptions, Message, UIMessage } from "ai";
+import type { UIMessage } from "ai";
 import { memo } from "react";
+import type { ChatHookType } from "~/types";
 import AssistantMessage from "./assistant-message";
 import UserMessage from "./user-message";
 
 type Props = {
   messages: UIMessage[];
-  reload: (
-    chatRequestOptions?: ChatRequestOptions
-  ) => Promise<string | null | undefined>;
-  setMessages: (
-    messages: Message[] | ((messages: Message[]) => Message[])
-  ) => void;
+  reload: ChatHookType["reload"];
+  setMessages: ChatHookType["setMessages"];
 };
 
 export default memo(function ChatMessages(props: Props) {

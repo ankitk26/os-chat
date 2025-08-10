@@ -5,27 +5,23 @@ import {
   useParams,
   useRouteContext,
 } from "@tanstack/react-router";
-import type { ChatRequestOptions, CreateMessage, Message } from "ai";
 import { api } from "convex/_generated/api";
 import type { Id } from "convex/_generated/dataModel";
-import type React from "react";
 import { useRef, useState } from "react";
 import { getChatTitle } from "~/server-fns/get-chat-title";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
+import type { ChatHookType } from "~/types";
 import AutoResizeTextarea from "./auto-resize-textarea";
 import PromptActions from "./prompt-actions";
 
 type Props = {
   chatId: string;
-  input: string;
-  setInput: React.Dispatch<React.SetStateAction<string>>;
-  status: "submitted" | "streaming" | "ready" | "error";
-  stop: () => void;
-  append: (
-    message: Message | CreateMessage,
-    chatRequestOptions?: ChatRequestOptions
-  ) => Promise<string | null | undefined>;
+  input: ChatHookType["input"];
+  setInput: ChatHookType["setInput"];
+  status: ChatHookType["status"];
+  stop: ChatHookType["stop"];
+  append: ChatHookType["append"];
 };
 
 export default function UserPromptInput(props: Props) {

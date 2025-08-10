@@ -1,7 +1,8 @@
-import type { ChatRequestOptions, Message, UIMessage } from "ai";
+import type { UIMessage } from "ai";
 import { CopyIcon } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
+import type { ChatHookType } from "~/types";
 import AIResponseContent from "./ai-response-content";
 import AIResponseReasoning from "./ai-response-reasoning";
 import AIResponseSources from "./ai-response-sources";
@@ -12,12 +13,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
   message: UIMessage;
-  reload?: (
-    chatRequestOptions?: ChatRequestOptions
-  ) => Promise<string | null | undefined>;
-  setMessages: (
-    messages: Message[] | ((messages: Message[]) => Message[])
-  ) => void;
+  reload?: ChatHookType["reload"];
+  setMessages: ChatHookType["setMessages"];
   messages: UIMessage[];
 };
 

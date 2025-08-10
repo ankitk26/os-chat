@@ -1,11 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import type { api } from "convex/_generated/api";
-import type { FunctionReturnType } from "convex/server";
 import { SplitIcon } from "lucide-react";
+import type { SidebarChatType } from "~/types";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
-  chat: FunctionReturnType<typeof api.chats.getPinnedChats>[0];
+  chat: SidebarChatType;
 };
 
 export default function BranchedChatIndicator(props: Props) {
