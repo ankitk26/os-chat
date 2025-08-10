@@ -6,6 +6,7 @@ import { MessageSquareIcon } from "lucide-react";
 import { Suspense } from "react";
 import AppSidebarChatItem from "./app-sidebar-chat-item";
 import AppSidebarFolderSkeleton from "./app-sidebar-folder-skeleton";
+import DeleteAllChatsAlertDialog from "./delete-all-chats-alert-dialog";
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu } from "./ui/sidebar";
 
 export default function UnpinnedChats() {
@@ -17,10 +18,13 @@ export default function UnpinnedChats() {
   );
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel className="flex items-center gap-2 text-sm">
-        <MessageSquareIcon />
-        Chats
+    <SidebarGroup className="group/chat-header group-data-[collapsible=icon]:hidden">
+      <SidebarGroupLabel className="flex items-center justify-between gap-2 text-sm">
+        <div className="flex items-center gap-2">
+          <MessageSquareIcon className="size-4" />
+          Chats
+        </div>
+        <DeleteAllChatsAlertDialog />
       </SidebarGroupLabel>
       <SidebarMenu className="mt-2 space-y-0.5">
         <Suspense fallback={<AppSidebarFolderSkeleton />}>
