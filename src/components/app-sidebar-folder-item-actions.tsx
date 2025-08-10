@@ -1,7 +1,6 @@
-import type { api } from "convex/_generated/api";
-import type { FunctionReturnType } from "convex/server";
 import { EditIcon, EllipsisVerticalIcon, Trash2Icon } from "lucide-react";
 import { useFolderActionStore } from "~/stores/folder-actions-store";
+import type { SidebarFolder } from "~/types";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -11,7 +10,7 @@ import {
 } from "./ui/dropdown-menu";
 
 type Props = {
-  folder: FunctionReturnType<typeof api.folders.getFoldersWithChats>[0];
+  folder: SidebarFolder;
 };
 
 export default function AppSidebarFolderItemActions({ folder }: Props) {

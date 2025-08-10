@@ -1,5 +1,7 @@
+import type { ChatHookType } from "~/types";
+
 type Props = {
-  status: "submitted" | "streaming" | "ready" | "error";
+  status: ChatHookType["status"];
   insertPending: boolean;
 };
 

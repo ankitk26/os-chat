@@ -1,11 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import type { api } from "convex/_generated/api";
-import type { FunctionReturnType } from "convex/server";
+import type { SidebarChatType } from "~/types";
 import AppSidebarChatItemActions from "./app-sidebar-chat-item-actions";
 import BranchedChatIndicator from "./branched-chat-indicator";
 
 type Props = {
-  chat: FunctionReturnType<typeof api.chats.getPinnedChats>[0];
+  chat: SidebarChatType;
 };
 
 export default function AppSidebarChatItem({ chat }: Props) {

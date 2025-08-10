@@ -1,12 +1,9 @@
-import type { api } from "convex/_generated/api";
-import type { FunctionReturnType } from "convex/server";
 import { create } from "zustand";
-
-type Folder = FunctionReturnType<typeof api.folders.getFoldersWithChats>[0];
+import type { SidebarFolder } from "~/types";
 
 type FolderActionState = {
-  selectedFolder: Folder | null;
-  setSelectedFolder: (folder: Folder | null) => void;
+  selectedFolder: SidebarFolder | null;
+  setSelectedFolder: (folder: SidebarFolder | null) => void;
   isCreateModalOpen: boolean;
   setIsCreateModalOpen: (value: boolean) => void;
   isDeleteModalOpen: boolean;
@@ -17,7 +14,8 @@ type FolderActionState = {
 
 export const useFolderActionStore = create<FolderActionState>()((set) => ({
   selectedFolder: null,
-  setSelectedFolder: (folder: Folder | null) => set({ selectedFolder: folder }),
+  setSelectedFolder: (folder: SidebarFolder | null) =>
+    set({ selectedFolder: folder }),
   isCreateModalOpen: false,
   setIsCreateModalOpen: (value: boolean) => set({ isCreateModalOpen: value }),
   isDeleteModalOpen: false,

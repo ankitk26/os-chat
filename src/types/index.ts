@@ -1,3 +1,4 @@
+import type { useChat } from "@ai-sdk/react";
 import type { api } from "convex/_generated/api";
 import type { FunctionReturnType } from "convex/server";
 
@@ -47,3 +48,8 @@ export type Provider = keyof ApiKeys;
 export type SidebarChatType = FunctionReturnType<
   typeof api.chats.getPinnedChats
 >[0];
+export type SidebarFolder = FunctionReturnType<
+  typeof api.folders.getFoldersWithChats
+>[0];
+
+export type ChatHookType = ReturnType<typeof useChat>;

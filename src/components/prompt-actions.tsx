@@ -1,11 +1,12 @@
 import { GlobeIcon, SendIcon, SquareIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { useModelStore } from "~/stores/model-store";
+import type { ChatHookType } from "~/types";
 import ModelSelector from "./model-selector";
 import { Button } from "./ui/button";
 
 type Props = {
-  status: "submitted" | "streaming" | "ready" | "error";
+  status: ChatHookType["status"];
   stop: () => void;
 };
 
