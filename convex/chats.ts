@@ -419,3 +419,19 @@ export const deleteChatsByFolder = internalMutation({
     }
   },
 });
+
+export const deleteAll = mutation({
+  args: {
+    sessionToken: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+
+    const chats = await ctx.db
+      .query("chats")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .collect();
+
+    await Promise.all(chats.map((chat) => ctx.db.delete(chat._id)));
+  },
+});
