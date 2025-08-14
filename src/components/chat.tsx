@@ -122,7 +122,7 @@ export default function Chat({
 
     viewport.scrollTo({
       top: viewport.scrollHeight,
-      behavior: "instant",
+      behavior: "smooth",
     });
   };
 
@@ -151,7 +151,7 @@ export default function Chat({
 
   // Auto-scroll to bottom when new messages arrive (optional)
   useEffect(() => {
-    if (status === "streaming") {
+    if (status === "submitted") {
       const timer = setTimeout(() => {
         scrollToBottom();
       }, 100);

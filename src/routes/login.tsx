@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Loader2Icon, MessageSquareIcon } from "lucide-react";
+import { LoaderIcon, MessageSquareIcon } from "lucide-react";
 import { useState } from "react";
 import GithubIcon from "~/components/github-icon";
 import { Button } from "~/components/ui/button";
@@ -56,7 +56,7 @@ function RouteComponent() {
               size="lg"
             >
               {isLoading ? (
-                <Loader2Icon className="h-4 w-4 animate-spin" />
+                <LoaderIcon className="h-4 w-4 animate-spin" />
               ) : (
                 <GithubIcon />
               )}
