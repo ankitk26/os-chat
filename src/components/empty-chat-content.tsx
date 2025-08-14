@@ -11,7 +11,7 @@ export default function EmptyChatContent() {
   const { auth } = useRouteContext({ from: "/_auth" });
 
   return (
-    <div className="mx-auto flex h-full w-full max-w-3xl flex-col justify-center">
+    <div className="mx-auto flex h-full w-full max-w-3xl flex-col justify-center px-4 lg:px-0">
       <h2 className="mb-2 font-semibold text-3xl">
         Welcome {auth.user.name.split(" ")[0]}
       </h2>

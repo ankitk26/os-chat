@@ -171,8 +171,8 @@ export default function Chat({
 
         {chatId && (
           <ScrollArea className="h-full w-full" ref={scrollAreaRef}>
-            <div className="mx-auto h-full w-full max-w-3xl">
-              <div className="my-8 space-y-8 pb-32">
+            <div className="mx-auto h-full w-full max-w-full px-2 lg:max-w-3xl lg:px-4">
+              <div className="my-4 space-y-6 pb-40 lg:my-8 lg:space-y-8 lg:pb-32">
                 {isMessagesPending && status !== "submitted" ? (
                   <>
                     <UserMessageSkeleton />
@@ -198,9 +198,9 @@ export default function Chat({
 
       {/* Scroll to bottom button - centered at top of prompt */}
       {showScrollToBottom && (
-        <div className="-translate-x-1/2 absolute bottom-36 left-1/2 z-50 transform">
+        <div className="-translate-x-1/2 absolute bottom-44 left-1/2 z-50 transform lg:bottom-36">
           <Button
-            className="rounded-full"
+            className="rounded-full bg-transparent"
             onClick={scrollToBottom}
             size="icon"
             variant="outline"

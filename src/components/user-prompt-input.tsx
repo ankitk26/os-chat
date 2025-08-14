@@ -110,7 +110,7 @@ export default function UserPromptInput(props: Props) {
   return (
     <div className="bg-background/80 backdrop-blur">
       <form
-        className="mx-auto mb-2 flex min-h-30 w-full max-w-3xl flex-col rounded-tl-lg rounded-tr-lg border border-border bg-popover/90 p-4"
+        className="mx-auto flex min-h-30 w-full max-w-3xl flex-col rounded-tl-lg rounded-tr-lg border border-border bg-popover/90 p-4"
         onSubmit={(e) => {
           e.preventDefault();
           handlePromptSubmit();
