@@ -18,7 +18,6 @@ import type * as chats from "../chats.js";
 import type * as folders from "../folders.js";
 import type * as functions from "../functions.js";
 import type * as messages from "../messages.js";
-import type * as migrations_setContentUndefined from "../migrations/setContentUndefined.js";
 import type * as migrations_setsIsBranched from "../migrations/setsIsBranched.js";
 import type * as model_users from "../model/users.js";
 
@@ -36,7 +35,6 @@ declare const fullApi: ApiFromModules<{
   folders: typeof folders;
   functions: typeof functions;
   messages: typeof messages;
-  "migrations/setContentUndefined": typeof migrations_setContentUndefined;
   "migrations/setsIsBranched": typeof migrations_setsIsBranched;
   "model/users": typeof model_users;
 }>;
