@@ -33,9 +33,16 @@ export default React.memo(function AssistantMessage(props: Props) {
 
   return (
     <div className="group space-y-4">
-      <AIResponseReasoning message={message} />
-      <AIResponseContent message={message} />
-      <AIResponseSources message={message} />
+      <AIResponseReasoning
+        messageContent={messageContent}
+        messageId={message.id}
+        parts={message.parts}
+      />
+      <AIResponseContent
+        messageContent={messageContent}
+        messageId={message.id}
+      />
+      <AIResponseSources parts={message.parts} />
       <div className="flex items-center gap-1.5 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
         <Tooltip>
           <TooltipTrigger asChild>

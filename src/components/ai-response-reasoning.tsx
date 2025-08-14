@@ -1,18 +1,18 @@
 import type { UIMessage } from "ai";
 import { useState } from "react";
-import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
 import ReasoningIndicatorText from "./reasoning-indicator-text";
 import ReasoningMarkdown from "./reasoning-markdown";
 import ReasoningToggleButton from "./reasoning-toggle-button";
 
-export default function AIResponseReasoning({
-  message,
-}: {
-  message: UIMessage;
-}) {
+type Props = {
+  parts: UIMessage["parts"];
+  messageContent: string;
+  messageId: string;
+};
+
+export default function AIResponseReasoning(props: Props) {
   const [showReasoning, setShowReasoning] = useState(false);
-  const reasoningPart = message.parts.find((part) => part.type === "reasoning");
-  const messageContent = getMessageContentFromParts(message.parts);
+  const reasoningPart = props.parts.find((part) => part.type === "reasoning");
 
   const toggleReasoningDisplay = () => {
     setShowReasoning((prev) => !prev);
@@ -33,12 +33,12 @@ export default function AIResponseReasoning({
           showReasoning={showReasoning}
           toggleReasoningDisplay={toggleReasoningDisplay}
         />
-        <ReasoningIndicatorText messageContent={messageContent} />
+        <ReasoningIndicatorText messageContent={props.messageContent} />
       </div>
 
       {showReasoning && (
         <ReasoningMarkdown
-          messageId={message.id}
+          messageId={props.messageId}
           reasoningContent={reasoningContent}
         />
       )}

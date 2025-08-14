@@ -24,21 +24,21 @@ export default function ReadOnlyAssistantMessage({ message }: Props) {
     annotations.find((a) => (a as any)["type"] === "model");
 
   const messageContent = getMessageContentFromParts(JSON.parse(message.parts));
-
-  const uiMessage = {
-    id: message.sourceMessageId ?? message._id,
-    role: message.role,
-    annotations: JSON.parse(message.annotations),
-    content: "",
-    parts: JSON.parse(message.parts),
-    createdAt: new Date(message._creationTime),
-  } satisfies UIMessage;
+  const messageId = message.sourceMessageId ?? message._id;
+  const messageParts = JSON.parse(message.parts) as UIMessage["parts"];
 
   return (
     <div className="space-y-4">
-      <AIResponseReasoning message={uiMessage} />
-      <AIResponseContent message={uiMessage} />
-      <AIResponseSources message={uiMessage} />
+      <AIResponseReasoning
+        messageContent={messageContent}
+        messageId={messageId}
+        parts={messageParts}
+      />
+      <AIResponseContent
+        messageContent={messageContent}
+        messageId={messageId}
+      />
+      <AIResponseSources parts={messageParts} />
       <div className="flex items-center gap-1.5 transition-opacity duration-200">
         <Tooltip>
           <TooltipTrigger asChild>

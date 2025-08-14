@@ -55,7 +55,7 @@ export default function Chat({
           id: message.sourceMessageId ?? message._id,
           role: message.role,
           annotations: JSON.parse(message.annotations),
-          content: "",
+          content: "", // not needed for displaying messages. useChat needs it
           parts: JSON.parse(message.parts),
           createdAt: new Date(message._creationTime),
         };

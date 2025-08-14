@@ -3,9 +3,13 @@ import { useState } from "react";
 import SourcesList from "./sources-list";
 import SourcesToggleButton from "./sources-toggle-button";
 
-export default function AIResponseSources({ message }: { message: UIMessage }) {
+export default function AIResponseSources({
+  parts,
+}: {
+  parts: UIMessage["parts"];
+}) {
   const [showSources, setShowSources] = useState(false);
-  const sourceParts = message.parts.filter((part) => part.type === "source");
+  const sourceParts = parts.filter((part) => part.type === "source");
 
   const toggleSourcesDisplay = () => {
     setShowSources((prev) => !prev);
