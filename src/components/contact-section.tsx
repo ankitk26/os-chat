@@ -6,7 +6,7 @@ import { TabsContent } from "./ui/tabs";
 export default function ContactSection() {
   return (
     <TabsContent
-      className="space-y-6 rounded-xl border bg-card p-8" // Reduced spacing
+      className="space-y-6 rounded-xl border bg-card p-4 lg:p-8"
       value="about"
     >
       <div className="space-y-3">
@@ -14,7 +14,7 @@ export default function ContactSection() {
           This project is Open-Source.
         </p>
         <CustomExternalLink href="https://github.com/ankitk26/os-chat">
-          <Button className="w-32" size="sm">
+          <Button className="w-full lg:w-32">
             <GithubIcon />
             os-chat
           </Button>
@@ -26,7 +26,7 @@ export default function ContactSection() {
           For bugs, features, or general inquiries:
         </p>
         <CustomExternalLink href="https://x.com/akcejia">
-          <Button className="w-32" size="sm">
+          <Button className="w-full lg:w-32">
             <svg
               className="size-4 fill-primary-foreground"
               role="img"

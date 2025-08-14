@@ -115,7 +115,7 @@ export default function ApiKeysForm() {
 
         <div className="flex justify-end pt-4">
           <Button
-            className="flex items-center gap-2"
+            className="flex w-full items-center gap-2 lg:w-fit"
             disabled={!hasChanges}
             onClick={handleSave}
           >
