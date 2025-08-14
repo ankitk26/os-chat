@@ -12,7 +12,7 @@ export default function ReadOnlyUserMessage({ message }: Props) {
   return (
     <div className="group flex w-3/4 flex-col items-end space-y-1 self-end">
       {/* Message bubble */}
-      <div className="wrap-break-word flex w-full max-w-full flex-col gap-6 whitespace-pre-wrap rounded-xl border bg-popover px-4 py-4">
+      <div className="wrap-break-word flex w-full max-w-full flex-col gap-6 whitespace-pre-wrap rounded-xl border bg-popover px-4 py-4 text-sm">
         {message.content}
       </div>
 
