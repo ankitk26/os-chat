@@ -81,7 +81,6 @@ export default function UserPromptInput(props: Props) {
     createMessageMutation.mutate({
       messageBody: {
         chatId: props.chatId,
-        content: textareaValue,
         role: "user",
         annotations: JSON.stringify([]),
         parts: JSON.stringify([{ type: "text", text: textareaValue }]),

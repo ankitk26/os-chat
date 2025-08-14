@@ -2,6 +2,7 @@ import type { JSONValue, UIMessage } from "ai";
 import type { Doc } from "convex/_generated/dataModel";
 import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
+import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
 import AIResponseContent from "./ai-response-content";
 import AIResponseReasoning from "./ai-response-reasoning";
 import AIResponseSources from "./ai-response-sources";
@@ -22,11 +23,13 @@ export default function ReadOnlyAssistantMessage({ message }: Props) {
     // biome-ignore lint/suspicious/noExplicitAny: To be fixed later
     annotations.find((a) => (a as any)["type"] === "model");
 
+  const messageContent = getMessageContentFromParts(JSON.parse(message.parts));
+
   const uiMessage = {
     id: message.sourceMessageId ?? message._id,
     role: message.role,
     annotations: JSON.parse(message.annotations),
-    content: message.content,
+    content: "",
     parts: JSON.parse(message.parts),
     createdAt: new Date(message._creationTime),
   } satisfies UIMessage;
@@ -41,7 +44,7 @@ export default function ReadOnlyAssistantMessage({ message }: Props) {
           <TooltipTrigger asChild>
             <Button
               onClick={async () => {
-                await navigator.clipboard.writeText(message.content);
+                await navigator.clipboard.writeText(messageContent);
                 toast.success("Copied to clipboard");
               }}
               size="icon"

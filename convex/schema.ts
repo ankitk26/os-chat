@@ -55,7 +55,7 @@ export default defineSchema({
     sourceMessageId: v.optional(v.string()),
     chatId: v.string(),
     userId: v.id("user"),
-    content: v.string(),
+    content: v.optional(v.string()), // remove it later after production deploy and redeploy
     parts: v.string(),
     annotations: v.string(),
     role: v.union(v.literal("user"), v.literal("assistant")),

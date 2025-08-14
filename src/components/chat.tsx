@@ -8,6 +8,7 @@ import type { Doc } from "convex/_generated/dataModel";
 import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
+import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
 import AiResponseAlert from "./ai-response-error";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
 import ChatLoadingIndicator from "./chat-loading-indicator";
@@ -54,7 +55,7 @@ export default function Chat({
           id: message.sourceMessageId ?? message._id,
           role: message.role,
           annotations: JSON.parse(message.annotations),
-          content: message.content,
+          content: "",
           parts: JSON.parse(message.parts),
           createdAt: new Date(message._creationTime),
         };
@@ -64,7 +65,11 @@ export default function Chat({
       if (!chatId) {
         return;
       }
-      if (!newMessage.content) {
+      if (!newMessage.parts) {
+        return;
+      }
+      const messageContent = getMessageContentFromParts(newMessage.parts);
+      if (!messageContent) {
         return;
       }
 
@@ -75,7 +80,6 @@ export default function Chat({
           parts: JSON.stringify(newMessage.parts),
           role: "assistant",
           sourceMessageId: newMessage.id,
-          content: newMessage.content,
         },
         sessionToken: auth.session.token,
       });

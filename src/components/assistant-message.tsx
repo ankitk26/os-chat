@@ -2,6 +2,7 @@ import type { UIMessage } from "ai";
 import { CopyIcon } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
+import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
 import type { ChatHookType } from "~/types";
 import AIResponseContent from "./ai-response-content";
 import AIResponseReasoning from "./ai-response-reasoning";
@@ -28,6 +29,8 @@ export default React.memo(function AssistantMessage(props: Props) {
     // biome-ignore lint/suspicious/noExplicitAny: To be fixed later
     message.annotations.find((a) => (a as any)["type"] === "model");
 
+  const messageContent = getMessageContentFromParts(message.parts);
+
   return (
     <div className="space-y-4">
       <AIResponseReasoning message={message} />
@@ -38,7 +41,7 @@ export default React.memo(function AssistantMessage(props: Props) {
           <TooltipTrigger asChild>
             <Button
               onClick={async () => {
-                await navigator.clipboard.writeText(message.content);
+                await navigator.clipboard.writeText(messageContent);
                 toast.success("Copied to clipboard");
               }}
               size="icon"
