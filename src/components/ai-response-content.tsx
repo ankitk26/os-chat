@@ -6,7 +6,7 @@ export default function AIResponseContent({ message }: { message: UIMessage }) {
   const messageContent = getMessageContentFromParts(message.parts);
 
   return (
-    <div className="prose prose-neutral dark:prose-invert prose-rose prose-pre:m-0 w-full max-w-full prose-pre:bg-transparent prose-pre:p-0 text-sm leading-8">
+    <div className="prose prose-neutral dark:prose-invert prose-rose prose-pre:m-0 w-full max-w-full prose-pre:bg-transparent prose-pre:p-0 leading-8">
       <MemoizedMarkdown content={messageContent} id={message.id} />
     </div>
   );

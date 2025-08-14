@@ -19,7 +19,7 @@ export default memo(function ChatMessages(props: Props) {
   }
 
   return (
-    <>
+    <div className="space-y-2">
       {messages.map((message) => {
         const messageContent = getMessageContentFromParts(message.parts);
         return (
@@ -37,6 +37,6 @@ export default memo(function ChatMessages(props: Props) {
           </div>
         );
       })}
-    </>
+    </div>
   );
 });
