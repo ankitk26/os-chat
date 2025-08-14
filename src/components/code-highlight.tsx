@@ -35,7 +35,7 @@ export default function CodeHighlight({
   }
 
   return (
-    <div className="rounded-lg">
+    <div className="w-full max-w-full rounded-lg">
       <div className="flex items-center justify-between rounded-tl-lg rounded-tr-lg border-0 bg-card-foreground/10 px-4 text-secondary-foreground text-sm dark:bg-secondary">
         <span className="font-light font-mono">{language}</span>
         <div className="my-0.5 flex items-center gap-2">
@@ -58,7 +58,7 @@ export default function CodeHighlight({
         </div>
       </div>
 
-      <div className="border-r border-b border-l">
+      <div className="w-full max-w-full overflow-x-auto border-r border-b border-l">
         <ShikiHighlighter
           delay={150}
           language={language}
