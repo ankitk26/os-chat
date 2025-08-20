@@ -8,6 +8,12 @@ const convexClient = new ConvexHttpClient(
 
 export const auth = betterAuth({
   database: convexAdapter(convexClient),
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 60 * 30, // cache duration in seconds - 30 minutes
+    },
+  },
   socialProviders: {
     github: {
       clientId: process.env.GITHUB_CLIENT_ID as string,

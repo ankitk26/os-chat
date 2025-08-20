@@ -1,42 +1,37 @@
-import { convexQuery } from "@convex-dev/react-query";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
-import { api } from "convex/_generated/api";
 import { MessageSquareIcon } from "lucide-react";
 import { Suspense } from "react";
-import AppSidebarChatItem from "./app-sidebar-chat-item";
-import AppSidebarFolderSkeleton from "./app-sidebar-folder-skeleton";
-import DeleteAllChatsAlertDialog from "./delete-all-chats-alert-dialog";
-import { SidebarGroup, SidebarGroupLabel, SidebarMenu } from "./ui/sidebar";
+import { generateRandomUUID } from "~/lib/generate-random-uuid";
+import {
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuSkeleton,
+} from "./ui/sidebar";
+import UnpinnedChatsList from "./unpinned-chats-list";
 
 export default function UnpinnedChats() {
-  const { auth } = useRouteContext({ strict: false });
-  const { data: chats } = useSuspenseQuery(
-    convexQuery(api.chats.getUnpinnedChats, {
-      sessionToken: auth?.session.token ?? "",
-    })
-  );
-
-  return (
+  const fallbackSkeleton = (
     <SidebarGroup className="group/chat-header group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel className="flex items-center justify-between gap-2 text-sm">
         <div className="flex items-center gap-2">
           <MessageSquareIcon className="size-4" />
           Chats
         </div>
-        <DeleteAllChatsAlertDialog />
       </SidebarGroupLabel>
-      <SidebarMenu className="mt-2 space-y-0.5">
-        <Suspense fallback={<AppSidebarFolderSkeleton />}>
-          {chats.length === 0 && (
-            <p className="pl-2 text-muted-foreground text-sm">No chats</p>
-          )}
-          {chats.length !== 0 &&
-            chats.map((chat) => (
-              <AppSidebarChatItem chat={chat} key={chat._id} />
-            ))}
-        </Suspense>
+      <SidebarMenu className="mt-2">
+        {Array.from({ length: 3 }).map(() => (
+          <SidebarMenuItem key={generateRandomUUID()}>
+            <SidebarMenuSkeleton />
+          </SidebarMenuItem>
+        ))}
       </SidebarMenu>
     </SidebarGroup>
+  );
+
+  return (
+    <Suspense fallback={fallbackSkeleton}>
+      <UnpinnedChatsList />
+    </Suspense>
   );
 }

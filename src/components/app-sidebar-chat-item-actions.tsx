@@ -1,4 +1,5 @@
 import { EllipsisVerticalIcon } from "lucide-react";
+import { Suspense } from "react";
 import type { SidebarChatType } from "~/types";
 import AppSidebarChatItemDelete from "./app-sidebar-chat-item-delete";
 import AppSidebarChatItemFolder from "./app-sidebar-chat-item-folder";
@@ -11,6 +12,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { Skeleton } from "./ui/skeleton";
 
 type Props = {
   chat: SidebarChatType;
@@ -32,7 +34,9 @@ export default function AppSidebarChatItemActions(props: Props) {
         <AppSidebarChatItemPin chat={props.chat} />
         <AppSidebarChatItemDelete chat={props.chat} />
         <AppSidebarChatItemShare chat={props.chat} />
-        <AppSidebarChatItemFolder chat={props.chat} />
+        <Suspense fallback={<Skeleton className="h-3 w-3/4" />}>
+          <AppSidebarChatItemFolder chat={props.chat} />
+        </Suspense>
       </DropdownMenuContent>
     </DropdownMenu>
   );
