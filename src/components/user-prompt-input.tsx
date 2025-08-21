@@ -53,7 +53,7 @@ export default function UserPromptInput(props: Props) {
   const handleChatTitleUpdate = async (dbGeneratedChatId: Id<"chats">) => {
     const title = await getChatTitle({ data: { userMessage: textareaValue } });
     await updateChatTitleMutation.mutateAsync({
-      chat: { chatId: dbGeneratedChatId, title },
+      chat: { chatId: dbGeneratedChatId, title: title as string },
       sessionToken: auth.session.token,
     });
   };

@@ -42,11 +42,8 @@ const getModelToUse = (
     const openRouter = createOpenRouter({
       apiKey: parsedApiKeys.openrouter,
     });
-    // if using OpenRouter and it's gemini model + webSearch, append :online to modelId
-    if (
-      requestModel.openRouterModelId.startsWith("google") &&
-      isWebSearchEnabled
-    ) {
+    // if using OpenRouter, append :online to modelId
+    if (isWebSearchEnabled) {
       return openRouter.chat(`${requestModel.openRouterModelId}:online`);
     }
     return openRouter.chat(requestModel.openRouterModelId);
