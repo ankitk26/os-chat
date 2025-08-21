@@ -1,6 +1,7 @@
 import { GlobeIcon, SendIcon, SquareIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { useModelStore } from "~/stores/model-store";
+import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import type { ChatHookType } from "~/types";
 import ModelSelector from "./model-selector";
 import { Button } from "./ui/button";
@@ -14,13 +15,17 @@ export default function PromptActions({ status, stop }: Props) {
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
   const toggleIsWebSearch = useModelStore((store) => store.toggleIsWebSearch);
   const selectedModel = useModelStore((store) => store.selectedModel);
+  const persistedUseOpenRouter = usePersistedApiKeysStore(
+    (store) => store.persistedUseOpenRouter
+  );
 
   return (
     <div className="mt-4 flex items-center justify-between">
       <div className="flex items-center gap-2">
         <ModelSelector />
 
-        {selectedModel.openRouterModelId.startsWith("google") && (
+        {(selectedModel.openRouterModelId.startsWith("google") ||
+          persistedUseOpenRouter) && (
           <Button
             className={cn("text-xs", isWebSearchEnabled ? "border" : "")}
             onClick={toggleIsWebSearch}
