@@ -55,6 +55,7 @@
   --shadow-xl:
     0px 1px 2px 0px hsl(0 0% 0% / 0.18), 0px 8px 10px -1px hsl(0 0% 0% / 0.18);
   --shadow-2xl: 0px 1px 2px 0px hsl(0 0% 0% / 0.45);
+  --code-editor: var(--color-code-light);
 }
 
 .dark {
@@ -103,6 +104,7 @@
   --shadow-xl:
     0px 1px 2px 0px hsl(0 0% 0% / 0.18), 0px 8px 10px -1px hsl(0 0% 0% / 0.18);
   --shadow-2xl: 0px 1px 2px 0px hsl(0 0% 0% / 0.45);
+  --code-editor: var(--color-code-dark);
 }
 
 @theme inline {
@@ -156,6 +158,9 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
+
+  --color-code-dark: rgb(16, 16, 16);
+  --color-code-light: rgb(239, 241, 245);
 }
 
 @layer base {
