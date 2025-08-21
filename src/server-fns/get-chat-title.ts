@@ -4,13 +4,16 @@ import { generateObject } from "ai";
 import { z } from "zod";
 
 export const getChatTitle = createServerFn({ method: "GET" })
-  .validator((userMessage: string) => userMessage)
-  .handler(async ({ data: userMessage }) => {
-    const { object } = await generateObject({
+  .validator(
+    z.object({
+      userMessage: z.string(),
+    })
+  )
+  .handler(async ({ data }) => {
+    const { object: generateTitle } = await generateObject({
       model: google("gemini-2.0-flash-lite"),
-      schema: z.object({
-        title: z.string(),
-      }),
+      mode: "json",
+      schema: z.string(),
       system:
         "You are a professional writer. " +
         "You write simple, clear, and concise content. " +
@@ -19,7 +22,7 @@ export const getChatTitle = createServerFn({ method: "GET" })
         "Generate a concise and informative title for the following user message. The title should summarize the core subject or intent of the message. Avoid conversational phrases in the title." +
         "\n\n" +
         "Here is the message - " +
-        userMessage +
+        data.userMessage +
         "\n\n" +
         "Examples:" +
         "\n" +
@@ -34,5 +37,5 @@ export const getChatTitle = createServerFn({ method: "GET" })
         "Title: New Photo Editing Feature Brainstorming",
     });
 
-    return object.title;
+    return generateTitle;
   });
