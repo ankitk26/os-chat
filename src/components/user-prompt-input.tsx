@@ -5,6 +5,7 @@ import {
   useParams,
   useRouteContext,
 } from "@tanstack/react-router";
+import type { ChatStatus } from "ai";
 import { api } from "convex/_generated/api";
 import type { Id } from "convex/_generated/dataModel";
 import { useRef, useState } from "react";
@@ -17,11 +18,9 @@ import PromptActions from "./prompt-actions";
 
 type Props = {
   chatId: string;
-  input: ChatHookType["input"];
-  setInput: ChatHookType["setInput"];
-  status: ChatHookType["status"];
+  status: ChatStatus;
   stop: ChatHookType["stop"];
-  append: ChatHookType["append"];
+  sendMessage: ChatHookType["sendMessage"];
 };
 
 export default function UserPromptInput(props: Props) {
@@ -30,7 +29,7 @@ export default function UserPromptInput(props: Props) {
 
   const navigate = useNavigate();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [textareaValue, setTextareaValue] = useState(props.input);
+  const [textareaValue, setTextareaValue] = useState("");
   const selectedModel = useModelStore((store) => store.selectedModel);
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
   const persistedApiKeys = usePersistedApiKeysStore(
@@ -63,9 +62,6 @@ export default function UserPromptInput(props: Props) {
       return;
     }
 
-    props.setInput(textareaValue);
-    props.setInput(textareaRef.current.value);
-
     if (!paramsChatId) {
       navigate({
         to: "/chat/$chatId",
@@ -88,12 +84,8 @@ export default function UserPromptInput(props: Props) {
       sessionToken: auth.session.token,
     });
 
-    props.append(
-      {
-        content: textareaValue,
-        role: "user",
-        parts: [{ type: "text", text: textareaValue }],
-      },
+    props.sendMessage(
+      { text: textareaValue },
       {
         body: {
           model: selectedModel,

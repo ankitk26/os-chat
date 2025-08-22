@@ -1,13 +1,12 @@
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
-import type { UIMessage } from "ai";
 import { api } from "convex/_generated/api";
 import { KeyIcon, RefreshCcwIcon } from "lucide-react";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
-import type { ChatHookType, Model } from "~/types";
+import type { ChatHookType, CustomUIMessage, Model } from "~/types";
 import ModelProviderIcon from "./model-provider-icon";
 import { Button } from "./ui/button";
 import {
@@ -24,14 +23,14 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
-  message: UIMessage;
-  reload: ChatHookType["reload"];
+  message: CustomUIMessage;
+  regenerate: ChatHookType["regenerate"];
   setMessages: ChatHookType["setMessages"];
-  messages: UIMessage[];
+  messages: CustomUIMessage[];
 };
 
 export default function RetryModelDropdown(props: Props) {
-  const { message, reload, setMessages, messages } = props;
+  const { message, regenerate, setMessages, messages } = props;
   const { auth } = useRouteContext({ from: "/_auth" });
   const selectedModel = useModelStore((store) => store.selectedModel);
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
@@ -58,10 +57,19 @@ export default function RetryModelDropdown(props: Props) {
     });
     const currentMessage = messages.find((m) => m.id === message.id);
     setMessages((prev) => [
-      // biome-ignore lint/style/noNonNullAssertion: Ignore here
-      ...prev.filter((m) => m.createdAt! < currentMessage?.createdAt!),
+      ...prev.filter((m) => {
+        const mCreatedAt = m.metadata?.createdAt;
+        const currentCreatedAt = currentMessage?.metadata?.createdAt;
+        if (
+          typeof mCreatedAt !== "number" ||
+          typeof currentCreatedAt !== "number"
+        ) {
+          return false;
+        }
+        return mCreatedAt < currentCreatedAt;
+      }),
     ]);
-    await reload({
+    await regenerate({
       body: {
         model,
         isWebSearchEnabled,

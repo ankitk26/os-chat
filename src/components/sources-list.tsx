@@ -1,7 +1,7 @@
-import type { UIMessage } from "ai";
+import type { SourceUrlUIPart } from "ai";
 
 type Props = {
-  sourceParts: Extract<UIMessage["parts"][number], { type: "source" }>[];
+  sourceParts: SourceUrlUIPart[];
 };
 
 export default function SourcesList(props: Props) {
@@ -11,8 +11,8 @@ export default function SourcesList(props: Props) {
         return (
           <a
             className="group block rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent"
-            href={sourcePart.source.url}
-            key={sourcePart.source.id}
+            href={sourcePart.url}
+            key={sourcePart.sourceId}
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -22,7 +22,7 @@ export default function SourcesList(props: Props) {
               </span>
               <div className="min-w-0 flex-1">
                 <div className="line-clamp-2 text-foreground text-sm transition-colors group-hover:text-primary">
-                  {sourcePart.source.title}
+                  {sourcePart.title}
                 </div>
               </div>
             </div>

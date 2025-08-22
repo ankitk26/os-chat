@@ -1,13 +1,13 @@
+import type { ChatStatus } from "ai";
 import { GlobeIcon, SendIcon, SquareIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
-import type { ChatHookType } from "~/types";
 import ModelSelector from "./model-selector";
 import { Button } from "./ui/button";
 
 type Props = {
-  status: ChatHookType["status"];
+  status: ChatStatus;
   stop: () => void;
 };
 

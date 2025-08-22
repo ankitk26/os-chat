@@ -1,9 +1,8 @@
-import type { UIMessage } from "ai";
 import { CopyIcon } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
-import type { ChatHookType } from "~/types";
+import type { ChatHookType, CustomUIMessage } from "~/types";
 import AIResponseContent from "./ai-response-content";
 import AIResponseReasoning from "./ai-response-reasoning";
 import AIResponseSources from "./ai-response-sources";
@@ -13,21 +12,22 @@ import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
-  message: UIMessage;
-  reload?: ChatHookType["reload"];
+  message: CustomUIMessage;
+  regenerate?: ChatHookType["regenerate"];
   setMessages: ChatHookType["setMessages"];
-  messages: UIMessage[];
+  messages: CustomUIMessage[];
 };
 
 export default React.memo(function AssistantMessage(props: Props) {
-  const { message, reload, setMessages, messages } = props;
+  const { message, regenerate, setMessages, messages } = props;
 
-  const modelUsed =
-    message.annotations &&
-    message.annotations.length > 0 &&
-    // biome-ignore lint/complexity/useLiteralKeys: To be fixed later
-    // biome-ignore lint/suspicious/noExplicitAny: To be fixed later
-    message.annotations.find((a) => (a as any)["type"] === "model");
+  // const modelUsed =
+  // 	message.annotations &&
+  // 	message.annotations.length > 0 &&
+  // 	// biome-ignore lint/complexity/useLiteralKeys: To be fixed later
+  // 	// biome-ignore lint/suspicious/noExplicitAny: To be fixed later
+  // 	message.annotations.find((a) => (a as any)["type"] === "model");
+  const modelUsed = "placeholder";
 
   const messageContent = getMessageContentFromParts(message.parts);
 
@@ -62,11 +62,11 @@ export default React.memo(function AssistantMessage(props: Props) {
 
         <BranchOffButton messageId={message.id} />
 
-        {reload && (
+        {regenerate && (
           <RetryModelDropdown
             message={message}
             messages={messages}
-            reload={reload}
+            regenerate={regenerate}
             setMessages={setMessages}
           />
         )}

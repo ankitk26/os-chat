@@ -1,8 +1,9 @@
-import type { JSONValue, UIMessage } from "ai";
+import type { JSONValue } from "ai";
 import type { Doc } from "convex/_generated/dataModel";
 import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
+import type { CustomUIMessage } from "~/types";
 import AIResponseContent from "./ai-response-content";
 import AIResponseReasoning from "./ai-response-reasoning";
 import AIResponseSources from "./ai-response-sources";
@@ -25,7 +26,7 @@ export default function ReadOnlyAssistantMessage({ message }: Props) {
 
   const messageContent = getMessageContentFromParts(JSON.parse(message.parts));
   const messageId = message.sourceMessageId ?? message._id;
-  const messageParts = JSON.parse(message.parts) as UIMessage["parts"];
+  const messageParts = JSON.parse(message.parts) as CustomUIMessage["parts"];
 
   return (
     <div className="space-y-4">
