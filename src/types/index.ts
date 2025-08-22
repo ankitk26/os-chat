@@ -1,6 +1,7 @@
-import type { useChat } from "@ai-sdk/react";
+import type { UIMessage, useChat } from "@ai-sdk/react";
 import type { api } from "convex/_generated/api";
 import type { FunctionReturnType } from "convex/server";
+import { z } from "zod";
 
 // Create type for /api/chat request body's model
 export type Model = {
@@ -52,4 +53,10 @@ export type SidebarFolder = FunctionReturnType<
   typeof api.folders.getFoldersWithChats
 >[0];
 
-export type ChatHookType = ReturnType<typeof useChat>;
+export const messageMetadataSchema = z.object({
+  createdAt: z.number().optional(),
+  model: z.string().optional(),
+});
+export type MessageMetadata = z.infer<typeof messageMetadataSchema>;
+export type CustomUIMessage = UIMessage<MessageMetadata>;
+export type ChatHookType = ReturnType<typeof useChat<CustomUIMessage>>;

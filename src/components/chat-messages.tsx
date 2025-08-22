@@ -1,18 +1,17 @@
-import type { UIMessage } from "ai";
 import { memo } from "react";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
-import type { ChatHookType } from "~/types";
+import type { ChatHookType, CustomUIMessage } from "~/types";
 import AssistantMessage from "./assistant-message";
 import UserMessage from "./user-message";
 
 type Props = {
-  messages: UIMessage[];
-  reload: ChatHookType["reload"];
+  messages: CustomUIMessage[];
+  regenerate: ChatHookType["regenerate"];
   setMessages: ChatHookType["setMessages"];
 };
 
 export default memo(function ChatMessages(props: Props) {
-  const { messages, reload, setMessages } = props;
+  const { messages, regenerate, setMessages } = props;
 
   if (messages.length === 0) {
     return null;
@@ -30,7 +29,7 @@ export default memo(function ChatMessages(props: Props) {
               <AssistantMessage
                 message={message}
                 messages={messages}
-                reload={reload}
+                regenerate={regenerate}
                 setMessages={setMessages}
               />
             )}
