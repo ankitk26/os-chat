@@ -17,8 +17,8 @@ import { Route as AuthIndexRouteImport } from './routes/_auth.index'
 import { Route as ShareChatIdRouteImport } from './routes/share.$chatId'
 import { Route as AuthSettingsRouteImport } from './routes/_auth.settings'
 import { Route as AuthChatChatIdRouteImport } from './routes/_auth.chat.$chatId'
-import { ServerRoute as ApiChatServerRouteImport } from './routes/api/chat'
-import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth.$'
+import { ServerRoute as ApiChatServerRouteImport } from './routes/api.chat'
+import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api.auth.$'
 
 const rootServerRouteImport = createServerRootRoute()
 
