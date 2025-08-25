@@ -1,10 +1,10 @@
-/** biome-ignore-all lint/correctness/useExhaustiveDependencies: Ignore useEffect deps */
 import { useChat } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
+import { DefaultChatTransport } from "ai";
 import { api } from "convex/_generated/api";
-import type { Doc } from "convex/_generated/dataModel";
+import { useEffect, useState } from "react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
 import type { CustomUIMessage } from "~/types";
@@ -19,7 +19,7 @@ import UserPromptInput from "./user-prompt-input";
 
 type Props = {
   chatId: string;
-  dbMessages: Doc<"messages">[];
+  dbMessages: CustomUIMessage[];
   isMessagesPending?: boolean;
 };
 
@@ -34,17 +34,7 @@ export default function Chat({
     mutationFn: useConvexMutation(api.messages.createMessage),
   });
 
-  const initialMessages = dbMessages.map((message) => {
-    return {
-      id: message.sourceMessageId ?? message._id,
-      role: message.role,
-      parts: JSON.parse(message.parts),
-      metadata: {
-        model: "placeholder",
-        createdAt: message._creationTime,
-      },
-    };
-  });
+  const [input, setInput] = useState("");
 
   const {
     messages,
@@ -56,9 +46,12 @@ export default function Chat({
     setMessages,
   } = useChat<CustomUIMessage>({
     id: chatId,
+    transport: new DefaultChatTransport({
+      api: "/api/chat",
+    }),
     generateId: generateRandomUUID,
     experimental_throttle: 50,
-    messages: initialMessages, // Changed from messages to initialMessages
+    messages: dbMessages,
     onFinish: ({ message: newMessage }) => {
       if (!(chatId && newMessage)) {
         return;
@@ -71,16 +64,16 @@ export default function Chat({
 
       console.log("ai response received");
 
-      // insertAiMessageMutation.mutate({
-      //   messageBody: {
-      //     chatId,
-      //     annotations: "",
-      //     parts: JSON.stringify(newMessage.parts),
-      //     role: "assistant",
-      //     sourceMessageId: newMessage.id,
-      //   },
-      //   sessionToken: auth.session.token,
-      // });
+      insertAiMessageMutation.mutate({
+        messageBody: {
+          chatId,
+          annotations: "",
+          parts: JSON.stringify(newMessage.parts),
+          role: "assistant",
+          sourceMessageId: newMessage.id,
+        },
+        sessionToken: auth.session.token,
+      });
     },
   });
 
@@ -159,6 +152,14 @@ export default function Chat({
   //   }
   // }, [messages.length]);
 
+  useEffect(() => {
+    setMessages(dbMessages);
+  }, [dbMessages, isMessagesPending]);
+
+  useEffect(() => {
+    console.log(status);
+  }, [status]);
+
   return (
     <div className="relative mx-auto flex h-svh max-h-svh w-full flex-col">
       {/* Full height scroll area that extends behind the prompt */}
@@ -214,6 +215,8 @@ export default function Chat({
           sendMessage={sendMessage}
           status={status}
           stop={stop}
+          input={input}
+          setInput={setInput}
         />
       </div>
     </div>
