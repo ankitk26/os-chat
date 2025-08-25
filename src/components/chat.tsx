@@ -9,6 +9,7 @@ import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
+import type { CustomUIMessage } from "~/types";
 import AiResponseAlert from "./ai-response-error";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
 import ChatLoadingIndicator from "./chat-loading-indicator";
@@ -36,38 +37,37 @@ export default function Chat({
     mutationFn: useConvexMutation(api.messages.createMessage),
   });
 
+  const initialMessages = dbMessages.map((message) => {
+    return {
+      id: message.sourceMessageId ?? message._id,
+      role: message.role,
+      parts: JSON.parse(message.parts),
+      metadata: {
+        model: "placeholder",
+        createdAt: message._creationTime,
+      },
+    };
+  });
+
+
   const {
     messages,
-    input,
     status,
-    setInput,
     stop,
-    reload,
-    append,
+    regenerate,
+    sendMessage,
     error,
     setMessages,
-  } = useChat({
+  } = useChat<CustomUIMessage>({
     id: chatId,
-    experimental_throttle: 200,
-    initialMessages:
-      dbMessages?.map((message) => {
-        return {
-          id: message.sourceMessageId ?? message._id,
-          role: message.role,
-          annotations: JSON.parse(message.annotations),
-          content: "", // not needed for displaying messages. useChat needs it
-          parts: JSON.parse(message.parts),
-          createdAt: new Date(message._creationTime),
-        };
-      }) ?? [],
     generateId: generateRandomUUID,
-    onFinish: (newMessage) => {
-      if (!chatId) {
+    experimental_throttle: 50,
+    messages: initialMessages, // Changed from messages to initialMessages
+    onFinish: ({ message: newMessage }) => {
+      if (!(chatId && newMessage)) {
         return;
       }
-      if (!newMessage.parts) {
-        return;
-      }
+
       const messageContent = getMessageContentFromParts(newMessage.parts);
       if (!messageContent) {
         return;
@@ -76,7 +76,7 @@ export default function Chat({
       insertAiMessageMutation.mutate({
         messageBody: {
           chatId,
-          annotations: JSON.stringify(newMessage.annotations),
+          annotations: "",
           parts: JSON.stringify(newMessage.parts),
           role: "assistant",
           sourceMessageId: newMessage.id,
@@ -86,7 +86,6 @@ export default function Chat({
     },
   });
 
-  // console.log(messages);
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
@@ -181,7 +180,7 @@ export default function Chat({
                 ) : (
                   <ChatMessages
                     messages={messages}
-                    reload={reload}
+                    regenerate={regenerate}
                     setMessages={setMessages}
                   />
                 )}
@@ -200,7 +199,7 @@ export default function Chat({
       {showScrollToBottom && (
         <div className="-translate-x-1/2 absolute bottom-44 left-1/2 z-50 transform lg:bottom-36">
           <Button
-            className="rounded-full bg-transparent"
+            className="rounded-full"
             onClick={scrollToBottom}
             size="icon"
             variant="outline"
@@ -213,10 +212,8 @@ export default function Chat({
       {/* Fixed prompt input with backdrop blur */}
       <div className="absolute right-0 bottom-0 left-0 z-10">
         <UserPromptInput
-          append={append}
           chatId={chatId}
-          input={input}
-          setInput={setInput}
+          sendMessage={sendMessage}
           status={status}
           stop={stop}
         />
