@@ -67,6 +67,7 @@ export default function UserPromptInput(props: Props) {
       navigate({
         to: "/chat/$chatId",
         params: { chatId: props.chatId },
+        replace: true,
       });
       const dbGeneratedChatId = await createChatMutation.mutateAsync({
         sessionToken: auth.session.token,
@@ -77,16 +78,16 @@ export default function UserPromptInput(props: Props) {
 
     const sourceMessageId = generateRandomUUID();
 
-    createMessageMutation.mutate({
-      messageBody: {
-        chatId: props.chatId,
-        role: "user",
-        sourceMessageId,
-        annotations: JSON.stringify([]),
-        parts: JSON.stringify([{ type: "text", text: textareaValue }]),
-      },
-      sessionToken: auth.session.token,
-    });
+    // createMessageMutation.mutate({
+    //   messageBody: {
+    //     chatId: props.chatId,
+    //     role: "user",
+    //     sourceMessageId,
+    //     annotations: JSON.stringify([]),
+    //     parts: JSON.stringify([{ type: "text", text: textareaValue }]),
+    //   },
+    //   sessionToken: auth.session.token,
+    // });
 
     props.sendMessage(
       {
