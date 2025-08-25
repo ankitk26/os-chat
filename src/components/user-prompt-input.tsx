@@ -9,6 +9,7 @@ import type { ChatStatus } from "ai";
 import { api } from "convex/_generated/api";
 import type { Id } from "convex/_generated/dataModel";
 import { useRef, useState } from "react";
+import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getChatTitle } from "~/server-fns/get-chat-title";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
@@ -74,10 +75,13 @@ export default function UserPromptInput(props: Props) {
       handleChatTitleUpdate(dbGeneratedChatId);
     }
 
+    const sourceMessageId = generateRandomUUID();
+
     createMessageMutation.mutate({
       messageBody: {
         chatId: props.chatId,
         role: "user",
+        sourceMessageId,
         annotations: JSON.stringify([]),
         parts: JSON.stringify([{ type: "text", text: textareaValue }]),
       },
@@ -85,7 +89,11 @@ export default function UserPromptInput(props: Props) {
     });
 
     props.sendMessage(
-      { text: textareaValue },
+      {
+        role: "user",
+        id: sourceMessageId,
+        parts: [{ type: "text", text: textareaValue }],
+      },
       {
         body: {
           model: selectedModel,
