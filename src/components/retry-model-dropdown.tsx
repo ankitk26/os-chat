@@ -81,7 +81,7 @@ export default function RetryModelDropdown(props: Props) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button size="icon" variant="ghost">

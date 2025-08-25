@@ -39,7 +39,7 @@ export default function DeleteAllChatsAlertDialog() {
     >
       <AlertDialogTrigger asChild>
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Button
               className="opacity-0 group-hover/chat-header:opacity-100"
               onClick={() => setIsDialogOpen(true)}
