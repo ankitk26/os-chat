@@ -1,3 +1,33 @@
+// import { convexQuery } from "@convex-dev/react-query";
+// import { useSuspenseQuery } from "@tanstack/react-query";
+// import { createFileRoute, useRouteContext } from "@tanstack/react-router";
+// import { api } from "convex/_generated/api";
+// import Chat from "~/components/chat";
+
+// export const Route = createFileRoute("/_auth/chat/$chatId")({
+//   component: RouteComponent,
+// });
+
+// function RouteComponent() {
+//   const { chatId } = Route.useParams();
+//   const { auth } = useRouteContext({ from: "/_auth" });
+
+//   const { data: messages, isPending: isMessagesPending } = useSuspenseQuery(
+//     convexQuery(api.messages.getMessages, {
+//       chatId,
+//       sessionToken: auth.session.token,
+//     })
+//   );
+
+//   return (
+//     <Chat
+//       chatId={chatId}
+//       dbMessages={messages ?? []}
+//       isMessagesPending={isMessagesPending}
+//     />
+//   );
+// }
+
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useRouteContext } from "@tanstack/react-router";
@@ -16,7 +46,16 @@ function RouteComponent() {
   const { auth } = useRouteContext({ from: "/_auth" });
 
   return (
-    <Suspense fallback={<ChatSkeleton />}>
+    <Suspense
+      fallback={
+        <div className="mx-auto h-full w-full max-w-full px-2 lg:max-w-3xl lg:px-4">
+          <div className="my-4 space-y-6 pb-40 lg:my-8 lg:space-y-8 lg:pb-32">
+            <UserMessageSkeleton />
+            <AssistantMessageSkeleton />
+          </div>
+        </div>
+      }
+    >
       <ChatWithData chatId={chatId} sessionToken={auth.session.token} />
     </Suspense>
   );
@@ -35,15 +74,4 @@ function ChatWithData({
   );
 
   return <Chat chatId={chatId} dbMessages={messages} />;
-}
-
-function ChatSkeleton() {
-  return (
-    <div className="mx-auto h-full w-full max-w-full px-2 lg:max-w-3xl lg:px-4">
-      <div className="my-4 space-y-6 pb-40 lg:my-8 lg:space-y-8 lg:pb-32">
-        <UserMessageSkeleton />
-        <AssistantMessageSkeleton />
-      </div>
-    </div>
-  );
 }

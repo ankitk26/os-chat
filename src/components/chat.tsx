@@ -5,8 +5,6 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import type { Doc } from "convex/_generated/dataModel";
-import { ChevronDownIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
 import type { CustomUIMessage } from "~/types";
@@ -15,7 +13,6 @@ import AssistantMessageSkeleton from "./assistant-message-skeleton";
 import ChatLoadingIndicator from "./chat-loading-indicator";
 import ChatMessages from "./chat-messages";
 import EmptyChatContent from "./empty-chat-content";
-import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
 import UserMessageSkeleton from "./user-message-skeleton";
 import UserPromptInput from "./user-prompt-input";
@@ -49,7 +46,6 @@ export default function Chat({
     };
   });
 
-
   const {
     messages,
     status,
@@ -73,94 +69,95 @@ export default function Chat({
         return;
       }
 
-      insertAiMessageMutation.mutate({
-        messageBody: {
-          chatId,
-          annotations: "",
-          parts: JSON.stringify(newMessage.parts),
-          role: "assistant",
-          sourceMessageId: newMessage.id,
-        },
-        sessionToken: auth.session.token,
-      });
+      console.log("ai response received");
+
+      // insertAiMessageMutation.mutate({
+      //   messageBody: {
+      //     chatId,
+      //     annotations: "",
+      //     parts: JSON.stringify(newMessage.parts),
+      //     role: "assistant",
+      //     sourceMessageId: newMessage.id,
+      //   },
+      //   sessionToken: auth.session.token,
+      // });
     },
   });
 
+  // const scrollAreaRef = useRef<HTMLDivElement>(null);
+  // const [showScrollToBottom, setShowScrollToBottom] = useState(false);
 
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const [showScrollToBottom, setShowScrollToBottom] = useState(false);
+  // const checkScrollPosition = () => {
+  //   const scrollArea = scrollAreaRef.current;
+  //   if (!scrollArea) {
+  //     return;
+  //   }
 
-  const checkScrollPosition = () => {
-    const scrollArea = scrollAreaRef.current;
-    if (!scrollArea) {
-      return;
-    }
+  //   const viewport = scrollArea.querySelector(
+  //     "[data-radix-scroll-area-viewport]"
+  //   );
+  //   if (!viewport) {
+  //     return;
+  //   }
 
-    const viewport = scrollArea.querySelector(
-      "[data-radix-scroll-area-viewport]"
-    );
-    if (!viewport) {
-      return;
-    }
+  //   const { scrollTop, scrollHeight, clientHeight } = viewport;
+  //   const isScrollable = scrollHeight > clientHeight;
+  //   const isNearBottom = scrollTop + clientHeight >= scrollHeight - 100; // 100px threshold
 
-    const { scrollTop, scrollHeight, clientHeight } = viewport;
-    const isScrollable = scrollHeight > clientHeight;
-    const isNearBottom = scrollTop + clientHeight >= scrollHeight - 100; // 100px threshold
+  //   setShowScrollToBottom(isScrollable && !isNearBottom);
+  // };
 
-    setShowScrollToBottom(isScrollable && !isNearBottom);
-  };
+  // const scrollToBottom = () => {
+  //   const scrollArea = scrollAreaRef.current;
+  //   if (!scrollArea) {
+  //     return;
+  //   }
 
-  const scrollToBottom = () => {
-    const scrollArea = scrollAreaRef.current;
-    if (!scrollArea) {
-      return;
-    }
+  //   const viewport = scrollArea.querySelector(
+  //     "[data-radix-scroll-area-viewport]"
+  //   );
+  //   if (!viewport) {
+  //     return;
+  //   }
 
-    const viewport = scrollArea.querySelector(
-      "[data-radix-scroll-area-viewport]"
-    );
-    if (!viewport) {
-      return;
-    }
+  //   viewport.scrollTo({
+  //     top: viewport.scrollHeight,
+  //     behavior: "smooth",
+  //   });
+  // };
 
-    viewport.scrollTo({
-      top: viewport.scrollHeight,
-      behavior: "smooth",
-    });
-  };
+  // useEffect(() => {
+  //   const scrollArea = scrollAreaRef.current;
+  //   if (!scrollArea) {
+  //     return;
+  //   }
 
-  useEffect(() => {
-    const scrollArea = scrollAreaRef.current;
-    if (!scrollArea) {
-      return;
-    }
+  //   const viewport = scrollArea.querySelector(
+  //     "[data-radix-scroll-area-viewport]"
+  //   );
+  //   if (!viewport) {
+  //     return;
+  //   }
 
-    const viewport = scrollArea.querySelector(
-      "[data-radix-scroll-area-viewport]"
-    );
-    if (!viewport) {
-      return;
-    }
+  //   viewport.addEventListener("scroll", checkScrollPosition);
 
-    viewport.addEventListener("scroll", checkScrollPosition);
+  //   // Check initial scroll position
+  //   checkScrollPosition();
 
-    // Check initial scroll position
-    checkScrollPosition();
+  //   return () => {
+  //     viewport.removeEventListener("scroll", checkScrollPosition);
+  //   };
+  // }, [messages]);
 
-    return () => {
-      viewport.removeEventListener("scroll", checkScrollPosition);
-    };
-  }, [messages]);
-
-  // Auto-scroll to bottom when new messages arrive (optional)
-  useEffect(() => {
-    if (status === "submitted") {
-      const timer = setTimeout(() => {
-        scrollToBottom();
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [messages.length]);
+  // // Auto-scroll to bottom when new messages arrive (optional)
+  // useEffect(() => {
+  //   if (status === "submitted") {
+  //     const timer = setTimeout(() => {
+  //       scrollToBottom();
+  //     }, 100);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [messages.length]);
 
   return (
     <div className="relative mx-auto flex h-svh max-h-svh w-full flex-col">
@@ -169,7 +166,8 @@ export default function Chat({
         {!isMessagesPending && messages.length === 0 && <EmptyChatContent />}
 
         {chatId && (
-          <ScrollArea className="h-full w-full" ref={scrollAreaRef}>
+          <ScrollArea className="h-full w-full">
+            {/* <ScrollArea className="h-full w-full" ref={scrollAreaRef}> */}
             <div className="mx-auto h-full w-full max-w-full px-2 lg:max-w-3xl lg:px-4">
               <div className="my-4 space-y-6 pb-40 lg:my-8 lg:space-y-8 lg:pb-32">
                 {isMessagesPending && status !== "submitted" ? (
@@ -196,7 +194,7 @@ export default function Chat({
       </div>
 
       {/* Scroll to bottom button - centered at top of prompt */}
-      {showScrollToBottom && (
+      {/* {showScrollToBottom && (
         <div className="-translate-x-1/2 absolute bottom-44 left-1/2 z-50 transform lg:bottom-36">
           <Button
             className="rounded-full"
@@ -207,7 +205,7 @@ export default function Chat({
             <ChevronDownIcon className="size-4" />
           </Button>
         </div>
-      )}
+      )} */}
 
       {/* Fixed prompt input with backdrop blur */}
       <div className="absolute right-0 bottom-0 left-0 z-10">
