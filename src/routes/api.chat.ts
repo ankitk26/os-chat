@@ -4,7 +4,12 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { createXai } from "@ai-sdk/xai";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { createServerFileRoute } from "@tanstack/react-start/server";
-import { convertToModelMessages, smoothStream, streamText } from "ai";
+import {
+  convertToModelMessages,
+  smoothStream,
+  streamText,
+  validateUIMessages,
+} from "ai";
 import { defaultSelectedModel } from "~/constants/model-providers";
 import { systemMessage } from "~/constants/system-message";
 import type { ApiKeys, CustomUIMessage, Model } from "~/types";
@@ -110,6 +115,8 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
       useOpenRouter,
     } = chatRequestBody;
 
+    const validatedMessages = await validateUIMessages({ messages });
+
     const modelToUse = getModelToUse(
       requestModel,
       apiKeys,
@@ -141,7 +148,7 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
     });
 
     return result.toUIMessageStreamResponse({
-      originalMessages: messages,
+      originalMessages: validatedMessages,
       sendReasoning: true,
       sendSources: isWebSearchEnabled,
       onError: (error) => {
