@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: ignore for now */
 import { useChat } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -63,8 +64,6 @@ export default function Chat({
       if (!messageContent) {
         return;
       }
-
-      console.log("ai response received");
 
       insertAiMessageMutation.mutate({
         messageBody: {
@@ -157,10 +156,6 @@ export default function Chat({
   useEffect(() => {
     setMessages(dbMessages);
   }, [dbMessages, isMessagesPending]);
-
-  useEffect(() => {
-    console.log(status);
-  }, [status]);
 
   return (
     <div className="relative mx-auto flex h-svh max-h-svh w-full flex-col">
