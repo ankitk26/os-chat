@@ -1,4 +1,4 @@
-import { UseChatHelpers } from "@ai-sdk/react";
+import type { UseChatHelpers } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
 import {
@@ -9,7 +9,13 @@ import {
 import type { ChatStatus } from "ai";
 import { api } from "convex/_generated/api";
 import type { Id } from "convex/_generated/dataModel";
-import { Dispatch, memo, SetStateAction, useEffect, useRef } from "react";
+import {
+  type Dispatch,
+  memo,
+  type SetStateAction,
+  useEffect,
+  useRef,
+} from "react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getChatTitle } from "~/server-fns/get-chat-title";
 import { useModelStore } from "~/stores/model-store";
@@ -90,7 +96,6 @@ function PureUserPromptInput(props: Props) {
       sessionToken: auth.session.token,
     });
 
-    console.log(`sending message - ${props.input}`);
     props.sendMessage(
       {
         role: "user",
@@ -119,11 +124,13 @@ function PureUserPromptInput(props: Props) {
   };
 
   // Resize when the textarea value changes.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: as noted below
   useEffect(() => {
     resizeTextarea();
   }, [props.input]);
 
   // Focus the textarea when the chat ID changes or on initial load.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: as noted below
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.focus();

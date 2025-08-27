@@ -3,11 +3,7 @@ import type { CustomUIMessage } from "~/types";
 import SourcesList from "./sources-list";
 import SourcesToggleButton from "./sources-toggle-button";
 
-export default function AIResponseSources({
-  parts,
-}: {
-  parts: CustomUIMessage["parts"];
-}) {
+export default function AIResponseSources({ parts }: { parts: CustomUIMessage["parts"] }) {
   const [showSources, setShowSources] = useState(false);
   const sourceParts = parts.filter((part) => part.type === "source-url");
 
