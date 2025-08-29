@@ -9,6 +9,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type { ReactNode } from "react";
 import { Toaster } from "~/components/ui/sonner";
 import { cn } from "~/lib/utils";
+import { ChatProvider } from "~/providers/chat-provider";
 import { useAppearanceStore } from "~/stores/appearance-store";
 import appCss from "~/styles.css?url";
 
@@ -84,9 +85,11 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           disableTransitionOnChange
           enableSystem
         >
-          <div>{children}</div>
-          <Toaster duration={800} />
-          <Scripts />
+          <ChatProvider>
+            <div>{children}</div>
+            <Toaster duration={800} />
+            <Scripts />
+          </ChatProvider>
         </NextThemesProvider>
       </body>
     </html>
