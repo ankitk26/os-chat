@@ -9,13 +9,7 @@ import {
 import type { ChatStatus } from "ai";
 import { api } from "convex/_generated/api";
 import type { Id } from "convex/_generated/dataModel";
-import {
-  type Dispatch,
-  memo,
-  type SetStateAction,
-  useEffect,
-  useRef,
-} from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getChatTitle } from "~/server-fns/get-chat-title";
 import { useModelStore } from "~/stores/model-store";
@@ -24,8 +18,6 @@ import type { CustomUIMessage } from "~/types";
 import PromptActions from "./prompt-actions";
 
 type Props = {
-  input: string;
-  setInput: Dispatch<SetStateAction<string>>;
   chatId: string;
   status: ChatStatus;
   stop: UseChatHelpers<CustomUIMessage>["stop"];
@@ -35,6 +27,8 @@ type Props = {
 function PureUserPromptInput(props: Props) {
   const { chatId: paramsChatId } = useParams({ strict: false });
   const { auth } = useRouteContext({ from: "/_auth" });
+
+  const [input, setInput] = useState("");
 
   const navigate = useNavigate();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -58,7 +52,7 @@ function PureUserPromptInput(props: Props) {
   });
 
   const handleChatTitleUpdate = async (dbGeneratedChatId: Id<"chats">) => {
-    const title = await getChatTitle({ data: { userMessage: props.input } });
+    const title = await getChatTitle({ data: { userMessage: input } });
     await updateChatTitleMutation.mutateAsync({
       chat: { chatId: dbGeneratedChatId, title: title as string },
       sessionToken: auth.session.token,
@@ -74,7 +68,6 @@ function PureUserPromptInput(props: Props) {
       navigate({
         to: "/chat/$chatId",
         params: { chatId: props.chatId },
-        replace: true,
       });
       const dbGeneratedChatId = await createChatMutation.mutateAsync({
         sessionToken: auth.session.token,
@@ -91,7 +84,7 @@ function PureUserPromptInput(props: Props) {
         role: "user",
         sourceMessageId,
         annotations: JSON.stringify([]),
-        parts: JSON.stringify([{ type: "text", text: props.input }]),
+        parts: JSON.stringify([{ type: "text", text: input }]),
       },
       sessionToken: auth.session.token,
     });
@@ -100,7 +93,7 @@ function PureUserPromptInput(props: Props) {
       {
         role: "user",
         id: sourceMessageId,
-        parts: [{ type: "text", text: props.input }],
+        parts: [{ type: "text", text: input }],
       },
       {
         body: {
@@ -112,7 +105,7 @@ function PureUserPromptInput(props: Props) {
       }
     );
 
-    props.setInput("");
+    setInput("");
   };
 
   const resizeTextarea = () => {
@@ -127,7 +120,7 @@ function PureUserPromptInput(props: Props) {
   // biome-ignore lint/correctness/useExhaustiveDependencies: as noted below
   useEffect(() => {
     resizeTextarea();
-  }, [props.input]);
+  }, [input]);
 
   // Focus the textarea when the chat ID changes or on initial load.
   // biome-ignore lint/correctness/useExhaustiveDependencies: as noted below
@@ -153,8 +146,8 @@ function PureUserPromptInput(props: Props) {
               createChatMutation.isPending || createMessageMutation.isPending
             }
             onChange={(e) => {
-              props.setInput(e.target.value);
-              resizeTextarea();
+              setInput(e.target.value);
+              // resizeTextarea();
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
@@ -165,7 +158,7 @@ function PureUserPromptInput(props: Props) {
             placeholder="Start the conversation..."
             ref={textareaRef}
             rows={1}
-            value={props.input}
+            value={input}
           />
         </div>
 
@@ -176,7 +169,6 @@ function PureUserPromptInput(props: Props) {
 }
 
 const UserPromptInput = memo(PureUserPromptInput, (prevProps, nextProps) => {
-  if (prevProps.input !== nextProps.input) return false;
   if (prevProps.status !== nextProps.status) return false;
   return true;
 });
