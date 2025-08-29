@@ -3,12 +3,11 @@ import { useChat } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
-import { DefaultChatTransport } from "ai";
 import { api } from "convex/_generated/api";
 import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
+import { useSharedChatContext } from "~/providers/chat-provider";
 import type { CustomUIMessage } from "~/types";
 import AiResponseAlert from "./ai-response-error";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
@@ -37,7 +36,7 @@ export default function Chat({
     mutationFn: useConvexMutation(api.messages.createMessage),
   });
 
-  const [input, setInput] = useState("");
+  const { chat } = useSharedChatContext();
 
   const {
     messages,
@@ -48,11 +47,8 @@ export default function Chat({
     error,
     setMessages,
   } = useChat<CustomUIMessage>({
+    chat,
     id: chatId,
-    transport: new DefaultChatTransport({
-      api: "/api/chat",
-    }),
-    generateId: generateRandomUUID,
     experimental_throttle: 50,
     messages: dbMessages,
     onFinish: ({ message: newMessage }) => {
@@ -64,6 +60,8 @@ export default function Chat({
       if (!messageContent) {
         return;
       }
+
+      console.log("ai response received");
 
       insertAiMessageMutation.mutate({
         messageBody: {
@@ -212,8 +210,6 @@ export default function Chat({
           sendMessage={sendMessage}
           status={status}
           stop={stop}
-          input={input}
-          setInput={setInput}
         />
       </div>
     </div>
