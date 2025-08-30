@@ -12,6 +12,9 @@ import {
 } from "ai";
 import { defaultSelectedModel } from "~/constants/model-providers";
 import { systemMessage } from "~/constants/system-message";
+import { generateRandomUUID } from "~/lib/generate-random-uuid";
+import { createMessageServerFn } from "~/server-fns/create-message";
+import { getAuth } from "~/server-fns/get-auth";
 import type { ApiKeys, CustomUIMessage, Model } from "~/types";
 
 type ChatRequestBody = {
@@ -20,6 +23,7 @@ type ChatRequestBody = {
   isWebSearchEnabled: boolean;
   apiKeys: ApiKeys;
   useOpenRouter: boolean;
+  chatId?: string;
 };
 
 const getModelToUse = (
@@ -105,6 +109,11 @@ const getModelToUse = (
 
 export const ServerRoute = createServerFileRoute("/api/chat").methods({
   POST: async ({ request }) => {
+    const authData = await getAuth();
+    if (!authData?.session) {
+      throw new Error("Invalid request");
+    }
+
     const chatRequestBody: ChatRequestBody = await request.json();
 
     const {
@@ -113,6 +122,7 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
       isWebSearchEnabled,
       apiKeys,
       useOpenRouter,
+      chatId,
     } = chatRequestBody;
 
     const validatedMessages = await validateUIMessages({ messages });
@@ -141,6 +151,7 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
     return result.toUIMessageStreamResponse({
       originalMessages: validatedMessages,
       sendReasoning: true,
+      generateMessageId: generateRandomUUID,
       messageMetadata: ({ part }) => {
         if (part.type === "start") {
           return {
@@ -150,9 +161,20 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
         }
       },
       sendSources: isWebSearchEnabled,
+      onFinish: async ({ responseMessage }) => {
+        if (chatId) {
+          await createMessageServerFn({
+            data: {
+              chatId,
+              messageId: responseMessage.id,
+              parts: JSON.stringify(responseMessage.parts),
+              metadata: JSON.stringify(responseMessage.metadata),
+            },
+          });
+        }
+      },
       onError: (error) => {
-        // console.log((error as any).message);
-        // biome-ignore lint/suspicious/noExplicitAny: Allow in this case
+        // biome-ignore lint/suspicious/noExplicitAny: ignore
         return (error as any).message;
       },
     });

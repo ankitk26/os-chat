@@ -101,6 +101,7 @@ function PureUserPromptInput(props: Props) {
           isWebSearchEnabled,
           apiKeys: persistedApiKeys,
           useOpenRouter: persistedUseOpenRouter,
+          chatId: props.chatId,
         },
       }
     );
