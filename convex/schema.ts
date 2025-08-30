@@ -57,6 +57,7 @@ export default defineSchema({
     userId: v.id("user"),
     parts: v.string(),
     annotations: v.string(),
+    metadata: v.optional(v.string()),
     role: v.union(v.literal("user"), v.literal("assistant")),
   })
     .index("by_user_chat", ["chatId", "userId"])

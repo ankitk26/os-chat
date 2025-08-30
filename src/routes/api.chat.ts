@@ -131,25 +131,24 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
           ? undefined
           : systemMessage,
       messages: convertToModelMessages(messages),
-      // providerOptions: {
-      //   google: { responseModalities: ["TEXT", "IMAGE"] },
-      // },
       experimental_transform: smoothStream({ chunking: "line" }),
       abortSignal: request.signal,
       tools: {
         google_search: google.tools.googleSearch({}),
       },
-      // onFinish: () => {
-      // 	dataStream.writeMessageAnnotation({
-      // 		type: "model",
-      // 		data: requestModel.name,
-      // 	});
-      // },
     });
 
     return result.toUIMessageStreamResponse({
       originalMessages: validatedMessages,
       sendReasoning: true,
+      messageMetadata: ({ part }) => {
+        if (part.type === "start") {
+          return {
+            model: requestModel.name,
+            createdAt: Date.now(),
+          };
+        }
+      },
       sendSources: isWebSearchEnabled,
       onError: (error) => {
         // console.log((error as any).message);
