@@ -71,7 +71,6 @@ export default function ShareChatAccessHandler() {
       .then(() => {
         setCopied(true);
         toast.success("Link copied to clipboard");
-        setTimeout(() => setCopied(false), 500);
       })
       .catch(() => toast.error("Failed to copy link"));
   }

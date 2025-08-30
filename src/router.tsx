@@ -40,6 +40,7 @@ export function createRouter() {
 }
 
 declare module "@tanstack/react-router" {
+  // biome-ignore lint/nursery/useConsistentTypeDefinitions: default syntax
   interface Register {
     router: ReturnType<typeof createRouter>;
   }

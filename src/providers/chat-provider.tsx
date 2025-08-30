@@ -4,11 +4,11 @@ import { createContext, type ReactNode, useContext, useState } from "react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import type { CustomUIMessage } from "~/types";
 
-interface ChatContextValue {
+type ChatContextValue = {
   // replace with your custom message type
   chat: Chat<CustomUIMessage>;
   clearChat: () => void;
-}
+};
 
 const ChatContext = createContext<ChatContextValue | undefined>(undefined);
 

@@ -119,7 +119,6 @@ export const deleteFolder = mutation({
           page: chats,
           isDone: batchDone,
           continueCursor,
-          // biome-ignore lint/nursery/noAwaitInLoop: Need async values to resolve for below operation
         } = await ctx.db
           .query("chats")
           .withIndex("by_folder_and_user", (q) =>

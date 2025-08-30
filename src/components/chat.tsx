@@ -49,7 +49,7 @@ export default function Chat({
   } = useChat<CustomUIMessage>({
     chat,
     id: chatId,
-    experimental_throttle: 50,
+    experimental_throttle: 200,
     messages: dbMessages,
     onFinish: ({ message: newMessage }) => {
       if (!(chatId && newMessage)) {
@@ -60,8 +60,6 @@ export default function Chat({
       if (!messageContent) {
         return;
       }
-
-      console.log("ai response received");
 
       insertAiMessageMutation.mutate({
         messageBody: {
@@ -94,7 +92,9 @@ export default function Chat({
 
     const { scrollTop, scrollHeight, clientHeight } = viewport;
     const isScrollable = scrollHeight > clientHeight;
-    const isNearBottom = scrollTop + clientHeight >= scrollHeight - 100; // 100px threshold
+    const bottomThreshold = 100;
+    const isNearBottom =
+      scrollTop + clientHeight >= scrollHeight - bottomThreshold;
 
     setShowScrollToBottom(isScrollable && !isNearBottom);
   };
@@ -144,15 +144,18 @@ export default function Chat({
   // Auto-scroll to bottom when new messages arrive (optional)
   useEffect(() => {
     if (status === "submitted") {
+      const timerSeconds = 100;
       const timer = setTimeout(() => {
         scrollToBottom();
-      }, 100);
+      }, timerSeconds);
       return () => clearTimeout(timer);
     }
   }, [messages.length]);
 
   useEffect(() => {
-    setMessages(dbMessages);
+    if (messages.length === 0) {
+      setMessages(dbMessages);
+    }
   }, [dbMessages, isMessagesPending]);
 
   return (

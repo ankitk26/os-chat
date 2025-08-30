@@ -75,6 +75,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 
   return (
     <html lang="en">
+      {/** biome-ignore lint/style/noHeadElement: required to avoid console errors */}
       <head>
         <HeadContent />
       </head>
