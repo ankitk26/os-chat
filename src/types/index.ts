@@ -1,4 +1,4 @@
-import type { UIMessage, useChat } from "@ai-sdk/react";
+import type { UIMessage } from "@ai-sdk/react";
 import type { api } from "convex/_generated/api";
 import type { FunctionReturnType } from "convex/server";
 import { z } from "zod";
@@ -59,4 +59,3 @@ export const messageMetadataSchema = z.object({
 });
 export type MessageMetadata = z.infer<typeof messageMetadataSchema>;
 export type CustomUIMessage = UIMessage<MessageMetadata>;
-export type ChatHookType = ReturnType<typeof useChat<CustomUIMessage>>;
