@@ -1,14 +1,14 @@
-/** biome-ignore-all lint/correctness/useExhaustiveDependencies: Ignore useEffect deps */
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: ignore for now */
 import { useChat } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
-import type { Doc } from "convex/_generated/dataModel";
 import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
+import { useSharedChatContext } from "~/providers/chat-provider";
+import type { CustomUIMessage } from "~/types";
 import AiResponseAlert from "./ai-response-error";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
 import ChatLoadingIndicator from "./chat-loading-indicator";
@@ -21,7 +21,7 @@ import UserPromptInput from "./user-prompt-input";
 
 type Props = {
   chatId: string;
-  dbMessages: Doc<"messages">[];
+  dbMessages: CustomUIMessage[];
   isMessagesPending?: boolean;
 };
 
@@ -36,47 +36,37 @@ export default function Chat({
     mutationFn: useConvexMutation(api.messages.createMessage),
   });
 
+  const { chat } = useSharedChatContext();
+
   const {
     messages,
-    input,
     status,
-    setInput,
     stop,
-    reload,
-    append,
+    regenerate,
+    sendMessage,
     error,
     setMessages,
-  } = useChat({
+  } = useChat<CustomUIMessage>({
+    chat,
     id: chatId,
-    experimental_throttle: 200,
-    initialMessages:
-      dbMessages?.map((message) => {
-        return {
-          id: message.sourceMessageId ?? message._id,
-          role: message.role,
-          annotations: JSON.parse(message.annotations),
-          content: "", // not needed for displaying messages. useChat needs it
-          parts: JSON.parse(message.parts),
-          createdAt: new Date(message._creationTime),
-        };
-      }) ?? [],
-    generateId: generateRandomUUID,
-    onFinish: (newMessage) => {
-      if (!chatId) {
+    experimental_throttle: 50,
+    messages: dbMessages,
+    onFinish: ({ message: newMessage }) => {
+      if (!(chatId && newMessage)) {
         return;
       }
-      if (!newMessage.parts) {
-        return;
-      }
+
       const messageContent = getMessageContentFromParts(newMessage.parts);
       if (!messageContent) {
         return;
       }
 
+      console.log("ai response received");
+
       insertAiMessageMutation.mutate({
         messageBody: {
           chatId,
-          annotations: JSON.stringify(newMessage.annotations),
+          annotations: "",
           parts: JSON.stringify(newMessage.parts),
           role: "assistant",
           sourceMessageId: newMessage.id,
@@ -85,8 +75,6 @@ export default function Chat({
       });
     },
   });
-
-  // console.log(messages);
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
@@ -163,6 +151,10 @@ export default function Chat({
     }
   }, [messages.length]);
 
+  useEffect(() => {
+    setMessages(dbMessages);
+  }, [dbMessages, isMessagesPending]);
+
   return (
     <div className="relative mx-auto flex h-svh max-h-svh w-full flex-col">
       {/* Full height scroll area that extends behind the prompt */}
@@ -170,6 +162,7 @@ export default function Chat({
         {!isMessagesPending && messages.length === 0 && <EmptyChatContent />}
 
         {chatId && (
+          // <ScrollArea className="h-full w-full">
           <ScrollArea className="h-full w-full" ref={scrollAreaRef}>
             <div className="mx-auto h-full w-full max-w-full px-2 lg:max-w-3xl lg:px-4">
               <div className="my-4 space-y-6 pb-40 lg:my-8 lg:space-y-8 lg:pb-32">
@@ -181,7 +174,7 @@ export default function Chat({
                 ) : (
                   <ChatMessages
                     messages={messages}
-                    reload={reload}
+                    regenerate={regenerate}
                     setMessages={setMessages}
                   />
                 )}
@@ -200,7 +193,7 @@ export default function Chat({
       {showScrollToBottom && (
         <div className="-translate-x-1/2 absolute bottom-44 left-1/2 z-50 transform lg:bottom-36">
           <Button
-            className="rounded-full bg-transparent"
+            className="rounded-full"
             onClick={scrollToBottom}
             size="icon"
             variant="outline"
@@ -213,10 +206,8 @@ export default function Chat({
       {/* Fixed prompt input with backdrop blur */}
       <div className="absolute right-0 bottom-0 left-0 z-10">
         <UserPromptInput
-          append={append}
           chatId={chatId}
-          input={input}
-          setInput={setInput}
+          sendMessage={sendMessage}
           status={status}
           stop={stop}
         />

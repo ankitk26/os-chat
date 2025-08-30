@@ -182,6 +182,7 @@ code,
 pre,
 code span {
   font-family: "Jetbrains Mono", monospace;
+  font-variant-ligatures: none;
 }
 
 pre.defaultStyles,

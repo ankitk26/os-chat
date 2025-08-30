@@ -1,21 +1,21 @@
 import { createAnthropic } from "@ai-sdk/anthropic";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { createGoogleGenerativeAI, google } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
 import { createXai } from "@ai-sdk/xai";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { createServerFileRoute } from "@tanstack/react-start/server";
 import {
-  createDataStreamResponse,
-  type Message,
+  convertToModelMessages,
   smoothStream,
   streamText,
+  validateUIMessages,
 } from "ai";
 import { defaultSelectedModel } from "~/constants/model-providers";
 import { systemMessage } from "~/constants/system-message";
-import type { ApiKeys, Model } from "~/types";
+import type { ApiKeys, CustomUIMessage, Model } from "~/types";
 
 type ChatRequestBody = {
-  messages: Message[];
+  messages: CustomUIMessage[];
   model: Model;
   isWebSearchEnabled: boolean;
   apiKeys: ApiKeys;
@@ -32,9 +32,7 @@ const getModelToUse = (
   const myGeminiModel = createGoogleGenerativeAI({
     apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
   });
-  const defaultModel = myGeminiModel(defaultSelectedModel.modelId, {
-    useSearchGrounding: isWebSearchEnabled,
-  });
+  const defaultModel = myGeminiModel(defaultSelectedModel.modelId);
 
   // useOpenRouter is true AND client provided an OpenRouter key
   // All models can be accessed and powered by OpenRouter API Key given by user
@@ -42,11 +40,8 @@ const getModelToUse = (
     const openRouter = createOpenRouter({
       apiKey: parsedApiKeys.openrouter,
     });
-    // if using OpenRouter and it's gemini model + webSearch, append :online to modelId
-    if (
-      requestModel.openRouterModelId.startsWith("google") &&
-      isWebSearchEnabled
-    ) {
+    // if using OpenRouter, append :online to modelId
+    if (isWebSearchEnabled) {
       return openRouter.chat(`${requestModel.openRouterModelId}:online`);
     }
     return openRouter.chat(requestModel.openRouterModelId);
@@ -64,9 +59,7 @@ const getModelToUse = (
       const googleModel = createGoogleGenerativeAI({
         apiKey: parsedApiKeys.gemini,
       });
-      return googleModel(requestModel.modelId, {
-        useSearchGrounding: isWebSearchEnabled,
-      });
+      return googleModel(requestModel.modelId);
     }
 
     // Handle OPENAI model
@@ -114,8 +107,6 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
   POST: async ({ request }) => {
     const chatRequestBody: ChatRequestBody = await request.json();
 
-    // console.log("[LOG]: API hit~~~~~~~~~~~");
-
     const {
       messages,
       model: requestModel,
@@ -124,6 +115,8 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
       useOpenRouter,
     } = chatRequestBody;
 
+    const validatedMessages = await validateUIMessages({ messages });
+
     const modelToUse = getModelToUse(
       requestModel,
       apiKeys,
@@ -131,34 +124,33 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
       isWebSearchEnabled
     );
 
-    return createDataStreamResponse({
-      execute: (dataStream) => {
-        const result = streamText({
-          model: modelToUse,
-          system:
-            requestModel.modelId === "gemini-2.0-flash-exp"
-              ? undefined
-              : systemMessage,
-          messages,
-          // providerOptions: {
-          //   google: { responseModalities: ["TEXT", "IMAGE"] },
-          // },
-          experimental_transform: smoothStream({ chunking: "line" }),
-          abortSignal: request.signal,
-          onFinish: () => {
-            dataStream.writeMessageAnnotation({
-              type: "model",
-              data: requestModel.name,
-            });
-          },
-          maxRetries: 2,
-        });
-
-        result.mergeIntoDataStream(dataStream, {
-          sendReasoning: true,
-          sendSources: true,
-        });
+    const result = streamText({
+      model: modelToUse,
+      system:
+        requestModel.modelId === "gemini-2.0-flash-exp"
+          ? undefined
+          : systemMessage,
+      messages: convertToModelMessages(messages),
+      // providerOptions: {
+      //   google: { responseModalities: ["TEXT", "IMAGE"] },
+      // },
+      experimental_transform: smoothStream({ chunking: "line" }),
+      abortSignal: request.signal,
+      tools: {
+        google_search: google.tools.googleSearch({}),
       },
+      // onFinish: () => {
+      // 	dataStream.writeMessageAnnotation({
+      // 		type: "model",
+      // 		data: requestModel.name,
+      // 	});
+      // },
+    });
+
+    return result.toUIMessageStreamResponse({
+      originalMessages: validatedMessages,
+      sendReasoning: true,
+      sendSources: isWebSearchEnabled,
       onError: (error) => {
         // console.log((error as any).message);
         // biome-ignore lint/suspicious/noExplicitAny: Allow in this case

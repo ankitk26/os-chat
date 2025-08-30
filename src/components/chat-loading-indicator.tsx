@@ -1,7 +1,7 @@
-import type { ChatHookType } from "~/types";
+import type { ChatStatus } from "ai";
 
 type Props = {
-  status: ChatHookType["status"];
+  status: ChatStatus;
   insertPending: boolean;
 };
 

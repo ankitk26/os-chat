@@ -1,26 +1,34 @@
-import type { UIMessage } from "ai";
-import { LinkIcon } from "lucide-react";
-import CustomExternalLink from "./custom-external-link";
-import { Badge } from "./ui/badge";
+import type { SourceUrlUIPart } from "ai";
 
 type Props = {
-  sourceParts: Extract<UIMessage["parts"][number], { type: "source" }>[];
+  sourceParts: SourceUrlUIPart[];
 };
 
 export default function SourcesList(props: Props) {
   return (
-    <div className="mt-2 flex flex-wrap space-x-2 font-mono text-sm">
-      {props.sourceParts.map((sourcePart) => (
-        <Badge className="my-2" key={sourcePart.source.id} variant="secondary">
-          <LinkIcon />
-          <CustomExternalLink
-            className="underline"
-            href={sourcePart.source.url}
+    <div className="mt-4 space-y-2">
+      {props.sourceParts.map((sourcePart, index) => {
+        return (
+          <a
+            className="group block rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent"
+            href={sourcePart.url}
+            key={sourcePart.sourceId}
+            rel="noopener noreferrer"
+            target="_blank"
           >
-            {sourcePart.source.title}
-          </CustomExternalLink>
-        </Badge>
-      ))}
+            <div className="flex items-center gap-3">
+              <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-muted font-medium text-muted-foreground text-xs">
+                {index + 1}
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="line-clamp-2 text-foreground text-sm transition-colors group-hover:text-primary">
+                  {sourcePart.title}
+                </div>
+              </div>
+            </div>
+          </a>
+        );
+      })}
     </div>
   );
 }

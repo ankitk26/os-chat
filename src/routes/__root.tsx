@@ -9,6 +9,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type { ReactNode } from "react";
 import { Toaster } from "~/components/ui/sonner";
 import { cn } from "~/lib/utils";
+import { ChatProvider } from "~/providers/chat-provider";
 import { useAppearanceStore } from "~/stores/appearance-store";
 import appCss from "~/styles.css?url";
 
@@ -74,21 +75,23 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 
   return (
     <html lang="en">
-      <HeadContent />
-      <NextThemesProvider
-        attribute="class"
-        defaultTheme="system"
-        disableTransitionOnChange
-        enableSystem
-      >
-        <body
-          className={cn("overflow-hidden", enableAllMono ? "font-mono" : "")}
+      <head>
+        <HeadContent />
+      </head>
+      <body className={cn("overflow-hidden", enableAllMono ? "font-mono" : "")}>
+        <NextThemesProvider
+          attribute="class"
+          defaultTheme="system"
+          disableTransitionOnChange
+          enableSystem
         >
-          <div>{children}</div>
-          <Toaster duration={800} />
-          <Scripts />
-        </body>
-      </NextThemesProvider>
+          <ChatProvider>
+            <div>{children}</div>
+            <Toaster duration={800} />
+            <Scripts />
+          </ChatProvider>
+        </NextThemesProvider>
+      </body>
     </html>
   );
 }

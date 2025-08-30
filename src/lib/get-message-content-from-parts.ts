@@ -1,6 +1,6 @@
-import type { UIMessage } from "ai";
+import type { CustomUIMessage } from "~/types";
 
-export const getMessageContentFromParts = (parts: UIMessage["parts"]) => {
+export const getMessageContentFromParts = (parts: CustomUIMessage["parts"]) => {
   const textPart = parts.find((part) => part.type === "text");
   if (!textPart) {
     return "";
