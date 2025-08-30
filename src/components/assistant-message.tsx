@@ -1,8 +1,9 @@
+import type { UseChatHelpers } from "@ai-sdk/react";
 import { CopyIcon } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
-import type { ChatHookType, CustomUIMessage } from "~/types";
+import type { CustomUIMessage } from "~/types";
 import AIResponseContent from "./ai-response-content";
 import AIResponseReasoning from "./ai-response-reasoning";
 import AIResponseSources from "./ai-response-sources";
@@ -13,8 +14,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
   message: CustomUIMessage;
-  regenerate?: ChatHookType["regenerate"];
-  setMessages: ChatHookType["setMessages"];
+  regenerate?: UseChatHelpers<CustomUIMessage>["regenerate"];
+  setMessages: UseChatHelpers<CustomUIMessage>["setMessages"];
   messages: CustomUIMessage[];
 };
 
@@ -43,7 +44,9 @@ export default React.memo(function AssistantMessage(props: Props) {
         messageId={message.id}
       />
       <AIResponseSources parts={message.parts} />
-      <div className="flex items-center gap-1 transition-opacity duration-200 md:opacity-0 group-hover:md:opacity-100 lg:gap-1.5">
+
+      {/* Message actions */}
+      <div className="flex items-center gap-1 transition-opacity duration-200 group-has-[data-state=open]:bg-red-600 md:opacity-0 group-hover:md:opacity-100 lg:gap-1.5">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button

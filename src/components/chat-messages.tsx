@@ -1,13 +1,14 @@
+import type { UseChatHelpers } from "@ai-sdk/react";
 import { memo } from "react";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
-import type { ChatHookType, CustomUIMessage } from "~/types";
+import type { CustomUIMessage } from "~/types";
 import AssistantMessage from "./assistant-message";
 import UserMessage from "./user-message";
 
 type Props = {
   messages: CustomUIMessage[];
-  regenerate: ChatHookType["regenerate"];
-  setMessages: ChatHookType["setMessages"];
+  regenerate: UseChatHelpers<CustomUIMessage>["regenerate"];
+  setMessages: UseChatHelpers<CustomUIMessage>["setMessages"];
 };
 
 export default memo(function ChatMessages(props: Props) {
