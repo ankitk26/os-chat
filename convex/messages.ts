@@ -66,6 +66,7 @@ export const createMessage = mutation({
       parts: v.string(),
       role: v.union(v.literal("user"), v.literal("assistant")),
       annotations: v.string(),
+      metadata: v.optional(v.string())
     }),
   },
   handler: async (ctx, args) => {
@@ -78,6 +79,7 @@ export const createMessage = mutation({
       annotations: args.messageBody.annotations,
       role: args.messageBody.role,
       userId,
+      metadata: args.messageBody.metadata
     });
 
     return args.messageBody.chatId;

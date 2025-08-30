@@ -55,10 +55,10 @@ function SuspendedChatPage() {
       }
       return {
         ...base,
-        metadata: {
-          model: "placeholder",
-          createdAt: message._creationTime,
-        },
+        metadata: JSON.parse(
+          message.metadata ??
+            JSON.stringify({ model: "", createdAt: Date.now() })
+        ),
       };
     }) as CustomUIMessage[];
   }, [messages]);

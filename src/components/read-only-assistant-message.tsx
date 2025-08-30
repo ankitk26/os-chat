@@ -15,13 +15,9 @@ type Props = {
 };
 
 export default function ReadOnlyAssistantMessage({ message }: Props) {
-  const annotations: JSONValue[] = JSON.parse(message.annotations);
-
-  const modelUsed =
-    annotations.length > 0 &&
-    // biome-ignore lint/complexity/useLiteralKeys: To be fixed later
-    // biome-ignore lint/suspicious/noExplicitAny: To be fixed later
-    annotations.find((a) => (a as any)["type"] === "model");
+  const messageMetadata = JSON.parse(
+    message.metadata ?? JSON.stringify({ model: "", createdAt: Date.now() })
+  ) as CustomUIMessage["metadata"];
 
   const messageContent = getMessageContentFromParts(JSON.parse(message.parts));
   const messageId = message.sourceMessageId ?? message._id;
@@ -57,8 +53,7 @@ export default function ReadOnlyAssistantMessage({ message }: Props) {
         </Tooltip>
 
         <span className="text-muted-foreground text-xs">
-          {/* biome-ignore lint/suspicious/noExplicitAny: To be fixed later */}
-          {(modelUsed as any)?.data}
+          {messageMetadata?.model}
         </span>
       </div>
     </div>
