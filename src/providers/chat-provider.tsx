@@ -1,7 +1,6 @@
 import { Chat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { createContext, type ReactNode, useContext, useState } from "react";
-import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import type { CustomUIMessage } from "~/types";
 
 type ChatContextValue = {
@@ -17,7 +16,6 @@ function createChat() {
     transport: new DefaultChatTransport({
       api: "/api/chat",
     }),
-    generateId: generateRandomUUID,
   });
 }
 

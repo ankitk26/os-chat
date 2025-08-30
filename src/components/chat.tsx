@@ -1,12 +1,7 @@
 /** biome-ignore-all lint/correctness/useExhaustiveDependencies: ignore for now */
 import { useChat } from "@ai-sdk/react";
-import { useConvexMutation } from "@convex-dev/react-query";
-import { useMutation } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
-import { api } from "convex/_generated/api";
 import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
 import { useSharedChatContext } from "~/providers/chat-provider";
 import type { CustomUIMessage } from "~/types";
 import AiResponseAlert from "./ai-response-error";
@@ -30,12 +25,6 @@ export default function Chat({
   dbMessages,
   isMessagesPending = false,
 }: Props) {
-  const { auth } = useRouteContext({ from: "/_auth" });
-
-  const insertAiMessageMutation = useMutation({
-    mutationFn: useConvexMutation(api.messages.createMessage),
-  });
-
   const { chat } = useSharedChatContext();
 
   const {
@@ -51,27 +40,6 @@ export default function Chat({
     id: chatId,
     experimental_throttle: 200,
     messages: dbMessages,
-    onFinish: ({ message: newMessage }) => {
-      if (!(chatId && newMessage)) {
-        return;
-      }
-
-      const messageContent = getMessageContentFromParts(newMessage.parts);
-      if (!messageContent) {
-        return;
-      }
-
-      insertAiMessageMutation.mutate({
-        messageBody: {
-          chatId,
-          annotations: "",
-          parts: JSON.stringify(newMessage.parts),
-          role: "assistant",
-          sourceMessageId: newMessage.id,
-        },
-        sessionToken: auth.session.token,
-      });
-    },
   });
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -181,10 +149,7 @@ export default function Chat({
                     setMessages={setMessages}
                   />
                 )}
-                <ChatLoadingIndicator
-                  insertPending={insertAiMessageMutation.isPending}
-                  status={status}
-                />
+                <ChatLoadingIndicator status={status} />
                 {error && <AiResponseAlert error={error} />}
               </div>
             </div>
