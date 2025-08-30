@@ -1,3 +1,4 @@
+import type { UseChatHelpers } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
@@ -6,7 +7,7 @@ import { KeyIcon, RefreshCcwIcon } from "lucide-react";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
-import type { ChatHookType, CustomUIMessage, Model } from "~/types";
+import type { CustomUIMessage, Model } from "~/types";
 import ModelProviderIcon from "./model-provider-icon";
 import { Button } from "./ui/button";
 import {
@@ -24,8 +25,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
   message: CustomUIMessage;
-  regenerate: ChatHookType["regenerate"];
-  setMessages: ChatHookType["setMessages"];
+  regenerate: UseChatHelpers<CustomUIMessage>["regenerate"];
+  setMessages: UseChatHelpers<CustomUIMessage>["setMessages"];
   messages: CustomUIMessage[];
 };
 
@@ -81,7 +82,7 @@ export default function RetryModelDropdown(props: Props) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button size="icon" variant="ghost">
