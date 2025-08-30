@@ -44,6 +44,7 @@ export function getAccessibleModels(
             hasSpecificProviderKey = false;
         }
         // A model is available if a specific provider key is present (for paid models) OR the model is free.
+        // biome-ignore lint/nursery/noUnnecessaryConditions: check later
         available = hasSpecificProviderKey || model.isFree;
       }
 

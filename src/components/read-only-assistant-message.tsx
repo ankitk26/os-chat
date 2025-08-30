@@ -18,7 +18,6 @@ export default function ReadOnlyAssistantMessage({ message }: Props) {
   const annotations: JSONValue[] = JSON.parse(message.annotations);
 
   const modelUsed =
-    annotations &&
     annotations.length > 0 &&
     // biome-ignore lint/complexity/useLiteralKeys: To be fixed later
     // biome-ignore lint/suspicious/noExplicitAny: To be fixed later

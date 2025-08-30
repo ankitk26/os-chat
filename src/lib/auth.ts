@@ -6,12 +6,14 @@ const convexClient = new ConvexHttpClient(
   process.env.VITE_CONVEX_URL as string
 );
 
+const SESSION_EXPIRATION_MINUTES = 30;
+
 export const auth = betterAuth({
   database: convexAdapter(convexClient),
   session: {
     cookieCache: {
       enabled: true,
-      maxAge: 60 * 30, // cache duration in seconds - 30 minutes
+      maxAge: 60 * SESSION_EXPIRATION_MINUTES, // cache duration in seconds - 30 minutes
     },
   },
   socialProviders: {

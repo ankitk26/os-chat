@@ -4,7 +4,7 @@ import ApiKeyInputForm from "./api-key-input-form";
 import ApiKeyInputIcon from "./api-key-input-icon";
 import ApiKeyLink from "./api-key-link";
 
-interface Props {
+type Props = {
   provider: Provider;
   keyLink: string;
   formValues: {
@@ -13,7 +13,7 @@ interface Props {
     value: string;
     onChange: (provider: Provider, value: string) => void;
   };
-}
+};
 
 export default function ApiKeyInput(props: Props) {
   return (

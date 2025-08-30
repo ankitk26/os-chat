@@ -169,7 +169,9 @@ function PureUserPromptInput(props: Props) {
 }
 
 const UserPromptInput = memo(PureUserPromptInput, (prevProps, nextProps) => {
-  if (prevProps.status !== nextProps.status) return false;
+  if (prevProps.status !== nextProps.status) {
+    return false;
+  }
   return true;
 });
 
