@@ -68,7 +68,7 @@ export default function BranchOffButton({ messageId }: { messageId: string }) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button size="icon" variant="ghost">
