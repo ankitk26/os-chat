@@ -52,7 +52,7 @@ export default defineSchema({
     .index("by_folder_and_user", ["userId", "folderId"]),
 
   messages: defineTable({
-    sourceMessageId: v.optional(v.string()),
+    sourceMessageId: v.string(),
     chatId: v.string(),
     userId: v.id("user"),
     parts: v.string(),

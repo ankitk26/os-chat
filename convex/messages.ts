@@ -61,7 +61,7 @@ export const createMessage = mutation({
   args: {
     sessionToken: v.string(),
     messageBody: v.object({
-      sourceMessageId: v.optional(v.string()),
+      sourceMessageId: v.string(),
       chatId: v.string(),
       parts: v.string(),
       role: v.union(v.literal("user"), v.literal("assistant")),

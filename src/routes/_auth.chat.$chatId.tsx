@@ -46,7 +46,7 @@ function SuspendedChatPage() {
     }
     return messages.map((message) => {
       const base = {
-        id: message.sourceMessageId ?? message._id,
+        id: message.sourceMessageId,
         role: message.role,
         parts: JSON.parse(message.parts) as CustomUIMessage["parts"],
       };

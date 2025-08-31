@@ -1,4 +1,3 @@
-import type { JSONValue } from "ai";
 import type { Doc } from "convex/_generated/dataModel";
 import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
@@ -20,7 +19,7 @@ export default function ReadOnlyAssistantMessage({ message }: Props) {
   ) as CustomUIMessage["metadata"];
 
   const messageContent = getMessageContentFromParts(JSON.parse(message.parts));
-  const messageId = message.sourceMessageId ?? message._id;
+  const messageId = message.sourceMessageId;
   const messageParts = JSON.parse(message.parts) as CustomUIMessage["parts"];
 
   return (
