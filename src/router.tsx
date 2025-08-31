@@ -4,6 +4,7 @@ import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import { routerWithQueryClient } from "@tanstack/react-router-with-query";
 import { ConvexProvider } from "convex/react";
 import NotFound from "./components/not-found";
+import TanstackErrorComponent from "./components/tanstack-error-component";
 import { routeTree } from "./routeTree.gen";
 
 export function createRouter() {
@@ -34,6 +35,7 @@ export function createRouter() {
         {children}
       </ConvexProvider>
     ),
+    defaultErrorComponent: () => <TanstackErrorComponent />,
   });
 
   return routerWithQueryClient(router, queryClient);
