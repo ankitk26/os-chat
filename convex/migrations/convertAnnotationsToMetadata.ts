@@ -12,7 +12,7 @@ export const convertAnnotationsToMetadata = internalMutation({
       if (!parsedAnnotation || parsedAnnotation.length === 0) {
         continue;
       }
-      const modelUsed = parsedAnnotation[0].model;
+      const modelUsed = parsedAnnotation[0].data;
       const createdAt = message._creationTime;
       const metadata = {
         model: modelUsed,
