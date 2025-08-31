@@ -21,6 +21,9 @@ type Props = {
 
 export default React.memo(function AssistantMessage(props: Props) {
   const { message, regenerate, setMessages, messages } = props;
+  if (message.parts.length === 0) {
+    return null;
+  }
 
   const modelUsed = message.metadata?.model;
 
@@ -64,7 +67,6 @@ export default React.memo(function AssistantMessage(props: Props) {
             message={message}
             messages={messages}
             regenerate={regenerate}
-            setMessages={setMessages}
           />
         )}
 

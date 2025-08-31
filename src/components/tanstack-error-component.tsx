@@ -13,11 +13,9 @@ export default function TanstackErrorComponent() {
           Some error occurred.
         </h2>
         <div className="mt-4 flex justify-center">
-          <Button asChild>
-            <Link aria-label="Go to the home page" to="/">
-              Go to Home
-            </Link>
-          </Button>
+          <Link aria-label="Go to the home page" to="/">
+            <Button>Go to Home</Button>
+          </Link>
         </div>
       </section>
     </div>

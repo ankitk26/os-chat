@@ -162,7 +162,7 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
       },
       sendSources: isWebSearchEnabled,
       onFinish: async ({ responseMessage }) => {
-        if (chatId) {
+        if (chatId && responseMessage.parts.length > 0) {
           await createMessageServerFn({
             data: {
               chatId,
