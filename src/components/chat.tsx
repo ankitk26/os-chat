@@ -149,7 +149,9 @@ export default function Chat({
                     setMessages={setMessages}
                   />
                 )}
-                <ChatLoadingIndicator status={status} />
+                {status === "submitted" &&
+                  messages.length > 0 &&
+                  messages.at(-1)?.role === "user" && <ChatLoadingIndicator />}
                 {error && <AiResponseAlert error={error} />}
               </div>
             </div>

@@ -22,7 +22,7 @@ type Props = {
 export default React.memo(function AssistantMessage(props: Props) {
   const { message, regenerate, setMessages, messages } = props;
 
-  const modelUsed = message.metadata?.model
+  const modelUsed = message.metadata?.model;
 
   const messageContent = getMessageContentFromParts(message.parts);
 
@@ -40,7 +40,7 @@ export default React.memo(function AssistantMessage(props: Props) {
       <AIResponseSources parts={message.parts} />
 
       {/* Message actions */}
-      <div className="flex items-center gap-1 transition-opacity duration-200 group-has-[data-state=open]:bg-red-600 md:opacity-0 group-hover:md:opacity-100 lg:gap-1.5">
+      <div className="flex items-center gap-1 transition-opacity duration-200 md:opacity-0 group-hover:md:opacity-100 lg:gap-1.5">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -68,9 +68,7 @@ export default React.memo(function AssistantMessage(props: Props) {
           />
         )}
 
-        <span className="text-muted-foreground text-xs">
-          {modelUsed}
-        </span>
+        <span className="text-muted-foreground text-xs">{modelUsed}</span>
       </div>
     </div>
   );

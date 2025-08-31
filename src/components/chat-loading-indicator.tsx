@@ -1,13 +1,4 @@
-import type { ChatStatus } from "ai";
-
-type Props = {
-  status: ChatStatus;
-};
-
-export default function ChatLoadingIndicator({ status }: Props) {
-  if (status !== "submitted") {
-    return null;
-  }
+export default function ChatLoadingIndicator() {
   return (
     <div className="space-y-2">
       <div className="flex items-center space-x-2 text-muted-foreground">
