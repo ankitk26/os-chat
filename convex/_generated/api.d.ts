@@ -18,6 +18,8 @@ import type * as chats from "../chats.js";
 import type * as folders from "../folders.js";
 import type * as functions from "../functions.js";
 import type * as messages from "../messages.js";
+import type * as migrations_convertAnnotationsToMetadata from "../migrations/convertAnnotationsToMetadata.js";
+import type * as migrations_setAnnotationsUndefined from "../migrations/setAnnotationsUndefined.js";
 import type * as migrations_setsIsBranched from "../migrations/setsIsBranched.js";
 import type * as model_users from "../model/users.js";
 
@@ -35,6 +37,8 @@ declare const fullApi: ApiFromModules<{
   folders: typeof folders;
   functions: typeof functions;
   messages: typeof messages;
+  "migrations/convertAnnotationsToMetadata": typeof migrations_convertAnnotationsToMetadata;
+  "migrations/setAnnotationsUndefined": typeof migrations_setAnnotationsUndefined;
   "migrations/setsIsBranched": typeof migrations_setsIsBranched;
   "model/users": typeof model_users;
 }>;

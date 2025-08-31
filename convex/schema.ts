@@ -56,7 +56,7 @@ export default defineSchema({
     chatId: v.string(),
     userId: v.id("user"),
     parts: v.string(),
-    annotations: v.string(),
+    annotations: v.optional(v.string()),
     metadata: v.optional(v.string()),
     role: v.union(v.literal("user"), v.literal("assistant")),
   })
