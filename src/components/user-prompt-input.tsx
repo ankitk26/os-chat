@@ -83,7 +83,6 @@ function PureUserPromptInput(props: Props) {
         chatId: props.chatId,
         role: "user",
         sourceMessageId,
-        annotations: JSON.stringify([]),
         parts: JSON.stringify([{ type: "text", text: input }]),
       },
       sessionToken: auth.session.token,

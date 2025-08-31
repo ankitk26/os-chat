@@ -24,7 +24,6 @@ export const createMessageServerFn = createServerFn({ method: "POST" })
     );
     await convexClient.mutation(api.messages.createMessage, {
       messageBody: {
-        annotations: "",
         chatId: data.chatId,
         parts: data.parts,
         role: "assistant",

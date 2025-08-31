@@ -356,7 +356,6 @@ export const branchOffChat = mutation({
         const newMessageId = generateRandomUUID();
 
         await ctx.db.insert("messages", {
-          annotations: message.annotations,
           chatId: branchedChat.uuid,
           parts: message.parts,
           role: message.role,
