@@ -26,9 +26,9 @@ export const createMessageServerFn = createServerFn({ method: "POST" })
       messageBody: {
         annotations: "",
         chatId: data.chatId,
-        parts: JSON.stringify(data.parts),
+        parts: data.parts,
         role: "assistant",
-        metadata: JSON.stringify(data.metadata),
+        metadata: data.metadata,
         sourceMessageId: data.messageId,
       },
       sessionToken: authData.session.token,
