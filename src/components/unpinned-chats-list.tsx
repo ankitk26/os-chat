@@ -22,7 +22,7 @@ export default function UnpinnedChatsList() {
           <MessageSquareIcon className="size-4" />
           Chats
         </div>
-        <DeleteAllChatsAlertDialog />
+        {chats.length > 0 && <DeleteAllChatsAlertDialog />}
       </SidebarGroupLabel>
       <SidebarMenu className="mt-2 space-y-0.5">
         {chats.length === 0 && (
