@@ -4,13 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import { useSharedChatContext } from "~/providers/chat-provider";
 import type { CustomUIMessage } from "~/types";
 import AiResponseAlert from "./ai-response-error";
-import AssistantMessageSkeleton from "./assistant-message-skeleton";
 import ChatLoadingIndicator from "./chat-loading-indicator";
 import ChatMessages from "./chat-messages";
 import EmptyChatContent from "./empty-chat-content";
 import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
-import UserMessageSkeleton from "./user-message-skeleton";
 import UserPromptInput from "./user-prompt-input";
 
 type Props = {
@@ -37,7 +35,7 @@ export default function Chat({
   } = useChat<CustomUIMessage>({
     chat,
     id: chatId,
-    experimental_throttle: 50,
+    experimental_throttle: 100,
     messages: dbMessages,
   });
 
@@ -137,14 +135,7 @@ export default function Chat({
           <ScrollArea className="h-full w-full" ref={scrollAreaRef}>
             <div className="mx-auto h-full w-full max-w-full px-2 lg:max-w-3xl lg:px-4">
               <div className="my-4 space-y-6 pb-40 lg:my-8 lg:space-y-8 lg:pb-32">
-                {isMessagesPending && status !== "submitted" ? (
-                  <>
-                    <UserMessageSkeleton />
-                    <AssistantMessageSkeleton />
-                  </>
-                ) : (
-                  <ChatMessages messages={messages} regenerate={regenerate} />
-                )}
+                <ChatMessages messages={messages} regenerate={regenerate} />
                 {status === "submitted" &&
                   messages.length > 0 &&
                   messages.at(-1)?.role === "user" && <ChatLoadingIndicator />}

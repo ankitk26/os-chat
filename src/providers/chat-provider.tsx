@@ -4,7 +4,6 @@ import { createContext, type ReactNode, useContext, useState } from "react";
 import type { CustomUIMessage } from "~/types";
 
 type ChatContextValue = {
-  // replace with your custom message type
   chat: Chat<CustomUIMessage>;
   clearChat: () => void;
 };
