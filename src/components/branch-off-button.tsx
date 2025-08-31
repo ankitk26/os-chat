@@ -28,7 +28,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export default function BranchOffButton({ messageId }: { messageId: string }) {
-  const { chatId } = useParams({ from: "/_auth/chat/$chatId" });
+  const { chatId } = useParams({ strict: false });
   const { auth } = useRouteContext({ from: "/_auth" });
   const navigate = useNavigate();
 
@@ -50,6 +50,9 @@ export default function BranchOffButton({ messageId }: { messageId: string }) {
   });
 
   const handleBranchOff = (model: Model | null = null) => {
+    if (!chatId) {
+      return;
+    }
     const branchChatUuid = generateRandomUUID();
 
     navigate({ to: `/chat/${branchChatUuid}` });
@@ -65,6 +68,10 @@ export default function BranchOffButton({ messageId }: { messageId: string }) {
       setSelectedModel(model);
     }
   };
+
+  if (!chatId) {
+    return null;
+  }
 
   return (
     <DropdownMenu>

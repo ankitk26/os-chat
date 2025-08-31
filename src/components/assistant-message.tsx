@@ -15,12 +15,10 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 type Props = {
   message: CustomUIMessage;
   regenerate?: UseChatHelpers<CustomUIMessage>["regenerate"];
-  setMessages: UseChatHelpers<CustomUIMessage>["setMessages"];
-  messages: CustomUIMessage[];
 };
 
 export default React.memo(function AssistantMessage(props: Props) {
-  const { message, regenerate, setMessages, messages } = props;
+  const { message, regenerate } = props;
   if (message.parts.length === 0) {
     return null;
   }
@@ -63,11 +61,7 @@ export default React.memo(function AssistantMessage(props: Props) {
         <BranchOffButton messageId={message.id} />
 
         {regenerate && (
-          <RetryModelDropdown
-            message={message}
-            messages={messages}
-            regenerate={regenerate}
-          />
+          <RetryModelDropdown message={message} regenerate={regenerate} />
         )}
 
         <span className="text-muted-foreground text-xs">{modelUsed}</span>

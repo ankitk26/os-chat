@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { toast } from "sonner";
+import { useSharedChatContext } from "~/providers/chat-provider";
 import { useChatActionStore } from "~/stores/chat-actions-store";
 import {
   AlertDialog,
@@ -20,6 +21,7 @@ import {
 } from "./ui/alert-dialog";
 
 export default function DeleteChatAlertDialog() {
+  const { clearChat } = useSharedChatContext();
   const { chatId } = useParams({ strict: false });
   const navigate = useNavigate();
   const { auth } = useRouteContext({ strict: false });
@@ -34,13 +36,16 @@ export default function DeleteChatAlertDialog() {
 
   const deleteChatMutation = useMutation({
     mutationFn: useConvexMutation(api.chats.deleteChat),
-    onSuccess: async () => {
-      if (selectedChat?.uuid === chatId) {
-        await navigate({ to: "/" });
-      }
+    onSuccess: () => {
+      const isCurrentChatOpened = selectedChat?.uuid === chatId;
       toast.success("Chat was deleted");
       setIsDeleteModalOpen(false);
       setSelectedChat(null);
+
+      if (isCurrentChatOpened) {
+        clearChat();
+        navigate({ to: "/" });
+      }
     },
     onError: () => {
       toast.error("Chat was not deleted", {

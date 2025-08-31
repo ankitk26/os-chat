@@ -63,6 +63,8 @@ function SuspendedChatPage() {
     }) as CustomUIMessage[];
   }, [messages]);
 
+  console.log({ transformedMessages });
+
   return (
     <Chat
       chatId={chatId}

@@ -1,7 +1,7 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
+import { useParams, useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { KeyIcon, RefreshCcwIcon } from "lucide-react";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
@@ -26,13 +26,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 type Props = {
   message: CustomUIMessage;
   regenerate: UseChatHelpers<CustomUIMessage>["regenerate"];
-  setMessages: UseChatHelpers<CustomUIMessage>["setMessages"];
-  messages: CustomUIMessage[];
 };
 
 export default function RetryModelDropdown(props: Props) {
-  const { message, regenerate, setMessages, messages } = props;
+  const { message, regenerate } = props;
   const { auth } = useRouteContext({ from: "/_auth" });
+  const { chatId } = useParams({ strict: false });
   const selectedModel = useModelStore((store) => store.selectedModel);
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
 
@@ -52,33 +51,44 @@ export default function RetryModelDropdown(props: Props) {
   );
 
   const handleRetry = async (model: Model) => {
+    if (!chatId) {
+      return;
+    }
+
+    // handle messages in DB
     deleteMessagesMutation.mutate({
       sessionToken: auth.session.token,
       currentMessageSourceId: message.id,
     });
-    const currentMessage = messages.find((m) => m.id === message.id);
-    setMessages((prev) => [
-      ...prev.filter((m) => {
-        const mCreatedAt = m.metadata?.createdAt;
-        const currentCreatedAt = currentMessage?.metadata?.createdAt;
-        if (
-          typeof mCreatedAt !== "number" ||
-          typeof currentCreatedAt !== "number"
-        ) {
-          return false;
-        }
-        return mCreatedAt < currentCreatedAt;
-      }),
-    ]);
+
+    // setMessages((prev) => [
+    //   ...prev.filter((m) => {
+    //     const mCreatedAt = m.metadata?.createdAt;
+    //     const currentCreatedAt = currentMessage?.metadata?.createdAt;
+    //     if (
+    //       typeof mCreatedAt !== "number" ||
+    //       typeof currentCreatedAt !== "number"
+    //     ) {
+    //       return false;
+    //     }
+    //     return mCreatedAt < currentCreatedAt;
+    //   }),
+    // ]);
     await regenerate({
+      messageId: message.id,
       body: {
         model,
         isWebSearchEnabled,
         apiKeys: persistedApiKeys,
         useOpenRouter: persistedUseOpenRouter,
+        chatId,
       },
     });
   };
+
+  if (!chatId) {
+    return null;
+  }
 
   return (
     <DropdownMenu>

@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/correctness/useExhaustiveDependencies: ignore for now */
 import { useChat } from "@ai-sdk/react";
 import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -86,6 +85,7 @@ export default function Chat({
     });
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: checkScrollPosition should not be added to dependency
   useEffect(() => {
     const scrollArea = scrollAreaRef.current;
     if (!scrollArea) {
@@ -110,6 +110,7 @@ export default function Chat({
   }, [messages]);
 
   // Auto-scroll to bottom when new messages arrive (optional)
+  // biome-ignore lint/correctness/useExhaustiveDependencies: scrollToBottom should not be added
   useEffect(() => {
     if (status === "submitted") {
       const timerSeconds = 100;
@@ -121,10 +122,15 @@ export default function Chat({
   }, [messages.length]);
 
   useEffect(() => {
+    if (!chatId) {
+      return;
+    }
     if (messages.length === 0) {
       setMessages(dbMessages);
     }
-  }, [dbMessages, isMessagesPending]);
+  }, [dbMessages, chatId, messages.length, setMessages]);
+
+  console.log(messages);
 
   return (
     <div className="relative mx-auto flex h-svh max-h-svh w-full flex-col">
@@ -143,11 +149,7 @@ export default function Chat({
                     <AssistantMessageSkeleton />
                   </>
                 ) : (
-                  <ChatMessages
-                    messages={messages}
-                    regenerate={regenerate}
-                    setMessages={setMessages}
-                  />
+                  <ChatMessages messages={messages} regenerate={regenerate} />
                 )}
                 {status === "submitted" &&
                   messages.length > 0 &&

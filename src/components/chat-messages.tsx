@@ -8,11 +8,10 @@ import UserMessage from "./user-message";
 type Props = {
   messages: CustomUIMessage[];
   regenerate: UseChatHelpers<CustomUIMessage>["regenerate"];
-  setMessages: UseChatHelpers<CustomUIMessage>["setMessages"];
 };
 
 export default memo(function ChatMessages(props: Props) {
-  const { messages, regenerate, setMessages } = props;
+  const { messages, regenerate } = props;
 
   if (messages.length === 0) {
     return null;
@@ -27,12 +26,7 @@ export default memo(function ChatMessages(props: Props) {
             {message.role === "user" ? (
               <UserMessage message={messageContent} />
             ) : (
-              <AssistantMessage
-                message={message}
-                messages={messages}
-                regenerate={regenerate}
-                setMessages={setMessages}
-              />
+              <AssistantMessage message={message} regenerate={regenerate} />
             )}
           </div>
         );
