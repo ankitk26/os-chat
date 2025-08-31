@@ -9,6 +9,7 @@ import { api } from "convex/_generated/api";
 import { KeyIcon, RefreshCcwIcon, SplitIcon } from "lucide-react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
+import { useSharedChatContext } from "~/providers/chat-provider";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import type { Model } from "~/types";
@@ -30,6 +31,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 export default function BranchOffButton({ messageId }: { messageId: string }) {
   const { chatId } = useParams({ strict: false });
   const { auth } = useRouteContext({ from: "/_auth" });
+  const { clearChat } = useSharedChatContext();
   const navigate = useNavigate();
 
   const setSelectedModel = useModelStore((store) => store.setSelectedModel);
@@ -55,6 +57,7 @@ export default function BranchOffButton({ messageId }: { messageId: string }) {
     }
     const branchChatUuid = generateRandomUUID();
 
+    clearChat();
     navigate({ to: `/chat/${branchChatUuid}` });
 
     branchOffChatMutation.mutate({

@@ -5,6 +5,7 @@ import { api } from "convex/_generated/api";
 import { TrashIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useSharedChatContext } from "~/providers/chat-provider";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,6 +22,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export default function DeleteAllChatsAlertDialog() {
   const { auth } = useRouteContext({ strict: false });
+  const { clearChat } = useSharedChatContext();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -28,6 +30,7 @@ export default function DeleteAllChatsAlertDialog() {
     mutationFn: useConvexMutation(api.chats.deleteAll),
     onSuccess: () => {
       toast.success("All messages deleted");
+      clearChat();
       navigate({ to: "/" });
     },
   });

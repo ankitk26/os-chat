@@ -1,6 +1,13 @@
 import { Chat } from "@ai-sdk/react";
+import { useParams } from "@tanstack/react-router";
 import { DefaultChatTransport } from "ai";
-import { createContext, type ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import type { CustomUIMessage } from "~/types";
 
 type ChatContextValue = {
@@ -20,11 +27,17 @@ function createChat() {
 }
 
 export function ChatProvider({ children }: { children: ReactNode }) {
+  const { chatId } = useParams({ strict: false });
   const [chat, setChat] = useState(() => createChat());
 
   const clearChat = () => {
     setChat(createChat());
   };
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: only run when chatId updates
+  useEffect(() => {
+    clearChat();
+  }, [chatId]);
 
   return (
     <ChatContext.Provider

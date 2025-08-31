@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { SplitIcon } from "lucide-react";
+import { useSharedChatContext } from "~/providers/chat-provider";
 import type { SidebarChatType } from "~/types";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
@@ -8,10 +9,13 @@ type Props = {
 };
 
 export default function BranchedChatIndicator(props: Props) {
+  const { clearChat } = useSharedChatContext();
+
   return (
     <Tooltip>
       <TooltipTrigger>
         <Link
+          onClick={() => clearChat()}
           params={{ chatId: props.chat.parentChat?.uuid ?? props.chat.uuid }}
           to="/chat/$chatId"
         >

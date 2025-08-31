@@ -1,11 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { HomeIcon } from "lucide-react";
+import { useSharedChatContext } from "~/providers/chat-provider";
 import { ThemeToggler } from "./theme-toggle";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Separator } from "./ui/separator";
 
 export default function NotFound() {
+  const { clearChat } = useSharedChatContext();
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-10 p-6">
       <div className="absolute top-4 right-4">
@@ -26,7 +29,11 @@ export default function NotFound() {
 
           <div className="mt-4 flex flex-wrap justify-center">
             <Button asChild>
-              <Link className="flex items-center" to="/">
+              <Link
+                className="flex items-center"
+                onClick={() => clearChat()}
+                to="/"
+              >
                 <HomeIcon className="h-4 w-4" />
                 Go Home
               </Link>
