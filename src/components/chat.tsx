@@ -37,7 +37,7 @@ export default function Chat({
   } = useChat<CustomUIMessage>({
     chat,
     id: chatId,
-    experimental_throttle: 200,
+    experimental_throttle: 50,
     messages: dbMessages,
   });
 
@@ -121,16 +121,10 @@ export default function Chat({
     }
   }, [messages.length]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: ignore
   useEffect(() => {
-    if (!chatId) {
-      return;
-    }
-    if (messages.length === 0) {
-      setMessages(dbMessages);
-    }
-  }, [dbMessages, chatId, messages.length, setMessages]);
-
-  console.log(messages);
+    setMessages(dbMessages);
+  }, [dbMessages]);
 
   return (
     <div className="relative mx-auto flex h-svh max-h-svh w-full flex-col">

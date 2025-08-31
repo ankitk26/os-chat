@@ -359,6 +359,7 @@ export const branchOffChat = mutation({
           chatId: branchedChat.uuid,
           parts: message.parts,
           role: message.role,
+          metadata: message.metadata,
           userId: user,
           sourceMessageId: newMessageId,
         });
