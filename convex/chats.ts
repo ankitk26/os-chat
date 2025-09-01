@@ -292,7 +292,10 @@ export const branchOffChat = mutation({
     sessionToken: v.string(),
     parentChatUuid: v.string(),
     branchedChatUuid: v.string(),
-    lastMessageId: v.string(),
+    lastMessage: v.object({
+      id: v.string(),
+      role: v.union(v.literal("user"), v.literal("assistant")),
+    }),
   },
   handler: async (ctx, args) => {
     const user = await getAuthUserIdOrThrow(ctx, args.sessionToken);
@@ -331,7 +334,7 @@ export const branchOffChat = mutation({
     const lastMessage = await ctx.db
       .query("messages")
       .withIndex("by_source_id", (q) =>
-        q.eq("sourceMessageId", args.lastMessageId)
+        q.eq("sourceMessageId", args.lastMessage.id)
       )
       .first();
 
@@ -341,14 +344,26 @@ export const branchOffChat = mutation({
     }
 
     // get all messages before the message on which chat was branched off
-    const messagesTillBranchedMessage = await ctx.db
+    // exclude current message if last message is a user message
+    let messagesTillBranchedMessage = await ctx.db
       .query("messages")
       .withIndex("by_chat", (q) =>
         q
           .eq("chatId", parentChat.uuid)
-          .lte("_creationTime", lastMessage._creationTime)
+          .lt("_creationTime", lastMessage._creationTime)
       )
       .collect();
+
+    if (args.lastMessage.role === "assistant") {
+      messagesTillBranchedMessage = await ctx.db
+        .query("messages")
+        .withIndex("by_chat", (q) =>
+          q
+            .eq("chatId", parentChat.uuid)
+            .lte("_creationTime", lastMessage._creationTime)
+        )
+        .collect();
+    }
 
     // insert parent chat's messages but for new branchedChat
     await Promise.all(

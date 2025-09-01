@@ -131,11 +131,14 @@ export default function Chat({
         {!isMessagesPending && messages.length === 0 && <EmptyChatContent />}
 
         {chatId && (
-          // <ScrollArea className="h-full w-full">
           <ScrollArea className="h-full w-full" ref={scrollAreaRef}>
             <div className="mx-auto h-full w-full max-w-full px-2 lg:max-w-3xl lg:px-4">
               <div className="my-4 space-y-6 pb-40 lg:my-8 lg:space-y-8 lg:pb-32">
-                <ChatMessages messages={messages} regenerate={regenerate} />
+                <ChatMessages
+                  messages={messages}
+                  regenerate={regenerate}
+                  sendMessage={sendMessage}
+                />
                 {status === "submitted" &&
                   messages.length > 0 &&
                   messages.at(-1)?.role === "user" && <ChatLoadingIndicator />}

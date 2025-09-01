@@ -1,3 +1,4 @@
+import type { UseChatHelpers } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
 import {
@@ -12,7 +13,7 @@ import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { useSharedChatContext } from "~/providers/chat-provider";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
-import type { Model } from "~/types";
+import type { CustomUIMessage, Model } from "~/types";
 import ModelProviderIcon from "./model-provider-icon";
 import { Button } from "./ui/button";
 import {
@@ -28,13 +29,20 @@ import {
 } from "./ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
-export default function BranchOffButton({ messageId }: { messageId: string }) {
+type Props = {
+  message: CustomUIMessage;
+  sendMessage?: UseChatHelpers<CustomUIMessage>["sendMessage"];
+};
+
+export default function BranchOffButton({ message, sendMessage }: Props) {
   const { chatId } = useParams({ strict: false });
   const { auth } = useRouteContext({ from: "/_auth" });
   const { clearChat } = useSharedChatContext();
   const navigate = useNavigate();
 
+  const selectedModel = useModelStore((store) => store.selectedModel);
   const setSelectedModel = useModelStore((store) => store.setSelectedModel);
+  const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
 
   const persistedApiKeys = usePersistedApiKeysStore(
     (store) => store.persistedApiKeys
@@ -50,6 +58,9 @@ export default function BranchOffButton({ messageId }: { messageId: string }) {
   const branchOffChatMutation = useMutation({
     mutationFn: useConvexMutation(api.chats.branchOffChat),
   });
+  const createMessageMutation = useMutation({
+    mutationFn: useConvexMutation(api.messages.createMessage),
+  });
 
   const handleBranchOff = (model: Model | null = null) => {
     if (!chatId) {
@@ -62,13 +73,47 @@ export default function BranchOffButton({ messageId }: { messageId: string }) {
 
     branchOffChatMutation.mutate({
       branchedChatUuid: branchChatUuid,
-      lastMessageId: messageId,
+      lastMessage: {
+        id: message.id,
+        role: message.role === "assistant" ? "assistant" : "user",
+      },
       parentChatUuid: chatId,
       sessionToken: auth.session.token,
     });
 
     if (model) {
       setSelectedModel(model);
+    }
+
+    if (message.role === "user" && sendMessage) {
+      const sourceMessageId = generateRandomUUID();
+
+      createMessageMutation.mutate({
+        messageBody: {
+          chatId: branchChatUuid,
+          role: "user",
+          sourceMessageId,
+          parts: JSON.stringify(message.parts),
+        },
+        sessionToken: auth.session.token,
+      });
+
+      sendMessage(
+        {
+          role: "user",
+          id: sourceMessageId,
+          parts: message.parts,
+        },
+        {
+          body: {
+            model,
+            isWebSearchEnabled,
+            apiKeys: persistedApiKeys,
+            useOpenRouter: persistedUseOpenRouter,
+            chatId: branchChatUuid,
+          },
+        }
+      );
     }
   };
 
@@ -91,7 +136,7 @@ export default function BranchOffButton({ messageId }: { messageId: string }) {
       <DropdownMenuContent className="w-[200px]">
         <DropdownMenuItem
           className="flex items-center gap-3 text-xs"
-          onClick={() => handleBranchOff()}
+          onClick={() => handleBranchOff(selectedModel)}
         >
           <RefreshCcwIcon className="size-4" />
           Branch off

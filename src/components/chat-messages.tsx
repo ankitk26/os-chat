@@ -1,6 +1,5 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { memo } from "react";
-import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
 import type { CustomUIMessage } from "~/types";
 import AssistantMessage from "./assistant-message";
 import UserMessage from "./user-message";
@@ -8,11 +7,14 @@ import UserMessage from "./user-message";
 type Props = {
   messages: CustomUIMessage[];
   regenerate: UseChatHelpers<CustomUIMessage>["regenerate"];
+  sendMessage: UseChatHelpers<CustomUIMessage>["sendMessage"];
 };
 
-export default memo(function ChatMessages(props: Props) {
-  const { messages, regenerate } = props;
-
+export default memo(function ChatMessages({
+  messages,
+  regenerate,
+  sendMessage,
+}: Props) {
   if (messages.length === 0) {
     return null;
   }
@@ -20,11 +22,10 @@ export default memo(function ChatMessages(props: Props) {
   return (
     <div className="space-y-4 px-3 lg:space-y-2 lg:px-0">
       {messages.map((message) => {
-        const messageContent = getMessageContentFromParts(message.parts);
         return (
           <div className="flex flex-col" key={message.id}>
             {message.role === "user" ? (
-              <UserMessage message={messageContent} />
+              <UserMessage message={message} sendMessage={sendMessage} />
             ) : (
               <AssistantMessage message={message} regenerate={regenerate} />
             )}
