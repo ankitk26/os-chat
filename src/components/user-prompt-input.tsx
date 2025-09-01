@@ -9,7 +9,7 @@ import {
 import type { ChatStatus } from "ai";
 import { api } from "convex/_generated/api";
 import type { Id } from "convex/_generated/dataModel";
-import { memo, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getChatTitle } from "~/server-fns/get-chat-title";
 import { useModelStore } from "~/stores/model-store";
@@ -24,7 +24,7 @@ type Props = {
   sendMessage: UseChatHelpers<CustomUIMessage>["sendMessage"];
 };
 
-function PureUserPromptInput(props: Props) {
+export default function UserPromptInput(props: Props) {
   const { chatId: paramsChatId } = useParams({ strict: false });
   const { auth } = useRouteContext({ from: "/_auth" });
 
@@ -167,12 +167,3 @@ function PureUserPromptInput(props: Props) {
     </div>
   );
 }
-
-const UserPromptInput = memo(PureUserPromptInput, (prevProps, nextProps) => {
-  if (prevProps.status !== nextProps.status) {
-    return false;
-  }
-  return true;
-});
-
-export default UserPromptInput;

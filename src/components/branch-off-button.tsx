@@ -58,7 +58,7 @@ export default function BranchOffButton({ messageId }: { messageId: string }) {
     const branchChatUuid = generateRandomUUID();
 
     clearChat();
-    navigate({ to: `/chat/${branchChatUuid}` });
+    navigate({ to: "/chat/$chatId", params: { chatId: branchChatUuid } });
 
     branchOffChatMutation.mutate({
       branchedChatUuid: branchChatUuid,
