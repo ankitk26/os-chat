@@ -60,6 +60,7 @@ export default defineSchema({
     role: v.union(v.literal("user"), v.literal("assistant")),
   })
     .index("by_user_chat", ["chatId", "userId"])
+    .index("by_user_and_role", ["userId", "role"])
     .index("by_chat", ["chatId"])
     .index("by_source_id", ["sourceMessageId"]),
 

@@ -55,10 +55,7 @@ function SuspendedChatPage() {
       }
       return {
         ...base,
-        metadata: JSON.parse(
-          message.metadata ??
-            JSON.stringify({ model: "", createdAt: Date.now() })
-        ),
+        metadata: JSON.parse(message.metadata ?? "{}"),
       };
     }) as CustomUIMessage[];
   }, [messages]);

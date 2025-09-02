@@ -144,3 +144,40 @@ export const deleteMessagesByChat = internalMutation({
     }
   },
 });
+
+export const tokensByModel = query({
+  args: {
+    sessionToken: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+
+    const aiMessages = await ctx.db
+      .query("messages")
+      .withIndex("by_user_and_role", (q) =>
+        q.eq("userId", userId).eq("role", "assistant")
+      )
+      .collect();
+
+    const tokenStats: Record<string, number> = {};
+    for (const message of aiMessages) {
+      const parsedMetadata = JSON.parse(message.metadata ?? "{}");
+      if (!parsedMetadata?.model) {
+        continue;
+      }
+      if (!parsedMetadata?.totalTokens) {
+        continue;
+      }
+
+      tokenStats[parsedMetadata.model] =
+        (tokenStats[parsedMetadata.model] || 0) + parsedMetadata.totalTokens;
+    }
+
+    // Convert to desired array shape
+    const result: Array<{ model: string; tokens: number }> = Object.entries(
+      tokenStats
+    ).map(([model, tokens]) => ({ model, tokens }));
+
+    return result;
+  },
+});

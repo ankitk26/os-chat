@@ -153,6 +153,11 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
             createdAt: Date.now(),
           };
         }
+        if (part.type === "finish") {
+          return {
+            totalTokens: part.totalUsage.totalTokens,
+          };
+        }
       },
       sendSources: isWebSearchEnabled,
       onFinish: async ({ responseMessage }) => {

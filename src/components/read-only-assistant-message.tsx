@@ -15,7 +15,7 @@ type Props = {
 
 export default function ReadOnlyAssistantMessage({ message }: Props) {
   const messageMetadata = JSON.parse(
-    message.metadata ?? JSON.stringify({ model: "", createdAt: Date.now() })
+    message.metadata ?? "{}"
   ) as CustomUIMessage["metadata"];
 
   const messageContent = getMessageContentFromParts(JSON.parse(message.parts));

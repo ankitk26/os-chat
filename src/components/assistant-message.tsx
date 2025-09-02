@@ -1,8 +1,10 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
-import { CopyIcon } from "lucide-react";
+import { CopyIcon, CpuIcon } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
+import { formatTokens } from "~/lib/format-tokens";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
+import { useAppearanceStore } from "~/stores/appearance-store";
 import type { CustomUIMessage } from "~/types";
 import AIResponseContent from "./ai-response-content";
 import AIResponseReasoning from "./ai-response-reasoning";
@@ -19,11 +21,11 @@ type Props = {
 
 export default React.memo(function AssistantMessage(props: Props) {
   const { message, regenerate } = props;
+  const showTokenUsage = useAppearanceStore((store) => store.showTokenUsage);
+
   if (message.parts.length === 0) {
     return null;
   }
-
-  const modelUsed = message.metadata?.model;
 
   const messageContent = getMessageContentFromParts(message.parts);
 
@@ -41,30 +43,41 @@ export default React.memo(function AssistantMessage(props: Props) {
       <AIResponseSources parts={message.parts} />
 
       {/* Message actions */}
-      <div className="flex items-center gap-1 transition-opacity duration-200 md:opacity-0 group-hover:md:opacity-100 lg:gap-1.5">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              onClick={async () => {
-                await navigator.clipboard.writeText(messageContent);
-                toast.success("Copied to clipboard");
-              }}
-              size="icon"
-              variant="ghost"
-            >
-              <CopyIcon />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Copy to clipboard</TooltipContent>
-        </Tooltip>
+      <div className="flex items-center gap-3 duration-200 md:opacity-0 group-hover:md:opacity-100 lg:gap-4">
+        <div className="flex items-center gap-1">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                onClick={async () => {
+                  await navigator.clipboard.writeText(messageContent);
+                  toast.success("Copied to clipboard");
+                }}
+                size="icon"
+                variant="ghost"
+              >
+                <CopyIcon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Copy to clipboard</TooltipContent>
+          </Tooltip>
 
-        <BranchOffButton message={message} />
+          <BranchOffButton message={message} />
 
-        {regenerate && (
-          <RetryModelDropdown message={message} regenerate={regenerate} />
+          {regenerate && (
+            <RetryModelDropdown message={message} regenerate={regenerate} />
+          )}
+
+          <span className="text-muted-foreground text-xs">
+            {message.metadata?.model}
+          </span>
+        </div>
+
+        {showTokenUsage && message.metadata?.totalTokens && (
+          <div className="flex items-center gap-1 text-muted-foreground text-xs">
+            <CpuIcon className="size-4" />
+            {formatTokens(message.metadata?.totalTokens)}
+          </div>
         )}
-
-        <span className="text-muted-foreground text-xs">{modelUsed}</span>
       </div>
     </div>
   );
