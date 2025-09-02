@@ -134,6 +134,7 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
           ? undefined
           : systemMessage,
       messages: convertToModelMessages(messages),
+      temperature: 0.7,
       experimental_transform: smoothStream({ chunking: "line" }),
       abortSignal: request.signal,
       tools: {
