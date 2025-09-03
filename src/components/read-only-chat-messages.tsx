@@ -46,7 +46,7 @@ export default function ReadOnlyChatMessages() {
               </small>
 
               <h2 className="-mt-3 text-center font-semibold text-3xl">
-                {data?.parentChat?.title}
+                {data?.parentChatTitle}
               </h2>
 
               {isPending ? (

@@ -16,7 +16,7 @@ export const getMessages = query({
       .order("asc")
       .collect();
 
-    return messages;
+    return messages.map(({ userId: messageUserId, ...rest }) => ({ ...rest }));
   },
 });
 
@@ -53,7 +53,13 @@ export const getSharedChatMessages = query({
       .order("asc")
       .collect();
 
-    return { sharedChat, messages, parentChat };
+    return {
+      sharedChat,
+      messages: messages.map(({ userId: messageUserId, ...rest }) => ({
+        ...rest,
+      })),
+      parentChatTitle: parentChat?.title,
+    };
   },
 });
 

@@ -3,6 +3,7 @@ import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { internal } from "./_generated/api";
 import { query } from "./_generated/server";
 import { internalMutation, mutation } from "./functions";
+import { selectChatFields } from "./model/chats";
 import { getAuthUserIdOrThrow } from "./model/users";
 
 export const getChats = query({
@@ -16,7 +17,9 @@ export const getChats = query({
       .order("desc")
       .collect();
 
-    return chats;
+    const selectedFieldsChats = chats.map((chat) => selectChatFields(chat));
+
+    return selectedFieldsChats;
   },
 });
 
@@ -35,10 +38,11 @@ export const getUnpinnedChats = query({
 
     const chatsWithParent = await Promise.all(
       chats.map(async (chat) => {
+        const currentChat = selectChatFields(chat);
         if (chat.isBranched && chat.parentChatId) {
           const parentChat = await ctx.db.get(chat.parentChatId);
           return {
-            ...chat,
+            ...currentChat,
             parentChat: {
               id: parentChat?._id,
               uuid: parentChat?.uuid,
@@ -46,7 +50,7 @@ export const getUnpinnedChats = query({
             },
           };
         }
-        return { ...chat, parentChat: null };
+        return { ...currentChat, parentChat: null };
       })
     );
 
@@ -69,10 +73,11 @@ export const getPinnedChats = query({
 
     const chatsWithParent = await Promise.all(
       chats.map(async (chat) => {
+        const currentChat = selectChatFields(chat);
         if (chat.isBranched && chat.parentChatId) {
           const parentChat = await ctx.db.get(chat.parentChatId);
           return {
-            ...chat,
+            ...currentChat,
             parentChat: {
               id: parentChat?._id,
               uuid: parentChat?.uuid,
@@ -80,7 +85,7 @@ export const getPinnedChats = query({
             },
           };
         }
-        return { ...chat, parentChat: null };
+        return { ...currentChat, parentChat: null };
       })
     );
 

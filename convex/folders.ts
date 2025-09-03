@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
 import { mutation, query } from "./_generated/server";
+import { selectChatFields } from "./model/chats";
 import { getAuthUserIdOrThrow } from "./model/users";
 
 export const getFolders = query({
@@ -14,7 +15,10 @@ export const getFolders = query({
       .order("desc")
       .collect();
 
-    return folders;
+    return folders.map((folder) => ({
+      _id: folder._id,
+      title: folder.title,
+    }));
   },
 });
 
@@ -40,10 +44,12 @@ export const getFoldersWithChats = query({
 
         const chatsWithParent = await Promise.all(
           chats.map(async (chat) => {
+            const currentChat = selectChatFields(chat);
+
             if (chat.isBranched && chat.parentChatId) {
               const parentChat = await ctx.db.get(chat.parentChatId);
               return {
-                ...chat,
+                ...currentChat,
                 parentChat: {
                   id: parentChat?._id,
                   uuid: parentChat?.uuid,
@@ -51,10 +57,10 @@ export const getFoldersWithChats = query({
                 },
               };
             }
-            return { ...chat, parentChat: null };
+            return { ...currentChat, parentChat: null };
           })
         );
-        return { ...folder, chats: chatsWithParent };
+        return { _id: folder._id, title: folder.title, chats: chatsWithParent };
       })
     );
 

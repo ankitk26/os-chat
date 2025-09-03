@@ -10,7 +10,7 @@ import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
-  message: Doc<"messages">;
+  message: Omit<Doc<"messages">, "userId">;
 };
 
 export default function ReadOnlyAssistantMessage({ message }: Props) {

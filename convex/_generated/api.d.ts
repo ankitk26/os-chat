@@ -20,6 +20,7 @@ import type * as functions from "../functions.js";
 import type * as messages from "../messages.js";
 import type * as migrations_assignMessageUuid from "../migrations/assignMessageUuid.js";
 import type * as migrations_setsIsBranched from "../migrations/setsIsBranched.js";
+import type * as model_chats from "../model/chats.js";
 import type * as model_users from "../model/users.js";
 
 /**
@@ -38,6 +39,7 @@ declare const fullApi: ApiFromModules<{
   messages: typeof messages;
   "migrations/assignMessageUuid": typeof migrations_assignMessageUuid;
   "migrations/setsIsBranched": typeof migrations_setsIsBranched;
+  "model/chats": typeof model_chats;
   "model/users": typeof model_users;
 }>;
 export declare const api: FilterApi<
