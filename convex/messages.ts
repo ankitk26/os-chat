@@ -92,23 +92,22 @@ export const createMessage = mutation({
       const modelUsed: string = parsedMetadata.model;
       const totalTokens: number = parsedMetadata.totalTokens;
 
-      const modelTokenDocs = await ctx.db
+      const modelTokenDoc = await ctx.db
         .query("userTokenUsage")
         .withIndex("by_user_and_model", (q) =>
           q.eq("userId", userId).eq("model", modelUsed)
         )
-        .collect();
+        .first();
 
-      if (modelTokenDocs.length === 0) {
+      if (modelTokenDoc) {
+        await ctx.db.patch(modelTokenDoc._id, {
+          tokens: modelTokenDoc.tokens + totalTokens,
+        });
+      } else {
         await ctx.db.insert("userTokenUsage", {
           userId,
           model: modelUsed,
           tokens: totalTokens,
-        });
-      } else {
-        const modelTokenDoc = modelTokenDocs[0];
-        await ctx.db.patch(modelTokenDoc._id, {
-          tokens: modelTokenDoc.tokens + totalTokens,
         });
       }
     }
