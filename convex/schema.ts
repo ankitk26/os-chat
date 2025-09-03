@@ -72,4 +72,10 @@ export default defineSchema({
   })
     .index("by_parent_chat", ["parentChatUuid"])
     .index("by_uuid", ["uuid"]),
+
+  userTokenUsage: defineTable({
+    userId: v.id("user"),
+    model: v.string(),
+    tokens: v.number(),
+  }).index("by_user_and_model", ["userId", "model"]),
 });

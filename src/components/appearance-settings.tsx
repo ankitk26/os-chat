@@ -1,62 +1,73 @@
+import { Label } from "~/components/ui/label";
+import { Switch } from "~/components/ui/switch";
+import { TabsContent } from "~/components/ui/tabs";
 import { useAppearanceStore } from "~/stores/appearance-store";
 import TokenUsageByModel from "./token-usage-by-model";
-import { Label } from "./ui/label";
-import { Switch } from "./ui/switch";
-import { TabsContent } from "./ui/tabs";
 
 export default function AppearanceSettings() {
   const enableAllMono = useAppearanceStore((store) => store.enableAllMono);
+  const toggleAllMono = useAppearanceStore((store) => store.toggleAllMono);
+
+  const showTokenUsage = useAppearanceStore((store) => store.showTokenUsage);
   const toggleShowTokenUsage = useAppearanceStore(
     (store) => store.toggleShowTokenUsage
   );
-  const showTokenUsage = useAppearanceStore((store) => store.showTokenUsage);
-  const toggleAllMono = useAppearanceStore((store) => store.toggleAllMono);
 
   return (
-    <TabsContent className="space-y-12" value="appearance">
-      <section className="flex flex-col space-y-3">
-        <div className="space-y-3">
-          <h2 className="font-semibold text-lg">Typography</h2>
+    <TabsContent className="flex flex-col gap-12" value="appearance">
+      {/* Typography */}
+      <section className="flex flex-col gap-5">
+        <header className="flex flex-col gap-2">
+          <h2 className="text-pretty font-semibold text-lg">Typography</h2>
           <p className="text-muted-foreground text-sm">
             Customize the font family used throughout the application
           </p>
-        </div>
+        </header>
 
-        <div className="flex items-center space-x-3">
-          <Switch
-            checked={enableAllMono}
-            id="mono-font"
-            onCheckedChange={toggleAllMono}
-          />
-          <Label
-            className="flex cursor-pointer items-center space-x-2"
-            htmlFor="mono-font"
-          >
-            <span>Enable Mono Font</span>
-          </Label>
+        <div className="rounded-lg border bg-card p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex min-w-0 flex-col gap-1">
+              <Label className="font-medium" htmlFor="mono-font">
+                Enable Mono Font
+              </Label>
+            </div>
+
+            <Switch
+              aria-label="Enable mono font"
+              checked={enableAllMono}
+              id="mono-font"
+              onCheckedChange={toggleAllMono}
+            />
+          </div>
         </div>
       </section>
 
-      <section>
-        <div className="space-y-6">
-          <div className="space-y-3">
-            <h2 className="font-semibold text-lg">Stats</h2>
-            <p className="text-muted-foreground text-sm">
-              Control the display of usage statistics in the application
-            </p>
-          </div>
-          <div className="flex items-center space-x-3">
+      {/* Stats */}
+      <section className="flex flex-col gap-5">
+        <header className="flex flex-col gap-2">
+          <h2 className="text-pretty font-semibold text-lg">Stats</h2>
+          <p className="text-muted-foreground text-sm">
+            Control the display of usage statistics in the application
+          </p>
+        </header>
+
+        <div className="rounded-lg border bg-card p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex min-w-0 flex-col gap-1">
+              <Label className="font-medium" htmlFor="show-token-usage">
+                Show Token Usage
+              </Label>
+              <p className="text-muted-foreground text-sm">
+                Display token consumption by model within the app
+              </p>
+            </div>
+
             <Switch
+              aria-label="Show token usage"
               checked={showTokenUsage}
               id="show-token-usage"
               onCheckedChange={toggleShowTokenUsage}
             />
-            <Label
-              className="flex cursor-pointer items-center space-x-2"
-              htmlFor="show-token-usage"
-            >
-              <span>Show Token Usage</span>
-            </Label>
           </div>
 
           <TokenUsageByModel />

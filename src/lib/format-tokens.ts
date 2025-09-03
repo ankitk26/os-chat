@@ -1,5 +1,3 @@
-/** biome-ignore-all lint/style/noMagicNumbers: this can be ignored here */
-
 const K_SUFFIX_REGEX = /\.?0+K$/;
 const M_SUFFIX_REGEX = /\.?0+M$/;
 

@@ -80,6 +80,33 @@ export const createMessage = mutation({
       metadata: args.messageBody.metadata,
     });
 
+    // below logic is required to handle tokens generated while regeneration
+    if (args.messageBody.role === "assistant") {
+      const parsedMetadata = JSON.parse(args.messageBody.metadata ?? "");
+      const modelUsed: string = parsedMetadata.model;
+      const totalTokens: number = parsedMetadata.totalTokens;
+
+      const modelTokenDocs = await ctx.db
+        .query("userTokenUsage")
+        .withIndex("by_user_and_model", (q) =>
+          q.eq("userId", userId).eq("model", modelUsed)
+        )
+        .collect();
+
+      if (modelTokenDocs.length === 0) {
+        await ctx.db.insert("userTokenUsage", {
+          userId,
+          model: modelUsed,
+          tokens: totalTokens,
+        });
+      } else {
+        const modelTokenDoc = modelTokenDocs[0];
+        await ctx.db.patch(modelTokenDoc._id, {
+          tokens: modelTokenDoc.tokens + totalTokens,
+        });
+      }
+    }
+
     return args.messageBody.chatId;
   },
 });
@@ -152,32 +179,11 @@ export const tokensByModel = query({
   handler: async (ctx, args) => {
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
 
-    const aiMessages = await ctx.db
-      .query("messages")
-      .withIndex("by_user_and_role", (q) =>
-        q.eq("userId", userId).eq("role", "assistant")
-      )
+    const stats = await ctx.db
+      .query("userTokenUsage")
+      .withIndex("by_user_and_model", (q) => q.eq("userId", userId))
       .collect();
 
-    const tokenStats: Record<string, number> = {};
-    for (const message of aiMessages) {
-      const parsedMetadata = JSON.parse(message.metadata ?? "{}");
-      if (!parsedMetadata?.model) {
-        continue;
-      }
-      if (!parsedMetadata?.totalTokens) {
-        continue;
-      }
-
-      tokenStats[parsedMetadata.model] =
-        (tokenStats[parsedMetadata.model] || 0) + parsedMetadata.totalTokens;
-    }
-
-    // Convert to desired array shape
-    const result: Array<{ model: string; tokens: number }> = Object.entries(
-      tokenStats
-    ).map(([model, tokens]) => ({ model, tokens }));
-
-    return result;
+    return stats;
   },
 });

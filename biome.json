@@ -30,7 +30,8 @@
       },
       "style": {
         "useConst": "error",
-        "useTemplate": "error"
+        "useTemplate": "error",
+        "noMagicNumbers": "off"
       },
       "complexity": {
         "noForEach": "error",
