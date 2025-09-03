@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { AppSidebar } from "~/components/app-sidebar";
 import ReadOnlyChatMessages from "~/components/read-only-chat-messages";
+import { ThemeToggler } from "~/components/theme-toggle";
 import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
 import { authQueryOptions } from "~/queries/auth";
 
@@ -35,5 +36,12 @@ function RouteComponent() {
     );
   }
 
-  return <ReadOnlyChatMessages />;
+  return (
+    <>
+      <div className="mx-auto flex w-1/2 items-center justify-center">
+        <ThemeToggler />
+      </div>
+      <ReadOnlyChatMessages />
+    </>
+  );
 }
