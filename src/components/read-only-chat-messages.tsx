@@ -41,10 +41,6 @@ export default function ReadOnlyChatMessages() {
         <ScrollArea className="h-full w-full">
           <div className="mx-auto h-full w-full max-w-3xl">
             <div className="my-8 flex flex-col space-y-8">
-              <small className="text-center text-muted-foreground">
-                This is a copy of a conversation between os-chat & Anonymous
-              </small>
-
               <h2 className="-mt-3 text-center font-semibold text-3xl">
                 {data?.parentChatTitle}
               </h2>
