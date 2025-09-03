@@ -13,7 +13,7 @@ export default function ContactSection() {
         <p className="text-muted-foreground text-sm">
           This project is Open-Source.
         </p>
-        <CustomExternalLink href="https://github.com/ankitk26/os-chat">
+        <CustomExternalLink href={import.meta.env.VITE_GITHUB_REPO_LINK}>
           <Button className="w-full lg:w-32">
             <GithubIcon />
             os-chat
@@ -25,7 +25,7 @@ export default function ContactSection() {
         <p className="text-muted-foreground text-sm">
           For bugs, features, or general inquiries:
         </p>
-        <CustomExternalLink href="https://x.com/akcejia">
+        <CustomExternalLink href={import.meta.env.VITE_X_URL}>
           <Button className="w-full lg:w-32">
             <svg
               className="size-4 fill-primary-foreground"
