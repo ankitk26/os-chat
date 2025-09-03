@@ -184,6 +184,10 @@ export const tokensByModel = query({
       .withIndex("by_user_and_model", (q) => q.eq("userId", userId))
       .collect();
 
-    return stats;
+    const sortedStats = stats
+      .sort((a, b) => b.tokens - a.tokens)
+      .map(({ model, tokens }) => ({ model, tokens }));
+
+    return sortedStats;
   },
 });
