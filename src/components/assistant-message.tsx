@@ -1,5 +1,5 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
-import { CopyIcon, CpuIcon } from "lucide-react";
+import { CopyIcon, CpuIcon, GlobeIcon } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
 import { formatTokens } from "~/lib/format-tokens";
@@ -70,6 +70,13 @@ export default React.memo(function AssistantMessage(props: Props) {
           <span className="text-muted-foreground text-xs">
             {message.metadata?.model}
           </span>
+
+          {message.parts.filter(
+            (part) =>
+              part.type === "source-document" || part.type === "source-url"
+          ).length > 0 && (
+            <GlobeIcon className="size-3 text-muted-foreground" />
+          )}
         </div>
 
         {showTokenUsage && message.metadata?.totalTokens && (
