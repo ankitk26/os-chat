@@ -56,6 +56,7 @@ export default function ModelSelector() {
                       setSelectedModel(model);
                     }}
                   >
+                    <ModelProviderIcon provider={provider.key} />
                     {model.name}
                     {!model.isAvailable && (
                       <KeyIcon className="ml-auto size-3" />

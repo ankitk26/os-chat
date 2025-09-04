@@ -124,7 +124,7 @@ export default function RetryModelDropdown(props: Props) {
               {provider.provider}
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
-              <DropdownMenuSubContent className="ml-2">
+              <DropdownMenuSubContent className="ml-2 w-[200px]">
                 {provider.models.map((model) => (
                   <DropdownMenuItem
                     className="py-3 text-xs"
@@ -134,6 +134,7 @@ export default function RetryModelDropdown(props: Props) {
                       await handleRetry(model);
                     }}
                   >
+                    <ModelProviderIcon provider={provider.key} />
                     {model.name}
                     {!model.isAvailable && (
                       <KeyIcon className="ml-auto size-3" />
