@@ -34,46 +34,35 @@ export default function RetryModelDropdown(props: Props) {
   const { chatId } = useParams({ strict: false });
   const selectedModel = useModelStore((store) => store.selectedModel);
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
-
-  const deleteMessagesMutation = useMutation({
-    mutationFn: useConvexMutation(api.messages.deleteMessagesByTimestamp),
-  });
-
   const persistedApiKeys = usePersistedApiKeysStore(
     (store) => store.persistedApiKeys
   );
   const persistedUseOpenRouter = usePersistedApiKeysStore(
     (store) => store.persistedUseOpenRouter
   );
+
   const accessibleModels = getAccessibleModels(
     persistedApiKeys,
     persistedUseOpenRouter
   );
+
+  const deleteMessagesMutation = useMutation({
+    mutationFn: useConvexMutation(api.messages.deleteMessagesByTimestamp),
+  });
 
   const handleRetry = async (model: Model) => {
     if (!chatId) {
       return;
     }
 
-    // handle messages in DB
+    // delete all messages after current message in current chat
     deleteMessagesMutation.mutate({
       sessionToken: auth.session.token,
       currentMessageSourceId: message.id,
+      role: message.role,
+      chatId,
     });
 
-    // setMessages((prev) => [
-    //   ...prev.filter((m) => {
-    //     const mCreatedAt = m.metadata?.createdAt;
-    //     const currentCreatedAt = currentMessage?.metadata?.createdAt;
-    //     if (
-    //       typeof mCreatedAt !== "number" ||
-    //       typeof currentCreatedAt !== "number"
-    //     ) {
-    //       return false;
-    //     }
-    //     return mCreatedAt < currentCreatedAt;
-    //   }),
-    // ]);
     await regenerate({
       messageId: message.id,
       body: {

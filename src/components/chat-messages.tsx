@@ -25,7 +25,11 @@ export default memo(function ChatMessages({
         return (
           <div className="flex flex-col" key={message.id}>
             {message.role === "user" ? (
-              <UserMessage message={message} sendMessage={sendMessage} />
+              <UserMessage
+                message={message}
+                regenerate={regenerate}
+                sendMessage={sendMessage}
+              />
             ) : (
               <AssistantMessage message={message} regenerate={regenerate} />
             )}

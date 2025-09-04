@@ -120,6 +120,8 @@ export const deleteMessagesByTimestamp = mutation({
   args: {
     sessionToken: v.string(),
     currentMessageSourceId: v.string(),
+    role: v.union(v.literal("assistant"), v.literal("user")),
+    chatId: v.string(),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
@@ -139,11 +141,26 @@ export const deleteMessagesByTimestamp = mutation({
       throw new Error("Unauthorized access");
     }
 
-    for await (const message of ctx.db
+    let messagesAfterCurrentMessage = ctx.db
       .query("messages")
-      .withIndex("by_creation_time", (q) =>
-        q.gte("_creationTime", currentMessage._creationTime)
-      )) {
+      .withIndex("by_chat", (q) =>
+        q
+          .eq("chatId", args.chatId)
+          .gte("_creationTime", currentMessage._creationTime)
+      );
+
+    // if message is a user message, don't delete current message
+    if (args.role === "user") {
+      messagesAfterCurrentMessage = ctx.db
+        .query("messages")
+        .withIndex("by_chat", (q) =>
+          q
+            .eq("chatId", args.chatId)
+            .gt("_creationTime", currentMessage._creationTime)
+        );
+    }
+
+    for await (const message of messagesAfterCurrentMessage) {
       await ctx.db.delete(message._id);
     }
   },

@@ -75,7 +75,7 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
       branchedChatUuid: branchChatUuid,
       lastMessage: {
         id: message.id,
-        role: message.role === "assistant" ? "assistant" : "user",
+        role: message.role,
       },
       parentChatUuid: chatId,
       sessionToken: auth.session.token,

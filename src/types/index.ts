@@ -59,4 +59,7 @@ export const messageMetadataSchema = z.object({
   totalTokens: z.number().optional(),
 });
 export type MessageMetadata = z.infer<typeof messageMetadataSchema>;
-export type CustomUIMessage = UIMessage<MessageMetadata>;
+// system role not needed for now
+export type CustomUIMessage = Omit<UIMessage<MessageMetadata>, "role"> & {
+  role: "user" | "assistant";
+};

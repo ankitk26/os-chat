@@ -5,15 +5,21 @@ import { toast } from "sonner";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
 import type { CustomUIMessage } from "~/types";
 import BranchOffButton from "./branch-off-button";
+import RetryModelDropdown from "./retry-model-dropdown";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
   message: CustomUIMessage;
   sendMessage: UseChatHelpers<CustomUIMessage>["sendMessage"];
+  regenerate: UseChatHelpers<CustomUIMessage>["regenerate"];
 };
 
-export default memo(function UserMessage({ message, sendMessage }: Props) {
+export default memo(function UserMessage({
+  message,
+  sendMessage,
+  regenerate,
+}: Props) {
   const messageContent = getMessageContentFromParts(message.parts);
 
   return (
@@ -23,6 +29,7 @@ export default memo(function UserMessage({ message, sendMessage }: Props) {
       </div>
       <div className="flex opacity-0 transition-opacity duration-200 group-hover:opacity-100">
         <BranchOffButton message={message} sendMessage={sendMessage} />
+        <RetryModelDropdown message={message} regenerate={regenerate} />
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
