@@ -120,8 +120,8 @@ export const deleteMessagesByTimestamp = mutation({
   args: {
     sessionToken: v.string(),
     currentMessageSourceId: v.string(),
-    role: v.union(v.literal("assistant"), v.literal("user")),
     chatId: v.string(),
+    deleteCurrentMessage: v.boolean(),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
@@ -146,17 +146,17 @@ export const deleteMessagesByTimestamp = mutation({
       .withIndex("by_chat", (q) =>
         q
           .eq("chatId", args.chatId)
-          .gte("_creationTime", currentMessage._creationTime)
+          .gt("_creationTime", currentMessage._creationTime)
       );
 
     // if message is a user message, don't delete current message
-    if (args.role === "user") {
+    if (args.deleteCurrentMessage) {
       messagesAfterCurrentMessage = ctx.db
         .query("messages")
         .withIndex("by_chat", (q) =>
           q
             .eq("chatId", args.chatId)
-            .gt("_creationTime", currentMessage._creationTime)
+            .gte("_creationTime", currentMessage._creationTime)
         );
     }
 

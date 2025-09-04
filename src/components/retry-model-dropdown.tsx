@@ -59,8 +59,8 @@ export default function RetryModelDropdown(props: Props) {
     deleteMessagesMutation.mutate({
       sessionToken: auth.session.token,
       currentMessageSourceId: message.id,
-      role: message.role,
       chatId,
+      deleteCurrentMessage: false,
     });
 
     await regenerate({
