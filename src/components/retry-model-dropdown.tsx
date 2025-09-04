@@ -60,7 +60,7 @@ export default function RetryModelDropdown(props: Props) {
       sessionToken: auth.session.token,
       currentMessageSourceId: message.id,
       chatId,
-      deleteCurrentMessage: false,
+      deleteCurrentMessage: message.role === "assistant",
     });
 
     await regenerate({

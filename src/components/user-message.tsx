@@ -115,15 +115,20 @@ export default memo(function UserMessage({
         )}
       </div>
       <div className="flex opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-        <Button
-          onClick={() => {
-            setIsEditing((prev) => !prev);
-          }}
-          size="icon"
-          variant="ghost"
-        >
-          {isEditing ? <PencilOffIcon /> : <PencilIcon />}
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              onClick={() => {
+                setIsEditing((prev) => !prev);
+              }}
+              size="icon"
+              variant="ghost"
+            >
+              {isEditing ? <PencilOffIcon /> : <PencilIcon />}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Edit message</TooltipContent>
+        </Tooltip>
         <BranchOffButton message={message} sendMessage={sendMessage} />
         <RetryModelDropdown message={message} regenerate={regenerate} />
         <Tooltip>
