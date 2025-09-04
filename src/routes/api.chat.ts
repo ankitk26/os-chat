@@ -137,9 +137,11 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
       temperature: 0.7,
       experimental_transform: smoothStream({ chunking: "line" }),
       abortSignal: request.signal,
-      tools: {
-        google_search: google.tools.googleSearch({}),
-      },
+      ...(isWebSearchEnabled && {
+        tools: {
+          google_search: google.tools.googleSearch({}),
+        },
+      }),
     });
 
     return result.toUIMessageStreamResponse({

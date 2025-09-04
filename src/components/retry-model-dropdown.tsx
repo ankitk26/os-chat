@@ -3,7 +3,7 @@ import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useParams, useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
-import { KeyIcon, RefreshCcwIcon } from "lucide-react";
+import { GlobeIcon, KeyIcon, RefreshCcwIcon } from "lucide-react";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
@@ -15,12 +15,14 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuPortal,
+  DropdownMenuSeparator,
   DropdownMenuSeparatorWithText,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { Switch } from "./ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
@@ -34,6 +36,7 @@ export default function RetryModelDropdown(props: Props) {
   const { chatId } = useParams({ strict: false });
   const selectedModel = useModelStore((store) => store.selectedModel);
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
+  const toggleIsWebSearch = useModelStore((store) => store.toggleIsWebSearch);
   const persistedApiKeys = usePersistedApiKeysStore(
     (store) => store.persistedApiKeys
   );
@@ -92,6 +95,20 @@ export default function RetryModelDropdown(props: Props) {
         </Tooltip>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[200px]">
+        {/* Web Search switch */}
+        <div className="flex items-center justify-between px-2 py-3">
+          <div className="flex items-center gap-2">
+            <GlobeIcon className="size-4" />
+            <span className="text-xs">Web Search</span>
+          </div>
+          <Switch
+            checked={isWebSearchEnabled}
+            onCheckedChange={toggleIsWebSearch}
+          />
+        </div>
+
+        <DropdownMenuSeparator />
+
         <DropdownMenuItem
           className="flex items-center gap-3 text-xs"
           onClick={async () => {
