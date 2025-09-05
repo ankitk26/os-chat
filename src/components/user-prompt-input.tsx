@@ -14,6 +14,7 @@ import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getChatTitle } from "~/server-fns/get-chat-title";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
+import { useTextSelectionStore } from "~/stores/text-selection-store";
 import type { CustomUIMessage } from "~/types";
 import PromptActions from "./prompt-actions";
 
@@ -40,6 +41,7 @@ export default function UserPromptInput(props: Props) {
   const persistedUseOpenRouter = usePersistedApiKeysStore(
     (store) => store.persistedUseOpenRouter
   );
+  const { selectedText, clearSelectedText } = useTextSelectionStore();
 
   const updateChatTitleMutation = useMutation({
     mutationFn: useConvexMutation(api.chats.updateChatTitle),
@@ -129,6 +131,23 @@ export default function UserPromptInput(props: Props) {
       textareaRef.current.focus();
     }
   }, [props.chatId]);
+
+  // Populate input when selected text changes
+  useEffect(() => {
+    if (selectedText) {
+      setInput(selectedText);
+      clearSelectedText();
+      // Focus the textarea after setting the text
+      if (textareaRef.current) {
+        textareaRef.current.focus();
+        // Move cursor to end of text
+        textareaRef.current.setSelectionRange(
+          selectedText.length,
+          selectedText.length
+        );
+      }
+    }
+  }, [selectedText, clearSelectedText]);
 
   return (
     <div className="bg-background/80 backdrop-blur">
