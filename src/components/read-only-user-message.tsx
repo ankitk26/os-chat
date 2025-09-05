@@ -2,6 +2,7 @@ import type { Doc } from "convex/_generated/dataModel";
 import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
+import MemoizedMarkdown from "./memoized-markdown";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
@@ -16,7 +17,7 @@ export default function ReadOnlyUserMessage({ message }: Props) {
     <div className="group flex w-3/4 flex-col items-end space-y-1 self-end">
       {/* Message bubble */}
       <div className="wrap-break-word flex w-full max-w-full flex-col gap-6 whitespace-pre-wrap rounded-xl border bg-popover px-4 py-4 text-sm">
-        {messageContent}
+        <MemoizedMarkdown content={messageContent} id={message._id} />
       </div>
 
       {/* Copy button container */}
