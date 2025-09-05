@@ -182,6 +182,25 @@ const qwenModels = {
   ],
 };
 
+const moonshotModels = {
+  provider: "Moonshot",
+  key: "moonshot",
+  models: [
+    {
+      name: "Kimi K2",
+      openRouterModelId: "moonshotai/kimi-k2",
+      modelId: "moonshotai/kimi-k2",
+      isFree: false,
+    },
+    {
+      name: "Kimi K2 0905",
+      openRouterModelId: "moonshotai/kimi-k2-0905",
+      modelId: "moonshotai/kimi-k2-0905",
+      isFree: false,
+    },
+  ],
+};
+
 export const allModelProviders: ProviderGroup[] = [
   geminiModels,
   deepseekModels,
@@ -189,4 +208,5 @@ export const allModelProviders: ProviderGroup[] = [
   anthropicModels,
   xAiModels,
   qwenModels,
+  moonshotModels,
 ];
