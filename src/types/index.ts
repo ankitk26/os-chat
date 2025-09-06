@@ -56,7 +56,7 @@ export type SidebarFolder = FunctionReturnType<
 export const messageMetadataSchema = z.object({
   createdAt: z.number().optional(),
   model: z.string().optional(),
-  totalTokens: z.number().optional(),
+  totalTokens: z.float64().optional(),
 });
 export type MessageMetadata = z.infer<typeof messageMetadataSchema>;
 // system role not needed for now

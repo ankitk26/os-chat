@@ -15,7 +15,7 @@ export default function TokenUsageByModel() {
 
   if (isPending) {
     return (
-      <div aria-busy="true" className="flex flex-col gap-2">
+      <div aria-busy="true" className="mt-6 flex flex-col gap-2">
         <Skeleton className="h-5 w-full" />
         <Skeleton className="h-5 w-full" />
         <Skeleton className="h-5 w-full" />
