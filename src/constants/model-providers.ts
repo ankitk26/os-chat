@@ -33,26 +33,26 @@ const deepseekModels = {
   models: [
     {
       name: "DeepSeek R1 0528",
-      openRouterModelId: "deepseek/deepseek-r1-0528:free",
-      modelId: "deepseek/deepseek-r1-0528:free",
+      openRouterModelId: "deepseek/deepseek-r1-0528",
+      modelId: "deepseek/deepseek-r1-0528",
       isFree: false,
     },
     {
       name: "DeepSeek R1",
-      openRouterModelId: "deepseek/deepseek-r1:free",
-      modelId: "deepseek/deepseek-r1:free",
+      openRouterModelId: "deepseek/deepseek-r1",
+      modelId: "deepseek/deepseek-r1",
       isFree: false,
     },
     {
       name: "DeepSeek V3 (0324)",
-      openRouterModelId: "deepseek/deepseek-chat-v3-0324:free",
-      modelId: "deepseek/deepseek-chat-v3-0324:free",
+      openRouterModelId: "deepseek/deepseek-chat-v3-0324",
+      modelId: "deepseek/deepseek-chat-v3-0324",
       isFree: false,
     },
     {
       name: "DeepSeek V3.1",
-      openRouterModelId: "deepseek/deepseek-chat-v3.1:free",
-      modelId: "deepseek/deepseek-chat-v3.1:free",
+      openRouterModelId: "deepseek/deepseek-chat-v3.1",
+      modelId: "deepseek/deepseek-chat-v3.1",
       isFree: false,
     },
   ],
@@ -169,8 +169,8 @@ const qwenModels = {
   models: [
     {
       name: "Qwen 2.5 Coder 32B",
-      openRouterModelId: "qwen/qwen-2.5-coder-32b-instruct:free",
-      modelId: "qwen/qwen-2.5-coder-32b-instruct:free",
+      openRouterModelId: "qwen/qwen-2.5-coder-32b-instruct",
+      modelId: "qwen/qwen-2.5-coder-32b-instruct",
       isFree: false,
     },
     {
