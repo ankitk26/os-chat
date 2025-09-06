@@ -162,21 +162,27 @@ const qwenModels = {
   key: "qwen",
   models: [
     {
-      name: "Qwen 3 32B",
-      openRouterModelId: "qwen/qwen3-32b",
-      modelId: "qwen/qwen3-32b",
-      isFree: false,
-    },
-    {
       name: "Qwen 2.5 Coder 32B",
       openRouterModelId: "qwen/qwen-2.5-coder-32b-instruct:free",
       modelId: "qwen/qwen-2.5-coder-32b-instruct:free",
       isFree: false,
     },
     {
+      name: "Qwen 3 32B",
+      openRouterModelId: "qwen/qwen3-32b",
+      modelId: "qwen/qwen3-32b",
+      isFree: false,
+    },
+    {
       name: "Qwen 3 Coder",
       openRouterModelId: "qwen/qwen3-coder",
       modelId: "qwen/qwen3-coder",
+      isFree: false,
+    },
+    {
+      name: "Qwen 3 Max",
+      openRouterModelId: "qwen/qwen3-max",
+      modelId: "qwen/qwen3-max",
       isFree: false,
     },
   ],
