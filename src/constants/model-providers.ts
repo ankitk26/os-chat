@@ -49,6 +49,12 @@ const deepseekModels = {
       modelId: "deepseek/deepseek-chat-v3-0324:free",
       isFree: false,
     },
+    {
+      name: "DeepSeek V3.1",
+      openRouterModelId: "deepseek/deepseek-chat-v3.1:free",
+      modelId: "deepseek/deepseek-chat-v3.1:free",
+      isFree: false,
+    },
   ],
 };
 
