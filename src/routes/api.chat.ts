@@ -10,6 +10,7 @@ import { systemMessage } from "~/constants/system-message";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { createMessageServerFn } from "~/server-fns/create-message";
 import { getAuth } from "~/server-fns/get-auth";
+import { getPostUrl } from "~/server-fns/get-post-url";
 import type { ApiKeys, CustomUIMessage, Model } from "~/types";
 
 type ChatRequestBody = {
@@ -164,14 +165,41 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
       sendSources: isWebSearchEnabled,
       onFinish: async ({ responseMessage }) => {
         if (chatId && responseMessage.parts.length > 0) {
-          await createMessageServerFn({
-            data: {
-              chatId,
-              messageId: responseMessage.id,
-              parts: JSON.stringify(responseMessage.parts),
-              metadata: JSON.stringify(responseMessage.metadata),
-            },
-          });
+          const imagePart = responseMessage.parts.find(
+            (part) => part.type === "file"
+          );
+          if (imagePart && imagePart.mediaType.startsWith("image/")) {
+            try {
+              console.log(imagePart.mediaType);
+              const postUrl = await getPostUrl();
+              
+              // Convert base64 string to Blob
+              const base64Data = imagePart.url.replace(/^data:image\/[a-z]+;base64,/, '');
+              const binaryData = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+              const blob = new Blob([binaryData], { type: imagePart.mediaType });
+              
+              const imageUploadRequest = await fetch(postUrl, {
+                method: "POST",
+                headers: {
+                  "Content-Type": imagePart.mediaType,
+                },
+                body: blob,
+              });
+              const json = await imageUploadRequest.json();
+              console.log(json);
+            } catch (e) {
+              console.log((e as Error).message);
+            }
+          } else {
+            await createMessageServerFn({
+              data: {
+                chatId,
+                messageId: responseMessage.id,
+                parts: JSON.stringify(responseMessage.parts),
+                metadata: JSON.stringify(responseMessage.metadata),
+              },
+            });
+          }
         }
       },
       onError: (error) => {

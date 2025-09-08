@@ -213,3 +213,9 @@ export const tokensByModel = query({
     return sortedStats;
   },
 });
+
+export const generateUploadUrl = mutation({
+  handler: async (ctx) => {
+    return await ctx.storage.generateUploadUrl();
+  },
+});

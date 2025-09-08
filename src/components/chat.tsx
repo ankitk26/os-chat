@@ -124,6 +124,8 @@ export default function Chat({
     setMessages(dbMessages);
   }, [dbMessages]);
 
+  console.log(messages);
+
   return (
     <div className="relative mx-auto flex h-svh max-h-svh w-full flex-col">
       {/* Full height scroll area that extends behind the prompt */}

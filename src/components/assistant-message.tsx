@@ -6,6 +6,7 @@ import { formatTokens } from "~/lib/format-tokens";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
 import { useAppearanceStore } from "~/stores/appearance-store";
 import type { CustomUIMessage } from "~/types";
+import AIGeneratedImages from "./ai-generated-images";
 import AIResponseContent from "./ai-response-content";
 import AIResponseReasoning from "./ai-response-reasoning";
 import AIResponseSources from "./ai-response-sources";
@@ -40,6 +41,7 @@ export default React.memo(function AssistantMessage(props: Props) {
         messageContent={messageContent}
         messageId={message.id}
       />
+      <AIGeneratedImages parts={message.parts} />
       <AIResponseSources parts={message.parts} />
 
       {/* Message actions */}

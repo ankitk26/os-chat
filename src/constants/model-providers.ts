@@ -19,6 +19,12 @@ const geminiModels = {
       isFree: true,
     },
     {
+      name: "Gemini 2.5 Flash Image",
+      openRouterModelId: "google/gemini-2.5-flash-image-preview",
+      modelId: "gemini-2.5-flash-image-preview",
+      isFree: false,
+    },
+    {
       name: "Gemini 2.5 Pro",
       openRouterModelId: "google/gemini-2.5-pro",
       modelId: "gemini-2.5-pro-preview-05-06",
