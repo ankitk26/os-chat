@@ -22,6 +22,8 @@ type ChatRequestBody = {
   chatId?: string;
 };
 
+const IMAGE_BASE64_REGEX = /^data:image\/[a-z]+;base64,/
+
 const getModelToUse = (
   requestModel: Model,
   parsedApiKeys: ApiKeys,
@@ -174,10 +176,7 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
               const postUrl = await getPostUrl();
 
               // Convert base64 string to Blob
-              const base64Data = imagePart.url.replace(
-                /^data:image\/[a-z]+;base64,/,
-                ""
-              );
+              const base64Data = imagePart.url.replace(IMAGE_BASE64_REGEX, "");
               const binaryData = Uint8Array.from(atob(base64Data), (c) =>
                 c.charCodeAt(0)
               );
@@ -192,7 +191,7 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
                 },
                 body: blob,
               });
-              const {storageId} = await imageUploadRequest.json();
+              const { storageId } = await imageUploadRequest.json();
             } catch (e) {
               console.log((e as Error).message);
             }

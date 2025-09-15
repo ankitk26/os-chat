@@ -3,7 +3,7 @@ import type { ProviderGroup } from "~/types";
 export const defaultSelectedModel = {
   name: "Gemini 2.0 Flash",
   openRouterModelId: "google/gemini-2.0-flash-001",
-  modelId: "gemini-2.0-flash-001",
+  modelId: "gemini-2.0-flash",
   isFree: true,
 };
 
@@ -15,7 +15,7 @@ const geminiModels = {
     {
       name: "Gemini 2.5 Flash",
       openRouterModelId: "google/gemini-2.5-flash",
-      modelId: "gemini-2.5-flash-preview-04-17",
+      modelId: "gemini-2.5-flash",
       isFree: true,
     },
     {
@@ -27,7 +27,7 @@ const geminiModels = {
     {
       name: "Gemini 2.5 Pro",
       openRouterModelId: "google/gemini-2.5-pro",
-      modelId: "gemini-2.5-pro-preview-05-06",
+      modelId: "gemini-2.5-pro",
       isFree: false,
     },
   ],
