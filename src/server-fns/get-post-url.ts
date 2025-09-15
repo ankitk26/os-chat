@@ -8,7 +8,7 @@ export const getPostUrl = createServerFn({ method: "POST" }).handler(
     const authData = await getAuth();
     if (!authData?.session) {
       throw new Error("Invalid request");
-      }
+    }
 
     const convexClient = new ConvexHttpClient(
       process.env.VITE_CONVEX_URL as string

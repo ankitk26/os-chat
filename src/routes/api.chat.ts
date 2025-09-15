@@ -22,7 +22,7 @@ type ChatRequestBody = {
   chatId?: string;
 };
 
-const IMAGE_BASE64_REGEX = /^data:image\/[a-z]+;base64,/
+const IMAGE_BASE64_REGEX = /^data:image\/[a-z]+;base64,/;
 
 const getModelToUse = (
   requestModel: Model,

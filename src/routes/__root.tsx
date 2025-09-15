@@ -88,7 +88,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         >
           <ChatProvider>
             <div>{children}</div>
-            <Toaster duration={800} />
+            <Toaster duration={800} style={{ fontFamily: "inherit" }} />
             <Scripts />
           </ChatProvider>
         </NextThemesProvider>
