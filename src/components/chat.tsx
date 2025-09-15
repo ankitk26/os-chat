@@ -32,12 +32,7 @@ export default function Chat({
     sendMessage,
     error,
     setMessages,
-  } = useChat<CustomUIMessage>({
-    chat,
-    id: chatId,
-    experimental_throttle: 100,
-    messages: dbMessages,
-  });
+  } = useChat<CustomUIMessage>({ chat, id: chatId });
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
@@ -124,7 +119,6 @@ export default function Chat({
     setMessages(dbMessages);
   }, [dbMessages]);
 
-  console.log(messages);
 
   return (
     <div className="relative mx-auto flex h-svh max-h-svh w-full flex-col">
@@ -141,7 +135,7 @@ export default function Chat({
                   regenerate={regenerate}
                   sendMessage={sendMessage}
                 />
-                {status === "submitted" &&
+                {(status === "streaming" || status === "submitted") &&
                   messages.length > 0 &&
                   messages.at(-1)?.role === "user" && <ChatLoadingIndicator />}
                 {error && <AiResponseAlert error={error} />}
