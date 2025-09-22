@@ -12,6 +12,10 @@ export default defineConfig({
       target: "vercel",
       customViteReactPlugin: true,
     }),
-    viteReact(),
+    viteReact({
+      babel: {
+        plugins: [["babel-plugin-react-compiler"]],
+      },
+    }),
   ],
 });
