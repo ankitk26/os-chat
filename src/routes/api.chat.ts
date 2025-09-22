@@ -10,7 +10,7 @@ import { systemMessage } from "~/constants/system-message";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { createMessageServerFn } from "~/server-fns/create-message";
 import { getAuth } from "~/server-fns/get-auth";
-import { getPostUrl } from "~/server-fns/get-post-url";
+// import { getPostUrl } from "~/server-fns/get-post-url";
 import type { ApiKeys, CustomUIMessage, Model } from "~/types";
 
 type ChatRequestBody = {
@@ -22,7 +22,7 @@ type ChatRequestBody = {
   chatId?: string;
 };
 
-const IMAGE_BASE64_REGEX = /^data:image\/[a-z]+;base64,/;
+// const IMAGE_BASE64_REGEX = /^data:image\/[a-z]+;base64,/;
 
 const getModelToUse = (
   requestModel: Model,
@@ -173,25 +173,25 @@ export const ServerRoute = createServerFileRoute("/api/chat").methods({
           if (imagePart?.mediaType.startsWith("image/")) {
             try {
               console.log(imagePart.mediaType);
-              const postUrl = await getPostUrl();
+              // const postUrl = await getPostUrl();
 
-              // Convert base64 string to Blob
-              const base64Data = imagePart.url.replace(IMAGE_BASE64_REGEX, "");
-              const binaryData = Uint8Array.from(atob(base64Data), (c) =>
-                c.charCodeAt(0)
-              );
-              const blob = new Blob([binaryData], {
-                type: imagePart.mediaType,
-              });
+              // // Convert base64 string to Blob
+              // const base64Data = imagePart.url.replace(IMAGE_BASE64_REGEX, "");
+              // const binaryData = Uint8Array.from(atob(base64Data), (c) =>
+              //   c.charCodeAt(0)
+              // );
+              // const blob = new Blob([binaryData], {
+              //   type: imagePart.mediaType,
+              // });
 
-              const imageUploadRequest = await fetch(postUrl, {
-                method: "POST",
-                headers: {
-                  "Content-Type": imagePart.mediaType,
-                },
-                body: blob,
-              });
-              const { storageId } = await imageUploadRequest.json();
+              // const imageUploadRequest = await fetch(postUrl, {
+              //   method: "POST",
+              //   headers: {
+              //     "Content-Type": imagePart.mediaType,
+              //   },
+              //   body: blob,
+              // });
+              // const { storageId } = await imageUploadRequest.json();
             } catch (e) {
               console.log((e as Error).message);
             }

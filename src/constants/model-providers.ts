@@ -163,7 +163,13 @@ const xAiModels = {
     {
       name: "Grok 4",
       openRouterModelId: "x-ai/grok-4",
-      modelId: "grok-4-latest",
+      modelId: "grok-4",
+      isFree: false,
+    },
+    {
+      name: "Grok 4 Fast",
+      openRouterModelId: "x-ai/grok-4-fast:free",
+      modelId: "grok-4-fast-non-reasoning",
       isFree: false,
     },
   ],
