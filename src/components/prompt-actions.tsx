@@ -27,7 +27,10 @@ export default function PromptActions({ status, stop }: Props) {
         {(selectedModel.openRouterModelId.startsWith("google") ||
           persistedUseOpenRouter) && (
           <Button
-            className={cn("text-xs", isWebSearchEnabled ? "border" : "")}
+            className={cn(
+              "border text-xs transition-all duration-300 ease-out",
+              isWebSearchEnabled ? "border-primary" : "border-border"
+            )}
             onClick={toggleIsWebSearch}
             size="sm"
             type="button"
