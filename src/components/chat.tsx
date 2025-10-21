@@ -74,7 +74,7 @@ export default function Chat({
 
     viewport.scrollTo({
       top: viewport.scrollHeight,
-      behavior: "smooth",
+      behavior: "instant",
     });
   };
 
