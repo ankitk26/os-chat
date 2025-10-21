@@ -3,7 +3,7 @@ import { createGoogleGenerativeAI, google } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
 import { createXai } from "@ai-sdk/xai";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
-import { createServerFileRoute } from "@tanstack/react-start/server";
+import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, smoothStream, streamText } from "ai";
 import { defaultSelectedModel } from "~/constants/model-providers";
 import { systemMessage } from "~/constants/system-message";
@@ -105,112 +105,116 @@ const getModelToUse = (
   return defaultModel;
 };
 
-export const ServerRoute = createServerFileRoute("/api/chat").methods({
-  POST: async ({ request }) => {
-    const authData = await getAuth();
-    if (!authData?.session) {
-      throw new Error("Invalid request");
-    }
-
-    const chatRequestBody: ChatRequestBody = await request.json();
-
-    const {
-      messages,
-      model: requestModel,
-      isWebSearchEnabled,
-      apiKeys,
-      useOpenRouter,
-      chatId,
-    } = chatRequestBody;
-
-    const modelToUse = getModelToUse(
-      requestModel,
-      apiKeys,
-      useOpenRouter,
-      isWebSearchEnabled
-    );
-
-    const result = streamText({
-      model: modelToUse,
-      system:
-        requestModel.modelId === "gemini-2.0-flash-exp"
-          ? undefined
-          : systemMessage,
-      messages: convertToModelMessages(messages),
-      temperature: 0.7,
-      experimental_transform: smoothStream({ chunking: "line" }),
-      abortSignal: request.signal,
-      ...(isWebSearchEnabled && {
-        tools: {
-          google_search: google.tools.googleSearch({}),
-        },
-      }),
-    });
-
-    return result.toUIMessageStreamResponse({
-      originalMessages: messages,
-      sendReasoning: true,
-      generateMessageId: generateRandomUUID,
-      messageMetadata: ({ part }) => {
-        if (part.type === "start") {
-          return {
-            model: requestModel.name,
-            createdAt: Date.now(),
-          };
+export const Route = createFileRoute("/api/chat")({
+  server: {
+    handlers: {
+      POST: async ({ request }) => {
+        const authData = await getAuth();
+        if (!authData?.session) {
+          throw new Error("Invalid request");
         }
-        if (part.type === "finish") {
-          return {
-            totalTokens: part.totalUsage.totalTokens,
-          };
-        }
-      },
-      sendSources: isWebSearchEnabled,
-      onFinish: async ({ responseMessage }) => {
-        if (chatId && responseMessage.parts.length > 0) {
-          const imagePart = responseMessage.parts.find(
-            (part) => part.type === "file"
-          );
-          if (imagePart?.mediaType.startsWith("image/")) {
-            try {
-              console.log(imagePart.mediaType);
-              // const postUrl = await getPostUrl();
 
-              // // Convert base64 string to Blob
-              // const base64Data = imagePart.url.replace(IMAGE_BASE64_REGEX, "");
-              // const binaryData = Uint8Array.from(atob(base64Data), (c) =>
-              //   c.charCodeAt(0)
-              // );
-              // const blob = new Blob([binaryData], {
-              //   type: imagePart.mediaType,
-              // });
+        const chatRequestBody: ChatRequestBody = await request.json();
 
-              // const imageUploadRequest = await fetch(postUrl, {
-              //   method: "POST",
-              //   headers: {
-              //     "Content-Type": imagePart.mediaType,
-              //   },
-              //   body: blob,
-              // });
-              // const { storageId } = await imageUploadRequest.json();
-            } catch (e) {
-              console.log((e as Error).message);
+        const {
+          messages,
+          model: requestModel,
+          isWebSearchEnabled,
+          apiKeys,
+          useOpenRouter,
+          chatId,
+        } = chatRequestBody;
+
+        const modelToUse = getModelToUse(
+          requestModel,
+          apiKeys,
+          useOpenRouter,
+          isWebSearchEnabled
+        );
+
+        const result = streamText({
+          model: modelToUse,
+          system:
+            requestModel.modelId === "gemini-2.0-flash-exp"
+              ? undefined
+              : systemMessage,
+          messages: convertToModelMessages(messages),
+          temperature: 0.7,
+          experimental_transform: smoothStream({ chunking: "line" }),
+          abortSignal: request.signal,
+          ...(isWebSearchEnabled && {
+            tools: {
+              google_search: google.tools.googleSearch({}),
+            },
+          }),
+        });
+
+        return result.toUIMessageStreamResponse({
+          originalMessages: messages,
+          sendReasoning: true,
+          generateMessageId: generateRandomUUID,
+          messageMetadata: ({ part }) => {
+            if (part.type === "start") {
+              return {
+                model: requestModel.name,
+                createdAt: Date.now(),
+              };
             }
-          } else {
-            await createMessageServerFn({
-              data: {
-                chatId,
-                messageId: responseMessage.id,
-                parts: JSON.stringify(responseMessage.parts),
-                metadata: JSON.stringify(responseMessage.metadata),
-              },
-            });
-          }
-        }
+            if (part.type === "finish") {
+              return {
+                totalTokens: part.totalUsage.totalTokens,
+              };
+            }
+          },
+          sendSources: isWebSearchEnabled,
+          onFinish: async ({ responseMessage }) => {
+            if (chatId && responseMessage.parts.length > 0) {
+              const imagePart = responseMessage.parts.find(
+                (part) => part.type === "file"
+              );
+              if (imagePart?.mediaType.startsWith("image/")) {
+                try {
+                  console.log(imagePart.mediaType);
+                  // const postUrl = await getPostUrl();
+
+                  // // Convert base64 string to Blob
+                  // const base64Data = imagePart.url.replace(IMAGE_BASE64_REGEX, "");
+                  // const binaryData = Uint8Array.from(atob(base64Data), (c) =>
+                  //   c.charCodeAt(0)
+                  // );
+                  // const blob = new Blob([binaryData], {
+                  //   type: imagePart.mediaType,
+                  // });
+
+                  // const imageUploadRequest = await fetch(postUrl, {
+                  //   method: "POST",
+                  //   headers: {
+                  //     "Content-Type": imagePart.mediaType,
+                  //   },
+                  //   body: blob,
+                  // });
+                  // const { storageId } = await imageUploadRequest.json();
+                } catch (e) {
+                  console.log((e as Error).message);
+                }
+              } else {
+                await createMessageServerFn({
+                  data: {
+                    chatId,
+                    messageId: responseMessage.id,
+                    parts: JSON.stringify(responseMessage.parts),
+                    metadata: JSON.stringify(responseMessage.metadata),
+                  },
+                });
+              }
+            }
+          },
+          onError: (error) => {
+            // biome-ignore lint/suspicious/noExplicitAny: ignore
+            return (error as any).message;
+          },
+        });
       },
-      onError: (error) => {
-        // biome-ignore lint/suspicious/noExplicitAny: ignore
-        return (error as any).message;
-      },
-    });
+    },
   },
 });

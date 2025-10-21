@@ -1,19 +1,17 @@
 import { google } from "@ai-sdk/google";
 import { createServerFn } from "@tanstack/react-start";
-import { generateObject } from "ai";
+import { generateText } from "ai";
 import { z } from "zod";
 
 export const getChatTitle = createServerFn({ method: "GET" })
-  .validator(
+  .inputValidator(
     z.object({
       userMessage: z.string(),
     })
   )
   .handler(async ({ data }) => {
-    const { object: generateTitle } = await generateObject({
+    const { text: generatedTitle } = await generateText({
       model: google("gemini-2.0-flash-lite"),
-      mode: "json",
-      schema: z.string(),
       system:
         "You are a professional writer. " +
         "You write simple, clear, and concise content. " +
@@ -21,8 +19,6 @@ export const getChatTitle = createServerFn({ method: "GET" })
       prompt:
         "Generate a concise and informative title for the following user message. The title should summarize the core subject or intent of the message. Avoid conversational phrases in the title." +
         "\n\n" +
-        "Here is the message - " +
-        data.userMessage +
         "\n\n" +
         "Examples:" +
         "\n" +
@@ -34,8 +30,13 @@ export const getChatTitle = createServerFn({ method: "GET" })
         // Scenario 2 Example
         "User message: 'I'm thinking about how we can add a new photo editing filter to the app. What are your thoughts on integrating AI for this?'" +
         "\n" +
-        "Title: New Photo Editing Feature Brainstorming",
+        "Title: New Photo Editing Feature Brainstorming" +
+        "\n\n" +
+        "Here is the user message - " +
+        data.userMessage,
     });
 
-    return generateTitle;
+    console.log("api key = ", process.env.GOOGLE_GENERATIVE_AI_API_KEY);
+
+    return generatedTitle;
   });

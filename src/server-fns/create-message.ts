@@ -5,7 +5,7 @@ import { z } from "zod";
 import { getAuth } from "./get-auth";
 
 export const createMessageServerFn = createServerFn({ method: "POST" })
-  .validator(
+  .inputValidator(
     z.object({
       chatId: z.string(),
       parts: z.string(),

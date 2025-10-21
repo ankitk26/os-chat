@@ -8,11 +8,6 @@
  * @module
  */
 
-import type {
-  ApiFromModules,
-  FilterApi,
-  FunctionReference,
-} from "convex/server";
 import type * as betterAuth from "../betterAuth.js";
 import type * as chats from "../chats.js";
 import type * as folders from "../folders.js";
@@ -22,6 +17,12 @@ import type * as migrations_assignMessageUuid from "../migrations/assignMessageU
 import type * as migrations_setsIsBranched from "../migrations/setsIsBranched.js";
 import type * as model_chats from "../model/chats.js";
 import type * as model_users from "../model/users.js";
+
+import type {
+  ApiFromModules,
+  FilterApi,
+  FunctionReference,
+} from "convex/server";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -42,11 +43,15 @@ declare const fullApi: ApiFromModules<{
   "model/chats": typeof model_chats;
   "model/users": typeof model_users;
 }>;
+declare const fullApiWithMounts: typeof fullApi;
+
 export declare const api: FilterApi<
-  typeof fullApi,
+  typeof fullApiWithMounts,
   FunctionReference<any, "public">
 >;
 export declare const internal: FilterApi<
-  typeof fullApi,
+  typeof fullApiWithMounts,
   FunctionReference<any, "internal">
 >;
+
+export declare const components: {};

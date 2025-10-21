@@ -7,7 +7,7 @@ import NotFound from "./components/not-found";
 import TanstackErrorComponent from "./components/tanstack-error-component";
 import { routeTree } from "./routeTree.gen";
 
-export function createRouter() {
+export function getRouter() {
   const CONVEX_URL = import.meta.env.VITE_CONVEX_URL;
   if (!CONVEX_URL) {
     console.error("missing envar VITE_CONVEX_URL");
@@ -44,6 +44,6 @@ export function createRouter() {
 declare module "@tanstack/react-router" {
   // biome-ignore lint/nursery/useConsistentTypeDefinitions: default syntax
   interface Register {
-    router: ReturnType<typeof createRouter>;
+    router: ReturnType<typeof getRouter>;
   }
 }
