@@ -12,19 +12,17 @@ function parseMarkdownIntoBlocks(markdown: string): string[] {
 }
 
 const MemoizedMarkdownBlock = memo(
-  ({ content }: { content: string }) => {
-    return (
-      <ReactMarkdown
-        components={{
-          code: CodeHighlight,
-        }}
-        rehypePlugins={[rehypeKatex]}
-        remarkPlugins={[remarkGfm, remarkMath]}
-      >
-        {content}
-      </ReactMarkdown>
-    );
-  },
+  ({ content }: { content: string }) => (
+    <ReactMarkdown
+      components={{
+        code: CodeHighlight,
+      }}
+      rehypePlugins={[rehypeKatex]}
+      remarkPlugins={[remarkGfm, remarkMath]}
+    >
+      {content}
+    </ReactMarkdown>
+  ),
   (prevProps, nextProps) => {
     if (prevProps.content !== nextProps.content) {
       return false;

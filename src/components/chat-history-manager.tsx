@@ -77,13 +77,12 @@ export default function ChatHistoryManager() {
     }
   };
 
-  const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString("en-GB", {
+  const formatDate = (timestamp: number) =>
+    new Date(timestamp).toLocaleDateString("en-GB", {
       day: "numeric",
       month: "short",
       year: "numeric",
     });
-  };
 
   const isAllSelected = chats.length > 0 && selectedChats.size === chats.length;
 

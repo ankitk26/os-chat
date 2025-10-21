@@ -215,7 +215,5 @@ export const tokensByModel = query({
 });
 
 export const generateUploadUrl = mutation({
-  handler: async (ctx) => {
-    return await ctx.storage.generateUploadUrl();
-  },
+  handler: async (ctx) => await ctx.storage.generateUploadUrl(),
 });
