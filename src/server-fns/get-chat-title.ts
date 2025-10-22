@@ -7,7 +7,7 @@ export const getChatTitle = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       userMessage: z.string(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const { text: generatedTitle } = await generateText({
@@ -35,8 +35,6 @@ export const getChatTitle = createServerFn({ method: "GET" })
         "Here is the user message - " +
         data.userMessage,
     });
-
-    console.log("api key = ", process.env.GOOGLE_GENERATIVE_AI_API_KEY);
 
     return generatedTitle;
   });

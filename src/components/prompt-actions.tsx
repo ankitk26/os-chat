@@ -16,7 +16,7 @@ export default function PromptActions({ status, stop }: Props) {
   const toggleIsWebSearch = useModelStore((store) => store.toggleIsWebSearch);
   const selectedModel = useModelStore((store) => store.selectedModel);
   const persistedUseOpenRouter = usePersistedApiKeysStore(
-    (store) => store.persistedUseOpenRouter
+    (store) => store.persistedUseOpenRouter,
   );
 
   return (
@@ -29,7 +29,7 @@ export default function PromptActions({ status, stop }: Props) {
           <Button
             className={cn(
               "border text-xs transition-all duration-300 ease-out",
-              isWebSearchEnabled ? "border-primary" : "border-border"
+              isWebSearchEnabled ? "border-primary" : "border-border",
             )}
             onClick={toggleIsWebSearch}
             size="sm"
@@ -53,7 +53,7 @@ export default function PromptActions({ status, stop }: Props) {
       </div>
 
       {status === "streaming" || status === "submitted" ? (
-        <Button onClick={stop} size="icon" type="button">
+        <Button onClick={stop} size="icon" type="button" disabled>
           <SquareIcon />
         </Button>
       ) : (
