@@ -7,7 +7,7 @@ export const getChatTitle = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       userMessage: z.string(),
-    }),
+    })
   )
   .handler(async ({ data }) => {
     const { text: generatedTitle } = await generateText({
