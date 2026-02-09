@@ -20,7 +20,7 @@ function RouteComponent() {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background to-muted/20 p-4">
+    <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-background to-muted/20 p-4">
       <div className="w-full max-w-md space-y-8">
         {/* Logo/Brand Section */}
         <div className="space-y-2 text-center">
