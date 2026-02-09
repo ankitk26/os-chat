@@ -59,11 +59,11 @@ const AuthChatChatIdRoute = AuthChatChatIdRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof AuthIndexRoute
   '/login': typeof LoginRoute
   '/settings': typeof AuthSettingsRoute
   '/api/chat': typeof ApiChatRoute
   '/share/$chatId': typeof ShareChatIdRoute
-  '/': typeof AuthIndexRoute
   '/chat/$chatId': typeof AuthChatChatIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
@@ -90,11 +90,11 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/login'
     | '/settings'
     | '/api/chat'
     | '/share/$chatId'
-    | '/'
     | '/chat/$chatId'
     | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
@@ -138,7 +138,7 @@ declare module '@tanstack/react-router' {
     '/_auth': {
       id: '/_auth'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
