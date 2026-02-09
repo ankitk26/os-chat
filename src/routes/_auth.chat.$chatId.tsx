@@ -1,6 +1,6 @@
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, useRouteContext } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { Suspense, useMemo } from "react";
 import AssistantMessageSkeleton from "~/components/assistant-message-skeleton";
@@ -31,7 +31,6 @@ function RouteComponent() {
 
 function SuspendedChatPage() {
   const { chatId } = Route.useParams();
-  const { auth } = useRouteContext({ from: "/_auth" });
 
   const { data: messages, isPending: isMessagesPending } = useSuspenseQuery(
     convexQuery(api.messages.getMessages, {

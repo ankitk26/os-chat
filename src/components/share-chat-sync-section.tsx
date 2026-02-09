@@ -31,7 +31,7 @@ export default function ShareChatSyncSection() {
   const isPublic = Boolean(sharedUuid);
 
   function handleSyncHistory() {
-    if (!(selectedChat && token)) {
+    if (!selectedChat) {
       return;
     }
     syncHistoryMutation.mutate({

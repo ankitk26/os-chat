@@ -4,12 +4,12 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { createXai } from "@ai-sdk/xai";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { createFileRoute } from "@tanstack/react-router";
-import { convertToModelMessages, smoothStream, streamText } from "ai";
+import { convertToModelMessages, streamText } from "ai";
 import { defaultSelectedModel } from "~/constants/model-providers";
 import { systemMessage } from "~/constants/system-message";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { createMessageServerFn } from "~/server-fns/create-message";
-import { getAuth } from "~/server-fns/get-auth";
+import { getAuthUser } from "~/server-fns/get-auth";
 // import { getPostUrl } from "~/server-fns/get-post-url";
 import type { ApiKeys, CustomUIMessage, Model } from "~/types";
 
@@ -108,8 +108,8 @@ export const Route = createFileRoute("/api/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const authData = await getAuth();
-        if (!authData?.session) {
+        const authData = await getAuthUser();
+        if (!authData) {
           throw new Error("Invalid request");
         }
 
@@ -137,15 +137,17 @@ export const Route = createFileRoute("/api/chat")({
             requestModel.modelId === "gemini-2.0-flash-exp"
               ? undefined
               : systemMessage,
-          messages: convertToModelMessages(messages),
+          messages: await convertToModelMessages(messages),
           temperature: 0.7,
-          experimental_transform: smoothStream({ chunking: "line" }),
           abortSignal: request.signal,
           ...(isWebSearchEnabled && {
             tools: {
               google_search: google.tools.googleSearch({}),
             },
           }),
+          onError: ({ error }) => {
+            console.error("streamText error:", error);
+          },
         });
 
         return result.toUIMessageStreamResponse({
@@ -209,6 +211,7 @@ export const Route = createFileRoute("/api/chat")({
             }
           },
           onError: (error) => {
+            console.error("toUIMessageStreamResponse error:", error);
             return (error as any).message;
           },
         });

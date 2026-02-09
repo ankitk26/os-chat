@@ -10,7 +10,7 @@ export default defineConfig({
     tsconfigPaths(),
     tailwindcss(),
     tanstackStart(),
-    nitro({ config: { preset: "vercel" } }),
+    nitro(),
     viteReact({
       babel: {
         plugins: [["babel-plugin-react-compiler"]],

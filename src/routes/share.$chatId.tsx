@@ -25,7 +25,7 @@ export const Route = createFileRoute("/share/$chatId")({
 function RouteComponent() {
   const { auth } = Route.useRouteContext();
 
-  if (auth?.session) {
+  if (auth) {
     return (
       <SidebarProvider>
         <AppSidebar variant="inset" />
