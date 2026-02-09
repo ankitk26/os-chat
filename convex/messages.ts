@@ -4,19 +4,19 @@ import { internalMutation, mutation, query } from "./_generated/server";
 import { getAuthUserIdOrThrow } from "./model/users";
 
 export const getMessages = query({
-  args: { sessionToken: v.string(), chatId: v.string() },
+  args: { chatId: v.string() },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const userId = await getAuthUserIdOrThrow(ctx);
 
     const messages = await ctx.db
       .query("messages")
       .withIndex("by_user_chat", (q) =>
-        q.eq("chatId", args.chatId).eq("userId", userId)
+        q.eq("chatId", args.chatId).eq("userId", userId),
       )
       .order("asc")
       .collect();
 
-    return messages.map(({ userId: messageUserId, ...rest }) => ({ ...rest }));
+    return messages.map(({ userId: _, ...rest }) => ({ ...rest }));
   },
 });
 
@@ -48,14 +48,14 @@ export const getSharedChatMessages = query({
       .withIndex("by_chat", (q) =>
         q
           .eq("chatId", sharedChat.parentChatUuid)
-          .lte("_creationTime", sharedChat.updatedTime)
+          .lte("_creationTime", sharedChat.updatedTime),
       )
       .order("asc")
       .collect();
 
     return {
       sharedChat,
-      messages: messages.map(({ userId: messageUserId, ...rest }) => ({
+      messages: messages.map(({ userId: _, ...rest }) => ({
         ...rest,
       })),
       parentChatTitle: parentChat?.title,
@@ -65,7 +65,6 @@ export const getSharedChatMessages = query({
 
 export const createMessage = mutation({
   args: {
-    sessionToken: v.string(),
     messageBody: v.object({
       sourceMessageId: v.string(),
       chatId: v.string(),
@@ -75,7 +74,7 @@ export const createMessage = mutation({
     }),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const userId = await getAuthUserIdOrThrow(ctx);
 
     await ctx.db.insert("messages", {
       sourceMessageId: args.messageBody.sourceMessageId,
@@ -95,7 +94,7 @@ export const createMessage = mutation({
       const modelTokenDoc = await ctx.db
         .query("userTokenUsage")
         .withIndex("by_user_and_model", (q) =>
-          q.eq("userId", userId).eq("model", modelUsed)
+          q.eq("userId", userId).eq("model", modelUsed),
         )
         .first();
 
@@ -118,18 +117,17 @@ export const createMessage = mutation({
 
 export const deleteMessagesByTimestamp = mutation({
   args: {
-    sessionToken: v.string(),
     currentMessageSourceId: v.string(),
     chatId: v.string(),
     deleteCurrentMessage: v.boolean(),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const userId = await getAuthUserIdOrThrow(ctx);
 
     const currentMessage = await ctx.db
       .query("messages")
       .withIndex("by_source_id", (q) =>
-        q.eq("sourceMessageId", args.currentMessageSourceId)
+        q.eq("sourceMessageId", args.currentMessageSourceId),
       )
       .first();
 
@@ -146,7 +144,7 @@ export const deleteMessagesByTimestamp = mutation({
       .withIndex("by_chat", (q) =>
         q
           .eq("chatId", args.chatId)
-          .gt("_creationTime", currentMessage._creationTime)
+          .gt("_creationTime", currentMessage._creationTime),
       );
 
     // if message is a user message, don't delete current message
@@ -156,7 +154,7 @@ export const deleteMessagesByTimestamp = mutation({
         .withIndex("by_chat", (q) =>
           q
             .eq("chatId", args.chatId)
-            .gte("_creationTime", currentMessage._creationTime)
+            .gte("_creationTime", currentMessage._creationTime),
         );
     }
 
@@ -195,11 +193,8 @@ export const deleteMessagesByChat = internalMutation({
 });
 
 export const tokensByModel = query({
-  args: {
-    sessionToken: v.string(),
-  },
-  handler: async (ctx, args) => {
-    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+  handler: async (ctx) => {
+    const userId = await getAuthUserIdOrThrow(ctx);
 
     const stats = await ctx.db
       .query("userTokenUsage")

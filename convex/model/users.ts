@@ -1,20 +1,21 @@
-import type { Session } from "better-auth";
 import type { Id } from "convex/_generated/dataModel";
-import { internal } from "../_generated/api";
 import type { QueryCtx } from "../_generated/server";
 
 export const getAuthUserIdOrThrow = async (
   ctx: QueryCtx,
-  sessionToken: string
-): Promise<Id<"user">> => {
-  const session: Session | null = await ctx.runQuery(
-    internal.betterAuth.getSession,
-    {
-      sessionToken,
-    }
-  );
-  if (!session) {
+): Promise<Id<"users">> => {
+  const auth = await ctx.auth.getUserIdentity();
+  if (!auth) {
     throw new Error("Unauthorized");
   }
-  return session.userId as Id<"user">;
+
+  const user = await ctx.db
+    .query("users")
+    .withIndex("by_auth", (q) => q.eq("authId", auth.subject))
+    .first();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+  return user._id;
 };

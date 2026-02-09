@@ -2,35 +2,15 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
-  account: defineTable({
-    accessToken: v.string(),
-    accountId: v.string(),
-    providerId: v.string(),
-    scope: v.string(),
-    updatedAt: v.string(),
-    userId: v.id("user"),
-  }),
-
-  session: defineTable({
-    expiresAt: v.string(),
-    ipAddress: v.string(),
-    token: v.string(),
-    updatedAt: v.string(),
-    userAgent: v.string(),
-    userId: v.id("user"),
-  }),
-
-  user: defineTable({
+  users: defineTable({
     email: v.string(),
-    emailVerified: v.boolean(),
-    image: v.string(),
-    name: v.string(),
-    updatedAt: v.string(),
-  }),
+    updatedAtTime: v.number(),
+    authId: v.string(),
+  }).index("by_auth", ["authId"]),
 
   folders: defineTable({
     title: v.string(),
-    userId: v.id("user"),
+    userId: v.id("users"),
     defaultModel: v.object({
       id: v.string(),
       name: v.string(),
@@ -40,7 +20,7 @@ export default defineSchema({
   chats: defineTable({
     uuid: v.string(),
     title: v.string(),
-    userId: v.id("user"),
+    userId: v.id("users"),
     isPinned: v.boolean(),
     isBranched: v.boolean(),
     parentChatId: v.optional(v.id("chats")),
@@ -54,7 +34,7 @@ export default defineSchema({
   messages: defineTable({
     sourceMessageId: v.string(),
     chatId: v.string(),
-    userId: v.id("user"),
+    userId: v.id("users"),
     parts: v.string(),
     metadata: v.optional(v.string()),
     role: v.union(v.literal("user"), v.literal("assistant")),
@@ -74,7 +54,7 @@ export default defineSchema({
     .index("by_uuid", ["uuid"]),
 
   userTokenUsage: defineTable({
-    userId: v.id("user"),
+    userId: v.id("users"),
     model: v.string(),
     tokens: v.float64(),
   }).index("by_user_and_model", ["userId", "model"]),

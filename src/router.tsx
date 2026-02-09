@@ -1,8 +1,7 @@
 import { ConvexQueryClient } from "@convex-dev/react-query";
 import { QueryClient } from "@tanstack/react-query";
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
-import { routerWithQueryClient } from "@tanstack/react-router-with-query";
-import { ConvexProvider } from "convex/react";
+import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 import NotFound from "./components/not-found";
 import TanstackErrorComponent from "./components/tanstack-error-component";
 import { routeTree } from "./routeTree.gen";
@@ -12,7 +11,10 @@ export function getRouter() {
   if (!CONVEX_URL) {
     console.error("missing envar VITE_CONVEX_URL");
   }
-  const convexQueryClient = new ConvexQueryClient(CONVEX_URL);
+
+  const convexQueryClient = new ConvexQueryClient(CONVEX_URL, {
+    expectAuth: true,
+  });
 
   const queryClient: QueryClient = new QueryClient({
     defaultOptions: {
@@ -27,22 +29,21 @@ export function getRouter() {
   const router = createTanStackRouter({
     routeTree,
     scrollRestoration: true,
-    context: { queryClient },
+    context: { queryClient, convexQueryClient },
     defaultPreload: "intent",
     defaultNotFoundComponent: NotFound,
-    Wrap: ({ children }) => (
-      <ConvexProvider client={convexQueryClient.convexClient}>
-        {children}
-      </ConvexProvider>
-    ),
     defaultErrorComponent: () => <TanstackErrorComponent />,
   });
 
-  return routerWithQueryClient(router, queryClient);
+  setupRouterSsrQueryIntegration({
+    router,
+    queryClient,
+  });
+
+  return router;
 }
 
 declare module "@tanstack/react-router" {
-  // biome-ignore lint/nursery/useConsistentTypeDefinitions: default syntax
   interface Register {
     router: ReturnType<typeof getRouter>;
   }
