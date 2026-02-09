@@ -1,4 +1,6 @@
 @import "katex/dist/katex.min.css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -95,9 +97,9 @@
 	--sidebar-accent-foreground: oklch(0 0 0);
 	--sidebar-border: oklch(0.94 0 0);
 	--sidebar-ring: oklch(0 0 0);
-	--font-sans: Geist, sans-serif;
+	--font-sans: "Geist Variable", sans-serif;
 	--font-serif: Georgia, serif;
-	--font-mono: Geist Mono, monospace;
+	--font-mono: "Geist Mono Variable", monospace;
 	--radius: 0.75rem;
 	--shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.09);
 	--shadow-xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.09);
@@ -169,7 +171,7 @@
 		@apply tracking-wide border-border outline-ring/50 selection:bg-primary selection:text-primary-foreground;
 	}
 	body {
-		@apply bg-background text-foreground;
+		@apply bg-background text-foreground font-sans;
 	}
 }
 
@@ -182,7 +184,7 @@
 code,
 pre,
 code span {
-	font-family: "Geist Mono", monospace;
+	font-family: "Geist Mono Variable", monospace;
 	font-variant-ligatures: none;
 }
 
