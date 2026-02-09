@@ -4,7 +4,7 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { createXai } from "@ai-sdk/xai";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { createFileRoute } from "@tanstack/react-router";
-import { convertToModelMessages, streamText } from "ai";
+import { convertToModelMessages, smoothStream, streamText } from "ai";
 import { defaultSelectedModel } from "~/constants/model-providers";
 import { systemMessage } from "~/constants/system-message";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
@@ -139,6 +139,7 @@ export const Route = createFileRoute("/api/chat")({
               : systemMessage,
           messages: await convertToModelMessages(messages),
           temperature: 0.7,
+          experimental_transform: smoothStream({ chunking: "line" }),
           abortSignal: request.signal,
           ...(isWebSearchEnabled && {
             tools: {
@@ -174,30 +175,7 @@ export const Route = createFileRoute("/api/chat")({
                 (part) => part.type === "file",
               );
               if (imagePart?.mediaType.startsWith("image/")) {
-                try {
-                  console.log(imagePart.mediaType);
-                  // const postUrl = await getPostUrl();
-
-                  // // Convert base64 string to Blob
-                  // const base64Data = imagePart.url.replace(IMAGE_BASE64_REGEX, "");
-                  // const binaryData = Uint8Array.from(atob(base64Data), (c) =>
-                  //   c.charCodeAt(0)
-                  // );
-                  // const blob = new Blob([binaryData], {
-                  //   type: imagePart.mediaType,
-                  // });
-
-                  // const imageUploadRequest = await fetch(postUrl, {
-                  //   method: "POST",
-                  //   headers: {
-                  //     "Content-Type": imagePart.mediaType,
-                  //   },
-                  //   body: blob,
-                  // });
-                  // const { storageId } = await imageUploadRequest.json();
-                } catch (e) {
-                  console.log((e as Error).message);
-                }
+                console.log(imagePart.mediaType);
               } else {
                 await createMessageServerFn({
                   data: {
