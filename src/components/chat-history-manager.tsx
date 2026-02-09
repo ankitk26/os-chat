@@ -1,6 +1,5 @@
 import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { CheckIcon, MinusIcon, SplitIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
@@ -22,12 +21,9 @@ import { TabsContent } from "./ui/tabs";
 
 export default function ChatHistoryManager() {
   const [selectedChats, setSelectedChats] = useState<Set<string>>(new Set());
-  const { auth } = useRouteContext({ from: "/_auth" });
 
   const { data: chats = [], isLoading } = useQuery(
-    convexQuery(api.chats.getChats, {
-      sessionToken: auth.session.token,
-    })
+    convexQuery(api.chats.getChats, {}),
   );
 
   const deleteChatMutation = useMutation({
@@ -70,7 +66,6 @@ export default function ChatHistoryManager() {
       const chat = chats.find((c) => c._id === chatId);
       if (chat) {
         deleteChatMutation.mutate({
-          sessionToken: auth?.session.token ?? "",
           chatId: chat._id,
         });
       }

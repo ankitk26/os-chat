@@ -78,7 +78,6 @@ export default function ApiKeysForm() {
       useOpenRouter !== initialState.useOpenRouter);
 
   // load all values from localStorage into local state
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Run only when component renders
   useEffect(() => {
     setApiKeys(persistedApiKeys);
     setUseOpenRouter(persistedUseOpenRouter);

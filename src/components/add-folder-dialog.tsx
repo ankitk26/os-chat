@@ -1,6 +1,5 @@
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { type FormEvent, useRef, useState } from "react";
 import { useFolderActionStore } from "~/stores/folder-actions-store";
@@ -17,12 +16,11 @@ import {
 import { Input } from "./ui/input";
 
 export default function AddFolderDialog() {
-  const { auth } = useRouteContext({ strict: false });
   const isCreateModalOpen = useFolderActionStore(
-    (store) => store.isCreateModalOpen
+    (store) => store.isCreateModalOpen,
   );
   const setIsCreateModalOpen = useFolderActionStore(
-    (store) => store.setIsCreateModalOpen
+    (store) => store.setIsCreateModalOpen,
   );
   const [folderTitle, setFolderTitle] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -48,7 +46,6 @@ export default function AddFolderDialog() {
     }
 
     createFolderMutation.mutate({
-      sessionToken: auth?.session.token ?? "",
       title: folderTitle,
     });
   };

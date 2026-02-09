@@ -1,7 +1,7 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { useParams, useRouteContext } from "@tanstack/react-router";
+import { useParams } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { CopyIcon, PencilIcon, PencilOffIcon } from "lucide-react";
 import { memo, useState } from "react";
@@ -30,7 +30,6 @@ export default memo(function UserMessage({
   sendMessage,
   regenerate,
 }: Props) {
-  const { auth } = useRouteContext({ from: "/_auth" });
   const { chatId } = useParams({ from: "/_auth/chat/$chatId" });
   const messageContent = getMessageContentFromParts(message.parts);
 
@@ -39,10 +38,10 @@ export default memo(function UserMessage({
   const selectedModel = useModelStore((store) => store.selectedModel);
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
   const persistedApiKeys = usePersistedApiKeysStore(
-    (store) => store.persistedApiKeys
+    (store) => store.persistedApiKeys,
   );
   const persistedUseOpenRouter = usePersistedApiKeysStore(
-    (store) => store.persistedUseOpenRouter
+    (store) => store.persistedUseOpenRouter,
   );
 
   const createMessageMutation = useMutation({
@@ -57,7 +56,6 @@ export default memo(function UserMessage({
     const sourceMessageId = generateRandomUUID();
 
     deleteMessagesMutation.mutate({
-      sessionToken: auth.session.token,
       currentMessageSourceId: message.id,
       chatId,
       deleteCurrentMessage: true,
@@ -70,7 +68,6 @@ export default memo(function UserMessage({
         sourceMessageId,
         parts: JSON.stringify([{ type: "text", text: input }]),
       },
-      sessionToken: auth.session.token,
     });
 
     sendMessage(
@@ -87,7 +84,7 @@ export default memo(function UserMessage({
           useOpenRouter: persistedUseOpenRouter,
           chatId,
         },
-      }
+      },
     );
 
     setIsEditing(false);
@@ -102,7 +99,7 @@ export default memo(function UserMessage({
       <div
         className={cn(
           "wrap-break-word flex w-full max-w-full flex-col gap-6 whitespace-pre-wrap rounded-xl border px-4 py-4 text-sm",
-          isEditing ? "bg-secondary" : "bg-popover"
+          isEditing ? "bg-secondary" : "bg-popover",
         )}
       >
         {isEditing ? (

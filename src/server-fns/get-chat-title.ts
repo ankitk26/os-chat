@@ -7,11 +7,11 @@ export const getChatTitle = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       userMessage: z.string(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const { text: generatedTitle } = await generateText({
-      model: google("gemini-2.0-flash-lite"),
+      model: google("gemini-2.5-flash-lite"),
       system:
         "You are a professional writer. " +
         "You write simple, clear, and concise content. " +

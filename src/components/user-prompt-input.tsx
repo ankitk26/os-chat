@@ -1,11 +1,7 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
-import {
-  useNavigate,
-  useParams,
-  useRouteContext,
-} from "@tanstack/react-router";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import type { ChatStatus } from "ai";
 import { api } from "convex/_generated/api";
 import type { Id } from "convex/_generated/dataModel";
@@ -27,7 +23,6 @@ type Props = {
 
 export default function UserPromptInput(props: Props) {
   const { chatId: paramsChatId } = useParams({ strict: false });
-  const { auth } = useRouteContext({ from: "/_auth" });
 
   const [input, setInput] = useState("");
 
@@ -36,10 +31,10 @@ export default function UserPromptInput(props: Props) {
   const selectedModel = useModelStore((store) => store.selectedModel);
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
   const persistedApiKeys = usePersistedApiKeysStore(
-    (store) => store.persistedApiKeys
+    (store) => store.persistedApiKeys,
   );
   const persistedUseOpenRouter = usePersistedApiKeysStore(
-    (store) => store.persistedUseOpenRouter
+    (store) => store.persistedUseOpenRouter,
   );
   const { selectedText, clearSelectedText } = useTextSelectionStore();
 
@@ -57,7 +52,6 @@ export default function UserPromptInput(props: Props) {
     const title = await getChatTitle({ data: { userMessage: input } });
     await updateChatTitleMutation.mutateAsync({
       chat: { chatId: dbGeneratedChatId, title: title as string },
-      sessionToken: auth.session.token,
     });
   };
 
@@ -72,7 +66,6 @@ export default function UserPromptInput(props: Props) {
         params: { chatId: props.chatId },
       });
       const dbGeneratedChatId = await createChatMutation.mutateAsync({
-        sessionToken: auth.session.token,
         uuid: props.chatId,
       });
       handleChatTitleUpdate(dbGeneratedChatId);
@@ -87,7 +80,6 @@ export default function UserPromptInput(props: Props) {
         sourceMessageId,
         parts: JSON.stringify([{ type: "text", text: input }]),
       },
-      sessionToken: auth.session.token,
     });
 
     props.sendMessage(
@@ -104,7 +96,7 @@ export default function UserPromptInput(props: Props) {
           useOpenRouter: persistedUseOpenRouter,
           chatId: props.chatId,
         },
-      }
+      },
     );
 
     setInput("");
@@ -119,13 +111,11 @@ export default function UserPromptInput(props: Props) {
   };
 
   // Resize when the textarea value changes.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: as noted below
   useEffect(() => {
     resizeTextarea();
   }, [input]);
 
   // Focus the textarea when the chat ID changes or on initial load.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: as noted below
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.focus();
@@ -143,7 +133,7 @@ export default function UserPromptInput(props: Props) {
         // Move cursor to end of text
         textareaRef.current.setSelectionRange(
           selectedText.length,
-          selectedText.length
+          selectedText.length,
         );
       }
     }

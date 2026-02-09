@@ -11,7 +11,7 @@ export const createMessageServerFn = createServerFn({ method: "POST" })
       parts: z.string(),
       metadata: z.string().default(""),
       messageId: z.string(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const authData = await getAuth();
@@ -20,7 +20,7 @@ export const createMessageServerFn = createServerFn({ method: "POST" })
     }
 
     const convexClient = new ConvexHttpClient(
-      process.env.VITE_CONVEX_URL as string
+      process.env.VITE_CONVEX_URL as string,
     );
     await convexClient.mutation(api.messages.createMessage, {
       messageBody: {
@@ -30,6 +30,5 @@ export const createMessageServerFn = createServerFn({ method: "POST" })
         metadata: data.metadata,
         sourceMessageId: data.messageId,
       },
-      sessionToken: authData.session.token,
     });
   });

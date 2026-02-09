@@ -1,18 +1,13 @@
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { PinIcon } from "lucide-react";
 import AppSidebarChatItem from "./app-sidebar-chat-item";
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu } from "./ui/sidebar";
 
 export default function PinnedChatsList() {
-  const { auth } = useRouteContext({ strict: false });
-
   const { data: chatsData } = useSuspenseQuery(
-    convexQuery(api.chats.getPinnedChats, {
-      sessionToken: auth?.session.token ?? "",
-    })
+    convexQuery(api.chats.getPinnedChats, {}),
   );
 
   if (chatsData.length === 0) {

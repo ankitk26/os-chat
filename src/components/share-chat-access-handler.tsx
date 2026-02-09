@@ -1,6 +1,5 @@
 import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import {
   CheckIcon,
@@ -20,24 +19,20 @@ import { Label } from "./ui/label";
 import { Switch } from "./ui/switch";
 
 export default function ShareChatAccessHandler() {
-  const { auth } = useRouteContext({ strict: false });
   const selectedChat = useChatActionStore((store) => store.selectedChat);
 
   const [copied, setCopied] = useState(false);
 
-  const token = auth?.session.token;
-  const canShare = Boolean(selectedChat && token);
+  const canShare = Boolean(selectedChat);
 
-  const queryArgs =
-    selectedChat && token
-      ? {
-          chatId: selectedChat._id,
-          sessionToken: token,
-        }
-      : "skip";
+  const queryArgs = selectedChat
+    ? {
+        chatId: selectedChat._id,
+      }
+    : "skip";
 
   const { data: sharedUuid, isPending } = useQuery(
-    convexQuery(api.chats.getSharedChatStatus, queryArgs)
+    convexQuery(api.chats.getSharedChatStatus, queryArgs),
   );
 
   const shareMutation = useMutation({
@@ -57,7 +52,6 @@ export default function ShareChatAccessHandler() {
     }
     shareMutation.mutate({
       chatId: selectedChat._id,
-      sessionToken: token,
       sharedChatUuid: generateRandomUUID(),
     });
   }

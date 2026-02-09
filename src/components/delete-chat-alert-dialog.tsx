@@ -1,10 +1,6 @@
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
-import {
-  useNavigate,
-  useParams,
-  useRouteContext,
-} from "@tanstack/react-router";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { toast } from "sonner";
 import { useSharedChatContext } from "~/providers/chat-provider";
@@ -24,13 +20,12 @@ export default function DeleteChatAlertDialog() {
   const { clearChat } = useSharedChatContext();
   const { chatId } = useParams({ strict: false });
   const navigate = useNavigate();
-  const { auth } = useRouteContext({ strict: false });
   const selectedChat = useChatActionStore((store) => store.selectedChat);
   const isDeleteModalOpen = useChatActionStore(
-    (store) => store.isDeleteModalOpen
+    (store) => store.isDeleteModalOpen,
   );
   const setIsDeleteModalOpen = useChatActionStore(
-    (store) => store.setIsDeleteModalOpen
+    (store) => store.setIsDeleteModalOpen,
   );
   const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
 
@@ -79,7 +74,6 @@ export default function DeleteChatAlertDialog() {
               }
               deleteChatMutation.mutate({
                 chatId: selectedChat._id,
-                sessionToken: auth?.session.token ?? "",
               });
             }}
           >

@@ -19,7 +19,6 @@ export default function CodeHighlight({
 }: CodeHighlightProps) {
   const { theme } = useTheme();
 
-  // biome-ignore lint/performance/useTopLevelRegex: Ignore
   const match = className?.match(/language-(\w+)/);
   const language = match ? match[1] : undefined;
 

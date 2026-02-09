@@ -1,6 +1,6 @@
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate, useRouteContext } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { TrashIcon } from "lucide-react";
 import { useState } from "react";
@@ -21,7 +21,6 @@ import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export default function DeleteAllChatsAlertDialog() {
-  const { auth } = useRouteContext({ strict: false });
   const { clearChat } = useSharedChatContext();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
@@ -70,9 +69,7 @@ export default function DeleteAllChatsAlertDialog() {
             disabled={deleteAllChatsMutation.isPending}
             onClick={() => {
               toast.info("Deleting all chats...");
-              deleteAllChatsMutation.mutate({
-                sessionToken: auth?.session.token ?? "",
-              });
+              deleteAllChatsMutation.mutate({});
             }}
           >
             {deleteAllChatsMutation.isPending ? "Deleting..." : "Delete"}

@@ -1,6 +1,3 @@
-/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
-/** biome-ignore-all lint/a11y/noRedundantAlt: <explanation> */
-/** biome-ignore-all lint/performance/noImgElement: <explanation> */
 import type { CustomUIMessage } from "~/types";
 
 type Props = {

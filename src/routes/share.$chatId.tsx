@@ -5,7 +5,7 @@ import { AppSidebar } from "~/components/app-sidebar";
 import ReadOnlyChatMessages from "~/components/read-only-chat-messages";
 import { ThemeToggler } from "~/components/theme-toggle";
 import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
-import { authQueryOptions } from "~/queries/auth";
+import { authQueryOptions } from "~/queries/auth-query";
 
 export const Route = createFileRoute("/share/$chatId")({
   beforeLoad: async ({ context }) => {
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/share/$chatId")({
     context.queryClient.ensureQueryData(
       convexQuery(api.messages.getSharedChatMessages, {
         sharedChatUuid: params.chatId,
-      })
+      }),
     );
   },
   component: RouteComponent,

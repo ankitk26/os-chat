@@ -1,11 +1,7 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
-import {
-  useNavigate,
-  useParams,
-  useRouteContext,
-} from "@tanstack/react-router";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { KeyIcon, RefreshCcwIcon, SplitIcon } from "lucide-react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
@@ -36,7 +32,6 @@ type Props = {
 
 export default function BranchOffButton({ message, sendMessage }: Props) {
   const { chatId } = useParams({ strict: false });
-  const { auth } = useRouteContext({ from: "/_auth" });
   const { clearChat } = useSharedChatContext();
   const navigate = useNavigate();
 
@@ -45,14 +40,14 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
 
   const persistedApiKeys = usePersistedApiKeysStore(
-    (store) => store.persistedApiKeys
+    (store) => store.persistedApiKeys,
   );
   const persistedUseOpenRouter = usePersistedApiKeysStore(
-    (store) => store.persistedUseOpenRouter
+    (store) => store.persistedUseOpenRouter,
   );
   const accessibleModels = getAccessibleModels(
     persistedApiKeys,
-    persistedUseOpenRouter
+    persistedUseOpenRouter,
   );
 
   const branchOffChatMutation = useMutation({
@@ -78,7 +73,6 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
         role: message.role,
       },
       parentChatUuid: chatId,
-      sessionToken: auth.session.token,
     });
 
     if (model) {
@@ -95,7 +89,6 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
           sourceMessageId,
           parts: JSON.stringify(message.parts),
         },
-        sessionToken: auth.session.token,
       });
 
       sendMessage(
@@ -112,7 +105,7 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
             useOpenRouter: persistedUseOpenRouter,
             chatId: branchChatUuid,
           },
-        }
+        },
       );
     }
   };

@@ -1,6 +1,5 @@
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -19,16 +18,15 @@ import { Label } from "./ui/label";
 import { Switch } from "./ui/switch";
 
 export default function DeleteFolderAlertDialog() {
-  const { auth } = useRouteContext({ strict: false });
   const selectedFolder = useFolderActionStore((store) => store.selectedFolder);
   const isDeleteModalOpen = useFolderActionStore(
-    (store) => store.isDeleteModalOpen
+    (store) => store.isDeleteModalOpen,
   );
   const setIsDeleteModalOpen = useFolderActionStore(
-    (store) => store.setIsDeleteModalOpen
+    (store) => store.setIsDeleteModalOpen,
   );
   const setSelectedFolder = useFolderActionStore(
-    (store) => store.setSelectedFolder
+    (store) => store.setSelectedFolder,
   );
 
   const [deleteAllChats, setDeleteAllChats] = useState(false);
@@ -91,7 +89,6 @@ export default function DeleteFolderAlertDialog() {
               }
               deleteFolderMutation.mutate({
                 folderId: selectedFolder._id,
-                sessionToken: auth?.session.token ?? "",
                 deleteChatsFlag: deleteAllChats,
               });
             }}

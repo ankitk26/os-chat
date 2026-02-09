@@ -1,6 +1,5 @@
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { PinIcon } from "lucide-react";
 import { toast } from "sonner";
@@ -12,8 +11,6 @@ type Props = {
 };
 
 export default function AppSidebarChatItemPin(props: Props) {
-  const { auth } = useRouteContext({ strict: false });
-
   const toggleChatPinMutation = useMutation({
     mutationFn: useConvexMutation(api.chats.toggleChatPin),
     onSuccess: (wasPinned) => {
@@ -32,7 +29,6 @@ export default function AppSidebarChatItemPin(props: Props) {
         e.stopPropagation();
         toggleChatPinMutation.mutate({
           chatId: props.chat._id,
-          sessionToken: auth?.session.token ?? "",
         });
       }}
     >

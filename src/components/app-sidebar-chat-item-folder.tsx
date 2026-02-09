@@ -1,6 +1,5 @@
 import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import type { Id } from "convex/_generated/dataModel";
 import { FolderArchiveIcon } from "lucide-react";
@@ -19,12 +18,8 @@ type Props = {
 };
 
 export default function AppSidebarChatItemFolder(props: Props) {
-  const { auth } = useRouteContext({ strict: false });
-
   const { data: folders } = useSuspenseQuery(
-    convexQuery(api.folders.getFolders, {
-      sessionToken: auth?.session.token ?? "",
-    })
+    convexQuery(api.folders.getFolders, {}),
   );
 
   const updateChatFolderMutation = useMutation({
@@ -40,7 +35,6 @@ export default function AppSidebarChatItemFolder(props: Props) {
     updateChatFolderMutation.mutate({
       chatId: props.chat._id,
       folderId,
-      sessionToken: auth?.session.token ?? "",
     });
   };
 

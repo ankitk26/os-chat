@@ -44,7 +44,7 @@ export default function Chat({
     }
 
     const viewport = scrollArea.querySelector(
-      "[data-radix-scroll-area-viewport]"
+      "[data-radix-scroll-area-viewport]",
     );
     if (!viewport) {
       return;
@@ -66,7 +66,7 @@ export default function Chat({
     }
 
     const viewport = scrollArea.querySelector(
-      "[data-radix-scroll-area-viewport]"
+      "[data-radix-scroll-area-viewport]",
     );
     if (!viewport) {
       return;
@@ -78,7 +78,6 @@ export default function Chat({
     });
   };
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: checkScrollPosition should not be added to dependency
   useEffect(() => {
     const scrollArea = scrollAreaRef.current;
     if (!scrollArea) {
@@ -86,7 +85,7 @@ export default function Chat({
     }
 
     const viewport = scrollArea.querySelector(
-      "[data-radix-scroll-area-viewport]"
+      "[data-radix-scroll-area-viewport]",
     );
     if (!viewport) {
       return;
@@ -103,7 +102,6 @@ export default function Chat({
   }, [messages]);
 
   // Auto-scroll to bottom when new messages arrive (optional)
-  // biome-ignore lint/correctness/useExhaustiveDependencies: scrollToBottom should not be added
   useEffect(() => {
     if (status === "submitted") {
       const timerSeconds = 100;
@@ -114,7 +112,6 @@ export default function Chat({
     }
   }, [messages.length]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: ignore
   useEffect(() => {
     setMessages(dbMessages);
   }, [dbMessages]);
