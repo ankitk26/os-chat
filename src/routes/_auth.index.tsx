@@ -4,11 +4,11 @@ import Chat from "~/components/chat";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 
 export const Route = createFileRoute("/_auth/")({
-  component: RouteComponent,
+	component: RouteComponent,
 });
 
 function RouteComponent() {
-  const chatId = useMemo(() => generateRandomUUID(), []);
+	const chatId = useMemo(() => generateRandomUUID(), []);
 
-  return <Chat chatId={chatId} dbMessages={[]} />;
+	return <Chat chatId={chatId} dbMessages={[]} />;
 }
