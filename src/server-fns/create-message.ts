@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { api } from "convex/_generated/api";
 import { ConvexHttpClient } from "convex/browser";
 import { z } from "zod";
-import { getAuth } from "./get-auth";
+import { getAuthUser } from "./get-auth";
 
 export const createMessageServerFn = createServerFn({ method: "POST" })
   .inputValidator(
@@ -14,8 +14,8 @@ export const createMessageServerFn = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
-    const authData = await getAuth();
-    if (!authData?.session) {
+    const authData = await getAuthUser();
+    if (!authData) {
       throw new Error("Invalid request");
     }
 

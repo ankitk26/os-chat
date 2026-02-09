@@ -47,7 +47,7 @@ export default function ShareChatAccessHandler() {
     : null;
 
   function handleToggleShare() {
-    if (!(selectedChat && token)) {
+    if (!selectedChat) {
       return;
     }
     shareMutation.mutate({
