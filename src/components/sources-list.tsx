@@ -16,7 +16,7 @@ export default function SourcesList(props: Props) {
           target="_blank"
         >
           <div className="flex items-center gap-3">
-            <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-muted font-medium text-muted-foreground text-xs">
+            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted font-medium text-muted-foreground text-xs">
               {index + 1}
             </span>
             <div className="min-w-0 flex-1">

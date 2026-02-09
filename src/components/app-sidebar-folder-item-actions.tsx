@@ -28,7 +28,7 @@ export default function AppSidebarFolderItemActions({ folder }: Props) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          className="size-7 flex-shrink-0 rounded-sm bg-secondary text-sidebar-foreground opacity-0 transition-opacity duration-200 hover:bg-sidebar group-hover/folders:opacity-100"
+          className="size-7 shrink-0 rounded-sm bg-secondary text-sidebar-foreground opacity-0 transition-opacity duration-200 hover:bg-sidebar group-hover/folders:opacity-100"
           size="icon"
         >
           <EllipsisVerticalIcon />
