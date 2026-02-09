@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { api } from "convex/_generated/api";
-import { ConvexHttpClient } from "convex/browser";
 import { z } from "zod";
+import { fetchAuthMutation } from "~/lib/auth-server";
 import { getAuthUser } from "./get-auth";
 
 export const createMessageServerFn = createServerFn({ method: "POST" })
@@ -19,10 +19,7 @@ export const createMessageServerFn = createServerFn({ method: "POST" })
       throw new Error("Invalid request");
     }
 
-    const convexClient = new ConvexHttpClient(
-      process.env.VITE_CONVEX_URL as string,
-    );
-    await convexClient.mutation(api.messages.createMessage, {
+    await fetchAuthMutation(api.messages.createMessage, {
       messageBody: {
         chatId: data.chatId,
         parts: data.parts,
