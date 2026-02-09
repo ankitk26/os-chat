@@ -5,12 +5,14 @@ import AssistantMessage from "./assistant-message";
 import UserMessage from "./user-message";
 
 type Props = {
+	chatId: string;
 	messages: CustomUIMessage[];
 	regenerate: UseChatHelpers<CustomUIMessage>["regenerate"];
 	sendMessage: UseChatHelpers<CustomUIMessage>["sendMessage"];
 };
 
 export default memo(function ChatMessages({
+	chatId,
 	messages,
 	regenerate,
 	sendMessage,
@@ -25,6 +27,7 @@ export default memo(function ChatMessages({
 				<div className="flex flex-col" key={message.id}>
 					{message.role === "user" ? (
 						<UserMessage
+							chatId={chatId}
 							message={message}
 							regenerate={regenerate}
 							sendMessage={sendMessage}
