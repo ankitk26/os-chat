@@ -2,14 +2,14 @@ import { TerminalIcon } from "lucide-react";
 import { Alert, AlertDescription } from "./ui/alert";
 
 type Props = {
-  error: Error;
+	error: Error;
 };
 
 export default function AiResponseAlert({ error }: Props) {
-  return (
-    <Alert className="mb-8">
-      <TerminalIcon className="stroke-destructive" />
-      <AlertDescription>{error.message}</AlertDescription>
-    </Alert>
-  );
+	return (
+		<Alert className="mb-8">
+			<TerminalIcon className="stroke-destructive" />
+			<AlertDescription>{error.message}</AlertDescription>
+		</Alert>
+	);
 }

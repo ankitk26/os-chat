@@ -4,15 +4,15 @@ import { api } from "convex/_generated/api";
 import AppSidebarFolderItem from "./app-sidebar-folder-item";
 
 export default function AppSidebarFoldersList() {
-  const { data: folders } = useSuspenseQuery(
-    convexQuery(api.folders.getFoldersWithChats),
-  );
+	const { data: folders } = useSuspenseQuery(
+		convexQuery(api.folders.getFoldersWithChats),
+	);
 
-  if (folders.length === 0) {
-    return <small className="px-2 text-muted-foreground">No folders</small>;
-  }
+	if (folders.length === 0) {
+		return <small className="text-muted-foreground px-2">No folders</small>;
+	}
 
-  return folders.map((folder) => (
-    <AppSidebarFolderItem folder={folder} key={folder._id} />
-  ));
+	return folders.map((folder) => (
+		<AppSidebarFolderItem folder={folder} key={folder._id} />
+	));
 }

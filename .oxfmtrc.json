@@ -1,0 +1,17 @@
+{
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
+	"useTabs": true,
+	"printWidth": 80,
+	"tabWidth": 2,
+	"ignorePatterns": [
+		"convex/_generated/**",
+		"bun.lock",
+		"src/routeTree.gen.ts"
+	],
+	"experimentalSortImports": {
+		"newlinesBetween": false
+	},
+	"experimentalTailwindcss": {
+		"functions": ["clsx", "cn", "cva"]
+	}
+}

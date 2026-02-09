@@ -5,10 +5,10 @@ import { z } from "zod";
 
 // Create type for /api/chat request body's model
 export type Model = {
-  name: string;
-  openRouterModelId: string;
-  modelId: string;
-  isFree: boolean;
+	name: string;
+	openRouterModelId: string;
+	modelId: string;
+	isFree: boolean;
 };
 
 // Model + isAvailable
@@ -16,50 +16,52 @@ export type ModelWithAvailability = Model & { isAvailable: boolean };
 
 // Type for models list
 export type ProviderGroup = {
-  provider: string;
-  key: string;
-  models: Model[];
+	provider: string;
+	key: string;
+	models: Model[];
 };
 
 // Provider Group + isAvailable (decided after analyzing API Keys)
-export interface ProviderGroupWithAvailability
-  extends Omit<ProviderGroup, "models"> {
-  models: ModelWithAvailability[];
+export interface ProviderGroupWithAvailability extends Omit<
+	ProviderGroup,
+	"models"
+> {
+	models: ModelWithAvailability[];
 }
 
 // API Keys type
 export type ApiKeys = {
-  gemini: string;
-  openai: string;
-  anthropic: string;
-  openrouter: string;
-  xai: string;
+	gemini: string;
+	openai: string;
+	anthropic: string;
+	openrouter: string;
+	xai: string;
 };
 
 export const defaultApiKeys: ApiKeys = {
-  gemini: "",
-  openai: "",
-  anthropic: "",
-  openrouter: "",
-  xai: "",
+	gemini: "",
+	openai: "",
+	anthropic: "",
+	openrouter: "",
+	xai: "",
 };
 
 export type Provider = keyof ApiKeys;
 
 export type SidebarChatType = FunctionReturnType<
-  typeof api.chats.getPinnedChats
+	typeof api.chats.getPinnedChats
 >[0];
 export type SidebarFolder = FunctionReturnType<
-  typeof api.folders.getFoldersWithChats
+	typeof api.folders.getFoldersWithChats
 >[0];
 
 export const messageMetadataSchema = z.object({
-  createdAt: z.number().optional(),
-  model: z.string().optional(),
-  totalTokens: z.float64().optional(),
+	createdAt: z.number().optional(),
+	model: z.string().optional(),
+	totalTokens: z.float64().optional(),
 });
 export type MessageMetadata = z.infer<typeof messageMetadataSchema>;
 // system role not needed for now
 export type CustomUIMessage = Omit<UIMessage<MessageMetadata>, "role"> & {
-  role: "user" | "assistant";
+	role: "user" | "assistant";
 };

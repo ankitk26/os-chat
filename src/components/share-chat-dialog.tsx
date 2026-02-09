@@ -7,35 +7,35 @@ import { Dialog, DialogContent } from "./ui/dialog";
 import { Separator } from "./ui/separator";
 
 export default function ShareChatDialog() {
-  const selectedChat = useChatActionStore((store) => store.selectedChat);
-  const isShareDialogOpen = useChatActionStore(
-    (store) => store.isShareDialogOpen
-  );
-  const setIsShareDialogOpen = useChatActionStore(
-    (store) => store.setIsShareDialogOpen
-  );
+	const selectedChat = useChatActionStore((store) => store.selectedChat);
+	const isShareDialogOpen = useChatActionStore(
+		(store) => store.isShareDialogOpen,
+	);
+	const setIsShareDialogOpen = useChatActionStore(
+		(store) => store.setIsShareDialogOpen,
+	);
 
-  function handleDialogOpenChange(open: boolean) {
-    setIsShareDialogOpen(open);
-  }
+	function handleDialogOpenChange(open: boolean) {
+		setIsShareDialogOpen(open);
+	}
 
-  return (
-    <Dialog onOpenChange={handleDialogOpenChange} open={isShareDialogOpen}>
-      <DialogContent className="sm:max-w-md" key={selectedChat?._id}>
-        <ShareChatDialogHeader />
+	return (
+		<Dialog onOpenChange={handleDialogOpenChange} open={isShareDialogOpen}>
+			<DialogContent className="sm:max-w-md" key={selectedChat?._id}>
+				<ShareChatDialogHeader />
 
-        <div className="space-y-6">
-          {/* Public/Private Toggle */}
-          <ShareChatAccessHandler />
+				<div className="space-y-6">
+					{/* Public/Private Toggle */}
+					<ShareChatAccessHandler />
 
-          <Separator />
+					<Separator />
 
-          {/* Sync Section */}
-          <ShareChatSyncSection />
-        </div>
+					{/* Sync Section */}
+					<ShareChatSyncSection />
+				</div>
 
-        <ShareChatDialogFooter />
-      </DialogContent>
-    </Dialog>
-  );
+				<ShareChatDialogFooter />
+			</DialogContent>
+		</Dialog>
+	);
 }

@@ -6,107 +6,107 @@ import { toast } from "sonner";
 import { useFolderActionStore } from "~/stores/folder-actions-store";
 import { Button } from "./ui/button";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
 
 export default function RenameFolderDialog() {
-  const selectedFolder = useFolderActionStore((store) => store.selectedFolder);
-  const setSelectedFolder = useFolderActionStore(
-    (store) => store.setSelectedFolder,
-  );
-  const isRenameModalOpen = useFolderActionStore(
-    (store) => store.isRenameModalOpen,
-  );
-  const setIsRenameModalOpen = useFolderActionStore(
-    (store) => store.setIsRenameModalOpen,
-  );
+	const selectedFolder = useFolderActionStore((store) => store.selectedFolder);
+	const setSelectedFolder = useFolderActionStore(
+		(store) => store.setSelectedFolder,
+	);
+	const isRenameModalOpen = useFolderActionStore(
+		(store) => store.isRenameModalOpen,
+	);
+	const setIsRenameModalOpen = useFolderActionStore(
+		(store) => store.setIsRenameModalOpen,
+	);
 
-  const [newFolderTitle, setNewFolderTitle] = useState("");
+	const [newFolderTitle, setNewFolderTitle] = useState("");
 
-  useEffect(() => {
-    if (selectedFolder?.title) {
-      setNewFolderTitle(selectedFolder.title);
-    }
-  }, [selectedFolder?.title]);
+	useEffect(() => {
+		if (selectedFolder?.title) {
+			setNewFolderTitle(selectedFolder.title);
+		}
+	}, [selectedFolder?.title]);
 
-  const renameFolderMutation = useMutation({
-    mutationFn: useConvexMutation(api.folders.renameFolder),
-    onSuccess: () => {
-      toast.success("Folder renamed");
-    },
-    onError: () => {
-      toast.error("Folder was not renamed", {
-        description: "Please try again later",
-      });
-    },
-    onSettled: () => {
-      setIsRenameModalOpen(false);
-      setNewFolderTitle("");
-      setSelectedFolder(null);
-    },
-  });
+	const renameFolderMutation = useMutation({
+		mutationFn: useConvexMutation(api.folders.renameFolder),
+		onSuccess: () => {
+			toast.success("Folder renamed");
+		},
+		onError: () => {
+			toast.error("Folder was not renamed", {
+				description: "Please try again later",
+			});
+		},
+		onSettled: () => {
+			setIsRenameModalOpen(false);
+			setNewFolderTitle("");
+			setSelectedFolder(null);
+		},
+	});
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+	const handleSubmit = (e: FormEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
 
-    if (newFolderTitle === selectedFolder?.title) {
-      return;
-    }
+		if (newFolderTitle === selectedFolder?.title) {
+			return;
+		}
 
-    if (!selectedFolder?._id) {
-      toast.error("No folder selected to rename.");
-      return;
-    }
+		if (!selectedFolder?._id) {
+			toast.error("No folder selected to rename.");
+			return;
+		}
 
-    renameFolderMutation.mutate({
-      folder: { id: selectedFolder._id, title: newFolderTitle },
-    });
-  };
+		renameFolderMutation.mutate({
+			folder: { id: selectedFolder._id, title: newFolderTitle },
+		});
+	};
 
-  return (
-    <Dialog
-      onOpenChange={(open) => setIsRenameModalOpen(open)}
-      open={isRenameModalOpen}
-    >
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Rename folder title</DialogTitle>
-          <DialogDescription>
-            Rename title for the folder "{selectedFolder?.title}"
-          </DialogDescription>
-        </DialogHeader>
+	return (
+		<Dialog
+			onOpenChange={(open) => setIsRenameModalOpen(open)}
+			open={isRenameModalOpen}
+		>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>Rename folder title</DialogTitle>
+					<DialogDescription>
+						Rename title for the folder "{selectedFolder?.title}"
+					</DialogDescription>
+				</DialogHeader>
 
-        <form onSubmit={handleSubmit}>
-          <Input
-            disabled={renameFolderMutation.isPending}
-            onChange={(e) => setNewFolderTitle(e.target.value)}
-            value={newFolderTitle}
-          />
-        </form>
+				<form onSubmit={handleSubmit}>
+					<Input
+						disabled={renameFolderMutation.isPending}
+						onChange={(e) => setNewFolderTitle(e.target.value)}
+						value={newFolderTitle}
+					/>
+				</form>
 
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="ghost">Cancel</Button>
-          </DialogClose>
-          <Button
-            disabled={
-              renameFolderMutation.isPending ||
-              selectedFolder?.title === newFolderTitle
-            }
-            onClick={handleSubmit}
-          >
-            {renameFolderMutation.isPending ? "Updating..." : "Update"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
+				<DialogFooter>
+					<DialogClose asChild>
+						<Button variant="ghost">Cancel</Button>
+					</DialogClose>
+					<Button
+						disabled={
+							renameFolderMutation.isPending ||
+							selectedFolder?.title === newFolderTitle
+						}
+						onClick={handleSubmit}
+					>
+						{renameFolderMutation.isPending ? "Updating..." : "Update"}
+					</Button>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
+	);
 }
