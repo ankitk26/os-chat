@@ -1,7 +1,7 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { useParams, useRouteContext } from "@tanstack/react-router";
+import { useParams } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { GlobeIcon, KeyIcon, RefreshCcwIcon } from "lucide-react";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
@@ -32,21 +32,20 @@ type Props = {
 
 export default function RetryModelDropdown(props: Props) {
   const { message, regenerate } = props;
-  const { auth } = useRouteContext({ from: "/_auth" });
   const { chatId } = useParams({ strict: false });
   const selectedModel = useModelStore((store) => store.selectedModel);
   const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
   const toggleIsWebSearch = useModelStore((store) => store.toggleIsWebSearch);
   const persistedApiKeys = usePersistedApiKeysStore(
-    (store) => store.persistedApiKeys
+    (store) => store.persistedApiKeys,
   );
   const persistedUseOpenRouter = usePersistedApiKeysStore(
-    (store) => store.persistedUseOpenRouter
+    (store) => store.persistedUseOpenRouter,
   );
 
   const accessibleModels = getAccessibleModels(
     persistedApiKeys,
-    persistedUseOpenRouter
+    persistedUseOpenRouter,
   );
 
   const deleteMessagesMutation = useMutation({
@@ -60,7 +59,6 @@ export default function RetryModelDropdown(props: Props) {
 
     // delete all messages after current message in current chat
     deleteMessagesMutation.mutate({
-      sessionToken: auth.session.token,
       currentMessageSourceId: message.id,
       chatId,
       deleteCurrentMessage: message.role === "assistant",

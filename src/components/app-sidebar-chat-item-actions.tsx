@@ -23,13 +23,13 @@ export default function AppSidebarChatItemActions(props: Props) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          className="size-7 flex-shrink-0 rounded-sm bg-secondary text-sidebar-foreground opacity-0 transition-opacity duration-200 hover:bg-sidebar group-hover/chats:opacity-100"
+          className="size-7 shrink-0 rounded-sm bg-secondary text-sidebar-foreground opacity-0 transition-opacity duration-200 hover:bg-sidebar group-hover/chats:opacity-100"
           size="icon"
         >
           <EllipsisVerticalIcon />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[200px]">
+      <DropdownMenuContent className="w-50">
         <AppSidebarChatItemRename chat={props.chat} />
         <AppSidebarChatItemPin chat={props.chat} />
         <AppSidebarChatItemDelete chat={props.chat} />

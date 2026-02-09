@@ -1,6 +1,5 @@
 import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { RefreshCwIcon } from "lucide-react";
 import { toast } from "sonner";
@@ -9,22 +8,18 @@ import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 
 export default function ShareChatSyncSection() {
-  const { auth } = useRouteContext({ strict: false });
   const selectedChat = useChatActionStore((store) => store.selectedChat);
 
-  const token = auth?.session.token;
-  const canShare = Boolean(selectedChat && token);
+  const canShare = Boolean(selectedChat);
 
-  const queryArgs =
-    selectedChat && token
-      ? {
-          chatId: selectedChat._id,
-          sessionToken: token,
-        }
-      : "skip";
+  const queryArgs = selectedChat
+    ? {
+        chatId: selectedChat._id,
+      }
+    : "skip";
 
   const { data: sharedUuid } = useQuery(
-    convexQuery(api.chats.getSharedChatStatus, queryArgs)
+    convexQuery(api.chats.getSharedChatStatus, queryArgs),
   );
 
   const syncHistoryMutation = useMutation({
@@ -40,7 +35,6 @@ export default function ShareChatSyncSection() {
       return;
     }
     syncHistoryMutation.mutate({
-      sessionToken: token,
       chatId: selectedChat._id,
     });
   }

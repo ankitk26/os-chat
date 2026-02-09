@@ -1,6 +1,5 @@
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { type FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -18,14 +17,13 @@ import {
 import { Input } from "./ui/input";
 
 export default function ChatRenameDialog() {
-  const { auth } = useRouteContext({ strict: false });
   const selectedChat = useChatActionStore((store) => store.selectedChat);
   const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
   const isRenameModalOpen = useChatActionStore(
-    (store) => store.isRenameModalOpen
+    (store) => store.isRenameModalOpen,
   );
   const setIsRenameModalOpen = useChatActionStore(
-    (store) => store.setIsRenameModalOpen
+    (store) => store.setIsRenameModalOpen,
   );
   const [newChatTitle, setNewChatTitle] = useState("");
 
@@ -67,11 +65,9 @@ export default function ChatRenameDialog() {
 
     renameChatMutation.mutate({
       chat: { chatId: selectedChat._id, title: newChatTitle },
-      sessionToken: auth?.session.token ?? "",
     });
   };
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Run on first render
   useEffect(() => {
     setNewChatTitle(selectedChat?.title ?? "");
   }, []);

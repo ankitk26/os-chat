@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar";
 
 export default function AppSidebarFooter() {
-  const { auth } = useRouteContext({ strict: false });
+  const { authUser } = useRouteContext({ strict: false });
 
   return (
     <SidebarMenu>
@@ -16,11 +16,11 @@ export default function AppSidebarFooter() {
           >
             <Avatar className="h-8 w-8 rounded-lg grayscale">
               <AvatarImage
-                alt={auth?.user.name[0]}
-                src={auth?.user.image || ""}
+                alt={authUser?.name?.[0]}
+                src={authUser?.image ?? ""}
               />
               <AvatarFallback className="rounded-lg">
-                {auth?.user.name
+                {(authUser?.name ?? "")
                   .split(" ")
                   .slice(0, 2)
                   .map((namePart) => namePart.charAt(0))
@@ -28,9 +28,9 @@ export default function AppSidebarFooter() {
               </AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">{auth?.user.name}</span>
+              <span className="truncate font-medium">{authUser?.name}</span>
               <span className="truncate text-muted-foreground text-xs">
-                {auth?.user.email}
+                {authUser?.email}
               </span>
             </div>
             <SettingsIcon />

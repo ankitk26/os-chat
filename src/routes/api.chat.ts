@@ -28,8 +28,7 @@ const getModelToUse = (
   requestModel: Model,
   parsedApiKeys: ApiKeys,
   useOpenRouter: boolean,
-  isWebSearchEnabled: boolean
-  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: To fix later
+  isWebSearchEnabled: boolean,
 ) => {
   const myGeminiModel = createGoogleGenerativeAI({
     apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
@@ -129,7 +128,7 @@ export const Route = createFileRoute("/api/chat")({
           requestModel,
           apiKeys,
           useOpenRouter,
-          isWebSearchEnabled
+          isWebSearchEnabled,
         );
 
         const result = streamText({
@@ -170,7 +169,7 @@ export const Route = createFileRoute("/api/chat")({
           onFinish: async ({ responseMessage }) => {
             if (chatId && responseMessage.parts.length > 0) {
               const imagePart = responseMessage.parts.find(
-                (part) => part.type === "file"
+                (part) => part.type === "file",
               );
               if (imagePart?.mediaType.startsWith("image/")) {
                 try {
@@ -210,7 +209,6 @@ export const Route = createFileRoute("/api/chat")({
             }
           },
           onError: (error) => {
-            // biome-ignore lint/suspicious/noExplicitAny: ignore
             return (error as any).message;
           },
         });

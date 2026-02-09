@@ -1,6 +1,5 @@
 import { convexQuery } from "@convex-dev/react-query";
 import { useQuery } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { CheckIcon, Link2Icon } from "lucide-react";
 import { useState } from "react";
@@ -10,20 +9,18 @@ import { Button } from "./ui/button";
 import { DialogClose, DialogFooter } from "./ui/dialog";
 
 export default function ShareChatDialogFooter() {
-  const { auth } = useRouteContext({ strict: false });
   const selectedChat = useChatActionStore((store) => store.selectedChat);
   const [copied, setCopied] = useState(false);
 
   const { data: sharedUuid, isPending } = useQuery(
     convexQuery(
       api.chats.getSharedChatStatus,
-      selectedChat && auth?.session.token
+      selectedChat
         ? {
             chatId: selectedChat._id,
-            sessionToken: auth.session.token,
           }
-        : "skip"
-    )
+        : "skip",
+    ),
   );
 
   const shareUrl = sharedUuid

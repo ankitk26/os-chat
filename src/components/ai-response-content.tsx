@@ -11,7 +11,7 @@ export default function AIResponseContent({
 }: Props) {
   return (
     <div className="relative">
-      <div className="prose prose-neutral dark:prose-invert prose-rose prose-sm prose-pre:m-0 w-full max-w-full select-text break-words prose-pre:bg-transparent prose-pre:p-0 leading-8">
+      <div className="prose prose-neutral dark:prose-invert prose-rose prose-sm prose-pre:m-0 w-full max-w-full select-text wrap-break-word prose-pre:bg-transparent prose-pre:p-0 leading-8">
         <MemoizedMarkdown content={messageContent} id={messageId} />
       </div>
     </div>

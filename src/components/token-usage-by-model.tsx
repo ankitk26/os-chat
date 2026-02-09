@@ -1,16 +1,12 @@
 import { convexQuery } from "@convex-dev/react-query";
 import { useQuery } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { formatTokens } from "~/lib/format-tokens";
 import { Skeleton } from "./ui/skeleton";
 
 export default function TokenUsageByModel() {
-  const { auth } = useRouteContext({ from: "/_auth" });
   const { data: tokenUsage, isPending } = useQuery(
-    convexQuery(api.messages.tokensByModel, {
-      sessionToken: auth.session.token,
-    })
+    convexQuery(api.messages.tokensByModel, {}),
   );
 
   if (isPending) {
@@ -29,7 +25,7 @@ export default function TokenUsageByModel() {
 
   const totalTokens = tokenUsage.reduce(
     (sum: number, item: { tokens: number }) => sum + (item?.tokens || 0),
-    0
+    0,
   );
 
   return (

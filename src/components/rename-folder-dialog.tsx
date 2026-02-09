@@ -1,6 +1,5 @@
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { type FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -18,16 +17,15 @@ import {
 import { Input } from "./ui/input";
 
 export default function RenameFolderDialog() {
-  const { auth } = useRouteContext({ strict: false });
   const selectedFolder = useFolderActionStore((store) => store.selectedFolder);
   const setSelectedFolder = useFolderActionStore(
-    (store) => store.setSelectedFolder
+    (store) => store.setSelectedFolder,
   );
   const isRenameModalOpen = useFolderActionStore(
-    (store) => store.isRenameModalOpen
+    (store) => store.isRenameModalOpen,
   );
   const setIsRenameModalOpen = useFolderActionStore(
-    (store) => store.setIsRenameModalOpen
+    (store) => store.setIsRenameModalOpen,
   );
 
   const [newFolderTitle, setNewFolderTitle] = useState("");
@@ -70,7 +68,6 @@ export default function RenameFolderDialog() {
 
     renameFolderMutation.mutate({
       folder: { id: selectedFolder._id, title: newFolderTitle },
-      sessionToken: auth?.session.token ?? "",
     });
   };
 

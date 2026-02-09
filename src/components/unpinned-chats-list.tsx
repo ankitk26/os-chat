@@ -1,6 +1,5 @@
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { MessageSquareIcon } from "lucide-react";
 import AppSidebarChatItem from "./app-sidebar-chat-item";
@@ -8,11 +7,8 @@ import DeleteAllChatsAlertDialog from "./delete-all-chats-alert-dialog";
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu } from "./ui/sidebar";
 
 export default function UnpinnedChatsList() {
-  const { auth } = useRouteContext({ strict: false });
   const { data: chats } = useSuspenseQuery(
-    convexQuery(api.chats.getUnpinnedChats, {
-      sessionToken: auth?.session.token ?? "",
-    })
+    convexQuery(api.chats.getUnpinnedChats, {}),
   );
 
   return (

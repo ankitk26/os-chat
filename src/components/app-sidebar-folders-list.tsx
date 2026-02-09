@@ -1,16 +1,11 @@
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useRouteContext } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import AppSidebarFolderItem from "./app-sidebar-folder-item";
 
 export default function AppSidebarFoldersList() {
-  const { auth } = useRouteContext({ strict: false });
-
   const { data: folders } = useSuspenseQuery(
-    convexQuery(api.folders.getFoldersWithChats, {
-      sessionToken: auth?.session.token ?? "",
-    })
+    convexQuery(api.folders.getFoldersWithChats),
   );
 
   if (folders.length === 0) {

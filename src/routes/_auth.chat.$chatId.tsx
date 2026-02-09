@@ -36,8 +36,7 @@ function SuspendedChatPage() {
   const { data: messages, isPending: isMessagesPending } = useSuspenseQuery(
     convexQuery(api.messages.getMessages, {
       chatId,
-      sessionToken: auth.session.token,
-    })
+    }),
   );
 
   const transformedMessages = useMemo(() => {
