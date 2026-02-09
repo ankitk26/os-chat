@@ -6,6 +6,7 @@ import {
 	CopyIcon,
 	ExternalLinkIcon,
 	GlobeIcon,
+	Loader,
 	LockIcon,
 } from "lucide-react";
 import { useState } from "react";
@@ -80,7 +81,9 @@ export default function ShareChatAccessHandler() {
 			<div className="bg-card flex items-center justify-between rounded-lg border p-4">
 				<div className="flex items-center gap-3">
 					<div className="bg-background flex h-8 w-8 items-center justify-center rounded-full">
-						{isPublic ? (
+						{isLoading ? (
+							<Loader className="text-muted-foreground h-4 w-4 animate-spin" />
+						) : isPublic ? (
 							<GlobeIcon className="text-primary h-4 w-4" />
 						) : (
 							<LockIcon className="text-muted-foreground h-4 w-4" />
@@ -93,8 +96,7 @@ export default function ShareChatAccessHandler() {
 								className="text-xs"
 								variant={isPublic ? "default" : "secondary"}
 							>
-								{isLoading && "Updating..."}
-								{!isLoading && isPublic ? "Active" : "Disabled"}
+								{isPublic ? "Active" : "Disabled"}
 							</Badge>
 						</div>
 						<p className="text-muted-foreground text-xs">
