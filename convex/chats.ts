@@ -7,9 +7,8 @@ import { selectChatFields } from "./model/chats";
 import { getAuthUserIdOrThrow } from "./model/users";
 
 export const getChats = query({
-  args: { sessionToken: v.string() },
-  handler: async (ctx, args) => {
-    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+  handler: async (ctx) => {
+    const userId = await getAuthUserIdOrThrow(ctx);
 
     const chats = await ctx.db
       .query("chats")
@@ -24,14 +23,13 @@ export const getChats = query({
 });
 
 export const getUnpinnedChats = query({
-  args: { sessionToken: v.string() },
-  handler: async (ctx, args) => {
-    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+  handler: async (ctx) => {
+    const userId = await getAuthUserIdOrThrow(ctx);
 
     const chats = await ctx.db
       .query("chats")
       .withIndex("by_user_and_pinned_and_folder", (q) =>
-        q.eq("userId", userId).eq("isPinned", false).eq("folderId", undefined)
+        q.eq("userId", userId).eq("isPinned", false).eq("folderId", undefined),
       )
       .order("desc")
       .collect();
@@ -51,7 +49,7 @@ export const getUnpinnedChats = query({
           };
         }
         return { ...currentChat, parentChat: null };
-      })
+      }),
     );
 
     return chatsWithParent;
@@ -59,14 +57,13 @@ export const getUnpinnedChats = query({
 });
 
 export const getPinnedChats = query({
-  args: { sessionToken: v.string() },
-  handler: async (ctx, args) => {
-    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+  handler: async (ctx) => {
+    const userId = await getAuthUserIdOrThrow(ctx);
 
     const chats = await ctx.db
       .query("chats")
       .withIndex("by_user_and_pinned_and_folder", (q) =>
-        q.eq("userId", userId).eq("isPinned", true).eq("folderId", undefined)
+        q.eq("userId", userId).eq("isPinned", true).eq("folderId", undefined),
       )
       .order("desc")
       .collect();
@@ -86,7 +83,7 @@ export const getPinnedChats = query({
           };
         }
         return { ...currentChat, parentChat: null };
-      })
+      }),
     );
 
     return chatsWithParent;
@@ -94,9 +91,9 @@ export const getPinnedChats = query({
 });
 
 export const createChat = mutation({
-  args: { sessionToken: v.string(), uuid: v.string() },
+  args: { uuid: v.string() },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const userId = await getAuthUserIdOrThrow(ctx);
 
     const newChatId = await ctx.db.insert("chats", {
       uuid: args.uuid,
@@ -112,14 +109,13 @@ export const createChat = mutation({
 
 export const updateChatTitle = mutation({
   args: {
-    sessionToken: v.string(),
     chat: v.object({
       chatId: v.id("chats"),
       title: v.string(),
     }),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const userId = await getAuthUserIdOrThrow(ctx);
     const chat = await ctx.db.get(args.chat.chatId);
     if (!chat) {
       throw new Error("Not found!");
@@ -133,11 +129,10 @@ export const updateChatTitle = mutation({
 
 export const toggleChatPin = mutation({
   args: {
-    sessionToken: v.string(),
     chatId: v.id("chats"),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const userId = await getAuthUserIdOrThrow(ctx);
     const chat = await ctx.db.get(args.chatId);
     if (!chat) {
       throw new Error("Invalid chat request");
@@ -152,11 +147,10 @@ export const toggleChatPin = mutation({
 
 export const deleteChat = mutation({
   args: {
-    sessionToken: v.string(),
     chatId: v.id("chats"),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const userId = await getAuthUserIdOrThrow(ctx);
 
     const chat = await ctx.db.get(args.chatId);
     if (!chat) {
@@ -197,7 +191,7 @@ export const deleteSharedChatsByParentChat = internalMutation({
         {
           chatId: args.chatId,
           cursor: continueCursor,
-        }
+        },
       );
     }
   },
@@ -205,12 +199,11 @@ export const deleteSharedChatsByParentChat = internalMutation({
 
 export const createSharedChat = mutation({
   args: {
-    sessionToken: v.string(),
     chatId: v.id("chats"),
     sharedChatUuid: v.string(),
   },
   handler: async (ctx, args) => {
-    await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    await getAuthUserIdOrThrow(ctx);
 
     const chat = await ctx.db.get(args.chatId);
     if (!chat) {
@@ -246,11 +239,10 @@ export const createSharedChat = mutation({
 
 export const getSharedChatStatus = query({
   args: {
-    sessionToken: v.string(),
     chatId: v.id("chats"),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const userId = await getAuthUserIdOrThrow(ctx);
 
     const chat = await ctx.db.get(args.chatId);
     if (!chat || chat.userId !== userId) {
@@ -268,11 +260,10 @@ export const getSharedChatStatus = query({
 
 export const syncSharedChat = mutation({
   args: {
-    sessionToken: v.string(),
     chatId: v.id("chats"),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const userId = await getAuthUserIdOrThrow(ctx);
 
     const chat = await ctx.db.get(args.chatId);
     if (!chat || chat.userId !== userId) {
@@ -294,7 +285,6 @@ export const syncSharedChat = mutation({
 
 export const branchOffChat = mutation({
   args: {
-    sessionToken: v.string(),
     parentChatUuid: v.string(),
     branchedChatUuid: v.string(),
     lastMessage: v.object({
@@ -303,7 +293,7 @@ export const branchOffChat = mutation({
     }),
   },
   handler: async (ctx, args) => {
-    const user = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const user = await getAuthUserIdOrThrow(ctx);
 
     // get the chat being branched
     const parentChat = await ctx.db
@@ -339,7 +329,7 @@ export const branchOffChat = mutation({
     const lastMessage = await ctx.db
       .query("messages")
       .withIndex("by_source_id", (q) =>
-        q.eq("sourceMessageId", args.lastMessage.id)
+        q.eq("sourceMessageId", args.lastMessage.id),
       )
       .first();
 
@@ -355,7 +345,7 @@ export const branchOffChat = mutation({
       .withIndex("by_chat", (q) =>
         q
           .eq("chatId", parentChat.uuid)
-          .lt("_creationTime", lastMessage._creationTime)
+          .lt("_creationTime", lastMessage._creationTime),
       )
       .collect();
 
@@ -365,7 +355,7 @@ export const branchOffChat = mutation({
         .withIndex("by_chat", (q) =>
           q
             .eq("chatId", parentChat.uuid)
-            .lte("_creationTime", lastMessage._creationTime)
+            .lte("_creationTime", lastMessage._creationTime),
         )
         .collect();
     }
@@ -383,19 +373,18 @@ export const branchOffChat = mutation({
           userId: user,
           sourceMessageId: newMessageId,
         });
-      })
+      }),
     );
   },
 });
 
 export const updateChatFolder = mutation({
   args: {
-    sessionToken: v.string(),
     chatId: v.id("chats"),
     folderId: v.optional(v.id("folders")),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+    const userId = await getAuthUserIdOrThrow(ctx);
     const chat = await ctx.db.get(args.chatId);
     if (!chat) {
       throw new Error("Not found!");
@@ -409,7 +398,7 @@ export const updateChatFolder = mutation({
 
 export const deleteChatsByFolder = internalMutation({
   args: {
-    userId: v.id("user"),
+    userId: v.id("users"),
     folderId: v.id("folders"),
     cursor: v.union(v.string(), v.null()),
   },
@@ -422,7 +411,7 @@ export const deleteChatsByFolder = internalMutation({
     } = await ctx.db
       .query("chats")
       .withIndex("by_folder_and_user", (q) =>
-        q.eq("userId", args.userId).eq("folderId", args.folderId)
+        q.eq("userId", args.userId).eq("folderId", args.folderId),
       )
       .paginate({ numItems: BATCH_SIZE, cursor: args.cursor ?? null });
 
@@ -440,11 +429,8 @@ export const deleteChatsByFolder = internalMutation({
 });
 
 export const deleteAll = mutation({
-  args: {
-    sessionToken: v.string(),
-  },
-  handler: async (ctx, args) => {
-    const userId = await getAuthUserIdOrThrow(ctx, args.sessionToken);
+  handler: async (ctx) => {
+    const userId = await getAuthUserIdOrThrow(ctx);
 
     const chats = await ctx.db
       .query("chats")

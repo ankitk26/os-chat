@@ -17,4 +17,7 @@ export default defineConfig({
       },
     }),
   ],
+  ssr: {
+    noExternal: ["@convex-dev/better-auth"],
+  },
 });
