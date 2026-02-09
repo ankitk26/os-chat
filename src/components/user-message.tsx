@@ -1,7 +1,6 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { useParams } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { CopyIcon, PencilIcon, PencilOffIcon } from "lucide-react";
 import { memo, useState } from "react";
@@ -20,17 +19,18 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import UserMessageEditor from "./user-message-editor";
 
 type Props = {
+	chatId: string;
 	message: CustomUIMessage;
 	sendMessage: UseChatHelpers<CustomUIMessage>["sendMessage"];
 	regenerate: UseChatHelpers<CustomUIMessage>["regenerate"];
 };
 
 export default memo(function UserMessage({
+	chatId,
 	message,
 	sendMessage,
 	regenerate,
 }: Props) {
-	const { chatId } = useParams({ from: "/_auth/chat/$chatId" });
 	const messageContent = getMessageContentFromParts(message.parts);
 
 	const [isEditing, setIsEditing] = useState(false);

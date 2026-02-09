@@ -127,6 +127,7 @@ export default function Chat({
 						<div className="mx-auto h-full w-full max-w-full px-2 lg:max-w-3xl lg:px-4">
 							<div className="my-4 space-y-6 pb-40 lg:my-8 lg:space-y-8 lg:pb-32">
 								<ChatMessages
+									chatId={chatId}
 									messages={messages}
 									regenerate={regenerate}
 									sendMessage={sendMessage}
