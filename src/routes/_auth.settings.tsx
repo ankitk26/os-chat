@@ -27,7 +27,13 @@ function SettingsPage() {
 						<h1 className="text-2xl font-bold lg:text-3xl">Settings</h1>
 						<Button
 							onClick={async () => {
-								await authClient.signOut();
+								await authClient.signOut({
+									fetchOptions: {
+										onSuccess: () => {
+											location.reload();
+										},
+									},
+								});
 								navigate({ to: "/login" });
 							}}
 							size={isMobile ? "icon" : "default"}
