@@ -193,3 +193,12 @@ pre.defaultStyles,
 	border-radius: 0px !important;
 	text-wrap: wrap !important;
 }
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+}

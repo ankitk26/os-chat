@@ -46,7 +46,7 @@ export default function DeleteAllChatsAlertDialog() {
 							className="opacity-0 group-hover/chat-header:opacity-100"
 							onClick={() => setIsDialogOpen(true)}
 							size="icon"
-							variant="ghost"
+							variant="destructive"
 						>
 							<TrashIcon />
 						</Button>

@@ -93,16 +93,24 @@ export default function ChatHistoryManager() {
 
 			{/* Actions */}
 			{chats.length > 0 && (
-				<div className="flex items-center justify-between">
-					<Button onClick={handleSelectAll}>
+				<div className="flex items-center gap-2">
+					<Button
+						className="h-7 px-2 text-xs"
+						size="sm"
+						onClick={handleSelectAll}
+					>
 						{isAllSelected ? "Deselect all" : "Select all"}
 					</Button>
 
 					{selectedChats.size > 0 && (
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
-								<Button size="sm" variant="destructive">
-									<Trash2Icon className="size-4" />
+								<Button
+									className="h-7 px-2 text-xs"
+									size="sm"
+									variant="destructive"
+								>
+									<Trash2Icon className="size-3.5" />
 									Delete {selectedChats.size}
 								</Button>
 							</AlertDialogTrigger>
