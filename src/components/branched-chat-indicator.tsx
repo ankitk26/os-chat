@@ -23,7 +23,9 @@ export default function BranchedChatIndicator(props: Props) {
 				</Link>
 			</TooltipTrigger>
 			<TooltipContent>
-				Branched from {props.chat.parentChat?.title}
+				{props.chat.parentChat?.title
+					? `Branched from ${props.chat.parentChat?.title}`
+					: `Parent chat does not exist`}
 			</TooltipContent>
 		</Tooltip>
 	);
