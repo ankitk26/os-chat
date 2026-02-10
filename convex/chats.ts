@@ -98,7 +98,7 @@ export const createChat = mutation({
 		const newChatId = await ctx.db.insert("chats", {
 			uuid: args.uuid,
 			userId,
-			title: "Title for chat",
+			title: "Generating title..",
 			isPinned: false,
 			isBranched: false,
 		});
@@ -203,10 +203,14 @@ export const createSharedChat = mutation({
 		sharedChatUuid: v.string(),
 	},
 	handler: async (ctx, args) => {
-		await getAuthUserIdOrThrow(ctx);
+		const userId = await getAuthUserIdOrThrow(ctx);
 
 		const chat = await ctx.db.get(args.chatId);
 		if (!chat) {
+			throw new Error("Invalid request");
+		}
+
+		if (chat.userId !== userId) {
 			throw new Error("Invalid request");
 		}
 

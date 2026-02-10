@@ -18,7 +18,7 @@ export default function AppSidebarHeader() {
 					{/* <SidebarTrigger /> */}
 					<SidebarMenuButton
 						asChild
-						className="data-slot=sidebar-menu-button:!p-1.5"
+						className="data-[slot=sidebar-menu-button]:p-1.5!"
 					>
 						<Link onClick={() => clearChat()} to="/">
 							<span className="text-base font-medium">os-chat</span>
