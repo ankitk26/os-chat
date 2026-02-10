@@ -4,32 +4,32 @@ import SourcesList from "./sources-list";
 import SourcesToggleButton from "./sources-toggle-button";
 
 export default function AIResponseSources({
-  parts,
+	parts,
 }: {
-  parts: CustomUIMessage["parts"];
+	parts: CustomUIMessage["parts"];
 }) {
-  const [showSources, setShowSources] = useState(false);
-  const sourceParts = parts.filter((part) => part.type === "source-url");
+	const [showSources, setShowSources] = useState(false);
+	const sourceParts = parts.filter((part) => part.type === "source-url");
 
-  const toggleSourcesDisplay = () => {
-    setShowSources((prev) => !prev);
-  };
+	const toggleSourcesDisplay = () => {
+		setShowSources((prev) => !prev);
+	};
 
-  if (sourceParts.length === 0) {
-    return null;
-  }
+	if (sourceParts.length === 0) {
+		return null;
+	}
 
-  return (
-    <div className="mt-8">
-      <div className="flex items-center space-x-2">
-        <SourcesToggleButton
-          showSources={showSources}
-          toggleSourcesDisplay={toggleSourcesDisplay}
-        />
-        <div className="font-mono text-muted-foreground text-sm">Sources</div>
-      </div>
+	return (
+		<div className="mt-8">
+			<div className="flex items-center space-x-2">
+				<SourcesToggleButton
+					showSources={showSources}
+					toggleSourcesDisplay={toggleSourcesDisplay}
+				/>
+				<div className="text-muted-foreground font-mono text-sm">Sources</div>
+			</div>
 
-      {showSources && <SourcesList sourceParts={sourceParts} />}
-    </div>
-  );
+			{showSources && <SourcesList sourceParts={sourceParts} />}
+		</div>
+	);
 }

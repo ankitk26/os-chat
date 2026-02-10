@@ -7,18 +7,18 @@ import RenameFolderDialog from "./rename-folder-dialog";
 import { SidebarGroup, SidebarMenu } from "./ui/sidebar";
 
 export default function AppSidebarFolders() {
-  return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <AppSidebarFolderHeader />
+	return (
+		<SidebarGroup className="group-data-[collapsible=icon]:hidden">
+			<AppSidebarFolderHeader />
 
-      <SidebarMenu className="mt-2">
-        <Suspense fallback={<AppSidebarFolderSkeleton />}>
-          <AppSidebarFoldersList />
-        </Suspense>
-      </SidebarMenu>
+			<SidebarMenu className="mt-2">
+				<Suspense fallback={<AppSidebarFolderSkeleton />}>
+					<AppSidebarFoldersList />
+				</Suspense>
+			</SidebarMenu>
 
-      <DeleteFolderDialog />
-      <RenameFolderDialog />
-    </SidebarGroup>
-  );
+			<DeleteFolderDialog />
+			<RenameFolderDialog />
+		</SidebarGroup>
+	);
 }

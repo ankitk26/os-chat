@@ -1,19 +1,24 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
-import { auth } from "~/lib/auth";
+import { api } from "convex/_generated/api";
+import { fetchAuthQuery } from "~/lib/auth-server";
 
-export const getAuth = createServerFn({ method: "GET" }).handler(async () => {
-  const request = getRequest();
-  if (!request) {
-    throw new Error("No request found");
-  }
-  const authData = await auth.api.getSession({ headers: request.headers });
-  if (!authData) {
-    return null;
-  }
+export const getAuthUser = createServerFn({ method: "GET" }).handler(
+	async () => {
+		const request = getRequest();
+		if (!request) {
+			throw new Error("No request found");
+		}
+		try {
+			const auth = await fetchAuthQuery(api.auth.getCurrentUser);
 
-  return {
-    session: authData.session,
-    user: authData.user,
-  };
-});
+			if (!auth) {
+				return null;
+			}
+			return auth;
+		} catch {
+			// If unauthenticated, return null instead of throwing
+			return null;
+		}
+	},
+);

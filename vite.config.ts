@@ -6,15 +6,18 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [
-    tsconfigPaths(),
-    tailwindcss(),
-    tanstackStart(),
-    nitro({ config: { preset: "vercel" } }),
-    viteReact({
-      babel: {
-        plugins: [["babel-plugin-react-compiler"]],
-      },
-    }),
-  ],
+	plugins: [
+		tsconfigPaths(),
+		tailwindcss(),
+		tanstackStart(),
+		nitro(),
+		viteReact({
+			babel: {
+				plugins: [["babel-plugin-react-compiler"]],
+			},
+		}),
+	],
+	ssr: {
+		noExternal: ["@convex-dev/better-auth"],
+	},
 });
