@@ -14,7 +14,7 @@ export default function ContactSection() {
           This project is Open-Source.
         </p>
         <CustomExternalLink href={import.meta.env.VITE_GITHUB_REPO_LINK}>
-          <Button className="w-full lg:w-32">
+          <Button className="w-28" size="sm">
             <GithubIcon />
             os-chat
           </Button>
@@ -26,7 +26,7 @@ export default function ContactSection() {
           For bugs, features, or general inquiries:
         </p>
         <CustomExternalLink href={import.meta.env.VITE_X_URL}>
-          <Button className="w-full lg:w-32">
+          <Button className="w-28" size="sm">
             <svg
               className="size-4 fill-primary-foreground"
               role="img"

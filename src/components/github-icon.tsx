@@ -1,7 +1,8 @@
 export default function GithubIcon() {
 	return (
 		<svg
-			className="fill-primary-foreground stroke-primary-foreground size-5"
+			className="size-5"
+			fill="currentColor"
 			role="img"
 			viewBox="0 0 24 24"
 			xmlns="http://www.w3.org/2000/svg"
