@@ -21,13 +21,15 @@ type Props = {
 export default function AppSidebarChatItemActions(props: Props) {
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button
-					className="bg-secondary text-sidebar-foreground hover:bg-sidebar size-7 shrink-0 rounded-sm opacity-0 transition-opacity duration-200 group-hover/chats:opacity-100"
-					size="icon"
-				>
-					<EllipsisVerticalIcon />
-				</Button>
+			<DropdownMenuTrigger
+				render={
+					<Button
+						className="bg-secondary text-sidebar-foreground hover:bg-sidebar size-7 shrink-0 rounded-sm opacity-0 transition-opacity duration-200 group-hover/chats:opacity-100"
+						size="icon"
+					/>
+				}
+			>
+				<EllipsisVerticalIcon />
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-50">
 				<AppSidebarChatItemRename chat={props.chat} />

@@ -43,14 +43,16 @@ export default function ShareChatDialogFooter() {
 
 	return (
 		<DialogFooter className="flex-col gap-2 sm:flex-row">
-			<DialogClose asChild>
-				<Button
-					className="w-full sm:w-auto"
-					disabled={isLoading}
-					variant="outline"
-				>
-					Close
-				</Button>
+			<DialogClose
+				render={
+					<Button
+						className="w-full sm:w-auto"
+						disabled={isLoading}
+						variant="outline"
+					/>
+				}
+			>
+				Close
 			</DialogClose>
 			{Boolean(shareUrl) && (
 				<Button

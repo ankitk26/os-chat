@@ -114,33 +114,37 @@ export default memo(function UserMessage({
 			</div>
 			<div className="flex opacity-0 transition-opacity duration-200 group-hover:opacity-100">
 				<Tooltip>
-					<TooltipTrigger asChild>
-						<Button
-							onClick={() => {
-								setIsEditing((prev) => !prev);
-							}}
-							size="icon"
-							variant="ghost"
-						>
-							{isEditing ? <PencilOffIcon /> : <PencilIcon />}
-						</Button>
+					<TooltipTrigger
+						render={
+							<Button
+								onClick={() => {
+									setIsEditing((prev) => !prev);
+								}}
+								size="icon"
+								variant="ghost"
+							/>
+						}
+					>
+						{isEditing ? <PencilOffIcon /> : <PencilIcon />}
 					</TooltipTrigger>
 					<TooltipContent>Edit message</TooltipContent>
 				</Tooltip>
 				<BranchOffButton message={message} sendMessage={sendMessage} />
 				<RetryModelDropdown message={message} regenerate={regenerate} />
 				<Tooltip>
-					<TooltipTrigger asChild>
-						<Button
-							onClick={async () => {
-								await navigator.clipboard.writeText(messageContent);
-								toast.success("Copied to clipboard");
-							}}
-							size="icon"
-							variant="ghost"
-						>
-							<CopyIcon />
-						</Button>
+					<TooltipTrigger
+						render={
+							<Button
+								onClick={async () => {
+									await navigator.clipboard.writeText(messageContent);
+									toast.success("Copied to clipboard");
+								}}
+								size="icon"
+								variant="ghost"
+							/>
+						}
+					>
+						<CopyIcon />
 					</TooltipTrigger>
 					<TooltipContent>Copy to clipboard</TooltipContent>
 				</Tooltip>

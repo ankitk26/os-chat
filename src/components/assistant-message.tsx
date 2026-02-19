@@ -48,17 +48,19 @@ export default React.memo(function AssistantMessage(props: Props) {
 			<div className="flex items-center gap-3 duration-200 md:opacity-0 group-hover:md:opacity-100 lg:gap-4">
 				<div className="flex items-center gap-1">
 					<Tooltip>
-						<TooltipTrigger asChild>
-							<Button
-								onClick={async () => {
-									await navigator.clipboard.writeText(messageContent);
-									toast.success("Copied to clipboard");
-								}}
-								size="icon"
-								variant="ghost"
-							>
-								<CopyIcon />
-							</Button>
+						<TooltipTrigger
+							render={
+								<Button
+									onClick={async () => {
+										await navigator.clipboard.writeText(messageContent);
+										toast.success("Copied to clipboard");
+									}}
+									size="icon"
+									variant="ghost"
+								/>
+							}
+						>
+							<CopyIcon />
 						</TooltipTrigger>
 						<TooltipContent>Copy to clipboard</TooltipContent>
 					</Tooltip>

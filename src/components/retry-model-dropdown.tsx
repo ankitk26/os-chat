@@ -15,7 +15,6 @@ import {
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuPortal,
-	DropdownMenuSeparator,
 	DropdownMenuSeparatorWithText,
 	DropdownMenuSub,
 	DropdownMenuSubContent,
@@ -83,13 +82,13 @@ export default function RetryModelDropdown(props: Props) {
 	return (
 		<DropdownMenu>
 			<Tooltip>
-				<DropdownMenuTrigger asChild>
-					<TooltipTrigger asChild>
-						<Button size="icon" variant="ghost">
+				<DropdownMenuTrigger
+					render={
+						<TooltipTrigger render={<Button size="icon" variant="ghost" />}>
 							<RefreshCcwIcon />
-						</Button>
-					</TooltipTrigger>
-				</DropdownMenuTrigger>
+						</TooltipTrigger>
+					}
+				/>
 				<TooltipContent>Retry message</TooltipContent>
 			</Tooltip>
 			<DropdownMenuContent className="w-[200px]">
@@ -104,8 +103,6 @@ export default function RetryModelDropdown(props: Props) {
 						onCheckedChange={toggleIsWebSearch}
 					/>
 				</div>
-
-				<DropdownMenuSeparator />
 
 				<DropdownMenuItem
 					className="flex items-center gap-3 text-xs"

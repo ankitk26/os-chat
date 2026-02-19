@@ -16,6 +16,7 @@
 		"@ai-sdk/openai": "^3.0.30",
 		"@ai-sdk/react": "^3.0.94",
 		"@ai-sdk/xai": "^3.0.57",
+		"@base-ui/react": "^1.2.0",
 		"@convex-dev/better-auth": "^0.10.10",
 		"@convex-dev/react-query": "0.1.0",
 		"@fontsource-variable/geist": "^5.2.8",

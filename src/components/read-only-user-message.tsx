@@ -23,17 +23,19 @@ export default function ReadOnlyUserMessage({ message }: Props) {
 			{/* Copy button container */}
 			<div className="flex opacity-0 transition-opacity duration-200 group-hover:opacity-100">
 				<Tooltip>
-					<TooltipTrigger asChild>
-						<Button
-							onClick={async () => {
-								await navigator.clipboard.writeText(messageContent);
-								toast.success("Copied to clipboard");
-							}}
-							size="icon"
-							variant="ghost"
-						>
-							<CopyIcon />
-						</Button>
+					<TooltipTrigger
+						render={
+							<Button
+								onClick={async () => {
+									await navigator.clipboard.writeText(messageContent);
+									toast.success("Copied to clipboard");
+								}}
+								size="icon"
+								variant="ghost"
+							/>
+						}
+					>
+						<CopyIcon />
 					</TooltipTrigger>
 					<TooltipContent>Copy to clipboard</TooltipContent>
 				</Tooltip>

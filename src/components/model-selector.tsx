@@ -32,11 +32,9 @@ export default function ModelSelector() {
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button size="sm" variant="outline">
-					{selectedModel.name}
-					<ChevronDownIcon />
-				</Button>
+			<DropdownMenuTrigger render={<Button size="sm" variant="outline" />}>
+				{selectedModel.name}
+				<ChevronDownIcon />
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-[200px]">
 				{accessibleModels.map((provider) => (

@@ -94,9 +94,7 @@ export default function ChatRenameDialog() {
 					/>
 				</form>
 				<DialogFooter>
-					<DialogClose asChild>
-						<Button variant="ghost">Cancel</Button>
-					</DialogClose>
+					<DialogClose render={<Button variant="ghost" />}>Cancel</DialogClose>
 					<Button
 						disabled={
 							renameChatMutation.isPending ||

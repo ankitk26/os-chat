@@ -26,13 +26,15 @@ export default function AppSidebarFolderItemActions({ folder }: Props) {
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button
-					className="bg-secondary text-sidebar-foreground hover:bg-sidebar size-7 shrink-0 rounded-sm opacity-0 transition-opacity duration-200 group-hover/folders:opacity-100"
-					size="icon"
-				>
-					<EllipsisVerticalIcon />
-				</Button>
+			<DropdownMenuTrigger
+				render={
+					<Button
+						className="bg-secondary text-sidebar-foreground hover:bg-sidebar size-7 shrink-0 rounded-sm opacity-0 transition-opacity duration-200 group-hover/folders:opacity-100"
+						size="icon"
+					/>
+				}
+			>
+				<EllipsisVerticalIcon />
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
 				<DropdownMenuItem

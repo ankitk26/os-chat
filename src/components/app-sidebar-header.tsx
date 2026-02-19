@@ -17,12 +17,10 @@ export default function AppSidebarHeader() {
 				<SidebarMenuItem className="flex items-center">
 					{/* <SidebarTrigger /> */}
 					<SidebarMenuButton
-						asChild
+						render={<Link onClick={() => clearChat()} to="/" />}
 						className="data-[slot=sidebar-menu-button]:p-1.5!"
 					>
-						<Link onClick={() => clearChat()} to="/">
-							<span className="text-base font-medium">os-chat</span>
-						</Link>
+						<span className="text-base font-medium">os-chat</span>
 					</SidebarMenuButton>
 					<ThemeToggler />
 				</SidebarMenuItem>
