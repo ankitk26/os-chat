@@ -128,7 +128,7 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
 			</Tooltip>
 			<DropdownMenuContent className="w-50">
 				<DropdownMenuItem
-					className="flex items-center gap-3 text-xs"
+					className="flex items-center gap-3 py-2.5 text-xs"
 					onClick={() => handleBranchOff(selectedModel)}
 				>
 					<RefreshCcwIcon className="size-4" />

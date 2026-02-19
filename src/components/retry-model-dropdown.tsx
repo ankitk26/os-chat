@@ -105,7 +105,7 @@ export default function RetryModelDropdown(props: Props) {
 				</div>
 
 				<DropdownMenuItem
-					className="flex items-center gap-3 text-xs"
+					className="flex items-center gap-3 py-2.5 text-xs"
 					onClick={async () => {
 						await handleRetry(selectedModel);
 					}}
