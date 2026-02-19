@@ -13,6 +13,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type { ReactNode } from "react";
 import { Toaster } from "~/components/ui/sonner";
+import { TooltipProvider } from "~/components/ui/tooltip";
 import { authClient } from "~/lib/auth-client";
 import { getToken } from "~/lib/auth-server";
 import { cn } from "~/lib/utils";
@@ -108,12 +109,14 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 					disableTransitionOnChange
 					enableSystem
 				>
-					<ChatProvider>
-						<div>{children}</div>
-						<Toaster duration={800} style={{ fontFamily: "inherit" }} />
-						<ReactQueryDevtools />
-						<Scripts />
-					</ChatProvider>
+					<TooltipProvider delay={0}>
+						<ChatProvider>
+							<div>{children}</div>
+							<Toaster duration={800} style={{ fontFamily: "inherit" }} />
+							<ReactQueryDevtools />
+							<Scripts />
+						</ChatProvider>
+					</TooltipProvider>
 				</NextThemesProvider>
 			</body>
 		</html>
