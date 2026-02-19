@@ -121,7 +121,7 @@ export const Route = createFileRoute("/api/chat")({
 					isWebSearchEnabled,
 					apiKeys,
 					useOpenRouter,
-					// chatId,
+					chatId,
 				} = chatRequestBody;
 
 				const modelToUse = getModelToUse(
