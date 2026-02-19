@@ -13,25 +13,27 @@ export default function AppSidebarChatItem({ chat }: Props) {
 	const { clearChat } = useSharedChatContext();
 
 	return (
-		<Link
-			activeProps={{ className: "bg-secondary text-secondary-foreground" }}
-			className="group/chats hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground flex cursor-pointer items-center justify-between rounded-md px-2 py-2 text-sm"
-			onClick={() => {
-				if (chatId === chat.uuid) {
-					return;
-				}
-				clearChat();
-			}}
-			params={{ chatId: chat.uuid }}
-			to="/chat/$chatId"
-		>
+		<div className="group/chats hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground flex cursor-pointer items-center justify-between rounded-md px-2 py-2 text-sm">
 			{chat.isBranched && <BranchedChatIndicator chat={chat} />}
 
-			<h4 className="line-clamp-1 w-full" title={chat.title}>
-				{chat.title}
-			</h4>
+			<Link
+				activeProps={{ className: "bg-secondary text-secondary-foreground" }}
+				className="flex flex-1 items-center overflow-hidden"
+				onClick={() => {
+					if (chatId === chat.uuid) {
+						return;
+					}
+					clearChat();
+				}}
+				params={{ chatId: chat.uuid }}
+				to="/chat/$chatId"
+			>
+				<h4 className="line-clamp-1 w-full" title={chat.title}>
+					{chat.title}
+				</h4>
+			</Link>
 
 			<AppSidebarChatItemActions chat={chat} />
-		</Link>
+		</div>
 	);
 }

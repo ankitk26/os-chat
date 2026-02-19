@@ -13,7 +13,7 @@ export default function BranchedChatIndicator(props: Props) {
 
 	return (
 		<Tooltip>
-			<TooltipTrigger>
+			<TooltipTrigger asChild>
 				<Link
 					onClick={() => clearChat()}
 					params={{ chatId: props.chat.parentChat?.uuid ?? props.chat.uuid }}

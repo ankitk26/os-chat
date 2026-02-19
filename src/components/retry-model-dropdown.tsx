@@ -82,16 +82,16 @@ export default function RetryModelDropdown(props: Props) {
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger>
-				<Tooltip>
+			<Tooltip>
+				<DropdownMenuTrigger asChild>
 					<TooltipTrigger asChild>
 						<Button size="icon" variant="ghost">
 							<RefreshCcwIcon />
 						</Button>
 					</TooltipTrigger>
-					<TooltipContent>Retry message</TooltipContent>
-				</Tooltip>
-			</DropdownMenuTrigger>
+				</DropdownMenuTrigger>
+				<TooltipContent>Retry message</TooltipContent>
+			</Tooltip>
 			<DropdownMenuContent className="w-[200px]">
 				{/* Web Search switch */}
 				<div className="flex items-center justify-between px-2 py-3">
