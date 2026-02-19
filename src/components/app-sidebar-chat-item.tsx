@@ -3,6 +3,11 @@ import { useSharedChatContext } from "~/providers/chat-provider";
 import type { SidebarChatType } from "~/types";
 import AppSidebarChatItemActions from "./app-sidebar-chat-item-actions";
 import BranchedChatIndicator from "./branched-chat-indicator";
+import {
+	SidebarMenuButton,
+	SidebarMenuItem,
+	SidebarMenuAction,
+} from "./ui/sidebar";
 
 type Props = {
 	chat: SidebarChatType;
@@ -13,31 +18,35 @@ export default function AppSidebarChatItem({ chat }: Props) {
 	const { clearChat } = useSharedChatContext();
 	const isActive = chatId === chat.uuid;
 
-	return (
-		<div
-			className={`group/chats hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground flex cursor-pointer items-center justify-between rounded-md px-2 py-2 text-sm ${
-				isActive ? "bg-secondary text-secondary-foreground" : ""
-			}`}
-		>
-			{chat.isBranched && <BranchedChatIndicator chat={chat} />}
+	const handleClick = () => {
+		if (chatId === chat.uuid) {
+			return;
+		}
+		clearChat();
+	};
 
+	return (
+		<SidebarMenuItem>
 			<Link
-				className="flex flex-1 items-center overflow-hidden"
-				onClick={() => {
-					if (chatId === chat.uuid) {
-						return;
-					}
-					clearChat();
-				}}
+				onClick={handleClick}
 				params={{ chatId: chat.uuid }}
 				to="/chat/$chatId"
+				className="flex w-full"
 			>
-				<h4 className="line-clamp-1 w-full" title={chat.title}>
-					{chat.title}
-				</h4>
+				<SidebarMenuButton
+					isActive={isActive}
+					tooltip={chat.title}
+					className="w-full"
+				>
+					{chat.isBranched && <BranchedChatIndicator chat={chat} />}
+					<span className="line-clamp-1 flex-1" title={chat.title}>
+						{chat.title}
+					</span>
+				</SidebarMenuButton>
 			</Link>
-
-			<AppSidebarChatItemActions chat={chat} />
-		</div>
+			<SidebarMenuAction showOnHover>
+				<AppSidebarChatItemActions chat={chat} />
+			</SidebarMenuAction>
+		</SidebarMenuItem>
 	);
 }

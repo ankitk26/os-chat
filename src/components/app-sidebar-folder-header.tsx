@@ -1,7 +1,6 @@
 import { FolderIcon, PlusIcon } from "lucide-react";
 import { useFolderActionStore } from "~/stores/folder-actions-store";
 import { Button } from "./ui/button";
-import { SidebarGroupLabel } from "./ui/sidebar";
 
 export default function AppSidebarFolderHeader() {
 	const setIsCreateModalOpen = useFolderActionStore(
@@ -9,19 +8,20 @@ export default function AppSidebarFolderHeader() {
 	);
 
 	return (
-		<SidebarGroupLabel className="flex items-center justify-between gap-2 text-sm">
-			<div className="flex items-center gap-2">
-				<FolderIcon className="size-4" />
-				Folders
+		<div className="flex items-center justify-between px-2 py-1">
+			<div className="flex items-center">
+				<FolderIcon className="text-sidebar-foreground/70 mr-2 size-4" />
+				<span className="text-sidebar-foreground/70 text-xs">Folders</span>
 			</div>
 			<Button
-				className="size-7 rounded"
 				onClick={() => setIsCreateModalOpen(true)}
 				size="icon"
 				variant="ghost"
+				className="h-6 w-6 shrink-0"
+				title="Add Folder"
 			>
-				<PlusIcon />
+				<PlusIcon className="size-3.5" />
 			</Button>
-		</SidebarGroupLabel>
+		</div>
 	);
 }

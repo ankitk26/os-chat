@@ -1,7 +1,9 @@
 import { useNavigate } from "@tanstack/react-router";
+import { PlusIcon } from "lucide-react";
 import { useSharedChatContext } from "~/providers/chat-provider";
 import {
 	SidebarGroup,
+	SidebarGroupContent,
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
@@ -18,17 +20,20 @@ export default function AppSidebarNewChatButton() {
 
 	return (
 		<SidebarGroup>
-			<SidebarMenu>
-				<SidebarMenuItem className="flex items-center gap-2">
-					<SidebarMenuButton
-						className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground flex w-full min-w-8 cursor-pointer items-center justify-center text-center font-semibold duration-200 ease-linear"
-						onClick={handleNewChat}
-						size="default"
-					>
-						New Chat
-					</SidebarMenuButton>
-				</SidebarMenuItem>
-			</SidebarMenu>
+			<SidebarGroupContent>
+				<SidebarMenu>
+					<SidebarMenuItem>
+						<SidebarMenuButton
+							onClick={handleNewChat}
+							tooltip="New Chat"
+							className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground flex w-full min-w-8 cursor-pointer items-center justify-center text-center font-semibold duration-200 ease-linear"
+						>
+							<PlusIcon className="size-4" />
+							<span>New Chat</span>
+						</SidebarMenuButton>
+					</SidebarMenuItem>
+				</SidebarMenu>
+			</SidebarGroupContent>
 		</SidebarGroup>
 	);
 }

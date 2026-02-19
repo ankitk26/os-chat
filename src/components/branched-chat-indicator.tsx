@@ -11,23 +11,41 @@ type Props = {
 export default function BranchedChatIndicator(props: Props) {
 	const { clearChat } = useSharedChatContext();
 
+	const handleClick = () => {
+		clearChat();
+	};
+
+	if (!props.chat.parentChat?.uuid) {
+		return (
+			<Tooltip>
+				<TooltipTrigger
+					render={
+						<span>
+							<SplitIcon className="text-sidebar-foreground/70 size-4 shrink-0" />
+						</span>
+					}
+				/>
+				<TooltipContent>Parent chat does not exist</TooltipContent>
+			</Tooltip>
+		);
+	}
+
 	return (
 		<Tooltip>
 			<TooltipTrigger
 				render={
 					<Link
-						onClick={() => clearChat()}
-						params={{ chatId: props.chat.parentChat?.uuid ?? props.chat.uuid }}
 						to="/chat/$chatId"
-					/>
+						params={{ chatId: props.chat.parentChat.uuid }}
+						onClick={handleClick}
+						className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex cursor-pointer items-center justify-center rounded p-0.5"
+					>
+						<SplitIcon className="size-4 shrink-0" />
+					</Link>
 				}
-			>
-				<SplitIcon className="text-muted-foreground hover:text-secondary-foreground mr-2 size-4 cursor-pointer" />
-			</TooltipTrigger>
+			/>
 			<TooltipContent>
-				{props.chat.parentChat?.title
-					? `Branched from ${props.chat.parentChat?.title}`
-					: `Parent chat does not exist`}
+				Branched from {props.chat.parentChat.title}
 			</TooltipContent>
 		</Tooltip>
 	);

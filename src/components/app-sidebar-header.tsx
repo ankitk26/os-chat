@@ -2,29 +2,33 @@ import { Link } from "@tanstack/react-router";
 import { useSharedChatContext } from "~/providers/chat-provider";
 import { ThemeToggler } from "./theme-toggle";
 import {
-	SidebarHeader,
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
+	SidebarTrigger,
 } from "./ui/sidebar";
 
 export default function AppSidebarHeader() {
 	const { clearChat } = useSharedChatContext();
 
 	return (
-		<SidebarHeader>
-			<SidebarMenu>
-				<SidebarMenuItem className="flex items-center">
-					{/* <SidebarTrigger /> */}
+		<SidebarMenu>
+			<SidebarMenuItem className="flex items-center gap-1">
+				<SidebarTrigger className="h-8 w-8" />
+				<Link
+					onClick={() => clearChat()}
+					to="/"
+					className="flex flex-1 justify-center"
+				>
 					<SidebarMenuButton
-						render={<Link onClick={() => clearChat()} to="/" />}
-						className="data-[slot=sidebar-menu-button]:p-1.5!"
+						tooltip="os-chat"
+						className="w-full justify-center"
 					>
 						<span className="text-base font-medium">os-chat</span>
 					</SidebarMenuButton>
-					<ThemeToggler />
-				</SidebarMenuItem>
-			</SidebarMenu>
-		</SidebarHeader>
+				</Link>
+				<ThemeToggler />
+			</SidebarMenuItem>
+		</SidebarMenu>
 	);
 }
