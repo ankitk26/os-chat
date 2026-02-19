@@ -1,17 +1,17 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
-import type { ChatStatus } from "ai";
-import type { Id } from "convex/_generated/dataModel";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
+import type { ChatStatus } from "ai";
 import { api } from "convex/_generated/api";
+import type { Id } from "convex/_generated/dataModel";
 import { useEffect, useRef, useState } from "react";
-import type { CustomUIMessage } from "~/types";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getChatTitle } from "~/server-fns/get-chat-title";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import { useTextSelectionStore } from "~/stores/text-selection-store";
+import type { CustomUIMessage } from "~/types";
 import PromptActions from "./prompt-actions";
 
 type Props = {

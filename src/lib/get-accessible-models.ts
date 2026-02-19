@@ -1,9 +1,9 @@
+import { allModelProviders } from "~/constants/model-providers";
 import type {
 	ApiKeys,
 	ModelWithAvailability,
 	ProviderGroupWithAvailability,
 } from "~/types";
-import { allModelProviders } from "~/constants/model-providers";
 
 export function getAccessibleModels(
 	apiKeys: ApiKeys,

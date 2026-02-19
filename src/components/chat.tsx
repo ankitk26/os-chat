@@ -1,8 +1,8 @@
 import { useChat } from "@ai-sdk/react";
 import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import type { CustomUIMessage } from "~/types";
 import { useSharedChatContext } from "~/providers/chat-provider";
+import type { CustomUIMessage } from "~/types";
 import AiResponseAlert from "./ai-response-error";
 import ChatLoadingIndicator from "./chat-loading-indicator";
 import ChatMessages from "./chat-messages";

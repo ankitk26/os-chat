@@ -1,8 +1,8 @@
 import type { Doc } from "convex/_generated/dataModel";
 import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
-import type { CustomUIMessage } from "~/types";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
+import type { CustomUIMessage } from "~/types";
 import AIResponseContent from "./ai-response-content";
 import AIResponseReasoning from "./ai-response-reasoning";
 import AIResponseSources from "./ai-response-sources";

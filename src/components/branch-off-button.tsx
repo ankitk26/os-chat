@@ -4,12 +4,12 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { KeyIcon, RefreshCcwIcon, SplitIcon } from "lucide-react";
-import type { CustomUIMessage, Model } from "~/types";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { useSharedChatContext } from "~/providers/chat-provider";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
+import type { CustomUIMessage, Model } from "~/types";
 import ModelProviderIcon from "./model-provider-icon";
 import { Button } from "./ui/button";
 import {

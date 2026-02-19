@@ -3,10 +3,10 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { Suspense, useMemo } from "react";
-import type { CustomUIMessage } from "~/types";
 import AssistantMessageSkeleton from "~/components/assistant-message-skeleton";
 import Chat from "~/components/chat";
 import UserMessageSkeleton from "~/components/user-message-skeleton";
+import type { CustomUIMessage } from "~/types";
 
 export const Route = createFileRoute("/_auth/chat/$chatId")({
 	component: RouteComponent,

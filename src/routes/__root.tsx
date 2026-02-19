@@ -1,7 +1,6 @@
+import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
 import type { ConvexQueryClient } from "@convex-dev/react-query";
 import type { QueryClient } from "@tanstack/react-query";
-import type { ReactNode } from "react";
-import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
 	createRootRouteWithContext,
@@ -12,6 +11,7 @@ import {
 } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
+import type { ReactNode } from "react";
 import { Toaster } from "~/components/ui/sonner";
 import { authClient } from "~/lib/auth-client";
 import { getToken } from "~/lib/auth-server";
