@@ -127,6 +127,7 @@ export default function ChatHistoryManager() {
 								<AlertDialogFooter>
 									<AlertDialogCancel>Cancel</AlertDialogCancel>
 									<AlertDialogAction
+										variant="destructive"
 										disabled={deleteChatMutation.isPending}
 										onClick={() => handleDeleteSelected()}
 									>

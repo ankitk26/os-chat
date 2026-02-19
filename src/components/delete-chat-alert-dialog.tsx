@@ -66,6 +66,7 @@ export default function DeleteChatAlertDialog() {
 				<AlertDialogFooter>
 					<AlertDialogCancel>Cancel</AlertDialogCancel>
 					<AlertDialogAction
+						variant="destructive"
 						disabled={deleteChatMutation.isPending}
 						onClick={() => {
 							if (!selectedChat) {
