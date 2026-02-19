@@ -5,13 +5,13 @@ import { createXai } from "@ai-sdk/xai";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, smoothStream, streamText } from "ai";
-// import { getPostUrl } from "~/server-fns/get-post-url";
-import type { ApiKeys, CustomUIMessage, Model } from "~/types";
 import { defaultSelectedModel } from "~/constants/model-providers";
 import { systemMessage } from "~/constants/system-message";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { createMessageServerFn } from "~/server-fns/create-message";
 import { getAuthUser } from "~/server-fns/get-auth";
+// import { getPostUrl } from "~/server-fns/get-post-url";
+import type { ApiKeys, CustomUIMessage, Model } from "~/types";
 
 type ChatRequestBody = {
 	messages: CustomUIMessage[];

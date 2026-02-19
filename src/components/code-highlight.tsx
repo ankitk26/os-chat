@@ -1,6 +1,6 @@
-import type { ReactNode } from "react";
 import { CopyIcon } from "lucide-react";
 import { useTheme } from "next-themes";
+import type { ReactNode } from "react";
 import ShikiHighlighter, { type Element, isInlineCode } from "react-shiki";
 import { toast } from "sonner";
 import { Button } from "./ui/button";

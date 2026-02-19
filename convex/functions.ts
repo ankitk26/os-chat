@@ -3,8 +3,8 @@ import {
 	customMutation,
 } from "convex-helpers/server/customFunctions";
 import { Triggers } from "convex-helpers/server/triggers";
-import type { DataModel } from "./_generated/dataModel";
 import { internal } from "./_generated/api";
+import type { DataModel } from "./_generated/dataModel";
 import {
 	internalMutation as rawInternalMutation,
 	mutation as rawMutation,

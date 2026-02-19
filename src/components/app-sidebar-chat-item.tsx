@@ -1,6 +1,6 @@
 import { Link, useParams } from "@tanstack/react-router";
-import type { SidebarChatType } from "~/types";
 import { useSharedChatContext } from "~/providers/chat-provider";
+import type { SidebarChatType } from "~/types";
 import AppSidebarChatItemActions from "./app-sidebar-chat-item-actions";
 import BranchedChatIndicator from "./branched-chat-indicator";
 

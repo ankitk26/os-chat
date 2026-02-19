@@ -1,6 +1,6 @@
 import { EditIcon } from "lucide-react";
-import type { SidebarChatType } from "~/types";
 import { useChatActionStore } from "~/stores/chat-actions-store";
+import type { SidebarChatType } from "~/types";
 import { DropdownMenuItem } from "./ui/dropdown-menu";
 
 type Props = {

@@ -1,6 +1,6 @@
 import { EditIcon, EllipsisVerticalIcon, Trash2Icon } from "lucide-react";
-import type { SidebarFolder } from "~/types";
 import { useFolderActionStore } from "~/stores/folder-actions-store";
+import type { SidebarFolder } from "~/types";
 import { Button } from "./ui/button";
 import {
 	DropdownMenu,

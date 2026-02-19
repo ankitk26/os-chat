@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { SplitIcon } from "lucide-react";
-import type { SidebarChatType } from "~/types";
 import { useSharedChatContext } from "~/providers/chat-provider";
+import type { SidebarChatType } from "~/types";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {

@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import type { Model } from "~/types";
 import { defaultSelectedModel } from "~/constants/model-providers";
+import type { Model } from "~/types";
 
 type ModelStoreState = {
 	selectedModel: Model;
