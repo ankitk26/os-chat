@@ -4,7 +4,7 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { createXai } from "@ai-sdk/xai";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { createFileRoute } from "@tanstack/react-router";
-import { convertToModelMessages, smoothStream, streamText } from "ai";
+import { convertToModelMessages, smoothStream, streamText, tool } from "ai";
 import { defaultSelectedModel } from "~/constants/model-providers";
 import { systemMessage } from "~/constants/system-message";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
@@ -121,7 +121,7 @@ export const Route = createFileRoute("/api/chat")({
 					isWebSearchEnabled,
 					apiKeys,
 					useOpenRouter,
-					chatId,
+					// chatId,
 				} = chatRequestBody;
 
 				const modelToUse = getModelToUse(
@@ -143,12 +143,9 @@ export const Route = createFileRoute("/api/chat")({
 					abortSignal: request.signal,
 					...(isWebSearchEnabled && {
 						tools: {
-							google_search: google.tools.googleSearch({}),
+							google_search: google.tools.googleSearch({}) as any,
 						},
 					}),
-					onError: ({ error }) => {
-						console.error("streamText error:", error);
-					},
 				});
 
 				return result.toUIMessageStreamResponse({
