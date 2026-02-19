@@ -21,13 +21,10 @@ export default function AIResponseSources({
 
 	return (
 		<div className="mt-8">
-			<div className="flex items-center space-x-2">
-				<SourcesToggleButton
-					showSources={showSources}
-					toggleSourcesDisplay={toggleSourcesDisplay}
-				/>
-				<div className="text-muted-foreground font-mono text-sm">Sources</div>
-			</div>
+			<SourcesToggleButton
+				showSources={showSources}
+				toggleSourcesDisplay={toggleSourcesDisplay}
+			/>
 
 			{showSources && <SourcesList sourceParts={sourceParts} />}
 		</div>

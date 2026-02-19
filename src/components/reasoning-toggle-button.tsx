@@ -1,24 +1,31 @@
-import { ChevronDownIcon, ChevronRightIcon } from "lucide-react";
-import { Button } from "./ui/button";
+import { BrainIcon, ChevronDownIcon, ChevronRightIcon } from "lucide-react";
 
 type Props = {
 	toggleReasoningDisplay: () => void;
 	showReasoning: boolean;
+	messageContent: string;
 };
 
 export default function ReasoningToggleButton(props: Props) {
 	return (
-		<Button
-			className="size-5 cursor-pointer rounded"
+		<div
+			className="flex cursor-pointer items-center gap-2 rounded px-1 py-1"
 			onClick={props.toggleReasoningDisplay}
-			size="icon"
-			variant="ghost"
 		>
 			{props.showReasoning ? (
 				<ChevronDownIcon className="size-4" />
 			) : (
 				<ChevronRightIcon className="size-4" />
 			)}
-		</Button>
+
+			<div className="text-muted-foreground flex items-center gap-2 font-mono text-sm select-none">
+				<BrainIcon className="size-4" />
+				{props.messageContent ? (
+					<div>Reasoning</div>
+				) : (
+					<div className="animate-pulse">Thinking...</div>
+				)}
+			</div>
+		</div>
 	);
 }

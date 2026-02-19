@@ -1,5 +1,4 @@
-import { ChevronDownIcon, ChevronRightIcon } from "lucide-react";
-import { Button } from "./ui/button";
+import { ChevronDownIcon, ChevronRightIcon, NewspaperIcon } from "lucide-react";
 
 type Props = {
 	toggleSourcesDisplay: () => void;
@@ -8,17 +7,19 @@ type Props = {
 
 export default function SourcesToggleButton(props: Props) {
 	return (
-		<Button
-			className="size-5 cursor-pointer rounded"
+		<div
+			className="flex cursor-pointer items-center gap-2 rounded px-1 py-1 select-none"
 			onClick={props.toggleSourcesDisplay}
-			size="icon"
-			variant="ghost"
 		>
 			{props.showSources ? (
 				<ChevronDownIcon className="size-4" />
 			) : (
 				<ChevronRightIcon className="size-4" />
 			)}
-		</Button>
+			<div className="text-muted-foreground flex items-center gap-2 font-mono text-sm select-none">
+				<NewspaperIcon className="size-4" />
+				Sources
+			</div>
+		</div>
 	);
 }
