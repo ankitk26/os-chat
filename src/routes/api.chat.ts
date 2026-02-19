@@ -4,7 +4,7 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { createXai } from "@ai-sdk/xai";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { createFileRoute } from "@tanstack/react-router";
-import { convertToModelMessages, smoothStream, streamText, tool } from "ai";
+import { convertToModelMessages, smoothStream, streamText } from "ai";
 import { defaultSelectedModel } from "~/constants/model-providers";
 import { systemMessage } from "~/constants/system-message";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
