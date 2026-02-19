@@ -19,6 +19,15 @@ export const Route = createFileRoute("/login")({
 function RouteComponent() {
 	const [isLoading, setIsLoading] = useState(false);
 
+	const handleLogin = async () => {
+		setIsLoading(true);
+		try {
+			await authClient.signIn.social({ provider: "github" });
+		} catch {
+			setIsLoading(false);
+		}
+	};
+
 	return (
 		<div className="from-background to-muted/20 flex min-h-screen items-center justify-center bg-linear-to-br p-4">
 			<div className="w-full max-w-md space-y-8">
@@ -43,20 +52,12 @@ function RouteComponent() {
 					</CardHeader>
 					<CardContent className="space-y-4">
 						<Button
-							className="h-11 w-full"
+							className="h-9 w-full gap-2"
 							disabled={isLoading}
-							onClick={async () => {
-								setIsLoading(true);
-								try {
-									await authClient.signIn.social({ provider: "github" });
-								} catch {
-									setIsLoading(false);
-								}
-							}}
-							size="lg"
+							onClick={handleLogin}
 						>
 							{isLoading ? (
-								<LoaderIcon className="h-4 w-4 animate-spin" />
+								<LoaderIcon className="size-4 animate-spin" />
 							) : (
 								<GithubIcon />
 							)}
