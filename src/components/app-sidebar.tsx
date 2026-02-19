@@ -14,10 +14,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 		<Sidebar collapsible="offcanvas" {...props}>
 			<SidebarHeader>
 				<AppSidebarHeader />
+				<AppSidebarNewChatButton />
 			</SidebarHeader>
 
 			<SidebarContent>
-				<AppSidebarNewChatButton />
 				<AppSidebarContent />
 			</SidebarContent>
 
