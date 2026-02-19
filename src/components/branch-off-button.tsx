@@ -126,7 +126,7 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
 				/>
 				<TooltipContent>Branch off</TooltipContent>
 			</Tooltip>
-			<DropdownMenuContent className="w-[200px]">
+			<DropdownMenuContent className="w-50">
 				<DropdownMenuItem
 					className="flex items-center gap-3 text-xs"
 					onClick={() => handleBranchOff(selectedModel)}
@@ -141,15 +141,15 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
 
 				{accessibleModels.map((provider) => (
 					<DropdownMenuSub key={provider.key}>
-						<DropdownMenuSubTrigger className="flex items-center gap-3 py-3 text-xs">
+						<DropdownMenuSubTrigger className="flex items-center gap-3 py-2.5 text-xs">
 							<ModelProviderIcon provider={provider.key} />
 							{provider.provider}
 						</DropdownMenuSubTrigger>
 						<DropdownMenuPortal>
-							<DropdownMenuSubContent className="ml-2 w-[200px]">
+							<DropdownMenuSubContent className="ml-2 w-50">
 								{provider.models.map((model) => (
 									<DropdownMenuItem
-										className="py-3 text-xs"
+										className="py-2.5 text-xs"
 										disabled={!model.isAvailable}
 										key={model.modelId}
 										onClick={() => handleBranchOff(model)}
