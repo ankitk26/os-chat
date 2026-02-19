@@ -15,13 +15,15 @@ export default function PinnedChatsList() {
 	}
 
 	return (
-		<SidebarGroup className="group-data-[collapsible=icon]:hidden">
-			<div className="flex items-center px-2 py-1">
-				<PinIcon className="text-sidebar-foreground/70 mr-2 size-4" />
-				<span className="text-sidebar-foreground/70 text-xs">Pinned chats</span>
+		<SidebarGroup className="space-y-1 group-data-[collapsible=icon]:hidden">
+			<div className="flex items-center px-2 py-1.5">
+				<PinIcon className="text-sidebar-foreground/60 mr-2 size-4" />
+				<span className="text-sidebar-foreground/50 text-xs font-normal">
+					Pinned chats
+				</span>
 			</div>
 
-			<SidebarMenu>
+			<SidebarMenu className="gap-0.5">
 				{chatsData.map((chat) => (
 					<AppSidebarChatItem chat={chat} key={chat._id} />
 				))}

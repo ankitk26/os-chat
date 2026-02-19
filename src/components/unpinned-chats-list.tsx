@@ -12,17 +12,19 @@ export default function UnpinnedChatsList() {
 	);
 
 	return (
-		<SidebarGroup className="group-data-[collapsible=icon]:hidden">
-			<div className="flex items-center justify-between px-2 py-1">
+		<SidebarGroup className="space-y-1 group-data-[collapsible=icon]:hidden">
+			<div className="flex items-center justify-between px-2 py-1.5">
 				<div className="flex items-center">
-					<MessageSquareIcon className="text-sidebar-foreground/70 mr-2 size-4" />
-					<span className="text-sidebar-foreground/70 text-xs">Chats</span>
+					<MessageSquareIcon className="text-sidebar-foreground/60 mr-2 size-4" />
+					<span className="text-sidebar-foreground/50 text-xs font-normal">
+						Chats
+					</span>
 				</div>
 				{chats.length > 0 && <DeleteAllChatsAlertDialog />}
 			</div>
-			<SidebarMenu>
+			<SidebarMenu className="gap-0.5">
 				{chats.length === 0 && (
-					<p className="text-sidebar-foreground/70 px-2 py-1 text-xs">
+					<p className="text-sidebar-foreground/50 px-2 py-2 text-xs italic">
 						No chats
 					</p>
 				)}

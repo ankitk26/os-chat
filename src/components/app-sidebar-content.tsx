@@ -8,7 +8,7 @@ import UnpinnedChats from "./unpinned-chats";
 
 export default function AppSidebarContent() {
 	return (
-		<div className="space-y-4">
+		<div className="space-y-3">
 			<AppSidebarFolders />
 			<PinnedChats />
 			<AddFolderDialog />

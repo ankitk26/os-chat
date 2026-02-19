@@ -8,7 +8,7 @@ import { SidebarGroup } from "./ui/sidebar";
 
 export default function AppSidebarFolders() {
 	return (
-		<SidebarGroup className="group-data-[collapsible=icon]:hidden">
+		<SidebarGroup className="space-y-1 group-data-[collapsible=icon]:hidden">
 			<AppSidebarFolderHeader />
 
 			<Suspense fallback={<AppSidebarFolderSkeleton />}>
