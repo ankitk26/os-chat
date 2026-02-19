@@ -28,11 +28,10 @@ export default function PromptActions({ status, stop }: Props) {
 					persistedUseOpenRouter) && (
 					<Button
 						className={cn(
-							"border text-xs transition-all duration-300 ease-out",
+							"transition-all duration-300 ease-out",
 							isWebSearchEnabled ? "border-primary" : "border-border",
 						)}
 						onClick={toggleIsWebSearch}
-						size="sm"
 						type="button"
 						variant={isWebSearchEnabled ? "default" : "outline"}
 					>

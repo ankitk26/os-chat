@@ -91,9 +91,9 @@ export default function RetryModelDropdown(props: Props) {
 				/>
 				<TooltipContent>Retry message</TooltipContent>
 			</Tooltip>
-			<DropdownMenuContent className="w-[200px]">
+			<DropdownMenuContent className="w-50">
 				{/* Web Search switch */}
-				<div className="flex items-center justify-between px-2 py-3">
+				<div className="flex items-center justify-between px-2 py-2.5">
 					<div className="flex items-center gap-2">
 						<GlobeIcon className="size-4" />
 						<span className="text-xs">Web Search</span>
@@ -120,15 +120,15 @@ export default function RetryModelDropdown(props: Props) {
 
 				{accessibleModels.map((provider) => (
 					<DropdownMenuSub key={provider.key}>
-						<DropdownMenuSubTrigger className="flex items-center gap-3 py-3 text-xs">
+						<DropdownMenuSubTrigger className="flex items-center gap-3 py-2.5 text-xs">
 							<ModelProviderIcon provider={provider.key} />
 							{provider.provider}
 						</DropdownMenuSubTrigger>
 						<DropdownMenuPortal>
-							<DropdownMenuSubContent className="ml-2 w-[200px]">
+							<DropdownMenuSubContent className="ml-2 w-50">
 								{provider.models.map((model) => (
 									<DropdownMenuItem
-										className="py-3 text-xs"
+										className="py-2.5 text-xs"
 										disabled={!model.isAvailable}
 										key={model.modelId}
 										onClick={async () => {
