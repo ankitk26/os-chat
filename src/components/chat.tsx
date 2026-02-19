@@ -110,11 +110,11 @@ export default function Chat({
 			}, timerSeconds);
 			return () => clearTimeout(timer);
 		}
-	}, [messages.length]);
+	}, [status, messages.length]);
 
 	useEffect(() => {
 		setMessages(dbMessages);
-	}, [dbMessages]);
+	}, [setMessages, dbMessages]);
 
 	return (
 		<div className="relative mx-auto flex h-svh max-h-svh w-full flex-col">
