@@ -24,7 +24,7 @@ export default function UnpinnedChatsList() {
 			</div>
 			<SidebarMenu className="gap-0.5">
 				{chats.length === 0 && (
-					<p className="text-sidebar-foreground/50 px-2 py-2 text-xs italic">
+					<p className="text-sidebar-foreground/70 px-2 py-2 text-xs">
 						No chats
 					</p>
 				)}
