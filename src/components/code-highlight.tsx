@@ -39,18 +39,20 @@ export default function CodeHighlight({
 				<span className="font-mono font-light">{language ?? "txt"}</span>
 				<div className="my-0.5 flex items-center gap-2">
 					<Tooltip>
-						<TooltipTrigger asChild>
-							<Button
-								className="dark:hover:bg-background/20"
-								onClick={async () => {
-									await navigator.clipboard.writeText(codeContent);
-									toast.success("Copied to clipboard");
-								}}
-								size="icon"
-								variant="ghost"
-							>
-								<CopyIcon />
-							</Button>
+						<TooltipTrigger
+							render={
+								<Button
+									className="dark:hover:bg-background/20"
+									onClick={async () => {
+										await navigator.clipboard.writeText(codeContent);
+										toast.success("Copied to clipboard");
+									}}
+									size="icon"
+									variant="ghost"
+								/>
+							}
+						>
+							<CopyIcon />
 						</TooltipTrigger>
 						<TooltipContent>Copy to clipboard</TooltipContent>
 					</Tooltip>

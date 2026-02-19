@@ -93,9 +93,7 @@ export default function RenameFolderDialog() {
 				</form>
 
 				<DialogFooter>
-					<DialogClose asChild>
-						<Button variant="ghost">Cancel</Button>
-					</DialogClose>
+					<DialogClose render={<Button variant="ghost" />}>Cancel</DialogClose>
 					<Button
 						disabled={
 							renameFolderMutation.isPending ||

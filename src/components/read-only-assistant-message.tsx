@@ -36,17 +36,19 @@ export default function ReadOnlyAssistantMessage({ message }: Props) {
 			<AIResponseSources parts={messageParts} />
 			<div className="flex items-center gap-1.5 transition-opacity duration-200">
 				<Tooltip>
-					<TooltipTrigger asChild>
-						<Button
-							onClick={async () => {
-								await navigator.clipboard.writeText(messageContent);
-								toast.success("Copied to clipboard");
-							}}
-							size="icon"
-							variant="ghost"
-						>
-							<CopyIcon />
-						</Button>
+					<TooltipTrigger
+						render={
+							<Button
+								onClick={async () => {
+									await navigator.clipboard.writeText(messageContent);
+									toast.success("Copied to clipboard");
+								}}
+								size="icon"
+								variant="ghost"
+							/>
+						}
+					>
+						<CopyIcon />
 					</TooltipTrigger>
 					<TooltipContent>Copy to clipboard</TooltipContent>
 				</Tooltip>

@@ -39,21 +39,25 @@ export default function DeleteAllChatsAlertDialog() {
 			onOpenChange={(val) => setIsDialogOpen(val)}
 			open={isDialogOpen}
 		>
-			<AlertDialogTrigger asChild>
-				<Tooltip>
-					<TooltipTrigger asChild>
-						<Button
-							className="opacity-0 group-hover/chat-header:opacity-100"
-							onClick={() => setIsDialogOpen(true)}
-							size="icon"
-							variant="ghost"
+			<AlertDialogTrigger
+				render={
+					<Tooltip>
+						<TooltipTrigger
+							render={
+								<Button
+									className="opacity-0 group-hover/chat-header:opacity-100"
+									onClick={() => setIsDialogOpen(true)}
+									size="icon"
+									variant="ghost"
+								/>
+							}
 						>
 							<TrashIcon />
-						</Button>
-					</TooltipTrigger>
-					<TooltipContent>Delete all chats</TooltipContent>
-				</Tooltip>
-			</AlertDialogTrigger>
+						</TooltipTrigger>
+						<TooltipContent>Delete all chats</TooltipContent>
+					</Tooltip>
+				}
+			/>
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>Delete all chats</AlertDialogTitle>

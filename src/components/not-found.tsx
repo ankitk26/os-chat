@@ -28,15 +28,17 @@ export default function NotFound() {
 					</p>
 
 					<div className="mt-4 flex flex-wrap justify-center">
-						<Button asChild>
-							<Link
-								className="flex items-center"
-								onClick={() => clearChat()}
-								to="/"
-							>
-								<HomeIcon className="h-4 w-4" />
-								Go Home
-							</Link>
+						<Button
+							render={
+								<Link
+									className="flex items-center"
+									onClick={() => clearChat()}
+									to="/"
+								/>
+							}
+						>
+							<HomeIcon className="h-4 w-4" />
+							Go Home
 						</Button>
 					</div>
 				</CardContent>

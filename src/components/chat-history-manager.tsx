@@ -104,15 +104,17 @@ export default function ChatHistoryManager() {
 
 					{selectedChats.size > 0 && (
 						<AlertDialog>
-							<AlertDialogTrigger asChild>
-								<Button
-									className="h-7 px-2 text-xs"
-									size="sm"
-									variant="destructive"
-								>
-									<Trash2Icon className="size-3.5" />
-									Delete {selectedChats.size}
-								</Button>
+							<AlertDialogTrigger
+								render={
+									<Button
+										className="h-7 px-2 text-xs"
+										size="sm"
+										variant="destructive"
+									/>
+								}
+							>
+								<Trash2Icon className="size-3.5" />
+								Delete {selectedChats.size}
 							</AlertDialogTrigger>
 							<AlertDialogContent>
 								<AlertDialogHeader>

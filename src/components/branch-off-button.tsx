@@ -117,13 +117,13 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
 	return (
 		<DropdownMenu>
 			<Tooltip>
-				<DropdownMenuTrigger asChild>
-					<TooltipTrigger asChild>
-						<Button size="icon" variant="ghost">
+				<DropdownMenuTrigger
+					render={
+						<TooltipTrigger render={<Button size="icon" variant="ghost" />}>
 							<SplitIcon />
-						</Button>
-					</TooltipTrigger>
-				</DropdownMenuTrigger>
+						</TooltipTrigger>
+					}
+				/>
 				<TooltipContent>Branch off</TooltipContent>
 			</Tooltip>
 			<DropdownMenuContent className="w-[200px]">
