@@ -12,7 +12,7 @@ export default function AppSidebarHeader() {
 	const { clearChat } = useSharedChatContext();
 
 	return (
-		<SidebarMenu>
+		<SidebarMenu className="py-1">
 			<SidebarMenuItem className="flex items-center gap-1">
 				<SidebarTrigger className="h-8 w-8" />
 				<Link
@@ -22,9 +22,11 @@ export default function AppSidebarHeader() {
 				>
 					<SidebarMenuButton
 						tooltip="os-chat"
-						className="w-full justify-center"
+						className="h-9 w-full justify-center"
 					>
-						<span className="text-base font-medium">os-chat</span>
+						<span className="text-base font-semibold tracking-tight">
+							os-chat
+						</span>
 					</SidebarMenuButton>
 				</Link>
 				<ThemeToggler />

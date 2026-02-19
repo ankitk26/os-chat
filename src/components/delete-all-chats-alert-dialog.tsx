@@ -63,6 +63,7 @@ export default function DeleteAllChatsAlertDialog() {
 				<AlertDialogFooter>
 					<AlertDialogCancel>Cancel</AlertDialogCancel>
 					<AlertDialogAction
+						variant="destructive"
 						disabled={deleteAllChatsMutation.isPending}
 						onClick={() => {
 							toast.info("Deleting all chats...");

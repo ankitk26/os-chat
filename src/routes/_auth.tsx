@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import * as React from "react";
 import { AppSidebar } from "~/components/app-sidebar";
 import {
 	SidebarInset,
@@ -21,14 +22,25 @@ export const Route = createFileRoute("/_auth")({
 
 function FloatingSidebarTrigger() {
 	const { state } = useSidebar();
+	const [isVisible, setIsVisible] = React.useState(false);
 
-	if (state === "expanded") {
+	React.useEffect(() => {
+		if (state === "collapsed") {
+			// Delay showing the trigger until sidebar animation completes
+			const timer = setTimeout(() => setIsVisible(true), 200);
+			return () => clearTimeout(timer);
+		} else {
+			setIsVisible(false);
+		}
+	}, [state]);
+
+	if (state === "expanded" || !isVisible) {
 		return null;
 	}
 
 	return (
 		<div className="absolute top-2 left-2 z-50">
-			<SidebarTrigger className="bg-background h-8 w-8 rounded-lg border shadow-sm" />
+			<SidebarTrigger className="h-8 w-8" />
 		</div>
 	);
 }
