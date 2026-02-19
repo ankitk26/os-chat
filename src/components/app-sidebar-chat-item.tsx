@@ -11,13 +11,17 @@ type Props = {
 export default function AppSidebarChatItem({ chat }: Props) {
 	const { chatId } = useParams({ strict: false });
 	const { clearChat } = useSharedChatContext();
+	const isActive = chatId === chat.uuid;
 
 	return (
-		<div className="group/chats hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground flex cursor-pointer items-center justify-between rounded-md px-2 py-2 text-sm">
+		<div
+			className={`group/chats hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground flex cursor-pointer items-center justify-between rounded-md px-2 py-2 text-sm ${
+				isActive ? "bg-secondary text-secondary-foreground" : ""
+			}`}
+		>
 			{chat.isBranched && <BranchedChatIndicator chat={chat} />}
 
 			<Link
-				activeProps={{ className: "bg-secondary text-secondary-foreground" }}
 				className="flex flex-1 items-center overflow-hidden"
 				onClick={() => {
 					if (chatId === chat.uuid) {
