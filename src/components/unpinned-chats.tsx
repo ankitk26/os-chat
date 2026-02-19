@@ -12,14 +12,12 @@ import UnpinnedChatsList from "./unpinned-chats-list";
 
 export default function UnpinnedChats() {
 	const fallbackSkeleton = (
-		<SidebarGroup className="group/chat-header group-data-[collapsible=icon]:hidden">
-			<SidebarGroupLabel className="flex items-center justify-between gap-2 text-sm">
-				<div className="flex items-center gap-2">
-					<MessageSquareIcon className="size-4" />
-					Chats
-				</div>
+		<SidebarGroup className="group-data-[collapsible=icon]:hidden">
+			<SidebarGroupLabel>
+				<MessageSquareIcon className="size-4" />
+				Chats
 			</SidebarGroupLabel>
-			<SidebarMenu className="mt-2">
+			<SidebarMenu>
 				{Array.from({ length: 3 }).map(() => (
 					<SidebarMenuItem key={generateRandomUUID()}>
 						<SidebarMenuSkeleton />

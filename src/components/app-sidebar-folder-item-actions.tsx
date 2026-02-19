@@ -1,7 +1,6 @@
 import { EditIcon, EllipsisVerticalIcon, Trash2Icon } from "lucide-react";
 import { useFolderActionStore } from "~/stores/folder-actions-store";
 import type { SidebarFolder } from "~/types";
-import { Button } from "./ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -28,15 +27,12 @@ export default function AppSidebarFolderItemActions({ folder }: Props) {
 		<DropdownMenu>
 			<DropdownMenuTrigger
 				render={
-					<Button
-						className="bg-secondary text-sidebar-foreground hover:bg-sidebar size-7 shrink-0 rounded-sm opacity-0 transition-opacity duration-200 group-hover/folders:opacity-100"
-						size="icon"
-					/>
+					<div className="flex h-full w-full cursor-pointer items-center justify-center">
+						<EllipsisVerticalIcon className="size-4" />
+					</div>
 				}
-			>
-				<EllipsisVerticalIcon />
-			</DropdownMenuTrigger>
-			<DropdownMenuContent>
+			/>
+			<DropdownMenuContent side="right" align="start">
 				<DropdownMenuItem
 					onClick={(e) => {
 						e.stopPropagation();
@@ -44,8 +40,8 @@ export default function AppSidebarFolderItemActions({ folder }: Props) {
 						setIsRenameModalOpen(true);
 					}}
 				>
-					<EditIcon />
-					<span className="leading-0">Rename</span>
+					<EditIcon className="size-4" />
+					<span>Rename</span>
 				</DropdownMenuItem>
 
 				<DropdownMenuItem
@@ -55,8 +51,8 @@ export default function AppSidebarFolderItemActions({ folder }: Props) {
 						setIsDeleteModalOpen(true);
 					}}
 				>
-					<Trash2Icon />
-					<span className="leading-0">Delete</span>
+					<Trash2Icon className="size-4" />
+					<span>Delete</span>
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

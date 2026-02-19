@@ -9,33 +9,32 @@ export default function AppSidebarFooter() {
 	return (
 		<SidebarMenu>
 			<SidebarMenuItem>
-				<Link to="/settings">
-					<SidebarMenuButton
-						className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
-						size="lg"
-					>
-						<Avatar className="h-8 w-8 rounded-lg grayscale">
-							<AvatarImage
-								alt={authUser?.name?.[0]}
-								src={authUser?.image ?? ""}
-							/>
-							<AvatarFallback className="rounded-lg">
-								{(authUser?.name ?? "")
-									.split(" ")
-									.slice(0, 2)
-									.map((namePart) => namePart.charAt(0))
-									.join("")}
-							</AvatarFallback>
-						</Avatar>
-						<div className="grid flex-1 text-left text-sm leading-tight">
-							<span className="truncate font-medium">{authUser?.name}</span>
-							<span className="text-muted-foreground truncate text-xs">
-								{authUser?.email}
-							</span>
-						</div>
-						<SettingsIcon />
-					</SidebarMenuButton>
-				</Link>
+				<SidebarMenuButton
+					render={<Link to="/settings" />}
+					size="lg"
+					tooltip={authUser?.name || "Settings"}
+				>
+					<Avatar className="h-8 w-8 rounded-lg grayscale">
+						<AvatarImage
+							alt={authUser?.name?.[0]}
+							src={authUser?.image ?? ""}
+						/>
+						<AvatarFallback className="rounded-lg">
+							{(authUser?.name ?? "")
+								.split(" ")
+								.slice(0, 2)
+								.map((namePart) => namePart.charAt(0))
+								.join("")}
+						</AvatarFallback>
+					</Avatar>
+					<div className="grid flex-1 text-left text-sm leading-tight">
+						<span className="truncate font-medium">{authUser?.name}</span>
+						<span className="text-muted-foreground truncate text-xs">
+							{authUser?.email}
+						</span>
+					</div>
+					<SettingsIcon className="ml-auto" />
+				</SidebarMenuButton>
 			</SidebarMenuItem>
 		</SidebarMenu>
 	);

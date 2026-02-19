@@ -3,7 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { PinIcon } from "lucide-react";
 import AppSidebarChatItem from "./app-sidebar-chat-item";
-import { SidebarGroup, SidebarGroupLabel, SidebarMenu } from "./ui/sidebar";
+import { SidebarGroup, SidebarMenu } from "./ui/sidebar";
 
 export default function PinnedChatsList() {
 	const { data: chatsData } = useSuspenseQuery(
@@ -16,12 +16,12 @@ export default function PinnedChatsList() {
 
 	return (
 		<SidebarGroup className="group-data-[collapsible=icon]:hidden">
-			<SidebarGroupLabel className="flex items-center gap-2 text-sm">
-				<PinIcon />
-				Pinned chats
-			</SidebarGroupLabel>
+			<div className="flex items-center px-2 py-1">
+				<PinIcon className="text-sidebar-foreground/70 mr-2 size-4" />
+				<span className="text-sidebar-foreground/70 text-xs">Pinned chats</span>
+			</div>
 
-			<SidebarMenu className="mt-2">
+			<SidebarMenu>
 				{chatsData.map((chat) => (
 					<AppSidebarChatItem chat={chat} key={chat._id} />
 				))}

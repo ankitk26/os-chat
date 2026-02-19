@@ -3,6 +3,12 @@ import type { SidebarFolder } from "~/types";
 import AppSidebarChatItem from "./app-sidebar-chat-item";
 import AppSidebarFolderItemActions from "./app-sidebar-folder-item-actions";
 import AppSidebarFolderItemToggler from "./app-sidebar-folder-item-toggler";
+import {
+	SidebarMenuButton,
+	SidebarMenuItem,
+	SidebarMenuAction,
+	SidebarMenuSub,
+} from "./ui/sidebar";
 
 type Props = {
 	folder: SidebarFolder;
@@ -13,35 +19,31 @@ export default function AppSidebarFolderItem(props: Props) {
 
 	return (
 		<>
-			<div
-				className="group/folders hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary dark:hover:text-secondary-foreground flex cursor-pointer items-center justify-between rounded-md px-2 py-2 text-sm"
-				onClick={() => setShowChats((prev) => !prev)}
-			>
-				{/* Show chats toggler */}
-				<AppSidebarFolderItemToggler
-					folderHasChats={props.folder.chats.length > 0}
-					showChats={showChats}
-				/>
-
-				{/* Folder title */}
-				<h4
-					className="line-clamp-1 w-full select-none"
-					title={props.folder.title}
+			<SidebarMenuItem>
+				<SidebarMenuButton
+					onClick={() => setShowChats((prev) => !prev)}
+					tooltip={props.folder.title}
 				>
-					{props.folder.title}
-				</h4>
-
-				{/* Actions related to folder */}
-				<AppSidebarFolderItemActions folder={props.folder} />
-			</div>
+					<AppSidebarFolderItemToggler
+						folderHasChats={props.folder.chats.length > 0}
+						showChats={showChats}
+					/>
+					<span className="line-clamp-1 flex-1" title={props.folder.title}>
+						{props.folder.title}
+					</span>
+				</SidebarMenuButton>
+				<SidebarMenuAction showOnHover>
+					<AppSidebarFolderItemActions folder={props.folder} />
+				</SidebarMenuAction>
+			</SidebarMenuItem>
 
 			{/* Chats under the folder */}
 			{props.folder.chats.length > 0 && showChats && (
-				<div className="ml-4 space-y-1">
+				<SidebarMenuSub className="mr-0 border-r-0 pr-0">
 					{props.folder.chats.map((chat) => (
 						<AppSidebarChatItem chat={chat} key={chat._id} />
 					))}
-				</div>
+				</SidebarMenuSub>
 			)}
 		</>
 	);

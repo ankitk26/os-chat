@@ -18,7 +18,6 @@ import {
 	AlertDialogTrigger,
 } from "./ui/alert-dialog";
 import { Button } from "./ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export default function DeleteAllChatsAlertDialog() {
 	const { clearChat } = useSharedChatContext();
@@ -41,21 +40,15 @@ export default function DeleteAllChatsAlertDialog() {
 		>
 			<AlertDialogTrigger
 				render={
-					<Tooltip>
-						<TooltipTrigger
-							render={
-								<Button
-									className="opacity-0 group-hover/chat-header:opacity-100"
-									onClick={() => setIsDialogOpen(true)}
-									size="icon"
-									variant="ghost"
-								/>
-							}
-						>
-							<TrashIcon />
-						</TooltipTrigger>
-						<TooltipContent>Delete all chats</TooltipContent>
-					</Tooltip>
+					<Button
+						onClick={() => setIsDialogOpen(true)}
+						size="icon"
+						variant="ghost"
+						className="h-6 w-6 shrink-0"
+						title="Delete all chats"
+					>
+						<TrashIcon className="size-3.5" />
+					</Button>
 				}
 			/>
 			<AlertDialogContent>

@@ -13,11 +13,11 @@ import {
 export default function PinnedChats() {
 	const fallbackSkeleton = (
 		<SidebarGroup className="group-data-[collapsible=icon]:hidden">
-			<SidebarGroupLabel className="flex items-center gap-2 text-sm">
-				<PinIcon />
+			<SidebarGroupLabel>
+				<PinIcon className="size-4" />
 				Pinned chats
 			</SidebarGroupLabel>
-			<SidebarMenu className="mt-2">
+			<SidebarMenu>
 				{Array.from({ length: 3 }).map(() => (
 					<SidebarMenuItem key={generateRandomUUID()}>
 						<SidebarMenuSkeleton />
