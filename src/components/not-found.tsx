@@ -29,6 +29,7 @@ export default function NotFound() {
 
 					<div className="mt-4 flex flex-wrap justify-center">
 						<Button
+							nativeButton={false}
 							render={
 								<Link
 									className="flex items-center"
