@@ -20,7 +20,7 @@ export default function SourcesList(props: Props) {
 							{index + 1}
 						</span>
 						<div className="min-w-0 flex-1">
-							<div className="text-foreground group-hover:text-primary line-clamp-2 text-sm transition-colors">
+							<div className="text-foreground group-hover:text-primary line-clamp-2 text-xs transition-colors">
 								{sourcePart.title}
 							</div>
 						</div>

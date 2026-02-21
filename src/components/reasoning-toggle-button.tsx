@@ -13,13 +13,13 @@ export default function ReasoningToggleButton(props: Props) {
 			onClick={props.toggleReasoningDisplay}
 		>
 			{props.showReasoning ? (
-				<ChevronDownIcon className="size-4" />
+				<ChevronDownIcon className="size-3" />
 			) : (
-				<ChevronRightIcon className="size-4" />
+				<ChevronRightIcon className="size-3" />
 			)}
 
-			<div className="text-muted-foreground flex items-center gap-2 font-mono text-sm select-none">
-				<BrainIcon className="size-4" />
+			<div className="text-muted-foreground flex items-center gap-2 font-mono text-xs select-none">
+				<BrainIcon className="size-3" />
 				{props.messageContent ? (
 					<div>Reasoning</div>
 				) : (

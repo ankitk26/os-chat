@@ -12,12 +12,12 @@ export default function SourcesToggleButton(props: Props) {
 			onClick={props.toggleSourcesDisplay}
 		>
 			{props.showSources ? (
-				<ChevronDownIcon className="size-4" />
+				<ChevronDownIcon className="size-3" />
 			) : (
-				<ChevronRightIcon className="size-4" />
+				<ChevronRightIcon className="size-3" />
 			)}
-			<div className="text-muted-foreground flex items-center gap-2 font-mono text-sm select-none">
-				<NewspaperIcon className="size-4" />
+			<div className="text-muted-foreground flex items-center gap-2 font-mono text-xs select-none">
+				<NewspaperIcon className="size-3" />
 				Sources
 			</div>
 		</div>
