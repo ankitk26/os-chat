@@ -1,17 +1,27 @@
+import { useRouteContext, useRouter } from "@tanstack/react-router";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { TabsContent } from "~/components/ui/tabs";
+import { setAppFont } from "~/server-fns/app-font";
 import { useAppearanceStore } from "~/stores/appearance-store";
+import { AppFont } from "~/types";
 import TokenUsageByModel from "./token-usage-by-model";
 
 export default function AppearanceSettings() {
-	const enableAllMono = useAppearanceStore((store) => store.enableAllMono);
-	const toggleAllMono = useAppearanceStore((store) => store.toggleAllMono);
+	const { appFont } = useRouteContext({ from: "__root__" });
+	const router = useRouter();
 
 	const showTokenUsage = useAppearanceStore((store) => store.showTokenUsage);
 	const toggleShowTokenUsage = useAppearanceStore(
 		(store) => store.toggleShowTokenUsage,
 	);
+
+	const toggleFont = () => {
+		const updatedFont: AppFont =
+			appFont === "font-mono" ? "font-sans" : "font-mono";
+		// router.invalidate refreshes the route context
+		setAppFont({ data: updatedFont }).then(() => router.invalidate());
+	};
 
 	return (
 		<TabsContent className="flex flex-col gap-12" value="appearance">
@@ -34,9 +44,9 @@ export default function AppearanceSettings() {
 
 						<Switch
 							aria-label="Enable mono font"
-							checked={enableAllMono}
+							checked={appFont === "font-mono"}
 							id="mono-font"
-							onCheckedChange={toggleAllMono}
+							onCheckedChange={toggleFont}
 						/>
 					</div>
 				</div>

@@ -65,3 +65,5 @@ export type MessageMetadata = z.infer<typeof messageMetadataSchema>;
 export type CustomUIMessage = Omit<UIMessage<MessageMetadata>, "role"> & {
 	role: "user" | "assistant";
 };
+
+export type AppFont = "font-mono" | "font-sans";
