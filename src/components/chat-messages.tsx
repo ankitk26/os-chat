@@ -22,7 +22,7 @@ export default memo(function ChatMessages({
 	}
 
 	return (
-		<div className="space-y-4 px-3 lg:space-y-2 lg:px-0">
+		<div className="space-y-6 px-3 lg:space-y-8 lg:px-0">
 			{messages.map((message) => (
 				<div className="flex flex-col" key={message.id}>
 					{message.role === "user" ? (

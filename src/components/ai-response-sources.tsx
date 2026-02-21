@@ -20,7 +20,7 @@ export default function AIResponseSources({
 	}
 
 	return (
-		<div className="mt-8">
+		<div>
 			<SourcesToggleButton
 				showSources={showSources}
 				toggleSourcesDisplay={toggleSourcesDisplay}

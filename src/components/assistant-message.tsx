@@ -31,7 +31,7 @@ export default React.memo(function AssistantMessage(props: Props) {
 	const messageContent = getMessageContentFromParts(message.parts);
 
 	return (
-		<div className="group space-y-3 lg:space-y-4">
+		<div className="group space-y-6">
 			<AIResponseReasoning
 				messageContent={messageContent}
 				messageId={message.id}
@@ -45,7 +45,7 @@ export default React.memo(function AssistantMessage(props: Props) {
 			<AIResponseSources parts={message.parts} />
 
 			{/* Message actions */}
-			<div className="flex items-center gap-3 duration-200 md:opacity-0 group-hover:md:opacity-100 lg:gap-4">
+			<div className="flex items-center gap-6 duration-200 md:opacity-0 group-hover:md:opacity-100">
 				<div className="flex items-center gap-1">
 					<Tooltip>
 						<TooltipTrigger

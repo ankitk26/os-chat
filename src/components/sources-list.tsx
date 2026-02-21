@@ -6,7 +6,7 @@ type Props = {
 
 export default function SourcesList(props: Props) {
 	return (
-		<div className="mt-4 space-y-2">
+		<div className="space-y-2">
 			{props.sourceParts.map((sourcePart, index) => (
 				<a
 					className="group border-border bg-card hover:bg-accent block rounded-lg border p-3 transition-colors"
