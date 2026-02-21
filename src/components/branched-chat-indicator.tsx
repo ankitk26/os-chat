@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { SplitIcon } from "lucide-react";
 import { useSharedChatContext } from "~/providers/chat-provider";
 import type { SidebarChatType } from "~/types";
@@ -10,9 +10,18 @@ type Props = {
 
 export default function BranchedChatIndicator(props: Props) {
 	const { clearChat } = useSharedChatContext();
+	const navigate = useNavigate();
 
-	const handleClick = () => {
+	const handleNavigateToParent = (e: React.MouseEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
 		clearChat();
+		if (props.chat.parentChat?.uuid) {
+			navigate({
+				to: "/chat/$chatId",
+				params: { chatId: props.chat.parentChat.uuid },
+			});
+		}
 	};
 
 	if (!props.chat.parentChat?.uuid) {
@@ -34,14 +43,20 @@ export default function BranchedChatIndicator(props: Props) {
 		<Tooltip>
 			<TooltipTrigger
 				render={
-					<Link
-						to="/chat/$chatId"
-						params={{ chatId: props.chat.parentChat.uuid }}
-						onClick={handleClick}
+					<span
+						onClick={handleNavigateToParent}
 						className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex cursor-pointer items-center justify-center rounded p-0.5"
+						role="button"
+						tabIndex={0}
+						onKeyDown={(e) => {
+							if (e.key === "Enter" || e.key === " ") {
+								e.preventDefault();
+								handleNavigateToParent(e as unknown as React.MouseEvent);
+							}
+						}}
 					>
 						<SplitIcon className="size-4 shrink-0" />
-					</Link>
+					</span>
 				}
 			/>
 			<TooltipContent>

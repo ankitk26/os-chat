@@ -26,10 +26,11 @@ export default function AppSidebarFolderItemActions({ folder }: Props) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger
+				nativeButton={false}
 				render={
-					<div className="flex h-full w-full cursor-pointer items-center justify-center">
+					<span className="flex h-full w-full items-center justify-center">
 						<EllipsisVerticalIcon className="size-4" />
-					</div>
+					</span>
 				}
 			/>
 			<DropdownMenuContent side="right" align="start">
