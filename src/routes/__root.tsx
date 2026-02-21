@@ -18,7 +18,7 @@ import { authClient } from "~/lib/auth-client";
 import { getToken } from "~/lib/auth-server";
 import { cn } from "~/lib/utils";
 import { ChatProvider } from "~/providers/chat-provider";
-import { useAppearanceStore } from "~/stores/appearance-store";
+import { getAppFont } from "~/server-fns/app-font";
 import appCss from "~/styles.css?url";
 
 // Get auth information for SSR using available cookies
@@ -41,9 +41,12 @@ export const Route = createRootRouteWithContext<{
 			ctx.context.convexQueryClient.serverHttpClient?.setAuth(token);
 		}
 
+		const appFont = await getAppFont();
+
 		return {
 			isAuthenticated: !!token,
 			token,
+			appFont,
 		};
 	},
 	head: () => ({
@@ -95,14 +98,14 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
-	const enableAllMono = useAppearanceStore((store) => store.enableAllMono);
+	const { appFont } = Route.useRouteContext();
 
 	return (
 		<html lang="en">
 			<head>
 				<HeadContent />
 			</head>
-			<body className={cn("overflow-hidden", enableAllMono ? "font-mono" : "")}>
+			<body className={cn("overflow-hidden", appFont)}>
 				<NextThemesProvider
 					attribute="class"
 					defaultTheme="system"
