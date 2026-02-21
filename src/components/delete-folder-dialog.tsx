@@ -79,6 +79,7 @@ export default function DeleteFolderAlertDialog() {
 				<AlertDialogFooter>
 					<AlertDialogCancel>Cancel</AlertDialogCancel>
 					<AlertDialogAction
+						variant="destructive"
 						disabled={deleteFolderMutation.isPending}
 						onClick={() => {
 							if (!selectedFolder?._id) {
