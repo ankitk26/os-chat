@@ -125,13 +125,8 @@ export default function Chat({
 			{/* Scroll to bottom button - centered at top of prompt */}
 			{showScrollToBottom && (
 				<div className="absolute bottom-44 left-1/2 z-50 -translate-x-1/2 transform lg:bottom-36">
-					<Button
-						className="rounded-full"
-						onClick={scrollToBottom}
-						size="icon"
-						variant="outline"
-					>
-						<ChevronDownIcon className="size-4" />
+					<Button className="rounded-full" onClick={scrollToBottom} size="icon">
+						<ChevronDownIcon />
 					</Button>
 				</div>
 			)}
