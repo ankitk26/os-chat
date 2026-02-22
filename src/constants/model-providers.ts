@@ -36,6 +36,12 @@ const geminiModels = {
 			modelId: "gemini-3-pro-preview",
 			isFree: false,
 		},
+		{
+			name: "Gemini 3.1 Pro",
+			openRouterModelId: "google/gemini-3.1-pro-preview",
+			modelId: "gemini-3.1-pro-preview",
+			isFree: false,
+		},
 	],
 };
 
