@@ -36,6 +36,7 @@ export default function Chat({
 
 	const viewportRef = useRef<HTMLDivElement>(null);
 	const [showScrollToBottom, setShowScrollToBottom] = useState(false);
+	const [inputHeight, setInputHeight] = useState(120); // Default estimate
 
 	const checkScrollPosition = () => {
 		const viewport = viewportRef.current;
@@ -105,7 +106,10 @@ export default function Chat({
 				{chatId && (
 					<ScrollArea className="h-full w-full" viewportRef={viewportRef}>
 						<div className="mx-auto h-full w-full max-w-full px-2 lg:max-w-3xl lg:px-4">
-							<div className="my-4 space-y-6 pb-40 lg:my-8 lg:space-y-8 lg:pb-40">
+							<div
+								className="my-4 space-y-6 lg:my-8 lg:space-y-8"
+								style={{ paddingBottom: `${inputHeight + 40}px` }}
+							>
 								<ChatMessages
 									chatId={chatId}
 									messages={messages}
@@ -124,7 +128,10 @@ export default function Chat({
 
 			{/* Scroll to bottom button - centered at top of prompt */}
 			{showScrollToBottom && (
-				<div className="absolute bottom-44 left-1/2 z-50 -translate-x-1/2 transform lg:bottom-36">
+				<div
+					className="absolute left-1/2 z-50 -translate-x-1/2 transform"
+					style={{ bottom: `${inputHeight + 16}px` }}
+				>
 					<Button className="rounded-full" onClick={scrollToBottom} size="icon">
 						<ChevronDownIcon />
 					</Button>
@@ -138,6 +145,7 @@ export default function Chat({
 					sendMessage={sendMessage}
 					status={status}
 					stop={stop}
+					onHeightChange={setInputHeight}
 				/>
 			</div>
 		</div>

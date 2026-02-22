@@ -19,6 +19,7 @@ type Props = {
 	status: ChatStatus;
 	stop: UseChatHelpers<CustomUIMessage>["stop"];
 	sendMessage: UseChatHelpers<CustomUIMessage>["sendMessage"];
+	onHeightChange?: (height: number) => void;
 };
 
 export default function UserPromptInput(props: Props) {
@@ -28,6 +29,7 @@ export default function UserPromptInput(props: Props) {
 
 	const navigate = useNavigate();
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
 	const selectedModel = useModelStore((store) => store.selectedModel);
 	const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
 	const persistedApiKeys = usePersistedApiKeysStore(
@@ -115,6 +117,14 @@ export default function UserPromptInput(props: Props) {
 		resizeTextarea();
 	}, [input]);
 
+	// Measure and report height changes
+	useEffect(() => {
+		if (containerRef.current && props.onHeightChange) {
+			const height = containerRef.current.getBoundingClientRect().height;
+			props.onHeightChange(height);
+		}
+	}, [input, props.onHeightChange]);
+
 	// Focus the textarea when the chat ID changes or on initial load.
 	useEffect(() => {
 		if (textareaRef.current) {
@@ -140,9 +150,9 @@ export default function UserPromptInput(props: Props) {
 	}, [selectedText, clearSelectedText]);
 
 	return (
-		<div className="bg-background/80 backdrop-blur">
+		<div ref={containerRef} className="bg-background/80 backdrop-blur">
 			<form
-				className="border-border bg-popover/90 mx-auto flex min-h-30 w-full max-w-3xl flex-col rounded-tl-lg rounded-tr-lg border p-4"
+				className="border-border bg-popover/90 mx-auto flex w-full max-w-3xl flex-col rounded-tl-lg rounded-tr-lg border p-4"
 				onSubmit={(e) => {
 					e.preventDefault();
 					handlePromptSubmit();
