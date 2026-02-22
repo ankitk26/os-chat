@@ -34,18 +34,12 @@ export default function Chat({
 		setMessages,
 	} = useChat<CustomUIMessage>({ chat, id: chatId });
 
-	const scrollAreaRef = useRef<HTMLDivElement>(null);
+	const viewportRef = useRef<HTMLDivElement>(null);
 	const [showScrollToBottom, setShowScrollToBottom] = useState(false);
 
 	const checkScrollPosition = () => {
-		const scrollArea = scrollAreaRef.current;
-		if (!scrollArea) {
-			return;
-		}
+		const viewport = viewportRef.current;
 
-		const viewport = scrollArea.querySelector(
-			"[data-radix-scroll-area-viewport]",
-		);
 		if (!viewport) {
 			return;
 		}
@@ -60,14 +54,7 @@ export default function Chat({
 	};
 
 	const scrollToBottom = () => {
-		const scrollArea = scrollAreaRef.current;
-		if (!scrollArea) {
-			return;
-		}
-
-		const viewport = scrollArea.querySelector(
-			"[data-radix-scroll-area-viewport]",
-		);
+		const viewport = viewportRef.current;
 		if (!viewport) {
 			return;
 		}
@@ -79,14 +66,7 @@ export default function Chat({
 	};
 
 	useEffect(() => {
-		const scrollArea = scrollAreaRef.current;
-		if (!scrollArea) {
-			return;
-		}
-
-		const viewport = scrollArea.querySelector(
-			"[data-radix-scroll-area-viewport]",
-		);
+		const viewport = viewportRef.current;
 		if (!viewport) {
 			return;
 		}
@@ -123,7 +103,7 @@ export default function Chat({
 				{!isMessagesPending && messages.length === 0 && <EmptyChatContent />}
 
 				{chatId && (
-					<ScrollArea className="h-full w-full" ref={scrollAreaRef}>
+					<ScrollArea className="h-full w-full" viewportRef={viewportRef}>
 						<div className="mx-auto h-full w-full max-w-full px-2 lg:max-w-3xl lg:px-4">
 							<div className="my-4 space-y-6 pb-40 lg:my-8 lg:space-y-8 lg:pb-40">
 								<ChatMessages
