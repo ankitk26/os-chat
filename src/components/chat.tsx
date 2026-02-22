@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { useSharedChatContext } from "~/providers/chat-provider";
 import type { CustomUIMessage } from "~/types";
 import AiResponseAlert from "./ai-response-error";
-import ChatLoadingIndicator from "./chat-loading-indicator";
 import ChatMessages from "./chat-messages";
 import EmptyChatContent from "./empty-chat-content";
+import ThinkingIndicator from "./thinking-indicator";
 import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
 import UserPromptInput from "./user-prompt-input";
@@ -116,9 +116,13 @@ export default function Chat({
 									regenerate={regenerate}
 									sendMessage={sendMessage}
 								/>
-								{(status === "streaming" || status === "submitted") &&
+								{status === "submitted" &&
 									messages.length > 0 &&
-									messages.at(-1)?.role === "user" && <ChatLoadingIndicator />}
+									messages.at(-1)?.role === "user" && (
+										<div className="px-3 lg:px-0">
+											<ThinkingIndicator />
+										</div>
+									)}
 								{error && <AiResponseAlert error={error} />}
 							</div>
 						</div>

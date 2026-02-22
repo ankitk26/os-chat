@@ -12,6 +12,7 @@ import AIResponseReasoning from "./ai-response-reasoning";
 import AIResponseSources from "./ai-response-sources";
 import BranchOffButton from "./branch-off-button";
 import RetryModelDropdown from "./retry-model-dropdown";
+import ThinkingIndicator from "./thinking-indicator";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
@@ -25,7 +26,11 @@ export default React.memo(function AssistantMessage(props: Props) {
 	const showTokenUsage = useAppearanceStore((store) => store.showTokenUsage);
 
 	if (message.parts.length === 0) {
-		return null;
+		return (
+			<div className="px-3 lg:px-0">
+				<ThinkingIndicator />
+			</div>
+		);
 	}
 
 	const messageContent = getMessageContentFromParts(message.parts);

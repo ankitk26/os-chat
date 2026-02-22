@@ -20,11 +20,7 @@ export default function ReasoningToggleButton(props: Props) {
 
 			<div className="text-muted-foreground flex items-center gap-2 font-mono text-xs select-none">
 				<BrainIcon className="size-3" />
-				{props.messageContent ? (
-					<div>Reasoning</div>
-				) : (
-					<div className="animate-pulse">Thinking...</div>
-				)}
+				<div>Reasoning</div>
 			</div>
 		</div>
 	);
