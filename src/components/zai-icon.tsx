@@ -2,7 +2,7 @@ export default function ZaiIcon() {
 	return (
 		<svg
 			fill="currentColor"
-			fill-rule="evenodd"
+			fillRule="evenodd"
 			height="1em"
 			viewBox="0 0 24 24"
 			width="1em"
