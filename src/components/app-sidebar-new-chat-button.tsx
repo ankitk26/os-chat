@@ -1,3 +1,4 @@
+import { useHotkey } from "@tanstack/react-hotkeys";
 import { useNavigate } from "@tanstack/react-router";
 import { PlusIcon } from "lucide-react";
 import { useSharedChatContext } from "~/providers/chat-provider";
@@ -17,6 +18,8 @@ export default function AppSidebarNewChatButton() {
 		clearChat();
 		navigate({ to: "/" });
 	};
+
+	useHotkey("Mod+Shift+O", handleNewChat);
 
 	return (
 		<SidebarGroup className="py-1">

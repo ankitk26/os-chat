@@ -1,3 +1,4 @@
+import { useHotkey } from "@tanstack/react-hotkeys";
 import type { ChatStatus } from "ai";
 import { GlobeIcon, SendIcon, SquareIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
@@ -18,6 +19,8 @@ export default function PromptActions({ status, stop }: Props) {
 	const persistedUseOpenRouter = usePersistedApiKeysStore(
 		(store) => store.persistedUseOpenRouter,
 	);
+
+	useHotkey("Mod+Shift+S", toggleIsWebSearch);
 
 	return (
 		<div className="mt-4 flex items-center justify-between">
