@@ -248,6 +248,50 @@ const moonshotModels = {
 	],
 };
 
+const zaiModels = {
+	provider: "Z.ai",
+	key: "zai",
+	models: [
+		{
+			name: "GLM 4.6v",
+			openRouterModelId: "z-ai/glm-4.6v",
+			modelId: "z-ai/glm-4.6v",
+			isFree: false,
+		},
+		{
+			name: "GLM 4.7",
+			openRouterModelId: "z-ai/glm-4.7",
+			modelId: "z-ai/glm-4.7",
+			isFree: false,
+		},
+		{
+			name: "GLM 5",
+			openRouterModelId: "z-ai/glm-5",
+			modelId: "z-ai/glm-5",
+			isFree: false,
+		},
+	],
+};
+
+const minimaxModels = {
+	provider: "MiniMax",
+	key: "minimax",
+	models: [
+		{
+			name: "MiniMax M2.1",
+			openRouterModelId: "minimax/minimax-m2.1",
+			modelId: "minimax/minimax-m2.1",
+			isFree: false,
+		},
+		{
+			name: "MiniMax M2.5",
+			openRouterModelId: "minimax/minimax-m2.5",
+			modelId: "minimax/minimax-m2.5",
+			isFree: false,
+		},
+	],
+};
+
 export const allModelProviders: ProviderGroup[] = [
 	geminiModels,
 	deepseekModels,
@@ -255,4 +299,6 @@ export const allModelProviders: ProviderGroup[] = [
 	anthropicModels,
 	xAiModels,
 	moonshotModels,
+	zaiModels,
+	minimaxModels,
 ];
