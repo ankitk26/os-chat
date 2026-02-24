@@ -9,6 +9,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "./ui/sidebar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export default function AppSidebarNewChatButton() {
 	const { clearChat } = useSharedChatContext();
@@ -26,14 +27,20 @@ export default function AppSidebarNewChatButton() {
 			<SidebarGroupContent>
 				<SidebarMenu>
 					<SidebarMenuItem>
-						<SidebarMenuButton
-							onClick={handleNewChat}
-							tooltip="New Chat"
-							className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground flex w-full min-w-8 cursor-pointer items-center justify-center text-center font-semibold duration-200 ease-linear"
-						>
-							<PlusIcon className="size-4" />
-							<span>New Chat</span>
-						</SidebarMenuButton>
+						<Tooltip>
+							<TooltipTrigger
+								render={
+									<SidebarMenuButton
+										onClick={handleNewChat}
+										className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground flex w-full min-w-8 cursor-pointer items-center justify-center text-center font-semibold duration-200 ease-linear"
+									>
+										<PlusIcon className="size-4" />
+										<span>New Chat</span>
+									</SidebarMenuButton>
+								}
+							/>
+							<TooltipContent>Ctrl+Shift+O</TooltipContent>
+						</Tooltip>
 					</SidebarMenuItem>
 				</SidebarMenu>
 			</SidebarGroupContent>
