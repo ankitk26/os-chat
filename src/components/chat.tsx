@@ -4,11 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { useSharedChatContext } from "~/providers/chat-provider";
 import type { CustomUIMessage } from "~/types";
 import AiResponseAlert from "./ai-response-error";
+import AssistantMessageSkeleton from "./assistant-message-skeleton";
 import ChatMessages from "./chat-messages";
 import EmptyChatContent from "./empty-chat-content";
 import ThinkingIndicator from "./thinking-indicator";
 import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
+import UserMessageSkeleton from "./user-message-skeleton";
 import UserPromptInput from "./user-prompt-input";
 
 type Props = {
@@ -82,17 +84,6 @@ export default function Chat({
 		};
 	}, [messages]);
 
-	// Auto-scroll to bottom when new messages arrive (optional)
-	useEffect(() => {
-		if (status === "submitted") {
-			const timerSeconds = 100;
-			const timer = setTimeout(() => {
-				scrollToBottom();
-			}, timerSeconds);
-			return () => clearTimeout(timer);
-		}
-	}, [status, messages.length]);
-
 	useEffect(() => {
 		setMessages(dbMessages);
 	}, [setMessages, dbMessages]);
@@ -105,25 +96,34 @@ export default function Chat({
 
 				{chatId && (
 					<ScrollArea className="h-full w-full" viewportRef={viewportRef}>
-						<div className="mx-auto h-full w-full max-w-full px-2 lg:max-w-3xl lg:px-4">
+						<div className="mx-auto min-h-full w-full max-w-full px-2 lg:max-w-3xl lg:px-4">
 							<div
 								className="my-4 space-y-6 lg:my-8 lg:space-y-8"
 								style={{ paddingBottom: `${inputHeight + 40}px` }}
 							>
-								<ChatMessages
-									chatId={chatId}
-									messages={messages}
-									regenerate={regenerate}
-									sendMessage={sendMessage}
-								/>
-								{status === "submitted" &&
-									messages.length > 0 &&
-									messages.at(-1)?.role === "user" && (
-										<div className="px-3 lg:px-0">
-											<ThinkingIndicator />
-										</div>
-									)}
-								{error && <AiResponseAlert error={error} />}
+								{isMessagesPending ? (
+									<>
+										<UserMessageSkeleton />
+										<AssistantMessageSkeleton />
+									</>
+								) : (
+									<>
+										<ChatMessages
+											chatId={chatId}
+											messages={messages}
+											regenerate={regenerate}
+											sendMessage={sendMessage}
+										/>
+										{status === "submitted" &&
+											messages.length > 0 &&
+											messages.at(-1)?.role === "user" && (
+												<div className="px-3 lg:px-0">
+													<ThinkingIndicator />
+												</div>
+											)}
+										{error && <AiResponseAlert error={error} />}
+									</>
+								)}
 							</div>
 						</div>
 					</ScrollArea>

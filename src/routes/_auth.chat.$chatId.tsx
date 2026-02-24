@@ -1,11 +1,9 @@
 import { convexQuery } from "@convex-dev/react-query";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
-import { Suspense, useMemo } from "react";
-import AssistantMessageSkeleton from "~/components/assistant-message-skeleton";
+import { useMemo } from "react";
 import Chat from "~/components/chat";
-import UserMessageSkeleton from "~/components/user-message-skeleton";
 import type { CustomUIMessage } from "~/types";
 
 export const Route = createFileRoute("/_auth/chat/$chatId")({
@@ -13,26 +11,9 @@ export const Route = createFileRoute("/_auth/chat/$chatId")({
 });
 
 function RouteComponent() {
-	return (
-		<Suspense
-			fallback={
-				<div className="mx-auto h-full w-full max-w-full px-2 lg:max-w-3xl lg:px-4">
-					<div className="my-4 space-y-6 pb-40 lg:my-8 lg:space-y-8 lg:pb-32">
-						<UserMessageSkeleton />
-						<AssistantMessageSkeleton />
-					</div>
-				</div>
-			}
-		>
-			<SuspendedChatPage />
-		</Suspense>
-	);
-}
-
-function SuspendedChatPage() {
 	const { chatId } = Route.useParams();
 
-	const { data: messages, isPending: isMessagesPending } = useSuspenseQuery(
+	const { data: messages, isPending } = useQuery(
 		convexQuery(api.messages.getMessages, {
 			chatId,
 		}),
@@ -62,7 +43,7 @@ function SuspendedChatPage() {
 		<Chat
 			chatId={chatId}
 			dbMessages={transformedMessages}
-			isMessagesPending={isMessagesPending}
+			isMessagesPending={isPending}
 		/>
 	);
 }
