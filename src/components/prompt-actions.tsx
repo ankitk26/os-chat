@@ -6,6 +6,7 @@ import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import ModelSelector from "./model-selector";
 import { Button } from "./ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
 	status: ChatStatus;
@@ -29,18 +30,25 @@ export default function PromptActions({ status, stop }: Props) {
 
 				{(selectedModel.openRouterModelId.startsWith("google") ||
 					persistedUseOpenRouter) && (
-					<Button
-						className={cn(
-							"transition-all duration-300 ease-out",
-							isWebSearchEnabled ? "border-primary" : "border-border",
-						)}
-						onClick={toggleIsWebSearch}
-						type="button"
-						variant={isWebSearchEnabled ? "default" : "outline"}
-					>
-						<GlobeIcon />
-						Search
-					</Button>
+					<Tooltip>
+						<TooltipTrigger
+							render={
+								<Button
+									className={cn(
+										"transition-all duration-300 ease-out",
+										isWebSearchEnabled ? "border-primary" : "border-border",
+									)}
+									onClick={toggleIsWebSearch}
+									type="button"
+									variant={isWebSearchEnabled ? "default" : "outline"}
+								>
+									<GlobeIcon />
+									Search
+								</Button>
+							}
+						/>
+						<TooltipContent>Ctrl+Shift+S</TooltipContent>
+					</Tooltip>
 				)}
 
 				{/* <Button
