@@ -6,8 +6,8 @@ import AppSidebarFolderItemToggler from "./app-sidebar-folder-item-toggler";
 import {
 	SidebarMenuButton,
 	SidebarMenuItem,
-	SidebarMenuAction,
 	SidebarMenuSub,
+	useSidebar,
 } from "./ui/sidebar";
 
 type Props = {
@@ -16,13 +16,20 @@ type Props = {
 
 export default function AppSidebarFolderItem(props: Props) {
 	const [showChats, setShowChats] = useState(false);
+	const { isMobile } = useSidebar();
+
+	const handleClick = (e: React.MouseEvent) => {
+		e.preventDefault();
+		setShowChats((prev) => !prev);
+	};
 
 	return (
 		<>
-			<SidebarMenuItem>
+			<SidebarMenuItem className="relative">
 				<SidebarMenuButton
-					onClick={() => setShowChats((prev) => !prev)}
+					onClick={handleClick}
 					tooltip={props.folder.title}
+					className="w-full pr-8 md:pr-7"
 				>
 					<AppSidebarFolderItemToggler
 						folderHasChats={props.folder.chats.length > 0}
@@ -32,9 +39,15 @@ export default function AppSidebarFolderItem(props: Props) {
 						{props.folder.title}
 					</span>
 				</SidebarMenuButton>
-				<SidebarMenuAction showOnHover>
+				<div
+					className={
+						isMobile
+							? "absolute top-1/2 right-1 z-30 flex h-9 w-9 -translate-y-1/2 items-center justify-center"
+							: "absolute top-1/2 right-1 z-10 flex h-7 w-7 -translate-y-1/2 items-center justify-center opacity-0 transition-opacity group-hover/menu-item:opacity-100"
+					}
+				>
 					<AppSidebarFolderItemActions folder={props.folder} />
-				</SidebarMenuAction>
+				</div>
 			</SidebarMenuItem>
 
 			{/* Chats under the folder */}

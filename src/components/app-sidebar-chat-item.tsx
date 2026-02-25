@@ -32,7 +32,7 @@ export default function AppSidebarChatItem({ chat }: Props) {
 				onClick={handleClick}
 				params={{ chatId: chat.uuid }}
 				to="/chat/$chatId"
-				className="flex w-full pr-10"
+				className="flex w-full pr-8 md:pr-7"
 			>
 				<SidebarMenuButton
 					isActive={isActive}
