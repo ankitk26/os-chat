@@ -46,7 +46,7 @@ function SettingsPage() {
 
 					<Tabs className="w-full flex-col" defaultValue="apiKeys">
 						{/* Scrollable tabs on mobile */}
-						<div className="w-full overflow-x-auto lg:w-fit">
+						<div className="scrollbar-hide w-full overflow-x-auto lg:w-fit">
 							<TabsList className="grid w-full min-w-fit grid-cols-4 lg:w-auto">
 								<TabsTrigger
 									className="text-xs whitespace-nowrap sm:text-sm"
