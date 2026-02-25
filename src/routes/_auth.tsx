@@ -20,15 +20,18 @@ export const Route = createFileRoute("/_auth")({
 });
 
 function FloatingSidebarTrigger() {
-	const { open } = useSidebar();
+	const { isMobile, open, openMobile } = useSidebar();
 
-	if (open) {
+	// On mobile, check openMobile state; on desktop, check open state
+	const isOpen = isMobile ? openMobile : open;
+
+	if (isOpen) {
 		return null;
 	}
 
 	return (
-		<div className="absolute top-2 left-2 z-50">
-			<SidebarTrigger className="h-8 w-8" />
+		<div className="relative flex h-14 w-full shrink-0 items-center px-3 md:absolute md:top-2 md:left-2 md:h-auto md:w-auto md:p-0">
+			<SidebarTrigger className="h-10 w-10 md:h-8 md:w-8" />
 		</div>
 	);
 }

@@ -49,8 +49,8 @@ export default React.memo(function AssistantMessage(props: Props) {
 			<AIGeneratedImages parts={message.parts} />
 			<AIResponseSources parts={message.parts} />
 
-			{/* Message actions */}
-			<div className="flex items-center gap-6 duration-200 md:opacity-0 group-hover:md:opacity-100">
+			{/* Message actions - visible on mobile, hover on desktop */}
+			<div className="flex items-center gap-6 opacity-100 transition-opacity duration-200 md:opacity-0 md:group-hover:opacity-100">
 				<div className="flex items-center gap-1">
 					<Tooltip>
 						<TooltipTrigger

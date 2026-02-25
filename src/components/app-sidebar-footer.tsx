@@ -1,15 +1,27 @@
 import { Link, useRouteContext } from "@tanstack/react-router";
 import { SettingsIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar";
+import {
+	SidebarMenu,
+	SidebarMenuButton,
+	SidebarMenuItem,
+	useSidebar,
+} from "./ui/sidebar";
 
 export default function AppSidebarFooter() {
 	const { authUser } = useRouteContext({ strict: false });
+	const { isMobile, setOpenMobile } = useSidebar();
+
+	const handleClick = () => {
+		if (isMobile) {
+			setOpenMobile(false);
+		}
+	};
 
 	return (
 		<SidebarMenu>
 			<SidebarMenuItem>
-				<Link to="/settings" className="flex w-full">
+				<Link to="/settings" className="flex w-full" onClick={handleClick}>
 					<SidebarMenuButton
 						size="lg"
 						tooltip={authUser?.name || "Settings"}

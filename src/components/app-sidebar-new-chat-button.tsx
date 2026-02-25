@@ -8,16 +8,21 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
+	useSidebar,
 } from "./ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export default function AppSidebarNewChatButton() {
 	const { clearChat } = useSharedChatContext();
 	const navigate = useNavigate();
+	const { isMobile, setOpenMobile } = useSidebar();
 
 	const handleNewChat = () => {
 		clearChat();
 		navigate({ to: "/" });
+		if (isMobile) {
+			setOpenMobile(false);
+		}
 	};
 
 	useHotkey("Mod+Shift+O", handleNewChat);

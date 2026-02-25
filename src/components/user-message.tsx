@@ -95,10 +95,10 @@ export default memo(function UserMessage({
 	};
 
 	return (
-		<div className="group flex w-3/4 flex-col items-end space-y-4 self-end">
+		<div className="group flex w-full max-w-[90%] flex-col items-end space-y-3 self-end lg:max-w-3xl">
 			<div
 				className={cn(
-					"flex w-full max-w-full flex-col gap-6 rounded-xl border px-4 py-4 text-sm wrap-break-word whitespace-pre-wrap",
+					"flex w-full max-w-full flex-col gap-6 rounded-xl border px-4 py-4 text-sm wrap-break-word whitespace-pre-wrap lg:max-w-3xl",
 					isEditing ? "bg-secondary" : "bg-popover",
 				)}
 			>

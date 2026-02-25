@@ -6,6 +6,7 @@ import AppSidebarChatItemFolder from "./app-sidebar-chat-item-folder";
 import AppSidebarChatItemPin from "./app-sidebar-chat-item-pin";
 import AppSidebarChatItemRename from "./app-sidebar-chat-item-rename";
 import AppSidebarChatItemShare from "./app-sidebar-chat-item-share";
+import { Button } from "./ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -21,11 +22,15 @@ export default function AppSidebarChatItemActions(props: Props) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger
-				nativeButton={false}
 				render={
-					<span className="flex h-full w-full items-center justify-center">
-						<EllipsisVerticalIcon className="size-4" />
-					</span>
+					<Button
+						size="icon-xs"
+						variant="ghost"
+						className="h-full w-full"
+						onClick={(e) => e.stopPropagation()}
+					>
+						<EllipsisVerticalIcon className="size-4 md:size-3" />
+					</Button>
 				}
 			/>
 			<DropdownMenuContent className="w-50" side="right" align="start">

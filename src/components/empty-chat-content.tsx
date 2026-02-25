@@ -11,7 +11,7 @@ export default function EmptyChatContent() {
 
 	return (
 		<div className="mx-auto flex h-full w-full max-w-3xl flex-col justify-center px-4 lg:px-0">
-			<h2 className="mb-2 text-3xl font-semibold">
+			<h2 className="mb-2 text-2xl font-semibold lg:text-3xl">
 				Welcome {authUser?.name?.split(" ")[0]}
 			</h2>
 			<p>Start a conversation by typing a message below.</p>

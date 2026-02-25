@@ -56,7 +56,8 @@ export const Route = createRootRouteWithContext<{
 			},
 			{
 				name: "viewport",
-				content: "width=device-width, initial-scale=1",
+				content:
+					"width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover",
 			},
 			{
 				title: "os-chat",
@@ -116,7 +117,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 						<ChatProvider>
 							<div>{children}</div>
 							<Toaster duration={800} style={{ fontFamily: "inherit" }} />
-							<ReactQueryDevtools />
+							{/*<ReactQueryDevtools />*/}
 							<Scripts />
 						</ChatProvider>
 					</TooltipProvider>
