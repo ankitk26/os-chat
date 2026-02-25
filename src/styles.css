@@ -193,6 +193,24 @@
 	.scrollbar-hide::-webkit-scrollbar {
 		display: none;
 	}
+
+	/* Safe area utilities for mobile devices */
+	.pb-safe {
+		padding-bottom: max(1rem, env(safe-area-inset-bottom));
+	}
+	.pt-safe {
+		padding-top: max(1rem, env(safe-area-inset-top));
+	}
+	.pl-safe {
+		padding-left: max(1rem, env(safe-area-inset-left));
+	}
+	.pr-safe {
+		padding-right: max(1rem, env(safe-area-inset-right));
+	}
+	.px-safe {
+		padding-left: max(1rem, env(safe-area-inset-left));
+		padding-right: max(1rem, env(safe-area-inset-right));
+	}
 }
 
 code,

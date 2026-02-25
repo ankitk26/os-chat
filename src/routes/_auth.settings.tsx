@@ -21,7 +21,7 @@ function SettingsPage() {
 	return (
 		<section className="h-svh max-h-svh py-4 pb-8 lg:py-6 lg:pb-12">
 			<ScrollArea className="h-full w-full">
-				<div className="mx-auto w-full max-w-5xl space-y-4 px-4 lg:space-y-6 lg:px-6">
+				<div className="mx-auto w-full max-w-5xl space-y-4 px-4 pb-20 lg:space-y-6 lg:px-6 lg:pb-12">
 					{/* Header - responsive layout */}
 					<div className="flex items-center justify-between gap-4">
 						<h1 className="text-2xl font-bold lg:text-3xl">Settings</h1>
@@ -47,27 +47,27 @@ function SettingsPage() {
 					<Tabs className="w-full flex-col" defaultValue="apiKeys">
 						{/* Scrollable tabs on mobile */}
 						<div className="scrollbar-hide w-full overflow-x-auto lg:w-fit">
-							<TabsList className="grid w-full min-w-fit grid-cols-4 lg:w-auto">
+							<TabsList className="flex w-full min-w-fit lg:w-auto">
 								<TabsTrigger
-									className="text-xs whitespace-nowrap sm:text-sm"
+									className="px-2 py-1 text-xs whitespace-nowrap lg:px-3 lg:py-1.5 lg:text-sm"
 									value="apiKeys"
 								>
 									API Keys
 								</TabsTrigger>
 								<TabsTrigger
-									className="text-xs whitespace-nowrap sm:text-sm"
+									className="px-2 py-1 text-xs whitespace-nowrap lg:px-3 lg:py-1.5 lg:text-sm"
 									value="chatHistory"
 								>
 									Chat History
 								</TabsTrigger>
 								<TabsTrigger
-									className="text-xs whitespace-nowrap sm:text-sm"
+									className="px-2 py-1 text-xs whitespace-nowrap lg:px-3 lg:py-1.5 lg:text-sm"
 									value="appearance"
 								>
 									Appearance
 								</TabsTrigger>
 								<TabsTrigger
-									className="text-xs whitespace-nowrap sm:text-sm"
+									className="px-2 py-1 text-xs whitespace-nowrap lg:px-3 lg:py-1.5 lg:text-sm"
 									value="about"
 								>
 									Contact

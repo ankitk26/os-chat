@@ -59,7 +59,7 @@ export default function CodeHighlight({
 				</div>
 			</div>
 
-			<div className="bg-background dark:bg-code-dark w-full max-w-full overflow-x-auto rounded-br-lg rounded-bl-lg border-r border-b border-l dark:border-0">
+			<div className="bg-background dark:bg-code-dark w-full max-w-full overflow-x-auto rounded-br-lg rounded-bl-lg border-r border-b border-l text-xs lg:text-sm dark:border-0">
 				<ShikiHighlighter
 					className="text-sm"
 					delay={150}

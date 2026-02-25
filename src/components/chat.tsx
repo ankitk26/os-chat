@@ -89,16 +89,16 @@ export default function Chat({
 	}, [setMessages, dbMessages]);
 
 	return (
-		<div className="relative mx-auto flex h-svh max-h-svh w-full flex-col">
+		<div className="relative mx-auto flex h-[calc(100svh-3.5rem)] max-h-[calc(100svh-3.5rem)] w-full flex-col md:h-svh md:max-h-svh">
 			{/* Full height scroll area that extends behind the prompt */}
 			<div className="absolute inset-0">
 				{!isMessagesPending && messages.length === 0 && <EmptyChatContent />}
 
 				{chatId && (
 					<ScrollArea className="h-full w-full" viewportRef={viewportRef}>
-						<div className="mx-auto min-h-full w-full max-w-full px-2 lg:max-w-3xl lg:px-4">
+						<div className="mx-auto min-h-full w-full max-w-full px-3 lg:max-w-3xl lg:px-4">
 							<div
-								className="my-4 space-y-6 lg:my-8 lg:space-y-8"
+								className="pb-safe my-4 space-y-6 lg:my-8 lg:space-y-8"
 								style={{ paddingBottom: `${inputHeight + 40}px` }}
 							>
 								{isMessagesPending ? (

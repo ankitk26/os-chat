@@ -152,7 +152,7 @@ export default function UserPromptInput(props: Props) {
 	return (
 		<div ref={containerRef} className="bg-background/80 backdrop-blur">
 			<form
-				className="border-border bg-popover/90 mx-auto flex w-full max-w-3xl flex-col rounded-tl-lg rounded-tr-lg border p-4"
+				className="border-border bg-popover/90 mx-auto flex w-full max-w-full flex-col rounded-tl-lg rounded-tr-lg border p-3 lg:max-w-3xl lg:p-4"
 				onSubmit={(e) => {
 					e.preventDefault();
 					handlePromptSubmit();

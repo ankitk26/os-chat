@@ -24,8 +24,8 @@ export default function PromptActions({ status, stop }: Props) {
 	useHotkey("Mod+Shift+S", toggleIsWebSearch);
 
 	return (
-		<div className="mt-4 flex items-center justify-between">
-			<div className="flex items-center gap-2">
+		<div className="mt-3 flex flex-row items-center justify-between gap-2 lg:mt-4">
+			<div className="flex flex-1 flex-wrap items-center gap-2">
 				<ModelSelector />
 
 				{(selectedModel.openRouterModelId.startsWith("google") ||
@@ -43,23 +43,14 @@ export default function PromptActions({ status, stop }: Props) {
 									variant={isWebSearchEnabled ? "default" : "outline"}
 								>
 									<GlobeIcon />
-									Search
+									<span className="hidden sm:inline">Search</span>
+									<span className="sm:hidden">Web</span>
 								</Button>
 							}
 						/>
 						<TooltipContent>Ctrl+Shift+S</TooltipContent>
 					</Tooltip>
 				)}
-
-				{/* <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          className="rounded-full"
-        >
-          <PaperclipIcon />
-          Attach
-        </Button> */}
 			</div>
 
 			{status === "streaming" || status === "submitted" ? (

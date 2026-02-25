@@ -3,11 +3,7 @@ import { useSharedChatContext } from "~/providers/chat-provider";
 import type { SidebarChatType } from "~/types";
 import AppSidebarChatItemActions from "./app-sidebar-chat-item-actions";
 import BranchedChatIndicator from "./branched-chat-indicator";
-import {
-	SidebarMenuButton,
-	SidebarMenuItem,
-	SidebarMenuAction,
-} from "./ui/sidebar";
+import { SidebarMenuButton, SidebarMenuItem, useSidebar } from "./ui/sidebar";
 
 type Props = {
 	chat: SidebarChatType;
@@ -16,6 +12,7 @@ type Props = {
 export default function AppSidebarChatItem({ chat }: Props) {
 	const { chatId } = useParams({ strict: false });
 	const { clearChat } = useSharedChatContext();
+	const { isMobile, setOpenMobile } = useSidebar();
 	const isActive = chatId === chat.uuid;
 
 	const handleClick = () => {
@@ -23,15 +20,19 @@ export default function AppSidebarChatItem({ chat }: Props) {
 			return;
 		}
 		clearChat();
+		// Close mobile sidebar when navigating to a chat
+		if (isMobile) {
+			setOpenMobile(false);
+		}
 	};
 
 	return (
-		<SidebarMenuItem>
+		<SidebarMenuItem className="relative">
 			<Link
 				onClick={handleClick}
 				params={{ chatId: chat.uuid }}
 				to="/chat/$chatId"
-				className="flex w-full"
+				className="flex w-full pr-10"
 			>
 				<SidebarMenuButton
 					isActive={isActive}
@@ -44,9 +45,15 @@ export default function AppSidebarChatItem({ chat }: Props) {
 					</span>
 				</SidebarMenuButton>
 			</Link>
-			<SidebarMenuAction showOnHover>
+			<div
+				className={
+					isMobile
+						? "absolute top-1/2 right-1 z-30 flex h-9 w-9 -translate-y-1/2 items-center justify-center"
+						: "absolute top-1/2 right-1 z-10 flex h-7 w-7 -translate-y-1/2 items-center justify-center opacity-0 transition-opacity group-hover/menu-item:opacity-100"
+				}
+			>
 				<AppSidebarChatItemActions chat={chat} />
-			</SidebarMenuAction>
+			</div>
 		</SidebarMenuItem>
 	);
 }

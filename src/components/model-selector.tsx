@@ -44,7 +44,7 @@ export default function ModelSelector() {
 							{provider.provider}
 						</DropdownMenuSubTrigger>
 						<DropdownMenuPortal>
-							<DropdownMenuSubContent className="ml-2 w-50">
+							<DropdownMenuSubContent className="ml-2 w-50 rounded-lg">
 								{provider.models.map((model) => (
 									<DropdownMenuItem
 										className="py-2.5 text-xs"
