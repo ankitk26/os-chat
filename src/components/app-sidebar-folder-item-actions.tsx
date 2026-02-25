@@ -1,6 +1,7 @@
 import { EditIcon, EllipsisVerticalIcon, Trash2Icon } from "lucide-react";
 import { useFolderActionStore } from "~/stores/folder-actions-store";
 import type { SidebarFolder } from "~/types";
+import { Button } from "./ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -26,11 +27,15 @@ export default function AppSidebarFolderItemActions({ folder }: Props) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger
-				nativeButton={false}
 				render={
-					<span className="flex h-full w-full items-center justify-center">
-						<EllipsisVerticalIcon className="size-4" />
-					</span>
+					<Button
+						size="icon-xs"
+						variant="ghost"
+						className="h-full w-full"
+						onClick={(e) => e.stopPropagation()}
+					>
+						<EllipsisVerticalIcon className="size-4 md:size-3" />
+					</Button>
 				}
 			/>
 			<DropdownMenuContent side="right" align="start">
@@ -46,7 +51,7 @@ export default function AppSidebarFolderItemActions({ folder }: Props) {
 				</DropdownMenuItem>
 
 				<DropdownMenuItem
-					onClick={(e) => {
+					onClick={(e: React.MouseEvent) => {
 						e.stopPropagation();
 						setSelectedFolder(folder);
 						setIsDeleteModalOpen(true);
