@@ -89,7 +89,7 @@ export default function Chat({
 	}, [setMessages, dbMessages]);
 
 	return (
-		<div className="relative mx-auto flex h-[calc(100svh-3.5rem)] max-h-[calc(100svh-3.5rem)] w-full flex-col md:h-svh md:max-h-svh">
+		<div className="relative mx-auto flex h-full min-h-0 w-full flex-col">
 			{/* Full height scroll area that extends behind the prompt */}
 			<div className="absolute inset-0">
 				{!isMessagesPending && messages.length === 0 && <EmptyChatContent />}
