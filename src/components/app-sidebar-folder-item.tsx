@@ -29,7 +29,7 @@ export default function AppSidebarFolderItem(props: Props) {
 				<SidebarMenuButton
 					onClick={handleClick}
 					tooltip={props.folder.title}
-					className="w-full pr-8 md:pr-7"
+					className="w-full"
 				>
 					<AppSidebarFolderItemToggler
 						folderHasChats={props.folder.chats.length > 0}
@@ -40,6 +40,7 @@ export default function AppSidebarFolderItem(props: Props) {
 					</span>
 				</SidebarMenuButton>
 				<div
+					data-sidebar="menu-action"
 					className={
 						isMobile
 							? "absolute top-1/2 right-1 z-30 flex h-9 w-9 -translate-y-1/2 items-center justify-center"
