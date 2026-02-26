@@ -40,7 +40,7 @@ function RouteComponent() {
 	return (
 		<SidebarProvider>
 			<AppSidebar variant="inset" />
-			<SidebarInset>
+			<SidebarInset className="h-svh overflow-hidden">
 				<FloatingSidebarTrigger />
 				<Outlet />
 			</SidebarInset>
