@@ -134,6 +134,12 @@ const openAiModels = {
 			modelId: "gpt-5.2",
 			isFree: false,
 		},
+		{
+			name: "GPT 5.3 Codex",
+			openRouterModelId: "openai/gpt-5.3-codex",
+			modelId: "gpt-5.3-codex",
+			isFree: false,
+		},
 	],
 };
 
