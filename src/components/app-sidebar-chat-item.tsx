@@ -32,7 +32,7 @@ export default function AppSidebarChatItem({ chat }: Props) {
 				onClick={handleClick}
 				params={{ chatId: chat.uuid }}
 				to="/chat/$chatId"
-				className="flex w-full pr-8 md:pr-7"
+				className="flex w-full"
 			>
 				<SidebarMenuButton
 					isActive={isActive}
@@ -46,6 +46,7 @@ export default function AppSidebarChatItem({ chat }: Props) {
 				</SidebarMenuButton>
 			</Link>
 			<div
+				data-sidebar="menu-action"
 				className={
 					isMobile
 						? "absolute top-1/2 right-1 z-30 flex h-9 w-9 -translate-y-1/2 items-center justify-center"
