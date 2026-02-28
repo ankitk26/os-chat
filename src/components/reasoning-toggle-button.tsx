@@ -1,4 +1,4 @@
-import { BrainIcon, ChevronDownIcon, ChevronRightIcon } from "lucide-react";
+import { Brain, CaretDown, CaretRight } from "@phosphor-icons/react";
 
 type Props = {
 	toggleReasoningDisplay: () => void;
@@ -13,13 +13,13 @@ export default function ReasoningToggleButton(props: Props) {
 			onClick={props.toggleReasoningDisplay}
 		>
 			{props.showReasoning ? (
-				<ChevronDownIcon className="size-3" />
+				<CaretDown className="size-3" />
 			) : (
-				<ChevronRightIcon className="size-3" />
+				<CaretRight className="size-3" />
 			)}
 
 			<div className="text-muted-foreground flex items-center gap-2 font-mono text-xs select-none">
-				<BrainIcon className="size-3" />
+				<Brain className="size-3" />
 				<div>Reasoning</div>
 			</div>
 		</div>

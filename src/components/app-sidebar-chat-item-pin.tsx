@@ -1,7 +1,7 @@
 import { useConvexMutation } from "@convex-dev/react-query";
+import { PushPin } from "@phosphor-icons/react";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
-import { PinIcon } from "lucide-react";
 import { toast } from "sonner";
 import type { SidebarChatType } from "~/types";
 import { DropdownMenuItem } from "./ui/dropdown-menu";
@@ -32,7 +32,7 @@ export default function AppSidebarChatItemPin(props: Props) {
 				});
 			}}
 		>
-			<PinIcon />
+			<PushPin />
 			<span className="leading-0">{props.chat.isPinned ? "Unpin" : "Pin"}</span>
 		</DropdownMenuItem>
 	);

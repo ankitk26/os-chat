@@ -1,6 +1,6 @@
+import { Globe, PaperPlaneRight, Stop } from "@phosphor-icons/react";
 import { useHotkey } from "@tanstack/react-hotkeys";
 import type { ChatStatus } from "ai";
-import { GlobeIcon, SendIcon, SquareIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
@@ -42,7 +42,7 @@ export default function PromptActions({ status, stop }: Props) {
 									type="button"
 									variant={isWebSearchEnabled ? "default" : "outline"}
 								>
-									<GlobeIcon />
+									<Globe />
 									<span className="hidden sm:inline">Search</span>
 									<span className="sm:hidden">Web</span>
 								</Button>
@@ -55,11 +55,11 @@ export default function PromptActions({ status, stop }: Props) {
 
 			{status === "streaming" || status === "submitted" ? (
 				<Button onClick={stop} size="icon" type="button">
-					<SquareIcon />
+					<Stop />
 				</Button>
 			) : (
 				<Button size="icon" type="submit">
-					<SendIcon />
+					<PaperPlaneRight />
 				</Button>
 			)}
 		</div>

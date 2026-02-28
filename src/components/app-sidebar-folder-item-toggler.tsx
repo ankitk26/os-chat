@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronRightIcon } from "lucide-react";
+import { CaretDown, CaretRight } from "@phosphor-icons/react";
 
 type Props = {
 	showChats: boolean;
@@ -11,8 +11,8 @@ export default function AppSidebarFolderItemToggler(props: Props) {
 	}
 
 	return props.showChats ? (
-		<ChevronDownIcon className="size-4 shrink-0" />
+		<CaretDown className="size-4 shrink-0" />
 	) : (
-		<ChevronRightIcon className="size-4 shrink-0" />
+		<CaretRight className="size-4 shrink-0" />
 	);
 }

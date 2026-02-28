@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog as SheetPrimitive } from "@base-ui/react/dialog";
-import { XIcon } from "lucide-react";
+import { X } from "@phosphor-icons/react";
 import * as React from "react";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
@@ -69,7 +69,7 @@ function SheetContent({
 							/>
 						}
 					>
-						<XIcon />
+						<X />
 						<span className="sr-only">Close</span>
 					</SheetPrimitive.Close>
 				)}

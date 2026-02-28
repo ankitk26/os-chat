@@ -1,7 +1,7 @@
 import { convexQuery } from "@convex-dev/react-query";
+import { Chat } from "@phosphor-icons/react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
-import { MessageSquareIcon } from "lucide-react";
 import AppSidebarChatItem from "./app-sidebar-chat-item";
 import DeleteAllChatsAlertDialog from "./delete-all-chats-alert-dialog";
 import { SidebarGroup, SidebarMenu } from "./ui/sidebar";
@@ -15,7 +15,7 @@ export default function UnpinnedChatsList() {
 		<SidebarGroup className="space-y-1 group-data-[collapsible=icon]:hidden">
 			<div className="flex items-center justify-between px-2 py-1.5">
 				<div className="flex items-center">
-					<MessageSquareIcon className="text-sidebar-foreground/60 mr-2 size-4" />
+					<Chat className="text-sidebar-foreground/60 mr-2 size-4" />
 					<span className="text-sidebar-foreground/50 text-xs font-normal">
 						Chats
 					</span>

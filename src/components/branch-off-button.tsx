@@ -1,9 +1,9 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
+import { Key, ArrowClockwise, GitBranch } from "@phosphor-icons/react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
-import { KeyIcon, RefreshCcwIcon, SplitIcon } from "lucide-react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { useSharedChatContext } from "~/providers/chat-provider";
@@ -120,7 +120,7 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
 				<DropdownMenuTrigger
 					render={
 						<TooltipTrigger render={<Button size="icon" variant="ghost" />}>
-							<SplitIcon />
+							<GitBranch />
 						</TooltipTrigger>
 					}
 				/>
@@ -131,7 +131,7 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
 					className="flex items-center gap-3 py-2.5 text-xs"
 					onClick={() => handleBranchOff(selectedModel)}
 				>
-					<RefreshCcwIcon className="size-4" />
+					<ArrowClockwise className="size-4" />
 					Branch off
 				</DropdownMenuItem>
 
@@ -156,9 +156,7 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
 									>
 										<ModelProviderIcon provider={provider.key} />
 										{model.name}
-										{!model.isAvailable && (
-											<KeyIcon className="ml-auto size-3" />
-										)}
+										{!model.isAvailable && <Key className="ml-auto size-3" />}
 									</DropdownMenuItem>
 								))}
 							</DropdownMenuSubContent>

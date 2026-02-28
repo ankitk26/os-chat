@@ -1,8 +1,8 @@
 import { convexQuery } from "@convex-dev/react-query";
+import { LinkBreak } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
-import { Link2OffIcon } from "lucide-react";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
 import ReadOnlyAssistantMessage from "./read-only-assistant-message";
 import ReadOnlyUserMessage from "./read-only-user-message";
@@ -21,7 +21,7 @@ export default function ReadOnlyChatMessages() {
 			<div className="mx-auto flex h-svh max-w-md flex-col items-center justify-center px-4">
 				<div className="space-y-4 text-center">
 					<div className="bg-muted mx-auto flex h-16 w-16 items-center justify-center rounded-full">
-						<Link2OffIcon className="text-muted-foreground h-8 w-8" />
+						<LinkBreak className="text-muted-foreground h-8 w-8" />
 					</div>
 					<div className="space-y-2">
 						<h1 className="text-xl font-semibold">Chat not available</h1>

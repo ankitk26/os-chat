@@ -1,7 +1,7 @@
 import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
+import { Check, Minus, GitBranch, Trash } from "@phosphor-icons/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
-import { CheckIcon, MinusIcon, SplitIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -113,7 +113,7 @@ export default function ChatHistoryManager() {
 									/>
 								}
 							>
-								<Trash2Icon className="size-3.5" />
+								<Trash className="size-3.5" />
 								Delete {selectedChats.size}
 							</AlertDialogTrigger>
 							<AlertDialogContent>
@@ -163,7 +163,7 @@ export default function ChatHistoryManager() {
 				(chats.length === 0 ? (
 					<div className="py-12 text-center">
 						<div className="bg-muted mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg">
-							<MinusIcon className="text-muted-foreground h-5 w-5" />
+							<Minus className="text-muted-foreground h-5 w-5" />
 						</div>
 						<p className="text-muted-foreground text-sm">
 							No conversations yet
@@ -191,7 +191,7 @@ export default function ChatHistoryManager() {
 										}`}
 									>
 										{isSelected && (
-											<CheckIcon className="text-primary-foreground h-3 w-3" />
+											<Check className="text-primary-foreground h-3 w-3" />
 										)}
 									</div>
 
@@ -203,7 +203,7 @@ export default function ChatHistoryManager() {
 													: "text-foreground"
 											}`}
 										>
-											{chat.isBranched && <SplitIcon className="size-3" />}
+											{chat.isBranched && <GitBranch className="size-3" />}
 											{chat.title}
 										</div>
 										<p
