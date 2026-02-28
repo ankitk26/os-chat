@@ -1,5 +1,6 @@
 import CustomExternalLink from "./custom-external-link";
 import GithubIcon from "./github-icon";
+import XIcon from "./x-icon";
 import { Button } from "./ui/button";
 import { TabsContent } from "./ui/tabs";
 
@@ -14,9 +15,9 @@ export default function ContactSection() {
 					This project is Open-Source.
 				</p>
 				<CustomExternalLink href={import.meta.env.VITE_GITHUB_REPO_LINK}>
-					<Button className="w-28" size="sm">
+					<Button variant="outline" className="gap-2">
 						<GithubIcon />
-						os-chat
+						<span>os-chat</span>
 					</Button>
 				</CustomExternalLink>
 			</div>
@@ -26,17 +27,9 @@ export default function ContactSection() {
 					For bugs, features, or general inquiries:
 				</p>
 				<CustomExternalLink href={import.meta.env.VITE_X_URL}>
-					<Button className="w-28" size="sm">
-						<svg
-							className="fill-primary-foreground size-4"
-							role="img"
-							viewBox="0 0 24 24"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<title>X</title>
-							<path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
-						</svg>
-						Contact
+					<Button variant="outline" className="gap-2">
+						<XIcon />
+						<span>Contact</span>
 					</Button>
 				</CustomExternalLink>
 			</div>
