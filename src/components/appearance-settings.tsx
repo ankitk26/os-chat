@@ -24,11 +24,11 @@ export default function AppearanceSettings() {
 	};
 
 	return (
-		<TabsContent className="flex flex-col gap-12" value="appearance">
+		<TabsContent className="flex flex-col gap-10" value="appearance">
 			{/* Typography */}
-			<section className="flex flex-col gap-5">
-				<header className="flex flex-col gap-2">
-					<h2 className="text-lg font-semibold text-pretty">Typography</h2>
+			<section className="flex flex-col gap-4">
+				<header className="flex flex-col gap-1">
+					<h2 className="text-base font-semibold">Typography</h2>
 					<p className="text-muted-foreground text-sm">
 						Customize the font family used throughout the application
 					</p>
@@ -36,11 +36,9 @@ export default function AppearanceSettings() {
 
 				<div className="bg-card rounded-lg border p-4">
 					<div className="flex items-center justify-between">
-						<div className="flex min-w-0 flex-col gap-1">
-							<Label className="font-medium" htmlFor="mono-font">
-								Enable Mono Font
-							</Label>
-						</div>
+						<Label className="font-medium" htmlFor="mono-font">
+							Use monospace font
+						</Label>
 
 						<Switch
 							aria-label="Enable mono font"
@@ -53,22 +51,22 @@ export default function AppearanceSettings() {
 			</section>
 
 			{/* Stats */}
-			<section className="flex flex-col gap-5">
-				<header className="flex flex-col gap-2">
-					<h2 className="text-lg font-semibold text-pretty">Stats</h2>
+			<section className="flex flex-col gap-4">
+				<header className="flex flex-col gap-1">
+					<h2 className="text-base font-semibold">Usage Stats</h2>
 					<p className="text-muted-foreground text-sm">
 						Control the display of usage statistics in the application
 					</p>
 				</header>
 
-				<div className="bg-card rounded-lg border p-4">
-					<div className="flex items-center justify-between">
-						<div className="flex min-w-0 flex-col gap-1">
+				<div className="bg-card rounded-lg border">
+					<div className="flex items-center justify-between border-b p-4">
+						<div className="flex flex-col gap-1">
 							<Label className="font-medium" htmlFor="show-token-usage">
-								Show Token Usage
+								Show token usage
 							</Label>
-							<p className="text-muted-foreground text-sm">
-								Display token consumption by model within the app
+							<p className="text-muted-foreground text-xs">
+								Display token consumption breakdown by model
 							</p>
 						</div>
 
@@ -80,7 +78,11 @@ export default function AppearanceSettings() {
 						/>
 					</div>
 
-					<TokenUsageByModel />
+					{showTokenUsage && (
+						<div className="p-4 pt-0">
+							<TokenUsageByModel />
+						</div>
+					)}
 				</div>
 			</section>
 		</TabsContent>
