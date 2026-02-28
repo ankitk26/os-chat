@@ -1,5 +1,5 @@
+import { House } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
-import { HomeIcon } from "lucide-react";
 import { useSharedChatContext } from "~/providers/chat-provider";
 import { ThemeToggler } from "./theme-toggle";
 import { Button } from "./ui/button";
@@ -38,7 +38,7 @@ export default function NotFound() {
 								/>
 							}
 						>
-							<HomeIcon className="h-4 w-4" />
+							<House className="h-4 w-4" />
 							Go Home
 						</Button>
 					</div>

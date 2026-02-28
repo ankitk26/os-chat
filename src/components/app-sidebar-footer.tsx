@@ -1,5 +1,5 @@
+import { Gear } from "@phosphor-icons/react";
 import { Link, useRouteContext } from "@tanstack/react-router";
-import { SettingsIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
 	SidebarMenu,
@@ -46,7 +46,7 @@ export default function AppSidebarFooter() {
 								{authUser?.email}
 							</span>
 						</div>
-						<SettingsIcon className="ml-auto" />
+						<Gear className="ml-auto" />
 					</SidebarMenuButton>
 				</Link>
 			</SidebarMenuItem>

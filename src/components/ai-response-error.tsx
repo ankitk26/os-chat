@@ -1,4 +1,4 @@
-import { TerminalIcon } from "lucide-react";
+import { Terminal } from "@phosphor-icons/react";
 import { Alert, AlertDescription } from "./ui/alert";
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
 export default function AiResponseAlert({ error }: Props) {
 	return (
 		<Alert className="mb-8">
-			<TerminalIcon className="stroke-destructive" />
+			<Terminal className="stroke-destructive" />
 			<AlertDescription>{error.message}</AlertDescription>
 		</Alert>
 	);

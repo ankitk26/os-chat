@@ -1,5 +1,5 @@
+import { Spinner, Chat } from "@phosphor-icons/react";
 import { createFileRoute } from "@tanstack/react-router";
-import { LoaderIcon, MessageSquareIcon } from "lucide-react";
 import { useState } from "react";
 import GithubIcon from "~/components/github-icon";
 import { Button } from "~/components/ui/button";
@@ -34,7 +34,7 @@ function RouteComponent() {
 				{/* Logo/Brand Section */}
 				<div className="space-y-2 text-center">
 					<div className="bg-primary mx-auto flex h-12 w-12 items-center justify-center rounded-xl">
-						<MessageSquareIcon className="text-primary-foreground h-6 w-6" />
+						<Chat className="text-primary-foreground h-6 w-6" />
 					</div>
 					<h1 className="text-2xl font-bold tracking-tight">os-chat</h1>
 					<p className="text-muted-foreground">
@@ -57,7 +57,7 @@ function RouteComponent() {
 							onClick={handleLogin}
 						>
 							{isLoading ? (
-								<LoaderIcon className="size-4 animate-spin" />
+								<Spinner className="size-4 animate-spin" />
 							) : (
 								<GithubIcon />
 							)}

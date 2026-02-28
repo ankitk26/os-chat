@@ -1,7 +1,7 @@
 import { convexQuery } from "@convex-dev/react-query";
+import { Check, Link } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
-import { CheckIcon, Link2Icon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useChatActionStore } from "~/stores/chat-actions-store";
@@ -62,12 +62,12 @@ export default function ShareChatDialogFooter() {
 				>
 					{copied ? (
 						<>
-							<CheckIcon className="size-4" />
+							<Check className="size-4" />
 							Copied!
 						</>
 					) : (
 						<>
-							<Link2Icon className="size-4" />
+							<Link className="size-4" />
 							Copy Link
 						</>
 					)}

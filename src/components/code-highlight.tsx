@@ -1,4 +1,4 @@
-import { CopyIcon } from "lucide-react";
+import { Copy } from "@phosphor-icons/react";
 import { useTheme } from "next-themes";
 import type { ReactNode } from "react";
 import ShikiHighlighter, { type Element, isInlineCode } from "react-shiki";
@@ -52,7 +52,7 @@ export default function CodeHighlight({
 								/>
 							}
 						>
-							<CopyIcon />
+							<Copy />
 						</TooltipTrigger>
 						<TooltipContent>Copy to clipboard</TooltipContent>
 					</Tooltip>

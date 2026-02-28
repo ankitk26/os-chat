@@ -1,4 +1,4 @@
-import { EllipsisVerticalIcon } from "lucide-react";
+import { DotsThreeVertical } from "@phosphor-icons/react";
 import { Suspense } from "react";
 import type { SidebarChatType } from "~/types";
 import AppSidebarChatItemDelete from "./app-sidebar-chat-item-delete";
@@ -29,7 +29,7 @@ export default function AppSidebarChatItemActions(props: Props) {
 						className="h-full w-full"
 						onClick={(e) => e.stopPropagation()}
 					>
-						<EllipsisVerticalIcon className="size-4 md:size-3" />
+						<DotsThreeVertical className="size-4 md:size-3" />
 					</Button>
 				}
 			/>

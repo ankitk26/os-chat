@@ -1,4 +1,4 @@
-import { Share2Icon } from "lucide-react";
+import { Export } from "@phosphor-icons/react";
 import { useChatActionStore } from "~/stores/chat-actions-store";
 import type { SidebarChatType } from "~/types";
 import { DropdownMenuItem } from "./ui/dropdown-menu";
@@ -21,7 +21,7 @@ export default function AppSidebarChatItemShare(props: Props) {
 				setIsShareDialogOpen(true);
 			}}
 		>
-			<Share2Icon />
+			<Export />
 			<span className="leading-0">Share</span>
 		</DropdownMenuItem>
 	);

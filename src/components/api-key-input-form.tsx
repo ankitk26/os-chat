@@ -1,4 +1,4 @@
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { Eye, EyeSlash } from "@phosphor-icons/react";
 import { useState } from "react";
 import type { Provider } from "~/types";
 import { Button } from "./ui/button";
@@ -41,11 +41,7 @@ export default function ApiKeyInputForm(props: Props) {
 				type="button"
 				variant="ghost"
 			>
-				{showKey ? (
-					<EyeOffIcon className="size-4" />
-				) : (
-					<EyeIcon className="size-4" />
-				)}
+				{showKey ? <EyeSlash className="size-4" /> : <Eye className="size-4" />}
 			</Button>
 		</div>
 	);

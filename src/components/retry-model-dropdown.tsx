@@ -1,9 +1,9 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
+import { Globe, Key, ArrowClockwise } from "@phosphor-icons/react";
 import { useMutation } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
-import { GlobeIcon, KeyIcon, RefreshCcwIcon } from "lucide-react";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
@@ -85,7 +85,7 @@ export default function RetryModelDropdown(props: Props) {
 				<DropdownMenuTrigger
 					render={
 						<TooltipTrigger render={<Button size="icon" variant="ghost" />}>
-							<RefreshCcwIcon />
+							<ArrowClockwise />
 						</TooltipTrigger>
 					}
 				/>
@@ -95,7 +95,7 @@ export default function RetryModelDropdown(props: Props) {
 				{/* Web Search switch */}
 				<div className="flex items-center justify-between px-2 py-2.5">
 					<div className="flex items-center gap-2">
-						<GlobeIcon className="size-4" />
+						<Globe className="size-4" />
 						<span className="text-xs">Web Search</span>
 					</div>
 					<Switch
@@ -110,7 +110,7 @@ export default function RetryModelDropdown(props: Props) {
 						await handleRetry(selectedModel);
 					}}
 				>
-					<RefreshCcwIcon className="size-4" />
+					<ArrowClockwise className="size-4" />
 					Retry same
 				</DropdownMenuItem>
 
@@ -137,9 +137,7 @@ export default function RetryModelDropdown(props: Props) {
 									>
 										<ModelProviderIcon provider={provider.key} />
 										{model.name}
-										{!model.isAvailable && (
-											<KeyIcon className="ml-auto size-3" />
-										)}
+										{!model.isAvailable && <Key className="ml-auto size-3" />}
 									</DropdownMenuItem>
 								))}
 							</DropdownMenuSubContent>

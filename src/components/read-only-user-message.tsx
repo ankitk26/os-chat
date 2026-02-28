@@ -1,5 +1,5 @@
+import { Copy } from "@phosphor-icons/react";
 import type { Doc } from "convex/_generated/dataModel";
-import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
 import MemoizedMarkdown from "./memoized-markdown";
@@ -35,7 +35,7 @@ export default function ReadOnlyUserMessage({ message }: Props) {
 							/>
 						}
 					>
-						<CopyIcon />
+						<Copy />
 					</TooltipTrigger>
 					<TooltipContent>Copy to clipboard</TooltipContent>
 				</Tooltip>

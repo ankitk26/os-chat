@@ -1,5 +1,5 @@
+import { SignOut } from "@phosphor-icons/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { LogOutIcon } from "lucide-react";
 import ApiKeysForm from "~/components/api-keys-form";
 import AppearanceSettings from "~/components/appearance-settings";
 import ChatHistoryManager from "~/components/chat-history-manager";
@@ -39,7 +39,7 @@ function SettingsPage() {
 							size={isMobile ? "icon" : "default"}
 							variant="secondary"
 						>
-							<LogOutIcon className="h-4 w-4" />
+							<SignOut className="h-4 w-4" />
 							<span className="hidden lg:inline">Sign out</span>
 						</Button>
 					</div>

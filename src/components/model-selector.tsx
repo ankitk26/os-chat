@@ -1,4 +1,4 @@
-import { ChevronDownIcon, KeyIcon } from "lucide-react";
+import { CaretDown, Key } from "@phosphor-icons/react";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
@@ -34,7 +34,7 @@ export default function ModelSelector() {
 		<DropdownMenu>
 			<DropdownMenuTrigger render={<Button variant="outline" />}>
 				{selectedModel.name}
-				<ChevronDownIcon />
+				<CaretDown />
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-50">
 				{accessibleModels.map((provider) => (
@@ -56,9 +56,7 @@ export default function ModelSelector() {
 									>
 										<ModelProviderIcon provider={provider.key} />
 										{model.name}
-										{!model.isAvailable && (
-											<KeyIcon className="ml-auto size-3" />
-										)}
+										{!model.isAvailable && <Key className="ml-auto size-3" />}
 									</DropdownMenuItem>
 								))}
 							</DropdownMenuSubContent>

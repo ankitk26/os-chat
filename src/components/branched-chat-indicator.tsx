@@ -1,5 +1,5 @@
+import { GitBranch } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
-import { SplitIcon } from "lucide-react";
 import { useSharedChatContext } from "~/providers/chat-provider";
 import type { SidebarChatType } from "~/types";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
@@ -30,7 +30,7 @@ export default function BranchedChatIndicator(props: Props) {
 				<TooltipTrigger
 					render={
 						<span>
-							<SplitIcon className="text-sidebar-foreground/70 size-4 shrink-0" />
+							<GitBranch className="text-sidebar-foreground/70 size-4 shrink-0" />
 						</span>
 					}
 				/>
@@ -55,7 +55,7 @@ export default function BranchedChatIndicator(props: Props) {
 							}
 						}}
 					>
-						<SplitIcon className="size-4 shrink-0" />
+						<GitBranch className="size-4 shrink-0" />
 					</span>
 				}
 			/>
