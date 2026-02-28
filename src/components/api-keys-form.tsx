@@ -1,4 +1,4 @@
-import { FloppyDisk } from "@phosphor-icons/react";
+import { FloppyDiskIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
@@ -118,7 +118,7 @@ export default function ApiKeysForm() {
 						disabled={!hasChanges}
 						onClick={handleSave}
 					>
-						<FloppyDisk className="size-4" />
+						<FloppyDiskIcon className="size-4" />
 						Save Settings
 					</Button>
 				</div>

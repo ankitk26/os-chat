@@ -1,5 +1,5 @@
 import { convexQuery } from "@convex-dev/react-query";
-import { PushPin } from "@phosphor-icons/react";
+import { PushPinIcon } from "@phosphor-icons/react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import AppSidebarChatItem from "./app-sidebar-chat-item";
@@ -17,7 +17,7 @@ export default function PinnedChatsList() {
 	return (
 		<SidebarGroup className="space-y-1 group-data-[collapsible=icon]:hidden">
 			<div className="flex items-center px-2 py-1.5">
-				<PushPin className="text-sidebar-foreground/60 mr-2 size-4" />
+				<PushPinIcon className="text-sidebar-foreground/60 mr-2 size-4" />
 				<span className="text-sidebar-foreground/50 text-xs font-normal">
 					Pinned chats
 				</span>

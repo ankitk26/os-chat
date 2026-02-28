@@ -1,4 +1,4 @@
-import { SignOut } from "@phosphor-icons/react";
+import { SignOutIcon } from "@phosphor-icons/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import ApiKeysForm from "~/components/api-keys-form";
 import AppearanceSettings from "~/components/appearance-settings";
@@ -39,7 +39,7 @@ function SettingsPage() {
 							size={isMobile ? "icon" : "default"}
 							variant="secondary"
 						>
-							<SignOut className="h-4 w-4" />
+							<SignOutIcon className="h-4 w-4" />
 							<span className="hidden lg:inline">Sign out</span>
 						</Button>
 					</div>

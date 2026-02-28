@@ -1,5 +1,5 @@
 import { convexQuery } from "@convex-dev/react-query";
-import { Check, Link } from "@phosphor-icons/react";
+import { CheckIcon, LinkIcon } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { useState } from "react";
@@ -62,12 +62,12 @@ export default function ShareChatDialogFooter() {
 				>
 					{copied ? (
 						<>
-							<Check className="size-4" />
+							<CheckIcon className="size-4" />
 							Copied!
 						</>
 					) : (
 						<>
-							<Link className="size-4" />
+							<LinkIcon className="size-4" />
 							Copy Link
 						</>
 					)}

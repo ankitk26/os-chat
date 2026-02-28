@@ -1,4 +1,8 @@
-import { CaretDown, CaretRight, Newspaper } from "@phosphor-icons/react";
+import {
+	CaretDownIcon,
+	CaretRightIcon,
+	NewspaperIcon,
+} from "@phosphor-icons/react";
 
 type Props = {
 	toggleSourcesDisplay: () => void;
@@ -12,12 +16,12 @@ export default function SourcesToggleButton(props: Props) {
 			onClick={props.toggleSourcesDisplay}
 		>
 			{props.showSources ? (
-				<CaretDown className="size-3" />
+				<CaretDownIcon className="size-3" />
 			) : (
-				<CaretRight className="size-3" />
+				<CaretRightIcon className="size-3" />
 			)}
 			<div className="text-muted-foreground flex items-center gap-2 font-mono text-xs select-none">
-				<Newspaper className="size-3" />
+				<NewspaperIcon className="size-3" />
 				Sources
 			</div>
 		</div>

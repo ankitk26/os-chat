@@ -1,5 +1,5 @@
 import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
-import { ArrowClockwise } from "@phosphor-icons/react";
+import { ArrowClockwiseIcon } from "@phosphor-icons/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { toast } from "sonner";
@@ -56,7 +56,7 @@ export default function ShareChatSyncSection() {
 					size="sm"
 					variant="outline"
 				>
-					<ArrowClockwise
+					<ArrowClockwiseIcon
 						className={`h-4 w-4 ${syncHistoryMutation.isPending ? "animate-spin" : ""}`}
 					/>
 					{syncHistoryMutation.isPending ? "Syncing..." : "Sync"}
