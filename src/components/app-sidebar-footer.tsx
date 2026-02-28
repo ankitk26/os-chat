@@ -28,11 +28,11 @@ export default function AppSidebarFooter() {
 						className="w-full"
 					>
 						<Avatar className="h-8 w-8 rounded-lg grayscale">
-						<AvatarImage
-							className="rounded-lg"
-							alt={authUser?.name?.[0]}
-							src={authUser?.image ?? ""}
-						/>
+							<AvatarImage
+								className="rounded-lg"
+								alt={authUser?.name?.[0]}
+								src={authUser?.image ?? ""}
+							/>
 							<AvatarFallback className="rounded-lg">
 								{(authUser?.name ?? "")
 									.split(" ")

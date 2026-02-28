@@ -1,8 +1,8 @@
 import CustomExternalLink from "./custom-external-link";
 import GithubIcon from "./github-icon";
-import XIcon from "./x-icon";
 import { Button } from "./ui/button";
 import { TabsContent } from "./ui/tabs";
+import XIcon from "./x-icon";
 
 export default function ContactSection() {
 	return (

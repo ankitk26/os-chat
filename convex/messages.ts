@@ -91,23 +91,30 @@ export const createMessage = mutation({
 			const modelUsed: string = parsedMetadata.model;
 			const totalTokens: number = parsedMetadata.totalTokens;
 
-			const modelTokenDoc = await ctx.db
-				.query("userTokenUsage")
-				.withIndex("by_user_and_model", (q) =>
-					q.eq("userId", userId).eq("model", modelUsed),
-				)
-				.first();
+			// Only process if tokens is a valid number
+			if (
+				typeof totalTokens === "number" &&
+				!Number.isNaN(totalTokens) &&
+				totalTokens > 0
+			) {
+				const modelTokenDoc = await ctx.db
+					.query("userTokenUsage")
+					.withIndex("by_user_and_model", (q) =>
+						q.eq("userId", userId).eq("model", modelUsed),
+					)
+					.first();
 
-			if (modelTokenDoc) {
-				await ctx.db.patch(modelTokenDoc._id, {
-					tokens: modelTokenDoc.tokens + totalTokens,
-				});
-			} else {
-				await ctx.db.insert("userTokenUsage", {
-					userId,
-					model: modelUsed,
-					tokens: totalTokens,
-				});
+				if (modelTokenDoc) {
+					await ctx.db.patch(modelTokenDoc._id, {
+						tokens: modelTokenDoc.tokens + totalTokens,
+					});
+				} else {
+					await ctx.db.insert("userTokenUsage", {
+						userId,
+						model: modelUsed,
+						tokens: totalTokens,
+					});
+				}
 			}
 		}
 
@@ -202,6 +209,9 @@ export const tokensByModel = query({
 			.collect();
 
 		const sortedStats = stats
+			.filter(
+				(stat) => typeof stat.tokens === "number" && !Number.isNaN(stat.tokens),
+			)
 			.sort((a, b) => b.tokens - a.tokens)
 			.map(({ model, tokens }) => ({ model, tokens }));
 

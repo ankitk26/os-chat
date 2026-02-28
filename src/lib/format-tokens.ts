@@ -1,7 +1,10 @@
 const K_SUFFIX_REGEX = /\.?0+K$/;
 const M_SUFFIX_REGEX = /\.?0+M$/;
 
-export const formatTokens = (tokens: number) => {
+export const formatTokens = (tokens: number | null | undefined) => {
+	if (tokens === null || tokens === undefined || Number.isNaN(tokens)) {
+		return "0";
+	}
 	if (tokens < 1000) {
 		return tokens.toString();
 	}
