@@ -20,7 +20,7 @@ export default function AIResponseSources({
 	}
 
 	return (
-		<div>
+		<div className="space-y-2">
 			<SourcesToggleButton
 				showSources={showSources}
 				toggleSourcesDisplay={toggleSourcesDisplay}
