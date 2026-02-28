@@ -5,6 +5,7 @@ import GeminiIcon from "./gemini-icon";
 import MiniMaxIcon from "./minimax-icon";
 import MoonShotIcon from "./moonshot-icon";
 import OpenAIIcon from "./open-ai-icon";
+import OpenRouterIcon from "./open-router-icon";
 import XAIIcon from "./xai-icon";
 import ZaiIcon from "./zai-icon";
 
@@ -21,6 +22,7 @@ const iconMap: { [key: string]: () => JSX.Element } = {
 	moonshot: MoonShotIcon,
 	zai: ZaiIcon,
 	minimax: MiniMaxIcon,
+	openrouter: OpenRouterIcon,
 };
 
 export default function ModelProviderIcon({ provider }: Props) {

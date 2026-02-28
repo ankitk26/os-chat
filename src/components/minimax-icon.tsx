@@ -3,9 +3,8 @@ export default function MiniMaxIcon() {
 		<svg
 			fill="currentColor"
 			fillRule="evenodd"
-			height="1em"
 			viewBox="0 0 24 24"
-			width="1em"
+			className="size-4"
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<title>Minimax</title>
