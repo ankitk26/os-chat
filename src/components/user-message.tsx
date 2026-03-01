@@ -1,6 +1,6 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
-import { Copy, Pencil, PencilSlash } from "@phosphor-icons/react";
+import { CopyIcon, PencilIcon, PencilSlashIcon } from "@phosphor-icons/react";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { memo, useState } from "react";
@@ -125,7 +125,7 @@ export default memo(function UserMessage({
 							/>
 						}
 					>
-						{isEditing ? <PencilSlash /> : <Pencil />}
+						{isEditing ? <PencilSlashIcon /> : <PencilIcon />}
 					</TooltipTrigger>
 					<TooltipContent>Edit message</TooltipContent>
 				</Tooltip>
@@ -144,7 +144,7 @@ export default memo(function UserMessage({
 							/>
 						}
 					>
-						<Copy />
+						<CopyIcon />
 					</TooltipTrigger>
 					<TooltipContent>Copy to clipboard</TooltipContent>
 				</Tooltip>
