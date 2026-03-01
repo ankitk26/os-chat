@@ -310,6 +310,19 @@ const minimaxModels = {
 	],
 };
 
+const byteDanceModels = {
+	provider: "ByteDance",
+	key: "byteDance",
+	models: [
+		{
+			name: "Seedream 4.5",
+			openRouterModelId: "bytedance-seed/seedream-4.5",
+			modelId: "bytedance-seed/seedream-4.5",
+			isFree: false,
+		},
+	],
+};
+
 export const allModelProviders: ProviderGroup[] = [
 	geminiModels,
 	deepseekModels,
@@ -319,4 +332,5 @@ export const allModelProviders: ProviderGroup[] = [
 	moonshotModels,
 	zaiModels,
 	minimaxModels,
+	byteDanceModels,
 ];

@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import AnthropicIcon from "./anthropic-icon";
+import ByteDanceIcon from "./byte-dance-icon";
 import DeepSeekIcon from "./deepseek-icon";
 import GeminiIcon from "./gemini-icon";
 import MiniMaxIcon from "./minimax-icon";
@@ -23,6 +24,7 @@ const iconMap: { [key: string]: () => JSX.Element } = {
 	zai: ZaiIcon,
 	minimax: MiniMaxIcon,
 	openrouter: OpenRouterIcon,
+	byteDance: ByteDanceIcon,
 };
 
 export default function ModelProviderIcon({ provider }: Props) {
