@@ -114,13 +114,16 @@ export default function Chat({
 											regenerate={regenerate}
 											sendMessage={sendMessage}
 										/>
+
 										{status === "submitted" &&
 											messages.length > 0 &&
-											messages.at(-1)?.role === "user" && (
+											messages.at(-1)?.role === "user" &&
+											!error && (
 												<div className="px-3 lg:px-0">
 													<ThinkingIndicator />
 												</div>
 											)}
+
 										{error && <AiResponseAlert error={error} />}
 									</>
 								)}
