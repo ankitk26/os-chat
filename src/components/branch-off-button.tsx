@@ -146,7 +146,7 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
 							{provider.provider}
 						</DropdownMenuSubTrigger>
 						<DropdownMenuPortal>
-							<DropdownMenuSubContent className="ml-2 w-50">
+							<DropdownMenuSubContent className="mx-2 w-50">
 								{provider.models.map((model) => (
 									<DropdownMenuItem
 										className="py-2.5 text-xs"
