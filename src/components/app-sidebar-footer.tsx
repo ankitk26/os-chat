@@ -1,4 +1,4 @@
-import { Gear } from "@phosphor-icons/react";
+import { GearIcon } from "@phosphor-icons/react";
 import { Link, useRouteContext } from "@tanstack/react-router";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
@@ -47,7 +47,7 @@ export default function AppSidebarFooter() {
 								{authUser?.email}
 							</span>
 						</div>
-						<Gear className="ml-auto" />
+						<GearIcon className="ml-auto" />
 					</SidebarMenuButton>
 				</Link>
 			</SidebarMenuItem>

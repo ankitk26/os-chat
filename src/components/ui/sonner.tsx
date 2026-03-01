@@ -1,11 +1,11 @@
 "use client";
 
 import {
-	CheckCircle,
-	Info,
-	Warning,
-	Prohibit,
-	Spinner,
+	CheckCircleIcon,
+	InfoIcon,
+	WarningIcon,
+	ProhibitIcon,
+	SpinnerIcon,
 } from "@phosphor-icons/react";
 import { useTheme } from "next-themes";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
@@ -18,11 +18,11 @@ const Toaster = ({ ...props }: ToasterProps) => {
 			theme={theme as ToasterProps["theme"]}
 			className="toaster group"
 			icons={{
-				success: <CheckCircle className="size-4" />,
-				info: <Info className="size-4" />,
-				warning: <Warning className="size-4" />,
-				error: <Prohibit className="size-4" />,
-				loading: <Spinner className="size-4 animate-spin" />,
+				success: <CheckCircleIcon className="size-4" />,
+				info: <InfoIcon className="size-4" />,
+				warning: <WarningIcon className="size-4" />,
+				error: <ProhibitIcon className="size-4" />,
+				loading: <SpinnerIcon className="size-4 animate-spin" />,
 			}}
 			style={
 				{

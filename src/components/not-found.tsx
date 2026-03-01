@@ -1,4 +1,4 @@
-import { House } from "@phosphor-icons/react";
+import { HouseIcon } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
 import { useSharedChatContext } from "~/providers/chat-provider";
 import { ThemeToggler } from "./theme-toggle";
@@ -38,7 +38,7 @@ export default function NotFound() {
 								/>
 							}
 						>
-							<House className="h-4 w-4" />
+							<HouseIcon className="h-4 w-4" />
 							Go Home
 						</Button>
 					</div>

@@ -1,11 +1,11 @@
 import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
 import {
-	Check,
-	Copy,
-	ArrowSquareOut,
-	Globe,
-	Spinner,
-	Lock,
+	CheckIcon,
+	CopyIcon,
+	ArrowSquareOutIcon,
+	GlobeIcon,
+	SpinnerIcon,
+	LockIcon,
 } from "@phosphor-icons/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
@@ -82,11 +82,11 @@ export default function ShareChatAccessHandler() {
 				<div className="flex items-center gap-3">
 					<div className="bg-background flex h-8 w-8 items-center justify-center rounded-full">
 						{isLoading ? (
-							<Spinner className="text-muted-foreground h-4 w-4 animate-spin" />
+							<SpinnerIcon className="text-muted-foreground h-4 w-4 animate-spin" />
 						) : isPublic ? (
-							<Globe className="text-primary h-4 w-4" />
+							<GlobeIcon className="text-primary h-4 w-4" />
 						) : (
-							<Lock className="text-muted-foreground h-4 w-4" />
+							<LockIcon className="text-muted-foreground h-4 w-4" />
 						)}
 					</div>
 					<div className="space-y-1">
@@ -132,9 +132,9 @@ export default function ShareChatAccessHandler() {
 								variant="ghost"
 							>
 								{copied ? (
-									<Check className="text-primary h-3 w-3" />
+									<CheckIcon className="text-primary h-3 w-3" />
 								) : (
-									<Copy className="h-3 w-3" />
+									<CopyIcon className="h-3 w-3" />
 								)}
 							</Button>
 						</div>
@@ -145,7 +145,7 @@ export default function ShareChatAccessHandler() {
 							size="icon"
 							variant="outline"
 						>
-							<ArrowSquareOut className="h-4 w-4" />
+							<ArrowSquareOutIcon className="h-4 w-4" />
 						</Button>
 					</div>
 					<p className="text-muted-foreground text-xs">

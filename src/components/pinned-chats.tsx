@@ -1,4 +1,4 @@
-import { PushPin } from "@phosphor-icons/react";
+import { PushPinIcon } from "@phosphor-icons/react";
 import { Suspense } from "react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import PinnedChatsList from "./pinned-chats-list";
@@ -14,7 +14,7 @@ export default function PinnedChats() {
 	const fallbackSkeleton = (
 		<SidebarGroup className="group-data-[collapsible=icon]:hidden">
 			<SidebarGroupLabel>
-				<PushPin className="size-4" />
+				<PushPinIcon className="size-4" />
 				Pinned chats
 			</SidebarGroupLabel>
 			<SidebarMenu>

@@ -1,4 +1,4 @@
-import { Copy } from "@phosphor-icons/react";
+import { CopyIcon } from "@phosphor-icons/react";
 import type { Doc } from "convex/_generated/dataModel";
 import { toast } from "sonner";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
@@ -35,7 +35,7 @@ export default function ReadOnlyUserMessage({ message }: Props) {
 							/>
 						}
 					>
-						<Copy />
+						<CopyIcon />
 					</TooltipTrigger>
 					<TooltipContent>Copy to clipboard</TooltipContent>
 				</Tooltip>

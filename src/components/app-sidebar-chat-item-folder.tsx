@@ -1,5 +1,5 @@
 import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
-import { FolderOpen } from "@phosphor-icons/react";
+import { FolderOpenIcon } from "@phosphor-icons/react";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import type { Id } from "convex/_generated/dataModel";
@@ -45,7 +45,7 @@ export default function AppSidebarChatItemFolder(props: Props) {
 	return (
 		<DropdownMenuSub>
 			<DropdownMenuSubTrigger className="shadcn-dropdown-item">
-				<FolderOpen />
+				<FolderOpenIcon />
 				Move to folder
 			</DropdownMenuSubTrigger>
 

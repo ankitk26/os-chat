@@ -1,5 +1,5 @@
 import { useConvexMutation } from "@convex-dev/react-query";
-import { PushPin } from "@phosphor-icons/react";
+import { PushPinIcon } from "@phosphor-icons/react";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { toast } from "sonner";
@@ -32,7 +32,7 @@ export default function AppSidebarChatItemPin(props: Props) {
 				});
 			}}
 		>
-			<PushPin />
+			<PushPinIcon />
 			<span className="leading-0">{props.chat.isPinned ? "Unpin" : "Pin"}</span>
 		</DropdownMenuItem>
 	);

@@ -1,4 +1,4 @@
-import { CaretDown, CaretRight } from "@phosphor-icons/react";
+import { CaretDownIcon, CaretRightIcon } from "@phosphor-icons/react";
 
 type Props = {
 	showChats: boolean;
@@ -11,8 +11,8 @@ export default function AppSidebarFolderItemToggler(props: Props) {
 	}
 
 	return props.showChats ? (
-		<CaretDown className="size-4 shrink-0" />
+		<CaretDownIcon className="size-4 shrink-0" />
 	) : (
-		<CaretRight className="size-4 shrink-0" />
+		<CaretRightIcon className="size-4 shrink-0" />
 	);
 }

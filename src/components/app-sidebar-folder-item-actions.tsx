@@ -1,4 +1,8 @@
-import { Pencil, DotsThreeVertical, Trash } from "@phosphor-icons/react";
+import {
+	PencilIcon,
+	DotsThreeVerticalIcon,
+	TrashIcon,
+} from "@phosphor-icons/react";
 import { useFolderActionStore } from "~/stores/folder-actions-store";
 import type { SidebarFolder } from "~/types";
 import { Button } from "./ui/button";
@@ -34,7 +38,7 @@ export default function AppSidebarFolderItemActions({ folder }: Props) {
 						className="h-full w-full"
 						onClick={(e) => e.stopPropagation()}
 					>
-						<DotsThreeVertical className="size-4 md:size-3" />
+						<DotsThreeVerticalIcon className="size-4 md:size-3" />
 					</Button>
 				}
 			/>
@@ -46,7 +50,7 @@ export default function AppSidebarFolderItemActions({ folder }: Props) {
 						setIsRenameModalOpen(true);
 					}}
 				>
-					<Pencil className="size-4" />
+					<PencilIcon className="size-4" />
 					<span>Rename</span>
 				</DropdownMenuItem>
 
@@ -57,7 +61,7 @@ export default function AppSidebarFolderItemActions({ folder }: Props) {
 						setIsDeleteModalOpen(true);
 					}}
 				>
-					<Trash className="size-4" />
+					<TrashIcon className="size-4" />
 					<span>Delete</span>
 				</DropdownMenuItem>
 			</DropdownMenuContent>
