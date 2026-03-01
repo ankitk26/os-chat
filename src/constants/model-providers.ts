@@ -13,12 +13,6 @@ const geminiModels = {
 	models: [
 		defaultSelectedModel,
 		{
-			name: "Gemini 2.5 Flash Image",
-			openRouterModelId: "google/gemini-2.5-flash-image-preview",
-			modelId: "gemini-2.5-flash-image-preview",
-			isFree: false,
-		},
-		{
 			name: "Gemini 2.5 Pro",
 			openRouterModelId: "google/gemini-2.5-pro",
 			modelId: "gemini-2.5-pro",
@@ -40,6 +34,24 @@ const geminiModels = {
 			name: "Gemini 3.1 Pro",
 			openRouterModelId: "google/gemini-3.1-pro-preview",
 			modelId: "gemini-3.1-pro-preview",
+			isFree: false,
+		},
+		{
+			name: "Nano Banana",
+			openRouterModelId: "google/gemini-2.5-flash-image",
+			modelId: "gemini-2.5-flash-image",
+			isFree: false,
+		},
+		{
+			name: "Nano Banana Pro",
+			openRouterModelId: "google/gemini-3-pro-image-preview",
+			modelId: "nano-banana-pro-preview",
+			isFree: false,
+		},
+		{
+			name: "Nano Banana 2",
+			openRouterModelId: "google/gemini-3.1-flash-image-preview",
+			modelId: "gemini-3-pro-image-preview",
 			isFree: false,
 		},
 	],
