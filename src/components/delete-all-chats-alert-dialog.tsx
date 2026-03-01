@@ -1,5 +1,5 @@
 import { useConvexMutation } from "@convex-dev/react-query";
-import { Trash } from "@phosphor-icons/react";
+import { TrashIcon } from "@phosphor-icons/react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
@@ -47,7 +47,7 @@ export default function DeleteAllChatsAlertDialog() {
 						className="h-6 w-6 shrink-0"
 						title="Delete all chats"
 					>
-						<Trash className="size-3.5" />
+						<TrashIcon className="size-3.5" />
 					</Button>
 				}
 			/>

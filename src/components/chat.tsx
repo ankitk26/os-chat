@@ -1,5 +1,5 @@
 import { useChat } from "@ai-sdk/react";
-import { CaretDown } from "@phosphor-icons/react";
+import { CaretDownIcon } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 import { useSharedChatContext } from "~/providers/chat-provider";
 import type { CustomUIMessage } from "~/types";
@@ -140,7 +140,7 @@ export default function Chat({
 					style={{ bottom: `${inputHeight + 16}px` }}
 				>
 					<Button className="rounded-full" onClick={scrollToBottom} size="icon">
-						<CaretDown />
+						<CaretDownIcon />
 					</Button>
 				</div>
 			)}

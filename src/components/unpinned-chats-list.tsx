@@ -1,5 +1,5 @@
 import { convexQuery } from "@convex-dev/react-query";
-import { Chat } from "@phosphor-icons/react";
+import { ChatIcon } from "@phosphor-icons/react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import AppSidebarChatItem from "./app-sidebar-chat-item";
@@ -15,7 +15,7 @@ export default function UnpinnedChatsList() {
 		<SidebarGroup className="space-y-1 group-data-[collapsible=icon]:hidden">
 			<div className="flex items-center justify-between px-2 py-1.5">
 				<div className="flex items-center">
-					<Chat className="text-sidebar-foreground/60 mr-2 size-4" />
+					<ChatIcon className="text-sidebar-foreground/60 mr-2 size-4" />
 					<span className="text-sidebar-foreground/50 text-xs font-normal">
 						Chats
 					</span>

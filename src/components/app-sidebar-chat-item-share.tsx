@@ -1,4 +1,4 @@
-import { Export } from "@phosphor-icons/react";
+import { ExportIcon } from "@phosphor-icons/react";
 import { useChatActionStore } from "~/stores/chat-actions-store";
 import type { SidebarChatType } from "~/types";
 import { DropdownMenuItem } from "./ui/dropdown-menu";
@@ -21,7 +21,7 @@ export default function AppSidebarChatItemShare(props: Props) {
 				setIsShareDialogOpen(true);
 			}}
 		>
-			<Export />
+			<ExportIcon />
 			<span className="leading-0">Share</span>
 		</DropdownMenuItem>
 	);

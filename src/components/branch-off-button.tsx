@@ -1,6 +1,10 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { useConvexMutation } from "@convex-dev/react-query";
-import { Key, ArrowClockwise, GitBranch } from "@phosphor-icons/react";
+import {
+	KeyIcon,
+	ArrowClockwiseIcon,
+	GitBranchIcon,
+} from "@phosphor-icons/react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
@@ -120,7 +124,7 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
 				<DropdownMenuTrigger
 					render={
 						<TooltipTrigger render={<Button size="icon" variant="ghost" />}>
-							<GitBranch />
+							<GitBranchIcon />
 						</TooltipTrigger>
 					}
 				/>
@@ -131,7 +135,7 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
 					className="flex items-center gap-3 py-2.5 text-xs"
 					onClick={() => handleBranchOff(selectedModel)}
 				>
-					<ArrowClockwise className="size-4" />
+					<ArrowClockwiseIcon className="size-4" />
 					Branch off
 				</DropdownMenuItem>
 
@@ -156,7 +160,9 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
 									>
 										<ModelProviderIcon provider={provider.key} />
 										{model.name}
-										{!model.isAvailable && <Key className="ml-auto size-3" />}
+										{!model.isAvailable && (
+											<KeyIcon className="ml-auto size-3" />
+										)}
 									</DropdownMenuItem>
 								))}
 							</DropdownMenuSubContent>

@@ -1,4 +1,8 @@
-import { Brain, CaretDown, CaretRight } from "@phosphor-icons/react";
+import {
+	BrainIcon,
+	CaretDownIcon,
+	CaretRightIcon,
+} from "@phosphor-icons/react";
 
 type Props = {
 	toggleReasoningDisplay: () => void;
@@ -13,13 +17,13 @@ export default function ReasoningToggleButton(props: Props) {
 			onClick={props.toggleReasoningDisplay}
 		>
 			{props.showReasoning ? (
-				<CaretDown className="size-3" />
+				<CaretDownIcon className="size-3" />
 			) : (
-				<CaretRight className="size-3" />
+				<CaretRightIcon className="size-3" />
 			)}
 
 			<div className="text-muted-foreground flex items-center gap-2 font-mono text-xs select-none">
-				<Brain className="size-3" />
+				<BrainIcon className="size-3" />
 				<div>Reasoning</div>
 			</div>
 		</div>

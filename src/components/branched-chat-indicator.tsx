@@ -1,4 +1,4 @@
-import { GitBranch } from "@phosphor-icons/react";
+import { GitBranchIcon } from "@phosphor-icons/react";
 import { useNavigate } from "@tanstack/react-router";
 import { useSharedChatContext } from "~/providers/chat-provider";
 import type { SidebarChatType } from "~/types";
@@ -30,7 +30,7 @@ export default function BranchedChatIndicator(props: Props) {
 				<TooltipTrigger
 					render={
 						<span>
-							<GitBranch className="text-sidebar-foreground/70 size-4 shrink-0" />
+							<GitBranchIcon className="text-sidebar-foreground/70 size-4 shrink-0" />
 						</span>
 					}
 				/>
@@ -55,7 +55,7 @@ export default function BranchedChatIndicator(props: Props) {
 							}
 						}}
 					>
-						<GitBranch className="size-4 shrink-0" />
+						<GitBranchIcon className="size-4 shrink-0" />
 					</span>
 				}
 			/>

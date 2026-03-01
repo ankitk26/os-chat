@@ -1,4 +1,4 @@
-import { Chat } from "@phosphor-icons/react";
+import { ChatIcon } from "@phosphor-icons/react";
 import { Suspense } from "react";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import {
@@ -14,7 +14,7 @@ export default function UnpinnedChats() {
 	const fallbackSkeleton = (
 		<SidebarGroup className="group-data-[collapsible=icon]:hidden">
 			<SidebarGroupLabel>
-				<Chat className="size-4" />
+				<ChatIcon className="size-4" />
 				Chats
 			</SidebarGroupLabel>
 			<SidebarMenu>
