@@ -19,14 +19,6 @@ export const createMessageServerFn = createServerFn({ method: "POST" })
 			throw new Error("Invalid request");
 		}
 
-		console.log({
-			chatId: data.chatId,
-			parts: data.parts,
-			role: "assistant",
-			metadata: data.metadata,
-			sourceMessageId: data.messageId,
-		});
-
 		await fetchAuthMutation(api.messages.createMessage, {
 			messageBody: {
 				chatId: data.chatId,
