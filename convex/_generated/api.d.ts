@@ -14,6 +14,7 @@ import type * as files from "../files.js";
 import type * as folders from "../folders.js";
 import type * as functions from "../functions.js";
 import type * as http from "../http.js";
+import type * as imageGenerations from "../imageGenerations.js";
 import type * as messages from "../messages.js";
 import type * as model_chats from "../model/chats.js";
 import type * as model_users from "../model/users.js";
@@ -31,6 +32,7 @@ declare const fullApi: ApiFromModules<{
   folders: typeof folders;
   functions: typeof functions;
   http: typeof http;
+  imageGenerations: typeof imageGenerations;
   messages: typeof messages;
   "model/chats": typeof model_chats;
   "model/users": typeof model_users;
