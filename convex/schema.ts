@@ -58,4 +58,12 @@ export default defineSchema({
 		model: v.string(),
 		tokens: v.float64(),
 	}).index("by_user_and_model", ["userId", "model"]),
+
+	imageGenerations: defineTable({
+		userId: v.id("users"),
+		storageId: v.id("_storage"),
+		generatedImageUrl: v.string(),
+	})
+		.index("by_user", ["userId"])
+		.index("by_storage_id", ["storageId"]),
 });
