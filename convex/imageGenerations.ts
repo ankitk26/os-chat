@@ -30,3 +30,28 @@ export const create = mutation({
 		});
 	},
 });
+
+export const deleteImage = mutation({
+	args: {
+		storageId: v.id("_storage"),
+	},
+	handler: async (ctx, args) => {
+		const authUserId = await getAuthUserIdOrThrow(ctx);
+
+		const image = await ctx.db
+			.query("imageGenerations")
+			.withIndex("by_storage_id", (q) => q.eq("storageId", args.storageId))
+			.first();
+
+		if (!image) {
+			throw new Error("invalid image");
+		}
+
+		if (image.userId !== authUserId) {
+			throw new Error("invalid request");
+		}
+
+		await ctx.db.delete("imageGenerations", image._id);
+		await ctx.storage.delete(args.storageId);
+	},
+});
