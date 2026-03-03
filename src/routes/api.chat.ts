@@ -102,7 +102,9 @@ const uploadImage = async (part: FileUIPart) => {
 	if (!result.ok) throw new Error(`Upload failed: ${result.status}`);
 
 	const { storageId } = await result.json();
-	return fetchAuthQuery(api.files.getImageUrl, { storageId });
+	const imageUrl = await fetchAuthQuery(api.files.getImageUrl, { storageId });
+
+	return { storageId, imageUrl };
 };
 
 const isImagePart = (
@@ -156,8 +158,16 @@ const processMessageParts = async (
 		parts.map(async (part) => {
 			if (isImagePart(part)) {
 				try {
-					const imageUrl = await uploadImage(part);
+					const uploadedImage = await uploadImage(part);
+					if (!uploadedImage) {
+						throw new Error("image_not_uploaded");
+					}
+					const { imageUrl, storageId } = uploadedImage;
 					if (imageUrl) {
+						await fetchAuthMutation(api.imageGenerations.create, {
+							generatedImageUrl: imageUrl,
+							storageId,
+						});
 						return { ...part, url: imageUrl };
 					}
 				} catch (error) {
@@ -169,7 +179,7 @@ const processMessageParts = async (
 		}),
 	);
 
-	return { partsToSave: processedParts, success: true };
+	return { partsToSave: processedParts };
 };
 
 type ChatRequestBody = {
