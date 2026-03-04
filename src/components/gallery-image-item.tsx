@@ -18,12 +18,27 @@ type Props = {
 export default function GalleryImageItem({ image }: Props) {
 	const [isOpen, setIsOpen] = useState(false);
 
-	const handleDownload = () => {
-		const link = document.createElement("a");
-		link.href = image.generatedImageUrl;
-		link.download = `image-${image._id}.png`;
-		link.click();
-		toast.success("Download started");
+	const handleDownload = async () => {
+		try {
+			const response = await fetch(image.generatedImageUrl);
+			const blob = await response.blob();
+			const blobUrl = URL.createObjectURL(blob);
+
+			const now = new Date();
+			const dateStr = now.toISOString().replace(/[:.]/g, "-").slice(0, 19);
+
+			const link = document.createElement("a");
+			link.href = blobUrl;
+			link.download = `oschat image ${dateStr}.png`;
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+			URL.revokeObjectURL(blobUrl);
+
+			toast.success("Download started");
+		} catch {
+			toast.error("Failed to download image");
+		}
 	};
 
 	const handleShare = async () => {
