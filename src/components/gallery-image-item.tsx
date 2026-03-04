@@ -64,7 +64,7 @@ export default function GalleryImageItem({ image }: Props) {
 				</Dialog>
 
 				{/* Desktop: Gradient overlay and action buttons on hover */}
-				<div className="absolute right-0 bottom-0 left-0 hidden h-20 bg-linear-to-t from-black/30 to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100 lg:flex" />
+				<div className="absolute right-0 bottom-0 left-0 hidden h-20 bg-linear-to-t from-black/50 to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100 lg:flex" />
 
 				<GalleryImageItemDesktopActions
 					image={image}
