@@ -1,7 +1,11 @@
-import { SpinnerIcon, ChatIcon } from "@phosphor-icons/react";
+import {
+	ChatIcon,
+	GithubLogoIcon,
+	GoogleLogoIcon,
+	SpinnerIcon,
+} from "@phosphor-icons/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import GithubIcon from "~/components/github-icon";
 import { Button } from "~/components/ui/button";
 import {
 	Card,
@@ -17,14 +21,16 @@ export const Route = createFileRoute("/login")({
 });
 
 function RouteComponent() {
-	const [isLoading, setIsLoading] = useState(false);
+	const [loadingProvider, setLoadingProvider] = useState<
+		"google" | "github" | null
+	>(null);
 
-	const handleLogin = async () => {
-		setIsLoading(true);
+	const handleLogin = async (provider: "google" | "github") => {
+		setLoadingProvider(provider);
 		try {
-			await authClient.signIn.social({ provider: "github" });
+			await authClient.signIn.social({ provider });
 		} catch {
-			setIsLoading(false);
+			setLoadingProvider(null);
 		}
 	};
 
@@ -53,15 +59,31 @@ function RouteComponent() {
 					<CardContent className="space-y-4">
 						<Button
 							className="h-9 w-full gap-2"
-							disabled={isLoading}
-							onClick={handleLogin}
+							disabled={loadingProvider === "github"}
+							onClick={() => handleLogin("github")}
 						>
-							{isLoading ? (
+							{loadingProvider === "github" ? (
 								<SpinnerIcon className="size-4 animate-spin" />
 							) : (
-								<GithubIcon />
+								<GithubLogoIcon className="size-4" />
 							)}
-							{isLoading ? "Signing in..." : "Continue with GitHub"}
+							{loadingProvider === "github"
+								? "Signing in..."
+								: "Continue with GitHub"}
+						</Button>
+						<Button
+							className="h-9 w-full gap-2"
+							disabled={loadingProvider === "google"}
+							onClick={() => handleLogin("google")}
+						>
+							{loadingProvider === "google" ? (
+								<SpinnerIcon className="size-4 animate-spin" />
+							) : (
+								<GoogleLogoIcon className="size-4" />
+							)}
+							{loadingProvider === "google"
+								? "Signing in..."
+								: "Continue with Google"}
 						</Button>
 					</CardContent>
 				</Card>

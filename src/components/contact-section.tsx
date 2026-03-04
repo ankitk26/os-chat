@@ -1,8 +1,7 @@
+import { GithubLogoIcon, XLogoIcon } from "@phosphor-icons/react";
 import CustomExternalLink from "./custom-external-link";
-import GithubIcon from "./github-icon";
 import { Button } from "./ui/button";
 import { TabsContent } from "./ui/tabs";
-import XIcon from "./x-icon";
 
 export default function ContactSection() {
 	return (
@@ -16,7 +15,7 @@ export default function ContactSection() {
 				</p>
 				<CustomExternalLink href={import.meta.env.VITE_GITHUB_REPO_LINK}>
 					<Button variant="outline" className="gap-2">
-						<GithubIcon />
+						<GithubLogoIcon className="size-4" />
 						<span>baychat</span>
 					</Button>
 				</CustomExternalLink>
@@ -28,7 +27,7 @@ export default function ContactSection() {
 				</p>
 				<CustomExternalLink href={import.meta.env.VITE_X_URL}>
 					<Button variant="outline" className="gap-2">
-						<XIcon />
+						<XLogoIcon className="size-4" />
 						<span>Contact</span>
 					</Button>
 				</CustomExternalLink>
