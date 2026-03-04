@@ -23,7 +23,7 @@ export default function GalleryImageItemDesktopActions(props: Props) {
 						<Button
 							variant="ghost"
 							size="icon"
-							className="hover:backdrop-blur-sm"
+							className="text-white hover:bg-white/20 hover:text-white hover:backdrop-blur-sm"
 							onClick={props.handleDownload}
 						>
 							<DownloadIcon className="h-4 w-4" />
@@ -39,7 +39,7 @@ export default function GalleryImageItemDesktopActions(props: Props) {
 						<Button
 							variant="ghost"
 							size="icon"
-							className="hover:backdrop-blur-sm"
+							className="text-white hover:bg-white/20 hover:text-white hover:backdrop-blur-sm"
 							onClick={props.handleShare}
 						>
 							<ShareNetworkIcon className="h-4 w-4" />

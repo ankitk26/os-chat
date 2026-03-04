@@ -20,7 +20,7 @@ export default function DeleteImageGenerationButton({ storageId }: Props) {
 						<Button
 							variant="ghost"
 							size="icon"
-							className="h-8 w-8 text-white hover:bg-white/20 hover:backdrop-blur-sm"
+							className="text-white hover:bg-white/20 hover:text-white hover:backdrop-blur-sm"
 							onClick={() => setIsOpen(true)}
 						>
 							<TrashIcon className="h-4 w-4" />
