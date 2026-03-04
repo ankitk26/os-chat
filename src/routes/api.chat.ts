@@ -164,10 +164,14 @@ const processMessageParts = async (
 					}
 					const { imageUrl, storageId } = uploadedImage;
 					if (imageUrl) {
-						await fetchAuthMutation(api.imageGenerations.create, {
-							generatedImageUrl: imageUrl,
-							storageId,
-						});
+						try {
+							await fetchAuthMutation(api.imageGenerations.create, {
+								generatedImageUrl: imageUrl,
+								storageId,
+							});
+						} catch (galleryError) {
+							console.error("Failed to save to gallery:", galleryError);
+						}
 						return { ...part, url: imageUrl };
 					}
 				} catch (error) {
