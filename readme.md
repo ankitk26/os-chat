@@ -1,6 +1,6 @@
-# OS Chat
+# baychat
 
-OS Chat is an open-source AI chatbot application built with TanStack Start, Convex, and the Vercel AI SDK.  
+baychat is an open-source AI chatbot application built with TanStack Start, Convex, and the Vercel AI SDK.  
 It supports multiple AI providers, real-time messaging, and chat organization.
 
 ## Features
