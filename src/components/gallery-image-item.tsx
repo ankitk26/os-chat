@@ -21,6 +21,9 @@ export default function GalleryImageItem({ image }: Props) {
 	const handleDownload = async () => {
 		try {
 			const response = await fetch(image.generatedImageUrl);
+			if (!response.ok) {
+				throw new Error("Failed to fetch image");
+			}
 			const blob = await response.blob();
 			const blobUrl = URL.createObjectURL(blob);
 
