@@ -28,10 +28,7 @@ function RouteComponent() {
 					{isLoading ? (
 						<div className="columns-2 gap-3 sm:columns-3 lg:columns-4 lg:gap-4">
 							{Array.from({ length: 8 }).map((_, i) => (
-								<Skeleton
-									key={i}
-									className="mb-3 aspect-square rounded-lg lg:mb-4"
-								/>
+								<Skeleton key={i} className="mb-2 aspect-square rounded-lg" />
 							))}
 						</div>
 					) : imageGenerations?.length === 0 ? (
@@ -43,10 +40,7 @@ function RouteComponent() {
 					) : (
 						<div className="columns-2 gap-3 sm:columns-3 lg:columns-4 lg:gap-4">
 							{imageGenerations?.map((image) => (
-								<div
-									key={image._id}
-									className="mb-3 break-inside-avoid lg:mb-4"
-								>
+								<div key={image._id} className="break-inside-avoid">
 									<GalleryImageItem image={image} />
 								</div>
 							))}
