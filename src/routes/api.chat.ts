@@ -160,7 +160,7 @@ const processMessageParts = async (
 				try {
 					const uploadedImage = await uploadImage(part);
 					if (!uploadedImage) {
-						throw new Error("image_not_uploaded");
+						return null;
 					}
 					const { imageUrl, storageId } = uploadedImage;
 					if (imageUrl) {
@@ -179,7 +179,11 @@ const processMessageParts = async (
 		}),
 	);
 
-	return { partsToSave: processedParts };
+	const partsToSave = processedParts.filter(
+		(part): part is NonNullable<typeof part> => part !== null,
+	);
+
+	return { partsToSave };
 };
 
 type ChatRequestBody = {
