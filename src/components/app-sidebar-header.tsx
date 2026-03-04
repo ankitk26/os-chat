@@ -28,7 +28,7 @@ export default function AppSidebarHeader() {
 					to="/"
 					className="flex flex-1 items-center justify-center text-base font-medium"
 				>
-					os-chat
+					baychat
 				</Link>
 				<ThemeToggler />
 			</SidebarMenuItem>

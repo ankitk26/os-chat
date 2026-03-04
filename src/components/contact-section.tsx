@@ -17,7 +17,7 @@ export default function ContactSection() {
 				<CustomExternalLink href={import.meta.env.VITE_GITHUB_REPO_LINK}>
 					<Button variant="outline" className="gap-2">
 						<GithubIcon />
-						<span>os-chat</span>
+						<span>baychat</span>
 					</Button>
 				</CustomExternalLink>
 			</div>

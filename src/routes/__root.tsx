@@ -59,7 +59,7 @@ export const Route = createRootRouteWithContext<{
 					"width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover",
 			},
 			{
-				title: "os-chat",
+				title: "baychat",
 			},
 			{
 				name: "color-scheme",
