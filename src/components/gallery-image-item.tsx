@@ -32,7 +32,7 @@ export default function GalleryImageItem({ image }: Props) {
 
 			const link = document.createElement("a");
 			link.href = blobUrl;
-			link.download = `oschat image ${dateStr}.png`;
+			link.download = `baychat image ${dateStr}.png`;
 			document.body.appendChild(link);
 			link.click();
 			document.body.removeChild(link);

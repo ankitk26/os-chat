@@ -36,7 +36,7 @@ function RouteComponent() {
 					<div className="bg-primary mx-auto flex h-12 w-12 items-center justify-center rounded-xl">
 						<ChatIcon className="text-primary-foreground h-6 w-6" />
 					</div>
-					<h1 className="text-2xl font-bold tracking-tight">os-chat</h1>
+					<h1 className="text-2xl font-bold tracking-tight">baychat</h1>
 					<p className="text-muted-foreground">
 						Your intelligent conversation companion
 					</p>

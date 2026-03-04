@@ -74,8 +74,8 @@ It supports multiple AI providers, real-time messaging, and chat organization.
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/ankitk26/os-chat.git
-   cd os-chat
+   git clone https://github.com/ankitk26/baychat.git
+   cd baychat
    ```
 
 2. Install dependencies:
@@ -164,6 +164,6 @@ This project is open-source and licensed under the [MIT License](LICENSE).
 
 ## Support
 
-- Issues: [GitHub Issues](https://github.com/ankitk26/os-chat/issues)
-- Discussions: [GitHub Discussions](https://github.com/ankitk26/os-chat/discussions)
+- Issues: [GitHub Issues](https://github.com/ankitk26/baychat/issues)
+- Discussions: [GitHub Discussions](https://github.com/ankitk26/baychat/discussions)
 - Documentation: Check the code comments and type definitions
