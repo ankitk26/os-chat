@@ -1,11 +1,9 @@
-import type { ProviderGroup } from "~/types";
-
 export const defaultSelectedModel = {
 	name: "Gemini 2.5 Flash",
 	openRouterModelId: "google/gemini-2.5-flash",
 	modelId: "gemini-2.5-flash",
 	isFree: true,
-};
+} as const;
 
 const geminiModels = {
 	provider: "Google",
@@ -54,8 +52,8 @@ const geminiModels = {
 			modelId: "gemini-3-pro-image-preview",
 			isFree: false,
 		},
-	],
-};
+	] as const,
+} as const;
 
 const deepseekModels = {
 	provider: "DeepSeek",
@@ -91,8 +89,8 @@ const deepseekModels = {
 			modelId: "deepseek/deepseek-v3.2",
 			isFree: false,
 		},
-	],
-};
+	] as const,
+} as const;
 
 const openAiModels = {
 	provider: "OpenAI",
@@ -152,8 +150,8 @@ const openAiModels = {
 			modelId: "gpt-5.3-codex",
 			isFree: false,
 		},
-	],
-};
+	] as const,
+} as const;
 
 const anthropicModels = {
 	provider: "Anthropic",
@@ -201,8 +199,8 @@ const anthropicModels = {
 			modelId: "claude-sonnet-4-6",
 			isFree: false,
 		},
-	],
-};
+	] as const,
+} as const;
 
 const xAiModels = {
 	provider: "xAI",
@@ -238,8 +236,8 @@ const xAiModels = {
 			modelId: "grok-4-1-fast-non-reasoning",
 			isFree: false,
 		},
-	],
-};
+	] as const,
+} as const;
 
 const moonshotModels = {
 	provider: "Moonshot",
@@ -263,8 +261,8 @@ const moonshotModels = {
 			modelId: "moonshotai/kimi-k2.5",
 			isFree: false,
 		},
-	],
-};
+	] as const,
+} as const;
 
 const zaiModels = {
 	provider: "Z.ai",
@@ -288,8 +286,8 @@ const zaiModels = {
 			modelId: "z-ai/glm-5",
 			isFree: false,
 		},
-	],
-};
+	] as const,
+} as const;
 
 const minimaxModels = {
 	provider: "MiniMax",
@@ -307,8 +305,8 @@ const minimaxModels = {
 			modelId: "minimax/minimax-m2.5",
 			isFree: false,
 		},
-	],
-};
+	] as const,
+} as const;
 
 const byteDanceModels = {
 	provider: "ByteDance",
@@ -320,10 +318,10 @@ const byteDanceModels = {
 			modelId: "bytedance-seed/seedream-4.5",
 			isFree: false,
 		},
-	],
-};
+	] as const,
+} as const;
 
-export const allModelProviders: ProviderGroup[] = [
+export const allModelProviders = [
 	geminiModels,
 	deepseekModels,
 	openAiModels,
@@ -333,4 +331,4 @@ export const allModelProviders: ProviderGroup[] = [
 	zaiModels,
 	minimaxModels,
 	byteDanceModels,
-];
+] as const;
