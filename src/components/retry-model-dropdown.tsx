@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
+import { getModelByOpenRouterId } from "~/lib/get-model-by-id";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import type { CustomUIMessage, Model } from "~/types";
@@ -81,34 +82,20 @@ export default function RetryModelDropdown(props: Props) {
 		});
 	};
 
-	const findModelById = (modelId: string): Model | undefined => {
-		for (const provider of accessibleModels) {
-			const foundModel = provider.models.find(
-				(m) => m.openRouterModelId === modelId,
-			);
-			if (foundModel) {
-				return foundModel;
-			}
-		}
-		return undefined;
-	};
-
 	const handleRetryUsingSameModel = async () => {
 		let modelToUse: Model | undefined;
 
 		if (message.role === "assistant") {
-			// For assistant messages, use the model that generated this response
 			const originalModelId = message.metadata?.modelId;
 			if (originalModelId) {
-				modelToUse = findModelById(originalModelId);
+				modelToUse = getModelByOpenRouterId(originalModelId);
 			}
 		} else if (message.role === "user") {
-			// For user messages, use the model from the following assistant message
 			const nextMessage = props.nextMessage;
 			if (nextMessage?.role === "assistant") {
 				const originalModelId = nextMessage.metadata?.modelId;
 				if (originalModelId) {
-					modelToUse = findModelById(originalModelId);
+					modelToUse = getModelByOpenRouterId(originalModelId);
 				}
 			}
 		}
