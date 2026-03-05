@@ -23,7 +23,7 @@ export default memo(function ChatMessages({
 
 	return (
 		<div className="space-y-6 px-3 lg:space-y-8 lg:px-0">
-			{messages.map((message) => (
+			{messages.map((message, index) => (
 				<div className="flex flex-col" key={message.id}>
 					{message.role === "user" ? (
 						<UserMessage
@@ -31,6 +31,7 @@ export default memo(function ChatMessages({
 							message={message}
 							regenerate={regenerate}
 							sendMessage={sendMessage}
+							nextMessage={messages[index + 1]}
 						/>
 					) : (
 						<AssistantMessage message={message} regenerate={regenerate} />

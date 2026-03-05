@@ -27,12 +27,15 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 type Props = {
 	message: CustomUIMessage;
 	regenerate: UseChatHelpers<CustomUIMessage>["regenerate"];
+	// For user messages, pass the next assistant message to get the model that generated its response
+	nextMessage?: CustomUIMessage;
 };
 
 export default function RetryModelDropdown(props: Props) {
 	const { message, regenerate } = props;
 	const { chatId } = useParams({ strict: false });
 	const selectedModel = useModelStore((store) => store.selectedModel);
+	const setSelectedModel = useModelStore((store) => store.setSelectedModel);
 	const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
 	const toggleIsWebSearch = useModelStore((store) => store.toggleIsWebSearch);
 	const persistedApiKeys = usePersistedApiKeysStore(
@@ -56,6 +59,9 @@ export default function RetryModelDropdown(props: Props) {
 			return;
 		}
 
+		// Set the model selector to the model being used for retry
+		setSelectedModel(model);
+
 		// delete all messages after current message in current chat
 		deleteMessagesMutation.mutate({
 			currentMessageSourceId: message.id,
@@ -73,6 +79,42 @@ export default function RetryModelDropdown(props: Props) {
 				chatId,
 			},
 		});
+	};
+
+	const findModelById = (modelId: string): Model | undefined => {
+		for (const provider of accessibleModels) {
+			const foundModel = provider.models.find(
+				(m) => m.openRouterModelId === modelId,
+			);
+			if (foundModel) {
+				return foundModel;
+			}
+		}
+		return undefined;
+	};
+
+	const handleRetryUsingSameModel = async () => {
+		let modelToUse: Model | undefined;
+
+		if (message.role === "assistant") {
+			// For assistant messages, use the model that generated this response
+			const originalModelId = message.metadata?.modelId;
+			if (originalModelId) {
+				modelToUse = findModelById(originalModelId);
+			}
+		} else if (message.role === "user") {
+			// For user messages, use the model from the following assistant message
+			const nextMessage = props.nextMessage;
+			if (nextMessage?.role === "assistant") {
+				const originalModelId = nextMessage.metadata?.modelId;
+				if (originalModelId) {
+					modelToUse = findModelById(originalModelId);
+				}
+			}
+		}
+
+		// Fall back to currently selected model if original model not found
+		await handleRetry(modelToUse ?? selectedModel);
 	};
 
 	if (!chatId) {
@@ -106,9 +148,7 @@ export default function RetryModelDropdown(props: Props) {
 
 				<DropdownMenuItem
 					className="flex items-center gap-3 py-2.5 text-xs"
-					onClick={async () => {
-						await handleRetry(selectedModel);
-					}}
+					onClick={handleRetryUsingSameModel}
 				>
 					<ArrowClockwiseIcon className="size-4" />
 					Retry same

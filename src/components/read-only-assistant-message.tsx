@@ -54,7 +54,7 @@ export default function ReadOnlyAssistantMessage({ message }: Props) {
 				</Tooltip>
 
 				<span className="text-muted-foreground text-xs">
-					{messageMetadata?.model}
+					{messageMetadata?.modelName}
 				</span>
 			</div>
 		</div>
