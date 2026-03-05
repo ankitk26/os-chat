@@ -23,6 +23,7 @@ type Props = {
 	message: CustomUIMessage;
 	sendMessage: UseChatHelpers<CustomUIMessage>["sendMessage"];
 	regenerate: UseChatHelpers<CustomUIMessage>["regenerate"];
+	nextMessage?: CustomUIMessage;
 };
 
 export default memo(function UserMessage({
@@ -30,6 +31,7 @@ export default memo(function UserMessage({
 	message,
 	sendMessage,
 	regenerate,
+	nextMessage,
 }: Props) {
 	const messageContent = getMessageContentFromParts(message.parts);
 
@@ -130,7 +132,11 @@ export default memo(function UserMessage({
 					<TooltipContent>Edit message</TooltipContent>
 				</Tooltip>
 				<BranchOffButton message={message} sendMessage={sendMessage} />
-				<RetryModelDropdown message={message} regenerate={regenerate} />
+				<RetryModelDropdown
+					message={message}
+					regenerate={regenerate}
+					nextMessage={nextMessage}
+				/>
 				<Tooltip>
 					<TooltipTrigger
 						render={

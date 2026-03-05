@@ -77,7 +77,7 @@ export default React.memo(function AssistantMessage(props: Props) {
 					)}
 
 					<span className="text-muted-foreground text-xs">
-						{message.metadata?.model}
+						{message.metadata?.modelName}
 					</span>
 
 					{message.parts.filter(

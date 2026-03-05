@@ -1,4 +1,5 @@
 import { v } from "convex/values";
+import { MessageMetadata } from "~/types";
 import { internal } from "./_generated/api";
 import { internalMutation, mutation, query } from "./_generated/server";
 import { getAuthUserIdOrThrow } from "./model/users";
@@ -87,9 +88,11 @@ export const createMessage = mutation({
 
 		// below logic is required to handle tokens generated while regeneration
 		if (args.messageBody.role === "assistant") {
-			const parsedMetadata = JSON.parse(args.messageBody.metadata ?? "");
-			const modelUsed: string = parsedMetadata.model;
-			const totalTokens: number = parsedMetadata.totalTokens;
+			const parsedMetadata: MessageMetadata = JSON.parse(
+				args.messageBody.metadata ?? "",
+			);
+			const modelUsedName = parsedMetadata.modelName as string;
+			const totalTokens = parsedMetadata.totalTokens as number;
 
 			// Only process if tokens is a valid number
 			if (
@@ -100,7 +103,7 @@ export const createMessage = mutation({
 				const modelTokenDoc = await ctx.db
 					.query("userTokenUsage")
 					.withIndex("by_user_and_model", (q) =>
-						q.eq("userId", userId).eq("model", modelUsed),
+						q.eq("userId", userId).eq("model", modelUsedName),
 					)
 					.first();
 
@@ -111,7 +114,7 @@ export const createMessage = mutation({
 				} else {
 					await ctx.db.insert("userTokenUsage", {
 						userId,
-						model: modelUsed,
+						model: modelUsedName,
 						tokens: totalTokens,
 					});
 				}

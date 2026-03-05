@@ -245,7 +245,11 @@ export const Route = createFileRoute("/api/chat")({
 					generateMessageId: generateRandomUUID,
 					messageMetadata: ({ part }) => {
 						if (part.type === "start") {
-							return { model: requestModel.name, createdAt: Date.now() };
+							return {
+								modelId: requestModel.openRouterModelId,
+								modelName: requestModel.name,
+								createdAt: Date.now(),
+							};
 						}
 						if (part.type === "finish") {
 							return { totalTokens: part.totalUsage.totalTokens };

@@ -57,7 +57,8 @@ export type SidebarFolder = FunctionReturnType<
 
 export const messageMetadataSchema = z.object({
 	createdAt: z.number().optional(),
-	model: z.string().optional(),
+	modelId: z.string().optional(),
+	modelName: z.string().optional(),
 	totalTokens: z.float64().optional(),
 });
 export type MessageMetadata = z.infer<typeof messageMetadataSchema>;
