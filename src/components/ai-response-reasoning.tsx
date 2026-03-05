@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default function AIResponseReasoning(props: Props) {
-	const [showReasoning, setShowReasoning] = useState(false);
+	const [showReasoning, setShowReasoning] = useState(true);
 	const reasoningPart = props.parts.find((part) => part.type === "reasoning");
 
 	const toggleReasoningDisplay = () => {
