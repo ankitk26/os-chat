@@ -85,8 +85,12 @@ export default function Chat({
 	}, [messages]);
 
 	useEffect(() => {
-		setMessages(dbMessages);
-	}, [setMessages, dbMessages]);
+		// Only sync dbMessages when we have actual data, not during initial load
+		// This preserves optimistic messages during route transitions
+		if (!isMessagesPending) {
+			setMessages(dbMessages);
+		}
+	}, [setMessages, dbMessages, isMessagesPending]);
 
 	return (
 		<div className="relative mx-auto flex h-full min-h-0 w-full flex-col">
@@ -101,7 +105,7 @@ export default function Chat({
 								className="pb-safe my-4 space-y-6 lg:my-8 lg:space-y-8"
 								style={{ paddingBottom: `${inputHeight + 40}px` }}
 							>
-								{isMessagesPending ? (
+								{isMessagesPending && messages.length === 0 ? (
 									<>
 										<UserMessageSkeleton />
 										<AssistantMessageSkeleton />
