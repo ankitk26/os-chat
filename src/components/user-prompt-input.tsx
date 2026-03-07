@@ -62,33 +62,15 @@ export default function UserPromptInput(props: Props) {
 			return;
 		}
 
-		if (!paramsChatId) {
-			navigate({
-				to: "/chat/$chatId",
-				params: { chatId: props.chatId },
-			});
-			const dbGeneratedChatId = await createChatMutation.mutateAsync({
-				uuid: props.chatId,
-			});
-			handleChatTitleUpdate(dbGeneratedChatId);
-		}
-
 		const sourceMessageId = generateRandomUUID();
+		const messageText = input;
 
-		createMessageMutation.mutate({
-			messageBody: {
-				chatId: props.chatId,
-				role: "user",
-				sourceMessageId,
-				parts: JSON.stringify([{ type: "text", text: input }]),
-			},
-		});
-
+		// Send message optimistically BEFORE navigation so it's in state
 		props.sendMessage(
 			{
 				role: "user",
 				id: sourceMessageId,
-				parts: [{ type: "text", text: input }],
+				parts: [{ type: "text", text: messageText }],
 			},
 			{
 				body: {
@@ -101,7 +83,30 @@ export default function UserPromptInput(props: Props) {
 			},
 		);
 
+		// Clear input immediately for better UX
 		setInput("");
+
+		if (!paramsChatId) {
+			// Navigate to chat page after optimistic message is sent
+			navigate({
+				to: "/chat/$chatId",
+				params: { chatId: props.chatId },
+			});
+			const dbGeneratedChatId = await createChatMutation.mutateAsync({
+				uuid: props.chatId,
+			});
+			handleChatTitleUpdate(dbGeneratedChatId);
+		}
+
+		// Persist message to database
+		createMessageMutation.mutate({
+			messageBody: {
+				chatId: props.chatId,
+				role: "user",
+				sourceMessageId,
+				parts: JSON.stringify([{ type: "text", text: messageText }]),
+			},
+		});
 	};
 
 	const resizeTextarea = () => {
