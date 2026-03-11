@@ -7,10 +7,10 @@ It supports multiple AI providers, real-time messaging, and chat organization.
 
 ### AI Model Support
 
-- Google Gemini (2.0 Flash, 2.5 Flash, 2.5 Pro)
-- OpenAI (GPT-4o, GPT-4o Mini, GPT-5, o3)
-- Anthropic (Claude 3.5 Sonnet, 3.7 Sonnet, Sonnet 4)
-- OpenRouter (100+ models via a single API)
+- Google Gemini
+- OpenAI
+- Anthropic
+- OpenRouter
 - BYOK (Bring your own API keys)
 
 ### Chat Management
@@ -28,9 +28,15 @@ It supports multiple AI providers, real-time messaging, and chat organization.
 - Math rendering (KaTeX)
 - Markdown support
 
+### Image Generation
+
+- Generate images from text prompts
+- Support for multiple image generation models
+- Download and share generated images
+
 ### Authentication
 
-- GitHub OAuth (via Better Auth)
+- GitHub and Google OAuth (via Better Auth)
 
 ## Tech Stack
 
@@ -53,20 +59,20 @@ It supports multiple AI providers, real-time messaging, and chat organization.
 - OpenAI (GPT models)
 - Anthropic (Claude models)
 - Google (Gemini models)
+- xAI (Grok models)
 - OpenRouter (unified AI API)
-- BYOK support for all major providers
+- BYOK support for all above providers
 
 **Development**
 
-- Ultracite (code formatting and linting)
-- Biome (fast linter and formatter)
+- Oxlint for linting and Oxfmt for formatting
 
 ## Installation
 
 ### Prerequisites
 
 - Node.js 18+
-- pnpm (recommended) or npm
+- Any package manager (bun used here)
 - Git
 
 ### Setup
@@ -81,7 +87,7 @@ It supports multiple AI providers, real-time messaging, and chat organization.
 2. Install dependencies:
 
    ```bash
-   pnpm install
+   bun install
    ```
 
 3. Set up Convex:
@@ -96,71 +102,43 @@ It supports multiple AI providers, real-time messaging, and chat organization.
 
    ```env
    # Convex (Required)
-   VITE_CONVEX_URL="https://your_project_url.convex.cloud"
+   CONVEX_DEPLOYMENT=dev:your_project_name
+   VITE_CONVEX_URL=https://your_project_url.convex.cloud
+   VITE_CONVEX_SITE_URL=https://your_project_url.convex.site
+
+   # Site URL (Required)
+   VITE_SITE_URL=http://localhost:3000
 
    # BetterAuth (Required for authentication)
-   BETTER_AUTH_SECRET="your_better_auth_secret"
-   BETTER_AUTH_URL="http://localhost:3000"
+   BETTER_AUTH_SECRET=your_better_auth_secret
 
    # GitHub OAuth (Required for authentication)
-   GITHUB_CLIENT_ID="your_github_client_id"
-   GITHUB_CLIENT_SECRET="your_github_client_secret"
+   GITHUB_CLIENT_ID=your_github_client_id
+   GITHUB_CLIENT_SECRET=your_github_client_secret
 
-   # Optional: Server-side API keys for default access
-   OPENROUTER_API_KEY="your_openrouter_api_key"
-   OPENAI_API_KEY="your_openai_api_key"
-   ANTHROPIC_API_KEY="your_anthropic_api_key"
-   GOOGLE_GENERATIVE_AI_API_KEY="your_google_api_key"
-   XAI_API_KEY="your_xai_api_key"
+   # Google OAuth (Required for authentication)
+   GOOGLE_CLIENT_ID=your_google_client_id
+   GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+   # Optional: API keys for AI providers
+   GOOGLE_GENERATIVE_AI_API_KEY=your_google_api_key
+   ANTHROPIC_API_KEY=your_anthropic_api_key
    ```
 
 5. Run the development server:
 
    ```bash
-   pnpm dev
+   bun run dev
    ```
 
 6. Open your browser and navigate to `http://localhost:3000`
 
-## Tech Stack
-
-### Frontend
-
-- TanStack Start - Full-stack React framework
-- TanStack Query - Server state management
-- ShadCN - UI components
-- Zustand - Client state management
-
-### Backend
-
-- Convex - Real-time database and backend
-- Better Auth - Authentication system
-- Vercel AI SDK - AI model integration
-- Zod - Schema validation
-
-### AI Providers
-
-- OpenAI - GPT models
-- Anthropic - Claude models
-- Google - Gemini models
-- OpenRouter - Unified AI API
-- BYOK Support - All major providers
-
-### Development
-
-- Ultracite - Code formatting and linting
-- Biome - Fast linter and formatter
-
 ## Usage
 
-1. Sign in with your GitHub account
+1. Sign in with your GitHub or Google account
 2. Configure API keys in settings (optional - you can use OpenRouter for all models)
 3. Start chatting with any available AI model
 4. Organize chats by creating folders and pinning important conversations
-
-## License
-
-This project is open-source and licensed under the [MIT License](LICENSE).
 
 ## Support
 
