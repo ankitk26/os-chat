@@ -6,11 +6,7 @@ import { useParams } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { getModelByOpenRouterId } from "~/lib/get-model-by-id";
-import {
-	setSelectedModel,
-	toggleIsWebSearch,
-	useModelStore,
-} from "~/stores/model-store";
+import { modelStoreActions, useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import type { CustomUIMessage, Model } from "~/types";
 import { DropdownMenuSeparatorWithText } from "./dropdown-menu-separator-with-text";
@@ -63,7 +59,7 @@ export default function RetryModelDropdown(props: Props) {
 		}
 
 		// Set the model selector to the model being used for retry
-		setSelectedModel(model);
+		modelStoreActions.setSelectedModel(model);
 
 		// delete all messages after current message in current chat
 		deleteMessagesMutation.mutate({
@@ -131,7 +127,7 @@ export default function RetryModelDropdown(props: Props) {
 					</div>
 					<Switch
 						checked={isWebSearchEnabled}
-						onCheckedChange={toggleIsWebSearch}
+						onCheckedChange={modelStoreActions.toggleIsWebSearch}
 					/>
 				</div>
 

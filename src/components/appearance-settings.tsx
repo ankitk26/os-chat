@@ -4,7 +4,7 @@ import { Switch } from "~/components/ui/switch";
 import { TabsContent } from "~/components/ui/tabs";
 import { setAppFont } from "~/server-fns/app-font";
 import {
-	toggleShowTokenUsage,
+	appearanceStoreActions,
 	useAppearanceStore,
 } from "~/stores/appearance-store";
 import { AppFont } from "~/types";
@@ -74,7 +74,7 @@ export default function AppearanceSettings() {
 							aria-label="Show token usage"
 							checked={showTokenUsage}
 							id="show-token-usage"
-							onCheckedChange={toggleShowTokenUsage}
+							onCheckedChange={appearanceStoreActions.toggleShowTokenUsage}
 						/>
 					</div>
 

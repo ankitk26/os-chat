@@ -4,8 +4,7 @@ import { api } from "convex/_generated/api";
 import { type FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
-	setIsRenameModalOpen,
-	setSelectedFolder,
+	folderActionStoreActions,
 	useFolderActionStore,
 } from "~/stores/folder-actions-store";
 import { Button } from "./ui/button";
@@ -45,9 +44,9 @@ export default function RenameFolderDialog() {
 			});
 		},
 		onSettled: () => {
-			setIsRenameModalOpen(false);
+			folderActionStoreActions.setIsRenameModalOpen(false);
 			setNewFolderTitle("");
-			setSelectedFolder(null);
+			folderActionStoreActions.setSelectedFolder(null);
 		},
 	});
 
@@ -71,7 +70,9 @@ export default function RenameFolderDialog() {
 
 	return (
 		<Dialog
-			onOpenChange={(open) => setIsRenameModalOpen(open)}
+			onOpenChange={(open) =>
+				folderActionStoreActions.setIsRenameModalOpen(open)
+			}
 			open={isRenameModalOpen}
 		>
 			<DialogContent>

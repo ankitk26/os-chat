@@ -43,10 +43,14 @@ export const usePersistedApiKeysStore = <T>(
 	selector: (state: ApiKeysStoreState) => T,
 ): T => useStore(apiKeysStore, selector);
 
-export const setPersistedApiKeys = (keys: ApiKeys) => {
-	apiKeysStore.setState((prev) => ({ ...prev, persistedApiKeys: keys }));
-};
-
-export const setPersistedUseOpenRouter = (value: boolean) => {
-	apiKeysStore.setState((prev) => ({ ...prev, persistedUseOpenRouter: value }));
+export const persistedApiKeysStoreActions = {
+	setPersistedApiKeys: (keys: ApiKeys) => {
+		apiKeysStore.setState((prev) => ({ ...prev, persistedApiKeys: keys }));
+	},
+	setPersistedUseOpenRouter: (value: boolean) => {
+		apiKeysStore.setState((prev) => ({
+			...prev,
+			persistedUseOpenRouter: value,
+		}));
+	},
 };

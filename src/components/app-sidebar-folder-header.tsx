@@ -1,5 +1,5 @@
 import { FolderIcon, PlusIcon } from "@phosphor-icons/react";
-import { setIsCreateModalOpen } from "~/stores/folder-actions-store";
+import { folderActionStoreActions } from "~/stores/folder-actions-store";
 import { Button } from "./ui/button";
 
 export default function AppSidebarFolderHeader() {
@@ -12,7 +12,7 @@ export default function AppSidebarFolderHeader() {
 				</span>
 			</div>
 			<Button
-				onClick={() => setIsCreateModalOpen(true)}
+				onClick={() => folderActionStoreActions.setIsCreateModalOpen(true)}
 				size="icon"
 				variant="ghost"
 				className="h-6 w-6 shrink-0 opacity-60 hover:opacity-100"

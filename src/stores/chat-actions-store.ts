@@ -26,18 +26,17 @@ export const useChatActionStore = <T>(
 	selector: (state: ChatActionState) => T,
 ): T => useStore(chatActionStore, selector);
 
-export const setSelectedChat = (chat: Chat | null) => {
-	chatActionStore.setState((prev) => ({ ...prev, selectedChat: chat }));
-};
-
-export const setIsDeleteModalOpen = (value: boolean) => {
-	chatActionStore.setState((prev) => ({ ...prev, isDeleteModalOpen: value }));
-};
-
-export const setIsRenameModalOpen = (value: boolean) => {
-	chatActionStore.setState((prev) => ({ ...prev, isRenameModalOpen: value }));
-};
-
-export const setIsShareDialogOpen = (value: boolean) => {
-	chatActionStore.setState((prev) => ({ ...prev, isShareDialogOpen: value }));
+export const chatActionStoreActions = {
+	setSelectedChat: (chat: Chat | null) => {
+		chatActionStore.setState((prev) => ({ ...prev, selectedChat: chat }));
+	},
+	setIsDeleteModalOpen: (value: boolean) => {
+		chatActionStore.setState((prev) => ({ ...prev, isDeleteModalOpen: value }));
+	},
+	setIsRenameModalOpen: (value: boolean) => {
+		chatActionStore.setState((prev) => ({ ...prev, isRenameModalOpen: value }));
+	},
+	setIsShareDialogOpen: (value: boolean) => {
+		chatActionStore.setState((prev) => ({ ...prev, isShareDialogOpen: value }));
+	},
 };

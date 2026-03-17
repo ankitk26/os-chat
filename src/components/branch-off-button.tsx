@@ -11,7 +11,7 @@ import { api } from "convex/_generated/api";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { useSharedChatContext } from "~/providers/chat-provider";
-import { setSelectedModel, useModelStore } from "~/stores/model-store";
+import { modelStoreActions, useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import type { CustomUIMessage, Model } from "~/types";
 import { DropdownMenuSeparatorWithText } from "./dropdown-menu-separator-with-text";
@@ -79,7 +79,7 @@ export default function BranchOffButton({ message, sendMessage }: Props) {
 		});
 
 		if (model) {
-			setSelectedModel(model);
+			modelStoreActions.setSelectedModel(model);
 		}
 
 		if (message.role === "user" && sendMessage) {

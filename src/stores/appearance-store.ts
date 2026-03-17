@@ -35,9 +35,11 @@ export const useAppearanceStore = <T>(
 	selector: (state: AppearanceStoreState) => T,
 ): T => useStore(appearanceStore, selector);
 
-export const toggleShowTokenUsage = () => {
-	appearanceStore.setState((prev) => ({
-		...prev,
-		showTokenUsage: !prev.showTokenUsage,
-	}));
+export const appearanceStoreActions = {
+	toggleShowTokenUsage: () => {
+		appearanceStore.setState((prev) => ({
+			...prev,
+			showTokenUsage: !prev.showTokenUsage,
+		}));
+	},
 };
