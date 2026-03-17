@@ -69,6 +69,26 @@ export const Route = createRootRouteWithContext<{
 				name: "apple-mobile-web-app-title",
 				content: "baychat",
 			},
+			{
+				name: "theme-color",
+				content: "#fefefe",
+				media: "(prefers-color-scheme: light)",
+			},
+			{
+				name: "theme-color",
+				content: "#141414",
+				media: "(prefers-color-scheme: dark)",
+			},
+			{
+				name: "apple-mobile-web-app-status-bar-style",
+				content: "default",
+				media: "(prefers-color-scheme: light)",
+			},
+			{
+				name: "apple-mobile-web-app-status-bar-style",
+				content: "black-translucent",
+				media: "(prefers-color-scheme: dark)",
+			},
 		],
 		links: [
 			// Preload critical styles early to reduce FOUC
