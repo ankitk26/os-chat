@@ -114,7 +114,7 @@ export default memo(function UserMessage({
 					<MemoizedMarkdown content={messageContent} id={message.id} />
 				)}
 			</div>
-			<div className="flex opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+			<div className="flex opacity-100 transition-opacity duration-200 md:opacity-0 md:group-hover:opacity-100">
 				<Tooltip>
 					<TooltipTrigger
 						render={
