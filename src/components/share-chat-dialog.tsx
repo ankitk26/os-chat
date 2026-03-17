@@ -1,5 +1,5 @@
 import {
-	setIsShareDialogOpen,
+	chatActionStoreActions,
 	useChatActionStore,
 } from "~/stores/chat-actions-store";
 import ShareChatAccessHandler from "./share-chat-access-handler";
@@ -16,7 +16,7 @@ export default function ShareChatDialog() {
 	);
 
 	function handleDialogOpenChange(open: boolean) {
-		setIsShareDialogOpen(open);
+		chatActionStoreActions.setIsShareDialogOpen(open);
 	}
 
 	return (

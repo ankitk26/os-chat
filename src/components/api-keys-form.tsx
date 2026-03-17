@@ -2,8 +2,7 @@ import { FloppyDiskIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
-	setPersistedApiKeys,
-	setPersistedUseOpenRouter,
+	persistedApiKeysStoreActions,
 	usePersistedApiKeysStore,
 } from "~/stores/persisted-api-keys-store";
 import { type ApiKeys, defaultApiKeys, type Provider } from "~/types";
@@ -69,8 +68,8 @@ export default function ApiKeysForm() {
 
 	// save keys and useOpenRouter setting in local storage
 	const handleSave = () => {
-		setPersistedApiKeys(apiKeys);
-		setPersistedUseOpenRouter(useOpenRouter);
+		persistedApiKeysStoreActions.setPersistedApiKeys(apiKeys);
+		persistedApiKeysStoreActions.setPersistedUseOpenRouter(useOpenRouter);
 		toast.success("API keys saved!");
 		setInitialState({ apiKeys: { ...apiKeys }, useOpenRouter });
 	};

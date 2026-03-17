@@ -18,17 +18,17 @@ const modelStore = new Store<ModelStoreState>({
 export const useModelStore = <T>(selector: (state: ModelStoreState) => T): T =>
 	useStore(modelStore, selector);
 
-export const setSelectedModel = (model: Model) => {
-	modelStore.setState((prev) => ({ ...prev, selectedModel: model }));
-};
-
-export const toggleIsWebSearch = () => {
-	modelStore.setState((prev) => ({
-		...prev,
-		isWebSearchEnabled: !prev.isWebSearchEnabled,
-	}));
-};
-
-export const setRetryModel = (model: string | null) => {
-	modelStore.setState((prev) => ({ ...prev, retryModel: model }));
+export const modelStoreActions = {
+	setSelectedModel: (model: Model) => {
+		modelStore.setState((prev) => ({ ...prev, selectedModel: model }));
+	},
+	toggleIsWebSearch: () => {
+		modelStore.setState((prev) => ({
+			...prev,
+			isWebSearchEnabled: !prev.isWebSearchEnabled,
+		}));
+	},
+	setRetryModel: (model: string | null) => {
+		modelStore.setState((prev) => ({ ...prev, retryModel: model }));
+	},
 };

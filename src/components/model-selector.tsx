@@ -1,6 +1,6 @@
 import { CaretDownIcon, KeyIcon } from "@phosphor-icons/react";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
-import { setSelectedModel, useModelStore } from "~/stores/model-store";
+import { modelStoreActions, useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import ModelProviderIcon from "./model-provider-icon";
 import { Button } from "./ui/button";
@@ -50,7 +50,7 @@ export default function ModelSelector() {
 										disabled={!model.isAvailable}
 										key={model.modelId}
 										onClick={() => {
-											setSelectedModel(model);
+											modelStoreActions.setSelectedModel(model);
 										}}
 									>
 										<ModelProviderIcon provider={provider.key} />

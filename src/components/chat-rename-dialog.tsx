@@ -4,8 +4,7 @@ import { api } from "convex/_generated/api";
 import { type FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
-	setIsRenameModalOpen,
-	setSelectedChat,
+	chatActionStoreActions,
 	useChatActionStore,
 } from "~/stores/chat-actions-store";
 import { Button } from "./ui/button";
@@ -44,9 +43,9 @@ export default function ChatRenameDialog() {
 			});
 		},
 		onSettled: () => {
-			setIsRenameModalOpen(false);
+			chatActionStoreActions.setIsRenameModalOpen(false);
 			setNewChatTitle("");
-			setSelectedChat(null);
+			chatActionStoreActions.setSelectedChat(null);
 		},
 	});
 
@@ -74,7 +73,7 @@ export default function ChatRenameDialog() {
 
 	return (
 		<Dialog
-			onOpenChange={(open) => setIsRenameModalOpen(open)}
+			onOpenChange={(open) => chatActionStoreActions.setIsRenameModalOpen(open)}
 			open={isRenameModalOpen}
 		>
 			<DialogContent>

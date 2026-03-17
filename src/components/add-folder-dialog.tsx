@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { type FormEvent, useRef, useState } from "react";
 import {
-	setIsCreateModalOpen,
+	folderActionStoreActions,
 	useFolderActionStore,
 } from "~/stores/folder-actions-store";
 import { Button } from "./ui/button";
@@ -52,7 +52,9 @@ export default function AddFolderDialog() {
 
 	return (
 		<Dialog
-			onOpenChange={(open) => setIsCreateModalOpen(open)}
+			onOpenChange={(open) =>
+				folderActionStoreActions.setIsCreateModalOpen(open)
+			}
 			open={isCreateModalOpen}
 		>
 			<DialogContent>

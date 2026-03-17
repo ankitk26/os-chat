@@ -20,18 +20,26 @@ export const useFolderActionStore = <T>(
 	selector: (state: FolderActionState) => T,
 ): T => useStore(folderActionStore, selector);
 
-export const setSelectedFolder = (folder: SidebarFolder | null) => {
-	folderActionStore.setState((prev) => ({ ...prev, selectedFolder: folder }));
-};
-
-export const setIsCreateModalOpen = (value: boolean) => {
-	folderActionStore.setState((prev) => ({ ...prev, isCreateModalOpen: value }));
-};
-
-export const setIsDeleteModalOpen = (value: boolean) => {
-	folderActionStore.setState((prev) => ({ ...prev, isDeleteModalOpen: value }));
-};
-
-export const setIsRenameModalOpen = (value: boolean) => {
-	folderActionStore.setState((prev) => ({ ...prev, isRenameModalOpen: value }));
+export const folderActionStoreActions = {
+	setSelectedFolder: (folder: SidebarFolder | null) => {
+		folderActionStore.setState((prev) => ({ ...prev, selectedFolder: folder }));
+	},
+	setIsCreateModalOpen: (value: boolean) => {
+		folderActionStore.setState((prev) => ({
+			...prev,
+			isCreateModalOpen: value,
+		}));
+	},
+	setIsDeleteModalOpen: (value: boolean) => {
+		folderActionStore.setState((prev) => ({
+			...prev,
+			isDeleteModalOpen: value,
+		}));
+	},
+	setIsRenameModalOpen: (value: boolean) => {
+		folderActionStore.setState((prev) => ({
+			...prev,
+			isRenameModalOpen: value,
+		}));
+	},
 };

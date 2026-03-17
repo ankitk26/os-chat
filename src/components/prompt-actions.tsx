@@ -6,7 +6,7 @@ import {
 import { useHotkey } from "@tanstack/react-hotkeys";
 import type { ChatStatus } from "ai";
 import { cn } from "~/lib/utils";
-import { toggleIsWebSearch, useModelStore } from "~/stores/model-store";
+import { modelStoreActions, useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import ModelSelector from "./model-selector";
 import { Button } from "./ui/button";
@@ -24,7 +24,7 @@ export default function PromptActions({ status, stop }: Props) {
 		(store) => store.persistedUseOpenRouter,
 	);
 
-	useHotkey("Mod+Shift+S", toggleIsWebSearch);
+	useHotkey("Mod+Shift+S", modelStoreActions.toggleIsWebSearch);
 
 	return (
 		<div className="mt-3 flex flex-row items-center justify-between gap-2 lg:mt-4">
@@ -41,7 +41,7 @@ export default function PromptActions({ status, stop }: Props) {
 										"transition-all duration-300 ease-out",
 										isWebSearchEnabled ? "border-primary" : "border-border",
 									)}
-									onClick={toggleIsWebSearch}
+									onClick={modelStoreActions.toggleIsWebSearch}
 									type="button"
 									variant={isWebSearchEnabled ? "default" : "outline"}
 								>

@@ -3,11 +3,7 @@ import {
 	DotsThreeVerticalIcon,
 	TrashIcon,
 } from "@phosphor-icons/react";
-import {
-	setIsDeleteModalOpen,
-	setIsRenameModalOpen,
-	setSelectedFolder,
-} from "~/stores/folder-actions-store";
+import { folderActionStoreActions } from "~/stores/folder-actions-store";
 import type { SidebarFolder } from "~/types";
 import { Button } from "./ui/button";
 import {
@@ -40,8 +36,8 @@ export default function AppSidebarFolderItemActions({ folder }: Props) {
 				<DropdownMenuItem
 					onClick={(e) => {
 						e.stopPropagation();
-						setSelectedFolder(folder);
-						setIsRenameModalOpen(true);
+						folderActionStoreActions.setSelectedFolder(folder);
+						folderActionStoreActions.setIsRenameModalOpen(true);
 					}}
 				>
 					<PencilIcon className="size-4" />
@@ -51,8 +47,8 @@ export default function AppSidebarFolderItemActions({ folder }: Props) {
 				<DropdownMenuItem
 					onClick={(e: React.MouseEvent) => {
 						e.stopPropagation();
-						setSelectedFolder(folder);
-						setIsDeleteModalOpen(true);
+						folderActionStoreActions.setSelectedFolder(folder);
+						folderActionStoreActions.setIsDeleteModalOpen(true);
 					}}
 				>
 					<TrashIcon className="size-4" />

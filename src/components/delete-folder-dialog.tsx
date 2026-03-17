@@ -4,8 +4,7 @@ import { api } from "convex/_generated/api";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
-	setIsDeleteModalOpen,
-	setSelectedFolder,
+	folderActionStoreActions,
 	useFolderActionStore,
 } from "~/stores/folder-actions-store";
 import {
@@ -33,8 +32,8 @@ export default function DeleteFolderAlertDialog() {
 		mutationFn: useConvexMutation(api.folders.deleteFolder),
 		onSuccess: () => {
 			toast.success("Folder was deleted");
-			setIsDeleteModalOpen(false);
-			setSelectedFolder(null);
+			folderActionStoreActions.setIsDeleteModalOpen(false);
+			folderActionStoreActions.setSelectedFolder(null);
 			setDeleteAllChats(false);
 			// navigate({ to: "/" });
 		},
@@ -42,13 +41,15 @@ export default function DeleteFolderAlertDialog() {
 			toast.error("Folder was not deleted", {
 				description: "Please try again later",
 			});
-			setSelectedFolder(null);
+			folderActionStoreActions.setSelectedFolder(null);
 		},
 	});
 
 	return (
 		<AlertDialog
-			onOpenChange={(open) => setIsDeleteModalOpen(open)}
+			onOpenChange={(open) =>
+				folderActionStoreActions.setIsDeleteModalOpen(open)
+			}
 			open={isDeleteModalOpen}
 		>
 			<AlertDialogContent>

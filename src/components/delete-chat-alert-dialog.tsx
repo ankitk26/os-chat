@@ -5,8 +5,7 @@ import { api } from "convex/_generated/api";
 import { toast } from "sonner";
 import { useSharedChatContext } from "~/providers/chat-provider";
 import {
-	setIsDeleteModalOpen,
-	setSelectedChat,
+	chatActionStoreActions,
 	useChatActionStore,
 } from "~/stores/chat-actions-store";
 import {
@@ -34,8 +33,8 @@ export default function DeleteChatAlertDialog() {
 		onSuccess: () => {
 			const isCurrentChatOpened = selectedChat?.uuid === chatId;
 			toast.success("Chat was deleted");
-			setIsDeleteModalOpen(false);
-			setSelectedChat(null);
+			chatActionStoreActions.setIsDeleteModalOpen(false);
+			chatActionStoreActions.setSelectedChat(null);
 
 			if (isCurrentChatOpened) {
 				clearChat();
@@ -46,13 +45,13 @@ export default function DeleteChatAlertDialog() {
 			toast.error("Chat was not deleted", {
 				description: "Please try again later",
 			});
-			setSelectedChat(null);
+			chatActionStoreActions.setSelectedChat(null);
 		},
 	});
 
 	return (
 		<AlertDialog
-			onOpenChange={(open) => setIsDeleteModalOpen(open)}
+			onOpenChange={(open) => chatActionStoreActions.setIsDeleteModalOpen(open)}
 			open={isDeleteModalOpen}
 		>
 			<AlertDialogContent>
