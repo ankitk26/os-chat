@@ -1,22 +1,34 @@
-import { create } from "zustand";
+import { useStore } from "@tanstack/react-store";
+import { Store } from "@tanstack/store";
 import { defaultSelectedModel } from "~/constants/model-providers";
 import type { Model } from "~/types";
 
 type ModelStoreState = {
 	selectedModel: Model;
-	setSelectedModel: (model: Model) => void;
 	isWebSearchEnabled: boolean;
-	toggleIsWebSearch: () => void;
 	retryModel: string | null;
-	setRetryModel: (model: string | null) => void;
 };
 
-export const useModelStore = create<ModelStoreState>()((set) => ({
+const modelStore = new Store<ModelStoreState>({
 	selectedModel: defaultSelectedModel,
-	setSelectedModel: (model: Model) => set({ selectedModel: model }),
 	isWebSearchEnabled: false,
-	toggleIsWebSearch: () =>
-		set((prev) => ({ isWebSearchEnabled: !prev.isWebSearchEnabled })),
 	retryModel: null,
-	setRetryModel: (model: string | null) => set({ retryModel: model }),
-}));
+});
+
+export const useModelStore = <T>(selector: (state: ModelStoreState) => T): T =>
+	useStore(modelStore, selector);
+
+export const setSelectedModel = (model: Model) => {
+	modelStore.setState((prev) => ({ ...prev, selectedModel: model }));
+};
+
+export const toggleIsWebSearch = () => {
+	modelStore.setState((prev) => ({
+		...prev,
+		isWebSearchEnabled: !prev.isWebSearchEnabled,
+	}));
+};
+
+export const setRetryModel = (model: string | null) => {
+	modelStore.setState((prev) => ({ ...prev, retryModel: model }));
+};

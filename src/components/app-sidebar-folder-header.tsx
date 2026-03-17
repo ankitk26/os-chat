@@ -1,12 +1,8 @@
 import { FolderIcon, PlusIcon } from "@phosphor-icons/react";
-import { useFolderActionStore } from "~/stores/folder-actions-store";
+import { setIsCreateModalOpen } from "~/stores/folder-actions-store";
 import { Button } from "./ui/button";
 
 export default function AppSidebarFolderHeader() {
-	const setIsCreateModalOpen = useFolderActionStore(
-		(store) => store.setIsCreateModalOpen,
-	);
-
 	return (
 		<div className="flex items-center justify-between px-2 py-1.5">
 			<div className="flex items-center">

@@ -3,7 +3,11 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useFolderActionStore } from "~/stores/folder-actions-store";
+import {
+	setIsDeleteModalOpen,
+	setSelectedFolder,
+	useFolderActionStore,
+} from "~/stores/folder-actions-store";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -21,12 +25,6 @@ export default function DeleteFolderAlertDialog() {
 	const selectedFolder = useFolderActionStore((store) => store.selectedFolder);
 	const isDeleteModalOpen = useFolderActionStore(
 		(store) => store.isDeleteModalOpen,
-	);
-	const setIsDeleteModalOpen = useFolderActionStore(
-		(store) => store.setIsDeleteModalOpen,
-	);
-	const setSelectedFolder = useFolderActionStore(
-		(store) => store.setSelectedFolder,
 	);
 
 	const [deleteAllChats, setDeleteAllChats] = useState(false);

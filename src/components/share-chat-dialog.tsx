@@ -1,4 +1,7 @@
-import { useChatActionStore } from "~/stores/chat-actions-store";
+import {
+	setIsShareDialogOpen,
+	useChatActionStore,
+} from "~/stores/chat-actions-store";
 import ShareChatAccessHandler from "./share-chat-access-handler";
 import ShareChatDialogFooter from "./share-chat-dialog-footer";
 import ShareChatDialogHeader from "./share-chat-dialog-header";
@@ -10,9 +13,6 @@ export default function ShareChatDialog() {
 	const selectedChat = useChatActionStore((store) => store.selectedChat);
 	const isShareDialogOpen = useChatActionStore(
 		(store) => store.isShareDialogOpen,
-	);
-	const setIsShareDialogOpen = useChatActionStore(
-		(store) => store.setIsShareDialogOpen,
 	);
 
 	function handleDialogOpenChange(open: boolean) {

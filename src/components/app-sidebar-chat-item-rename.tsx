@@ -1,5 +1,8 @@
 import { PencilIcon } from "@phosphor-icons/react";
-import { useChatActionStore } from "~/stores/chat-actions-store";
+import {
+	setIsRenameModalOpen,
+	setSelectedChat,
+} from "~/stores/chat-actions-store";
 import type { SidebarChatType } from "~/types";
 import { DropdownMenuItem } from "./ui/dropdown-menu";
 
@@ -8,11 +11,6 @@ type Props = {
 };
 
 export default function AppSidebarChatItemRename(props: Props) {
-	const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
-	const setIsRenameModalOpen = useChatActionStore(
-		(store) => store.setIsRenameModalOpen,
-	);
-
 	return (
 		<DropdownMenuItem
 			onClick={(e) => {

@@ -3,7 +3,10 @@ import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { TabsContent } from "~/components/ui/tabs";
 import { setAppFont } from "~/server-fns/app-font";
-import { useAppearanceStore } from "~/stores/appearance-store";
+import {
+	toggleShowTokenUsage,
+	useAppearanceStore,
+} from "~/stores/appearance-store";
 import { AppFont } from "~/types";
 import TokenUsageByModel from "./token-usage-by-model";
 
@@ -12,9 +15,6 @@ export default function AppearanceSettings() {
 	const router = useRouter();
 
 	const showTokenUsage = useAppearanceStore((store) => store.showTokenUsage);
-	const toggleShowTokenUsage = useAppearanceStore(
-		(store) => store.toggleShowTokenUsage,
-	);
 
 	const toggleFont = () => {
 		const updatedFont: AppFont =

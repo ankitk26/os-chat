@@ -2,7 +2,10 @@ import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { type FormEvent, useRef, useState } from "react";
-import { useFolderActionStore } from "~/stores/folder-actions-store";
+import {
+	setIsCreateModalOpen,
+	useFolderActionStore,
+} from "~/stores/folder-actions-store";
 import { Button } from "./ui/button";
 import {
 	Dialog,
@@ -18,9 +21,6 @@ import { Input } from "./ui/input";
 export default function AddFolderDialog() {
 	const isCreateModalOpen = useFolderActionStore(
 		(store) => store.isCreateModalOpen,
-	);
-	const setIsCreateModalOpen = useFolderActionStore(
-		(store) => store.setIsCreateModalOpen,
 	);
 	const [folderTitle, setFolderTitle] = useState("");
 	const inputRef = useRef<HTMLInputElement>(null);

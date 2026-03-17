@@ -1,5 +1,8 @@
 import { TrashIcon } from "@phosphor-icons/react";
-import { useChatActionStore } from "~/stores/chat-actions-store";
+import {
+	setIsDeleteModalOpen,
+	setSelectedChat,
+} from "~/stores/chat-actions-store";
 import type { SidebarChatType } from "~/types";
 import { DropdownMenuItem } from "./ui/dropdown-menu";
 
@@ -8,11 +11,6 @@ type Props = {
 };
 
 export default function AppSidebarChatItemDelete(props: Props) {
-	const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
-	const setIsDeleteModalOpen = useChatActionStore(
-		(store) => store.setIsDeleteModalOpen,
-	);
-
 	return (
 		<DropdownMenuItem
 			onClick={(e) => {

@@ -3,7 +3,11 @@ import {
 	DotsThreeVerticalIcon,
 	TrashIcon,
 } from "@phosphor-icons/react";
-import { useFolderActionStore } from "~/stores/folder-actions-store";
+import {
+	setIsDeleteModalOpen,
+	setIsRenameModalOpen,
+	setSelectedFolder,
+} from "~/stores/folder-actions-store";
 import type { SidebarFolder } from "~/types";
 import { Button } from "./ui/button";
 import {
@@ -18,16 +22,6 @@ type Props = {
 };
 
 export default function AppSidebarFolderItemActions({ folder }: Props) {
-	const setSelectedFolder = useFolderActionStore(
-		(store) => store.setSelectedFolder,
-	);
-	const setIsDeleteModalOpen = useFolderActionStore(
-		(store) => store.setIsDeleteModalOpen,
-	);
-	const setIsRenameModalOpen = useFolderActionStore(
-		(store) => store.setIsRenameModalOpen,
-	);
-
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger

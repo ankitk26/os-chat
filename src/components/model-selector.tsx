@@ -1,6 +1,6 @@
 import { CaretDownIcon, KeyIcon } from "@phosphor-icons/react";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
-import { useModelStore } from "~/stores/model-store";
+import { setSelectedModel, useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import ModelProviderIcon from "./model-provider-icon";
 import { Button } from "./ui/button";
@@ -17,7 +17,6 @@ import {
 
 export default function ModelSelector() {
 	const selectedModel = useModelStore((store) => store.selectedModel);
-	const setSelectedModel = useModelStore((store) => store.setSelectedModel);
 
 	const persistedApiKeys = usePersistedApiKeysStore(
 		(store) => store.persistedApiKeys,

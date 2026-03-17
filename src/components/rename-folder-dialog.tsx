@@ -3,7 +3,11 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { type FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useFolderActionStore } from "~/stores/folder-actions-store";
+import {
+	setIsRenameModalOpen,
+	setSelectedFolder,
+	useFolderActionStore,
+} from "~/stores/folder-actions-store";
 import { Button } from "./ui/button";
 import {
 	Dialog,
@@ -18,14 +22,8 @@ import { Input } from "./ui/input";
 
 export default function RenameFolderDialog() {
 	const selectedFolder = useFolderActionStore((store) => store.selectedFolder);
-	const setSelectedFolder = useFolderActionStore(
-		(store) => store.setSelectedFolder,
-	);
 	const isRenameModalOpen = useFolderActionStore(
 		(store) => store.isRenameModalOpen,
-	);
-	const setIsRenameModalOpen = useFolderActionStore(
-		(store) => store.setIsRenameModalOpen,
 	);
 
 	const [newFolderTitle, setNewFolderTitle] = useState("");

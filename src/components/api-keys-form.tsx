@@ -1,7 +1,11 @@
 import { FloppyDiskIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
+import {
+	setPersistedApiKeys,
+	setPersistedUseOpenRouter,
+	usePersistedApiKeysStore,
+} from "~/stores/persisted-api-keys-store";
 import { type ApiKeys, defaultApiKeys, type Provider } from "~/types";
 import ApiKeyInput from "./api-key-input";
 import ApiKeyOpenRouter from "./api-key-open-router";
@@ -51,12 +55,12 @@ export default function ApiKeysForm() {
 	const [useOpenRouter, setUseOpenRouter] = useState(false);
 	const [initialState, setInitialState] = useState<FormState>(null);
 
-	const {
-		persistedApiKeys,
-		persistedUseOpenRouter,
-		setPersistedApiKeys,
-		setPersistedUseOpenRouter,
-	} = usePersistedApiKeysStore();
+	const persistedApiKeys = usePersistedApiKeysStore(
+		(state) => state.persistedApiKeys,
+	);
+	const persistedUseOpenRouter = usePersistedApiKeysStore(
+		(state) => state.persistedUseOpenRouter,
+	);
 
 	// update key value for all provider keys
 	const handleApiKeyChange = (provider: Provider, value: string) => {
