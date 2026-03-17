@@ -6,7 +6,7 @@ import {
 import { useHotkey } from "@tanstack/react-hotkeys";
 import type { ChatStatus } from "ai";
 import { cn } from "~/lib/utils";
-import { useModelStore } from "~/stores/model-store";
+import { toggleIsWebSearch, useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import ModelSelector from "./model-selector";
 import { Button } from "./ui/button";
@@ -19,7 +19,6 @@ type Props = {
 
 export default function PromptActions({ status, stop }: Props) {
 	const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
-	const toggleIsWebSearch = useModelStore((store) => store.toggleIsWebSearch);
 	const selectedModel = useModelStore((store) => store.selectedModel);
 	const persistedUseOpenRouter = usePersistedApiKeysStore(
 		(store) => store.persistedUseOpenRouter,

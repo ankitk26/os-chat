@@ -3,7 +3,11 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { type FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useChatActionStore } from "~/stores/chat-actions-store";
+import {
+	setIsRenameModalOpen,
+	setSelectedChat,
+	useChatActionStore,
+} from "~/stores/chat-actions-store";
 import { Button } from "./ui/button";
 import {
 	Dialog,
@@ -18,12 +22,8 @@ import { Input } from "./ui/input";
 
 export default function ChatRenameDialog() {
 	const selectedChat = useChatActionStore((store) => store.selectedChat);
-	const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
 	const isRenameModalOpen = useChatActionStore(
 		(store) => store.isRenameModalOpen,
-	);
-	const setIsRenameModalOpen = useChatActionStore(
-		(store) => store.setIsRenameModalOpen,
 	);
 	const [newChatTitle, setNewChatTitle] = useState("");
 

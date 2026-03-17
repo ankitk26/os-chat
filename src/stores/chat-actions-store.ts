@@ -1,5 +1,6 @@
+import { useStore } from "@tanstack/react-store";
+import { Store } from "@tanstack/store";
 import type { Id } from "convex/_generated/dataModel";
-import { create } from "zustand";
 
 type Chat = {
 	_id: Id<"chats">;
@@ -9,22 +10,34 @@ type Chat = {
 
 type ChatActionState = {
 	selectedChat: Chat | null;
-	setSelectedChat: (chat: Chat | null) => void;
 	isDeleteModalOpen: boolean;
-	setIsDeleteModalOpen: (value: boolean) => void;
 	isRenameModalOpen: boolean;
-	setIsRenameModalOpen: (value: boolean) => void;
 	isShareDialogOpen: boolean;
-	setIsShareDialogOpen: (value: boolean) => void;
 };
 
-export const useChatActionStore = create<ChatActionState>()((set) => ({
+const chatActionStore = new Store<ChatActionState>({
 	selectedChat: null,
-	setSelectedChat: (chat: Chat | null) => set({ selectedChat: chat }),
 	isDeleteModalOpen: false,
-	setIsDeleteModalOpen: (value: boolean) => set({ isDeleteModalOpen: value }),
 	isRenameModalOpen: false,
-	setIsRenameModalOpen: (value: boolean) => set({ isRenameModalOpen: value }),
 	isShareDialogOpen: false,
-	setIsShareDialogOpen: (value: boolean) => set({ isShareDialogOpen: value }),
-}));
+});
+
+export const useChatActionStore = <T>(
+	selector: (state: ChatActionState) => T,
+): T => useStore(chatActionStore, selector);
+
+export const setSelectedChat = (chat: Chat | null) => {
+	chatActionStore.setState((prev) => ({ ...prev, selectedChat: chat }));
+};
+
+export const setIsDeleteModalOpen = (value: boolean) => {
+	chatActionStore.setState((prev) => ({ ...prev, isDeleteModalOpen: value }));
+};
+
+export const setIsRenameModalOpen = (value: boolean) => {
+	chatActionStore.setState((prev) => ({ ...prev, isRenameModalOpen: value }));
+};
+
+export const setIsShareDialogOpen = (value: boolean) => {
+	chatActionStore.setState((prev) => ({ ...prev, isShareDialogOpen: value }));
+};

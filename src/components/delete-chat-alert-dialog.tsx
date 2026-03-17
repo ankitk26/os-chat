@@ -4,7 +4,11 @@ import { useNavigate, useParams } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { toast } from "sonner";
 import { useSharedChatContext } from "~/providers/chat-provider";
-import { useChatActionStore } from "~/stores/chat-actions-store";
+import {
+	setIsDeleteModalOpen,
+	setSelectedChat,
+	useChatActionStore,
+} from "~/stores/chat-actions-store";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -24,10 +28,6 @@ export default function DeleteChatAlertDialog() {
 	const isDeleteModalOpen = useChatActionStore(
 		(store) => store.isDeleteModalOpen,
 	);
-	const setIsDeleteModalOpen = useChatActionStore(
-		(store) => store.setIsDeleteModalOpen,
-	);
-	const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
 
 	const deleteChatMutation = useMutation({
 		mutationFn: useConvexMutation(api.chats.deleteChat),

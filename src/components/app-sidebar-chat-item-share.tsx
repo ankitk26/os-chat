@@ -1,5 +1,8 @@
 import { ExportIcon } from "@phosphor-icons/react";
-import { useChatActionStore } from "~/stores/chat-actions-store";
+import {
+	setIsShareDialogOpen,
+	setSelectedChat,
+} from "~/stores/chat-actions-store";
 import type { SidebarChatType } from "~/types";
 import { DropdownMenuItem } from "./ui/dropdown-menu";
 
@@ -8,11 +11,6 @@ type Props = {
 };
 
 export default function AppSidebarChatItemShare(props: Props) {
-	const setSelectedChat = useChatActionStore((store) => store.setSelectedChat);
-	const setIsShareDialogOpen = useChatActionStore(
-		(store) => store.setIsShareDialogOpen,
-	);
-
 	return (
 		<DropdownMenuItem
 			onClick={(e) => {

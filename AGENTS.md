@@ -1,0 +1,2 @@
+- use bun for all script runs
+- never run build

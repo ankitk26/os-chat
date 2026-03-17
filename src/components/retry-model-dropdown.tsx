@@ -6,7 +6,11 @@ import { useParams } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
 import { getAccessibleModels } from "~/lib/get-accessible-models";
 import { getModelByOpenRouterId } from "~/lib/get-model-by-id";
-import { useModelStore } from "~/stores/model-store";
+import {
+	setSelectedModel,
+	toggleIsWebSearch,
+	useModelStore,
+} from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import type { CustomUIMessage, Model } from "~/types";
 import { DropdownMenuSeparatorWithText } from "./dropdown-menu-separator-with-text";
@@ -36,9 +40,7 @@ export default function RetryModelDropdown(props: Props) {
 	const { message, regenerate } = props;
 	const { chatId } = useParams({ strict: false });
 	const selectedModel = useModelStore((store) => store.selectedModel);
-	const setSelectedModel = useModelStore((store) => store.setSelectedModel);
 	const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
-	const toggleIsWebSearch = useModelStore((store) => store.toggleIsWebSearch);
 	const persistedApiKeys = usePersistedApiKeysStore(
 		(store) => store.persistedApiKeys,
 	);
