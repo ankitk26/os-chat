@@ -12,7 +12,6 @@ import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import type { CustomUIMessage } from "~/types";
 import BranchOffButton from "./branch-off-button";
-import MemoizedMarkdown from "./memoized-markdown";
 import RetryModelDropdown from "./retry-model-dropdown";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
@@ -111,7 +110,7 @@ export default memo(function UserMessage({
 						onSubmit={handleMessageEdit}
 					/>
 				) : (
-					<MemoizedMarkdown content={messageContent} id={message.id} />
+					<span className="whitespace-pre-wrap">{messageContent}</span>
 				)}
 			</div>
 			<div className="flex opacity-100 transition-opacity duration-200 md:opacity-0 md:group-hover:opacity-100">
