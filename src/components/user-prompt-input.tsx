@@ -6,6 +6,7 @@ import type { ChatStatus } from "ai";
 import { api } from "convex/_generated/api";
 import type { Id } from "convex/_generated/dataModel";
 import { useEffect, useRef, useState } from "react";
+import { useIsDesktop } from "~/hooks/use-desktop";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getChatTitle } from "~/server-fns/get-chat-title";
 import { useModelStore } from "~/stores/model-store";
@@ -29,6 +30,7 @@ export default function UserPromptInput(props: Props) {
 	const navigate = useNavigate();
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
+	const isDesktop = useIsDesktop();
 	const selectedModel = useModelStore((store) => store.selectedModel);
 	const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
 	const persistedApiKeys = usePersistedApiKeysStore(
@@ -128,12 +130,12 @@ export default function UserPromptInput(props: Props) {
 		}
 	}, [input, props.onHeightChange]);
 
-	// Focus the textarea when the chat ID changes or on initial load.
+	// Focus the textarea on desktop for all chats, on mobile/tablet only for new chats.
 	useEffect(() => {
-		if (textareaRef.current) {
+		if (textareaRef.current && (isDesktop || !paramsChatId)) {
 			textareaRef.current.focus();
 		}
-	}, [props.chatId]);
+	}, [props.chatId, isDesktop, paramsChatId]);
 
 	return (
 		<div ref={containerRef} className="bg-background/80 backdrop-blur">
