@@ -5,6 +5,7 @@ import ShikiHighlighter, { type Element, isInlineCode } from "react-shiki";
 import { toast } from "sonner";
 import { cn } from "~/lib/utils";
 import { Button } from "./ui/button";
+import { Toggle } from "./ui/toggle";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type CodeHighlightProps = {
@@ -43,11 +44,10 @@ export default function CodeHighlight({
 					<Tooltip>
 						<TooltipTrigger
 							render={
-								<Button
-									className="dark:hover:bg-background/20"
-									onClick={() => setIsWrap(!isWrap)}
-									size="icon"
-									variant="ghost"
+								<Toggle
+									pressed={isWrap}
+									onPressedChange={setIsWrap}
+									size="sm"
 								/>
 							}
 						>
