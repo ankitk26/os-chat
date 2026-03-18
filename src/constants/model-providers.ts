@@ -35,6 +35,12 @@ const geminiModels = {
 			isFree: false,
 		},
 		{
+			name: "Gemini 3.1 Flash Lite",
+			openRouterModelId: "google/gemini-3.1-flash-lite-preview",
+			modelId: "gemini-3.1-flash-lite-preview",
+			isFree: false,
+		},
+		{
 			name: "Nano Banana",
 			openRouterModelId: "google/gemini-2.5-flash-image",
 			modelId: "gemini-2.5-flash-image",
@@ -148,6 +154,24 @@ const openAiModels = {
 			name: "GPT 5.3 Codex",
 			openRouterModelId: "openai/gpt-5.3-codex",
 			modelId: "gpt-5.3-codex",
+			isFree: false,
+		},
+		{
+			name: "GPT 5.4",
+			openRouterModelId: "openai/gpt-5.4",
+			modelId: "gpt-5.4",
+			isFree: false,
+		},
+		{
+			name: "GPT 5.4 Mini",
+			openRouterModelId: "openai/gpt-5.4-mini",
+			modelId: "gpt-5.4-mini",
+			isFree: false,
+		},
+		{
+			name: "GPT 5.4 Nano",
+			openRouterModelId: "openai/gpt-5.4-nano",
+			modelId: "gpt-5.4-nano",
 			isFree: false,
 		},
 	] as const,
