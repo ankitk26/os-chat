@@ -9,18 +9,18 @@ export default function SourcesList(props: Props) {
 		<div className="space-y-2">
 			{props.sourceParts.map((sourcePart, index) => (
 				<a
-					className="group border-border bg-card hover:bg-accent block rounded-lg border p-3 transition-colors"
+					className="group block rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent"
 					href={sourcePart.url}
 					key={sourcePart.sourceId}
 					rel="noopener noreferrer"
 					target="_blank"
 				>
 					<div className="flex items-center gap-3">
-						<span className="bg-muted text-muted-foreground flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-medium">
+						<span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-foreground">
 							{index + 1}
 						</span>
 						<div className="min-w-0 flex-1">
-							<div className="text-foreground group-hover:text-primary line-clamp-2 text-xs transition-colors">
+							<div className="line-clamp-2 text-xs text-foreground transition-colors group-hover:text-primary">
 								{sourcePart.title}
 							</div>
 						</div>

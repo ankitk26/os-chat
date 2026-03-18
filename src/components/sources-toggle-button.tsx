@@ -20,7 +20,7 @@ export default function SourcesToggleButton(props: Props) {
 			) : (
 				<CaretRightIcon className="size-3" />
 			)}
-			<div className="text-muted-foreground flex items-center gap-2 font-mono text-xs select-none">
+			<div className="flex items-center gap-2 font-mono text-xs text-muted-foreground select-none">
 				<NewspaperIcon className="size-3" />
 				Sources
 			</div>

@@ -1,3 +1,3 @@
 export default function ThinkingIndicator() {
-	return <div className="text-muted-foreground animate-pulse">Thinking...</div>;
+	return <div className="animate-pulse text-muted-foreground">Thinking...</div>;
 }

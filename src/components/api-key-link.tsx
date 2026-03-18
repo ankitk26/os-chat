@@ -6,7 +6,7 @@ type Props = {
 
 export default function ApiKeyLink(props: Props) {
 	return (
-		<small className="text-muted-foreground text-xs">
+		<small className="text-xs text-muted-foreground">
 			Get your{" "}
 			<CustomExternalLink
 				className="text-primary hover:underline"

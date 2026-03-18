@@ -6,8 +6,8 @@ export default function AppSidebarFolderHeader() {
 	return (
 		<div className="flex items-center justify-between px-2 py-1.5">
 			<div className="flex items-center">
-				<FolderIcon className="text-sidebar-foreground/60 mr-2 size-4" />
-				<span className="text-sidebar-foreground/50 text-xs font-normal">
+				<FolderIcon className="mr-2 size-4 text-sidebar-foreground/60" />
+				<span className="text-xs font-normal text-sidebar-foreground/50">
 					Folders
 				</span>
 			</div>

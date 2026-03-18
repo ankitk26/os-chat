@@ -42,10 +42,10 @@ export default function ShareChatSyncSection() {
 	return (
 		<div className="space-y-3">
 			<Label className="text-sm font-medium">Chat History</Label>
-			<div className="bg-muted/30 flex items-center justify-between gap-3 rounded-lg border p-3">
+			<div className="flex items-center justify-between gap-3 rounded-lg border bg-muted/30 p-3">
 				<div className="space-y-1">
 					<p className="text-sm font-medium">Sync Latest Messages</p>
-					<p className="text-muted-foreground text-xs">
+					<p className="text-xs text-muted-foreground">
 						Update shared chat with recent messages
 					</p>
 				</div>

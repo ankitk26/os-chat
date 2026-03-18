@@ -53,7 +53,7 @@ export default function ReadOnlyAssistantMessage({ message }: Props) {
 					<TooltipContent>Copy to clipboard</TooltipContent>
 				</Tooltip>
 
-				<span className="text-muted-foreground text-xs">
+				<span className="text-xs text-muted-foreground">
 					{messageMetadata?.modelName}
 				</span>
 			</div>

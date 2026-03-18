@@ -32,7 +32,7 @@ function RouteComponent() {
 							))}
 						</div>
 					) : imageGenerations?.length === 0 ? (
-						<div className="text-muted-foreground py-12 text-center">
+						<div className="py-12 text-center text-muted-foreground">
 							<ImagesIcon className="mx-auto mb-4 h-12 w-12 opacity-50" />
 							<p className="text-lg font-medium">No images yet</p>
 							<p className="text-sm">Generated images will appear here</p>

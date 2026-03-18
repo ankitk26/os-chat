@@ -29,7 +29,7 @@ export default function CodeHighlight({
 
 	if (isInline) {
 		return (
-			<code className="not-prose bg-secondary my-10 rounded-sm px-2 py-1 text-sm">
+			<code className="not-prose my-10 rounded-sm bg-secondary px-2 py-1 text-sm">
 				{children}
 			</code>
 		);
@@ -37,7 +37,7 @@ export default function CodeHighlight({
 
 	return (
 		<div className="w-full max-w-full">
-			<div className="bg-card-foreground/10 text-secondary-foreground dark:bg-secondary flex items-center justify-between rounded-tl-lg rounded-tr-lg px-4 text-sm">
+			<div className="flex items-center justify-between rounded-tl-lg rounded-tr-lg bg-card-foreground/10 px-4 text-sm text-secondary-foreground dark:bg-secondary">
 				<span className="font-mono font-light">{language ?? "txt"}</span>
 				<div className="my-0.5 flex items-center gap-2">
 					<Tooltip>
@@ -80,7 +80,7 @@ export default function CodeHighlight({
 
 			<div
 				className={cn(
-					"bg-background dark:bg-code-dark w-full max-w-full rounded-br-lg rounded-bl-lg border-r border-b border-l text-xs sm:text-sm dark:border-0",
+					"w-full max-w-full rounded-br-lg rounded-bl-lg border-r border-b border-l bg-background text-xs sm:text-sm dark:border-0 dark:bg-code-dark",
 					isWrap ? "break-all whitespace-pre-wrap" : "overflow-x-auto",
 				)}
 			>
