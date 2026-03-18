@@ -1,3 +1,5 @@
+"use client";
+
 import { Select as SelectPrimitive } from "@base-ui/react/select";
 import { CaretDownIcon, CheckIcon, CaretUpIcon } from "@phosphor-icons/react";
 import * as React from "react";
