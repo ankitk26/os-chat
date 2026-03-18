@@ -12,7 +12,7 @@ export default function AppSidebarFoldersList() {
 	if (folders.length === 0) {
 		return (
 			<SidebarMenu>
-				<p className="text-sidebar-foreground/70 px-2 py-1 text-xs">
+				<p className="px-2 py-1 text-xs text-sidebar-foreground/70">
 					No folders
 				</p>
 			</SidebarMenu>

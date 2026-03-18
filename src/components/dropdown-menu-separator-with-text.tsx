@@ -7,11 +7,11 @@ function DropdownMenuSeparatorWithText({
 }) {
 	return (
 		<div className="my-2 flex items-center">
-			<div className="border-border flex-1 border-t"></div>
-			<span className="text-muted-foreground px-3 text-xs font-medium">
+			<div className="flex-1 border-t border-border"></div>
+			<span className="px-3 text-xs font-medium text-muted-foreground">
 				{children}
 			</span>
-			<div className="border-border flex-1 border-t"></div>
+			<div className="flex-1 border-t border-border"></div>
 		</div>
 	);
 }

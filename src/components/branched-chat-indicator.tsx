@@ -30,7 +30,7 @@ export default function BranchedChatIndicator(props: Props) {
 				<TooltipTrigger
 					render={
 						<span>
-							<GitBranchIcon className="text-sidebar-foreground/70 size-4 shrink-0" />
+							<GitBranchIcon className="size-4 shrink-0 text-sidebar-foreground/70" />
 						</span>
 					}
 				/>
@@ -45,7 +45,7 @@ export default function BranchedChatIndicator(props: Props) {
 				render={
 					<span
 						onClick={handleNavigateToParent}
-						className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex cursor-pointer items-center justify-center rounded p-0.5"
+						className="flex cursor-pointer items-center justify-center rounded p-0.5 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
 						role="button"
 						tabIndex={0}
 						onKeyDown={(e) => {

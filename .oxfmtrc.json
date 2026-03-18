@@ -8,10 +8,11 @@
 		"bun.lock",
 		"src/routeTree.gen.ts"
 	],
-	"experimentalSortImports": {
+	"sortImports": {
 		"newlinesBetween": false
 	},
-	"experimentalTailwindcss": {
-		"functions": ["clsx", "cn", "cva"]
+	"sortTailwindcss": {
+		"stylesheet": "./src/styles.css",
+		"functions": ["clsx", "cn"]
 	}
 }

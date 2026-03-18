@@ -90,8 +90,8 @@ export default function ChatHistoryManager() {
 		<TabsContent className="space-y-6" value="chatHistory">
 			{/* Header */}
 			<div className="space-y-1">
-				<h3 className="text-foreground text-lg font-medium">Chat History</h3>
-				<p className="text-muted-foreground text-sm">
+				<h3 className="text-lg font-medium text-foreground">Chat History</h3>
+				<p className="text-sm text-muted-foreground">
 					{chats.length} conversation{chats.length !== 1 ? "s" : ""}
 				</p>
 			</div>
@@ -155,10 +155,10 @@ export default function ChatHistoryManager() {
 							className="flex animate-pulse items-center gap-3 py-3"
 							key={`loading-skeleton-${i + 1}`}
 						>
-							<div className="bg-muted h-4 w-4 rounded-sm" />
+							<div className="h-4 w-4 rounded-sm bg-muted" />
 							<div className="flex-1 space-y-2">
-								<div className="bg-muted h-4 w-3/4 rounded-md" />
-								<div className="bg-muted h-3 w-1/3 rounded-md" />
+								<div className="h-4 w-3/4 rounded-md bg-muted" />
+								<div className="h-3 w-1/3 rounded-md bg-muted" />
 							</div>
 						</div>
 					))}
@@ -167,10 +167,10 @@ export default function ChatHistoryManager() {
 			{!isLoading &&
 				(chats.length === 0 ? (
 					<div className="py-12 text-center">
-						<div className="bg-muted mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg">
-							<MinusIcon className="text-muted-foreground h-5 w-5" />
+						<div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
+							<MinusIcon className="h-5 w-5 text-muted-foreground" />
 						</div>
-						<p className="text-muted-foreground text-sm">
+						<p className="text-sm text-muted-foreground">
 							No conversations yet
 						</p>
 					</div>
@@ -196,7 +196,7 @@ export default function ChatHistoryManager() {
 										}`}
 									>
 										{isSelected && (
-											<CheckIcon className="text-primary-foreground h-3 w-3" />
+											<CheckIcon className="h-3 w-3 text-primary-foreground" />
 										)}
 									</div>
 

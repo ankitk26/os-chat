@@ -17,7 +17,7 @@ export default function NotFound() {
 
 			<Card className="w-full max-w-md text-center shadow-xl">
 				<CardContent className="flex flex-col items-center gap-6 p-10">
-					<h1 className="text-primary text-7xl font-extrabold tracking-tight">
+					<h1 className="text-7xl font-extrabold tracking-tight text-primary">
 						404
 					</h1>
 

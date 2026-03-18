@@ -17,11 +17,11 @@ export default function ApiKeyOpenRouter(props: Props) {
 				<Label className="text-base font-medium" htmlFor="openrouter-toggle">
 					Use OpenRouter
 				</Label>
-				<p className="text-muted-foreground text-sm">
+				<p className="text-sm text-muted-foreground">
 					Route all AI model requests through OpenRouter
 				</p>
 				{isSwitchDisabled && (
-					<p className="text-destructive text-xs">
+					<p className="text-xs text-destructive">
 						Please provide an OpenRouter API Key to enable this option.
 					</p>
 				)}

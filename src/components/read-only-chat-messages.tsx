@@ -20,8 +20,8 @@ export default function ReadOnlyChatMessages() {
 		return (
 			<div className="mx-auto flex h-svh max-w-md flex-col items-center justify-center px-4">
 				<div className="space-y-4 text-center">
-					<div className="bg-muted mx-auto flex h-16 w-16 items-center justify-center rounded-full">
-						<LinkBreakIcon className="text-muted-foreground h-8 w-8" />
+					<div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+						<LinkBreakIcon className="h-8 w-8 text-muted-foreground" />
 					</div>
 					<div className="space-y-2">
 						<h1 className="text-xl font-semibold">Chat not available</h1>

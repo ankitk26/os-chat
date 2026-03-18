@@ -35,12 +35,12 @@ function RouteComponent() {
 	};
 
 	return (
-		<div className="from-background to-muted/20 flex min-h-screen items-center justify-center bg-linear-to-br p-4">
+		<div className="flex min-h-screen items-center justify-center bg-linear-to-br from-background to-muted/20 p-4">
 			<div className="w-full max-w-md space-y-8">
 				{/* Logo/Brand Section */}
 				<div className="space-y-2 text-center">
-					<div className="bg-primary mx-auto flex h-12 w-12 items-center justify-center rounded-xl">
-						<ChatIcon className="text-primary-foreground h-6 w-6" />
+					<div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
+						<ChatIcon className="h-6 w-6 text-primary-foreground" />
 					</div>
 					<h1 className="text-2xl font-bold tracking-tight">baychat</h1>
 					<p className="text-muted-foreground">

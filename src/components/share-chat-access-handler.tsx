@@ -78,15 +78,15 @@ export default function ShareChatAccessHandler() {
 
 	return (
 		<div className="space-y-4">
-			<div className="bg-card flex items-center justify-between rounded-lg border p-4">
+			<div className="flex items-center justify-between rounded-lg border bg-card p-4">
 				<div className="flex items-center gap-3">
-					<div className="bg-background flex h-8 w-8 items-center justify-center rounded-full">
+					<div className="flex h-8 w-8 items-center justify-center rounded-full bg-background">
 						{isLoading ? (
-							<SpinnerIcon className="text-muted-foreground h-4 w-4 animate-spin" />
+							<SpinnerIcon className="h-4 w-4 animate-spin text-muted-foreground" />
 						) : isPublic ? (
-							<GlobeIcon className="text-primary h-4 w-4" />
+							<GlobeIcon className="h-4 w-4 text-primary" />
 						) : (
-							<LockIcon className="text-muted-foreground h-4 w-4" />
+							<LockIcon className="h-4 w-4 text-muted-foreground" />
 						)}
 					</div>
 					<div className="space-y-1">
@@ -99,7 +99,7 @@ export default function ShareChatAccessHandler() {
 								{isPublic ? "Active" : "Disabled"}
 							</Badge>
 						</div>
-						<p className="text-muted-foreground text-xs">
+						<p className="text-xs text-muted-foreground">
 							{isPublic
 								? "Anyone with the link can view this chat"
 								: "Only you can access this chat"}
@@ -132,7 +132,7 @@ export default function ShareChatAccessHandler() {
 								variant="ghost"
 							>
 								{copied ? (
-									<CheckIcon className="text-primary h-3 w-3" />
+									<CheckIcon className="h-3 w-3 text-primary" />
 								) : (
 									<CopyIcon className="h-3 w-3" />
 								)}
@@ -148,7 +148,7 @@ export default function ShareChatAccessHandler() {
 							<ArrowSquareOutIcon className="h-4 w-4" />
 						</Button>
 					</div>
-					<p className="text-muted-foreground text-xs">
+					<p className="text-xs text-muted-foreground">
 						Messages up to this point will be visible to anyone with this link
 					</p>
 				</div>

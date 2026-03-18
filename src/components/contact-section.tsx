@@ -6,11 +6,11 @@ import { TabsContent } from "./ui/tabs";
 export default function ContactSection() {
 	return (
 		<TabsContent
-			className="bg-card space-y-6 rounded-lg border p-4 lg:p-8"
+			className="space-y-6 rounded-lg border bg-card p-4 lg:p-8"
 			value="about"
 		>
 			<div className="space-y-3">
-				<p className="text-muted-foreground text-sm">
+				<p className="text-sm text-muted-foreground">
 					This project is Open-Source.
 				</p>
 				<CustomExternalLink href={import.meta.env.VITE_GITHUB_REPO_LINK}>
@@ -22,7 +22,7 @@ export default function ContactSection() {
 			</div>
 
 			<div className="space-y-3">
-				<p className="text-muted-foreground text-sm">
+				<p className="text-sm text-muted-foreground">
 					For bugs, features, or general inquiries:
 				</p>
 				<CustomExternalLink href={import.meta.env.VITE_X_URL}>

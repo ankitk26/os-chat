@@ -29,12 +29,12 @@ export default function AppearanceSettings() {
 			<section className="flex flex-col gap-4">
 				<header className="flex flex-col gap-1">
 					<h2 className="text-base font-semibold">Typography</h2>
-					<p className="text-muted-foreground text-sm">
+					<p className="text-sm text-muted-foreground">
 						Customize the font family used throughout the application
 					</p>
 				</header>
 
-				<div className="bg-card rounded-lg border p-4">
+				<div className="rounded-lg border bg-card p-4">
 					<div className="flex items-center justify-between">
 						<Label className="font-medium" htmlFor="mono-font">
 							Use monospace font
@@ -54,18 +54,18 @@ export default function AppearanceSettings() {
 			<section className="flex flex-col gap-4">
 				<header className="flex flex-col gap-1">
 					<h2 className="text-base font-semibold">Usage Stats</h2>
-					<p className="text-muted-foreground text-sm">
+					<p className="text-sm text-muted-foreground">
 						Control the display of usage statistics in the application
 					</p>
 				</header>
 
-				<div className="bg-card rounded-lg border">
+				<div className="rounded-lg border bg-card">
 					<div className="flex items-center justify-between border-b p-4">
 						<div className="flex flex-col gap-1">
 							<Label className="font-medium" htmlFor="show-token-usage">
 								Show token usage
 							</Label>
-							<p className="text-muted-foreground text-xs">
+							<p className="text-xs text-muted-foreground">
 								Display token consumption breakdown by model
 							</p>
 						</div>

@@ -34,7 +34,7 @@ export default function TokenUsageByModel() {
 				<h3 className="text-base font-medium text-pretty">
 					Model-wise Token Usage
 				</h3>
-				<p className="text-muted-foreground text-sm">
+				<p className="text-sm text-muted-foreground">
 					Breakdown of tokens used across different AI models
 				</p>
 			</header>
@@ -48,21 +48,21 @@ export default function TokenUsageByModel() {
 
 					return (
 						<div
-							className="bg-card rounded-lg border p-3"
+							className="rounded-lg border bg-card p-3"
 							key={usageItem.model}
 						>
 							<div className="flex items-center justify-between gap-4">
 								<div className="flex min-w-0 items-center gap-3">
 									<span
 										aria-hidden
-										className="bg-primary h-3 w-3 rounded-full"
+										className="h-3 w-3 rounded-full bg-primary"
 									/>
 									<span className="truncate text-sm font-medium">
 										{usageItem.model}
 									</span>
 								</div>
 								<div className="flex items-center gap-3">
-									<span className="text-muted-foreground text-sm tabular-nums">
+									<span className="text-sm text-muted-foreground tabular-nums">
 										{formatTokens(usageItem.tokens)}
 									</span>
 								</div>
@@ -74,11 +74,11 @@ export default function TokenUsageByModel() {
 									aria-valuemax={100}
 									aria-valuemin={0}
 									aria-valuenow={pct}
-									className="bg-muted h-2 w-full rounded-md"
+									className="h-2 w-full rounded-md bg-muted"
 									role="progressbar"
 								>
 									<div
-										className="bg-primary h-2 rounded-md"
+										className="h-2 rounded-md bg-primary"
 										style={{ width: `${pct}%` }}
 									/>
 								</div>
@@ -87,7 +87,7 @@ export default function TokenUsageByModel() {
 					);
 				})}
 
-				<div className="bg-muted/50 rounded-lg border p-3">
+				<div className="rounded-lg border bg-muted/50 p-3">
 					<div className="flex items-center justify-between">
 						<span className="text-sm font-medium">Total</span>
 						<span className="text-sm font-medium tabular-nums">
