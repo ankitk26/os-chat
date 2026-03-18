@@ -27,13 +27,13 @@ export default function AppSidebarFooter() {
 						tooltip={authUser?.name || "Settings"}
 						className="w-full"
 					>
-						<Avatar className="h-8 w-8 rounded-lg grayscale">
+						<Avatar className="h-8 w-8 rounded-full grayscale">
 							<AvatarImage
-								className="rounded-lg"
+								className="rounded-full"
 								alt={authUser?.name?.[0]}
 								src={authUser?.image ?? ""}
 							/>
-							<AvatarFallback className="rounded-lg">
+							<AvatarFallback className="rounded-full">
 								{(authUser?.name ?? "")
 									.split(" ")
 									.slice(0, 2)

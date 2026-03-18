@@ -27,7 +27,7 @@ export default function CodeHighlight({
 
 	if (isInline) {
 		return (
-			<code className="not-prose bg-secondary my-10 rounded px-2 py-1 text-sm">
+			<code className="not-prose bg-secondary my-10 rounded-sm px-2 py-1 text-sm">
 				{children}
 			</code>
 		);

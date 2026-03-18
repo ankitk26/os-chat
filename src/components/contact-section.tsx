@@ -6,7 +6,7 @@ import { TabsContent } from "./ui/tabs";
 export default function ContactSection() {
 	return (
 		<TabsContent
-			className="bg-card space-y-6 rounded-xl border p-4 lg:p-8"
+			className="bg-card space-y-6 rounded-lg border p-4 lg:p-8"
 			value="about"
 		>
 			<div className="space-y-3">

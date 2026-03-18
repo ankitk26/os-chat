@@ -16,7 +16,7 @@ export default function ReadOnlyUserMessage({ message }: Props) {
 	return (
 		<div className="group flex w-3/4 flex-col items-end space-y-1 self-end">
 			{/* Message bubble */}
-			<div className="bg-popover flex w-full max-w-full flex-col gap-6 rounded-xl border px-4 py-4 text-sm wrap-break-word whitespace-pre-wrap">
+			<div className="bg-popover flex w-full max-w-full flex-col gap-6 rounded-lg border px-4 py-4 text-sm wrap-break-word whitespace-pre-wrap">
 				<MemoizedMarkdown content={messageContent} id={message._id} />
 			</div>
 
