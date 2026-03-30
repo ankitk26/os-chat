@@ -5,7 +5,7 @@ type AppearanceStoreState = {
 	showTokenUsage: boolean;
 };
 
-const STORAGE_KEY = "appearance-settings";
+const STORAGE_KEY = "baychat-appearance-settings";
 
 const getInitialState = (): AppearanceStoreState => {
 	if (typeof window === "undefined") {

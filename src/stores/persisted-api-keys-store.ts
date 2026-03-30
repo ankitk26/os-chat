@@ -7,7 +7,7 @@ type ApiKeysStoreState = {
 	persistedUseOpenRouter: boolean;
 };
 
-const STORAGE_KEY = "apiKeysState";
+const STORAGE_KEY = "baychat-api-keys";
 
 const getInitialState = (): ApiKeysStoreState => {
 	if (typeof window === "undefined") {

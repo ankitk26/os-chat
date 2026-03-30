@@ -8,6 +8,7 @@ import MoonShotIcon from "./moonshot-icon";
 import OpenAIIcon from "./open-ai-icon";
 import OpenRouterIcon from "./open-router-icon";
 import XAIIcon from "./xai-icon";
+import XiaomiIcon from "./xiaomi-icon";
 import ZaiIcon from "./zai-icon";
 
 type Props = {
@@ -24,6 +25,7 @@ const iconMap: { [key: string]: () => JSX.Element } = {
 	zai: ZaiIcon,
 	minimax: MiniMaxIcon,
 	openrouter: OpenRouterIcon,
+	xiaomi: XiaomiIcon,
 	byteDance: ByteDanceIcon,
 };
 

@@ -1861,7 +1861,6 @@ export declare const components: {
       >;
     };
     adapterTest: {
-      runCustomTests: FunctionReference<"action", "internal", any, any>;
       runTests: FunctionReference<"action", "internal", any, any>;
     };
     testProfiles: {
