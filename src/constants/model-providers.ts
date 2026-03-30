@@ -174,6 +174,12 @@ const openAiModels = {
 			modelId: "gpt-5.4-nano",
 			isFree: false,
 		},
+		{
+			name: "GPT 5.4 Pro",
+			openRouterModelId: "openai/gpt-5.4-pro",
+			modelId: "gpt-5.4-pro",
+			isFree: false,
+		},
 	] as const,
 } as const;
 
@@ -329,6 +335,37 @@ const minimaxModels = {
 			modelId: "minimax/minimax-m2.5",
 			isFree: false,
 		},
+		{
+			name: "MiniMax M2.7",
+			openRouterModelId: "minimax/minimax-m2.7",
+			modelId: "minimax/minimax-m2.7",
+			isFree: false,
+		},
+	] as const,
+} as const;
+
+const xiaomiModels = {
+	provider: "Xiaomi",
+	key: "xiaomi",
+	models: [
+		{
+			name: "MiMo-V2-Flash",
+			openRouterModelId: "xiaomi/mimo-v2-flash",
+			modelId: "xiaomi/mimo-v2-flash",
+			isFree: false,
+		},
+		{
+			name: "MiMo-V2-Omni",
+			openRouterModelId: "xiaomi/mimo-v2-omni",
+			modelId: "xiaomi/mimo-v2-omni",
+			isFree: false,
+		},
+		{
+			name: "MiMo-V2-Pro",
+			openRouterModelId: "xiaomi/mimo-v2-pro",
+			modelId: "xiaomi/mimo-v2-pro",
+			isFree: false,
+		},
 	] as const,
 } as const;
 
@@ -354,5 +391,6 @@ export const allModelProviders = [
 	moonshotModels,
 	zaiModels,
 	minimaxModels,
+	xiaomiModels,
 	byteDanceModels,
 ] as const;
