@@ -1,6 +1,8 @@
 import {
 	GlobeIcon,
+	PaperclipIcon,
 	PaperPlaneRightIcon,
+	SpinnerIcon,
 	StopIcon,
 } from "@phosphor-icons/react";
 import { useHotkey } from "@tanstack/react-hotkeys";
@@ -13,11 +15,22 @@ import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
+	attachmentCount?: number;
+	disabled?: boolean;
+	isUploading?: boolean;
+	onAttachClick?: () => void;
 	status: ChatStatus;
 	stop: () => void;
 };
 
-export default function PromptActions({ status, stop }: Props) {
+export default function PromptActions({
+	attachmentCount = 0,
+	disabled = false,
+	isUploading = false,
+	onAttachClick,
+	status,
+	stop,
+}: Props) {
 	const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
 	const selectedModel = useModelStore((store) => store.selectedModel);
 	const persistedUseOpenRouter = usePersistedApiKeysStore(
@@ -54,6 +67,36 @@ export default function PromptActions({ status, stop }: Props) {
 						<TooltipContent>Ctrl+Shift+S</TooltipContent>
 					</Tooltip>
 				)}
+
+				<Button
+					className={cn(
+						"transition-all duration-300 ease-out",
+						attachmentCount > 0 &&
+							"border-primary/60 bg-primary/8 text-foreground",
+					)}
+					disabled={disabled}
+					onClick={onAttachClick}
+					type="button"
+					variant="outline"
+				>
+					{isUploading ? (
+						<>
+							<SpinnerIcon className="size-4 animate-spin" />
+							<span>Uploading...</span>
+						</>
+					) : (
+						<>
+							<PaperclipIcon />
+							<span className="hidden sm:inline">Upload</span>
+							<span className="sm:hidden">File</span>
+						</>
+					)}
+					{!isUploading && attachmentCount > 0 && (
+						<span className="rounded-full bg-foreground px-1.5 py-0.5 text-[10px] leading-none text-background">
+							{attachmentCount}
+						</span>
+					)}
+				</Button>
 			</div>
 
 			{status === "streaming" || status === "submitted" ? (

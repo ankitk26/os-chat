@@ -1,3 +1,4 @@
+import type { FileUIPart } from "ai";
 import { isImageGenerationModel } from "~/lib/is-image-generation-model";
 import type { CustomUIMessage, Model } from "~/types";
 
@@ -11,22 +12,26 @@ const isValidImageUrl = (value: string) => {
 };
 
 export const buildUserMessageParts = ({
+	attachments = [],
 	latestGeneratedImageUrl,
 	model,
 	prompt,
 }: {
+	attachments?: FileUIPart[];
 	latestGeneratedImageUrl?: string | null;
 	model: Model;
 	prompt: string;
 }): CustomUIMessage["parts"] => {
-	const textPart = { type: "text" as const, text: prompt };
+	const trimmedPrompt = prompt.trim();
+	const textPart =
+		trimmedPrompt.length > 0 ? [{ type: "text" as const, text: prompt }] : [];
 
 	if (!isImageGenerationModel(model)) {
-		return [textPart];
+		return [...attachments, ...textPart];
 	}
 
 	if (!latestGeneratedImageUrl || !isValidImageUrl(latestGeneratedImageUrl)) {
-		return [textPart];
+		return [...attachments, ...textPart];
 	}
 
 	return [
@@ -35,6 +40,7 @@ export const buildUserMessageParts = ({
 			mediaType: "image/png",
 			url: latestGeneratedImageUrl,
 		},
-		textPart,
+		...attachments,
+		...textPart,
 	];
 };

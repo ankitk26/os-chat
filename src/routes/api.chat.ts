@@ -190,6 +190,54 @@ const processMessageParts = async (
 	return { partsToSave };
 };
 
+const getTextAttachmentPromptPart = (part: FileUIPart) => {
+	const textContent = part.providerMetadata?.baychat?.textContent;
+	if (typeof textContent !== "string" || textContent.trim() === "") {
+		return null;
+	}
+
+	return {
+		type: "text" as const,
+		text: `Attached file: ${part.filename ?? "untitled"}\n\n${textContent}`,
+	};
+};
+
+const transformMessagesForModel = (
+	messages: CustomUIMessage[],
+): CustomUIMessage[] =>
+	messages.map((message) => {
+		if (message.role !== "user") {
+			return message;
+		}
+
+		const transformedParts: CustomUIMessage["parts"] = [];
+
+		for (const part of message.parts) {
+			if (part.type !== "file") {
+				transformedParts.push(part);
+				continue;
+			}
+
+			if (
+				part.mediaType.startsWith("image/") ||
+				part.mediaType === "application/pdf"
+			) {
+				transformedParts.push(part);
+				continue;
+			}
+
+			const textPart = getTextAttachmentPromptPart(part);
+			if (textPart) {
+				transformedParts.push(textPart);
+			}
+		}
+
+		return {
+			...message,
+			parts: transformedParts,
+		};
+	});
+
 type ChatRequestBody = {
 	messages: CustomUIMessage[];
 	model: Model;
@@ -228,7 +276,9 @@ export const Route = createFileRoute("/api/chat")({
 				const result = streamText({
 					model: modelToUse,
 					system: systemMessage,
-					messages: await convertToModelMessages(messages),
+					messages: await convertToModelMessages(
+						transformMessagesForModel(messages),
+					),
 					temperature: 0.7,
 					experimental_transform: smoothStream({ chunking: "line" }),
 					abortSignal: request.signal,
