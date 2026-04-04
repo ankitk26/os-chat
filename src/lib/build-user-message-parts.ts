@@ -19,9 +19,6 @@ export const buildUserMessageParts = ({
 	model: Model;
 	prompt: string;
 }): CustomUIMessage["parts"] => {
-	console.log("[LAST GENERATED IMAGE URL] ", latestGeneratedImageUrl);
-	console.log("[PROMPT] ", prompt);
-
 	const textPart = { type: "text" as const, text: prompt };
 
 	if (!isImageGenerationModel(model)) {
@@ -31,8 +28,6 @@ export const buildUserMessageParts = ({
 	if (!latestGeneratedImageUrl || !isValidImageUrl(latestGeneratedImageUrl)) {
 		return [textPart];
 	}
-
-	console.log("[SENDING LAST IMAGE AS INPUT]");
 
 	return [
 		{
