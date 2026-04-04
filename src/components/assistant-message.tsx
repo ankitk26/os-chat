@@ -4,6 +4,7 @@ import React from "react";
 import { toast } from "sonner";
 import { formatTokens } from "~/lib/format-tokens";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
+import { isImageGenerationModel } from "~/lib/is-image-generation-model";
 import { useAppearanceStore } from "~/stores/appearance-store";
 import type { CustomUIMessage } from "~/types";
 import AIGeneratedImages from "./ai-generated-images";
@@ -11,24 +12,35 @@ import AIResponseContent from "./ai-response-content";
 import AIResponseReasoning from "./ai-response-reasoning";
 import AIResponseSources from "./ai-response-sources";
 import BranchOffButton from "./branch-off-button";
+import ImageGenerationSkeleton from "./image-generation-skeleton";
 import RetryModelDropdown from "./retry-model-dropdown";
 import ThinkingIndicator from "./thinking-indicator";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
+	isGeneratingImage?: boolean;
 	message: CustomUIMessage;
 	regenerate?: UseChatHelpers<CustomUIMessage>["regenerate"];
 };
 
 export default React.memo(function AssistantMessage(props: Props) {
-	const { message, regenerate } = props;
+	const { isGeneratingImage = false, message, regenerate } = props;
 	const showTokenUsage = useAppearanceStore((store) => store.showTokenUsage);
+	const isImageMessage =
+		isGeneratingImage ||
+		isImageGenerationModel({
+			modelId: message.metadata?.modelId,
+			name: message.metadata?.modelName,
+		});
+	const hasRenderableParts = message.parts.some(
+		(part) => part.type !== "step-start",
+	);
 
-	if (message.parts.length === 0) {
+	if (message.parts.length === 0 || (isImageMessage && !hasRenderableParts)) {
 		return (
 			<div className="px-3 lg:px-0">
-				<ThinkingIndicator />
+				{isImageMessage ? <ImageGenerationSkeleton /> : <ThinkingIndicator />}
 			</div>
 		);
 	}

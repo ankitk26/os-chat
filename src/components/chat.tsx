@@ -1,12 +1,16 @@
 import { useChat } from "@ai-sdk/react";
 import { CaretDownIcon } from "@phosphor-icons/react";
+import type { FileUIPart } from "ai";
 import { useEffect, useRef, useState } from "react";
+import { isImageGenerationModel } from "~/lib/is-image-generation-model";
 import { useSharedChatContext } from "~/providers/chat-provider";
+import { useModelStore } from "~/stores/model-store";
 import type { CustomUIMessage } from "~/types";
 import AiResponseAlert from "./ai-response-error";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
 import ChatMessages from "./chat-messages";
 import EmptyChatContent from "./empty-chat-content";
+import ImageGenerationSkeleton from "./image-generation-skeleton";
 import ThinkingIndicator from "./thinking-indicator";
 import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
@@ -19,12 +23,22 @@ type Props = {
 	isMessagesPending?: boolean;
 };
 
+const isImageFilePart = (
+	part: CustomUIMessage["parts"][number],
+): part is FileUIPart =>
+	part.type === "file" &&
+	"mediaType" in part &&
+	part.mediaType.startsWith("image/") &&
+	"url" in part &&
+	typeof part.url === "string";
+
 export default function Chat({
 	chatId,
 	dbMessages,
 	isMessagesPending = false,
 }: Props) {
 	const { chat } = useSharedChatContext();
+	const selectedModel = useModelStore((store) => store.selectedModel);
 
 	const {
 		messages,
@@ -91,6 +105,13 @@ export default function Chat({
 			setMessages(dbMessages);
 		}
 	}, [setMessages, dbMessages, isMessagesPending]);
+	const isGeneratingImage = isImageGenerationModel(selectedModel);
+	const latestGeneratedImageUrl =
+		[...messages]
+			.reverse()
+			.filter((message) => message.role === "assistant")
+			.flatMap((message) => message.parts)
+			.find(isImageFilePart)?.url ?? null;
 
 	return (
 		<div className="relative mx-auto flex h-full min-h-0 w-full flex-col">
@@ -114,6 +135,8 @@ export default function Chat({
 									<>
 										<ChatMessages
 											chatId={chatId}
+											isGeneratingImage={isGeneratingImage}
+											latestGeneratedImageUrl={latestGeneratedImageUrl}
 											messages={messages}
 											regenerate={regenerate}
 											sendMessage={sendMessage}
@@ -124,7 +147,11 @@ export default function Chat({
 											messages.at(-1)?.role === "user" &&
 											!error && (
 												<div className="px-3 lg:px-0">
-													<ThinkingIndicator />
+													{isGeneratingImage ? (
+														<ImageGenerationSkeleton />
+													) : (
+														<ThinkingIndicator />
+													)}
 												</div>
 											)}
 
@@ -153,6 +180,7 @@ export default function Chat({
 			<div className="absolute right-0 bottom-0 left-0 z-10">
 				<UserPromptInput
 					chatId={chatId}
+					latestGeneratedImageUrl={latestGeneratedImageUrl}
 					sendMessage={sendMessage}
 					status={status}
 					stop={stop}

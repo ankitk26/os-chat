@@ -1,17 +1,16 @@
 import { DownloadIcon, ShareNetworkIcon } from "@phosphor-icons/react";
-import { api } from "convex/_generated/api";
-import { FunctionReturnType } from "convex/server";
+import { Id } from "convex/_generated/dataModel";
 import DeleteImageGenerationButton from "./delete-image-generation-button";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
-	image: FunctionReturnType<typeof api.imageGenerations.getAll>[0];
 	handleDownload: () => void;
 	handleShare: () => void;
+	storageId?: Id<"_storage">;
 };
 
-export default function GalleryImageItemDesktopActions(props: Props) {
+export default function GeneratedImageViewerDesktopActions(props: Props) {
 	return (
 		<div
 			className="absolute right-0 bottom-0 left-0 hidden items-center justify-center gap-2 p-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100 lg:flex"
@@ -49,7 +48,9 @@ export default function GalleryImageItemDesktopActions(props: Props) {
 				<TooltipContent side="bottom">Copy link</TooltipContent>
 			</Tooltip>
 
-			<DeleteImageGenerationButton storageId={props.image.storageId} />
+			{props.storageId ? (
+				<DeleteImageGenerationButton storageId={props.storageId} />
+			) : null}
 		</div>
 	);
 }

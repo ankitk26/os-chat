@@ -49,7 +49,7 @@ function RouteComponent() {
 				</div>
 
 				{/* Login Card */}
-				<Card className="border-0 shadow-lg">
+				<Card className="border-0">
 					<CardHeader className="space-y-1 text-center">
 						<CardTitle className="text-xl">Welcome back</CardTitle>
 						<CardDescription>
@@ -58,9 +58,11 @@ function RouteComponent() {
 					</CardHeader>
 					<CardContent className="space-y-4">
 						<Button
-							className="h-9 w-full gap-2"
+							className="w-full"
+							size="lg"
 							disabled={loadingProvider === "github"}
 							onClick={() => handleLogin("github")}
+							variant="outline"
 						>
 							{loadingProvider === "github" ? (
 								<SpinnerIcon className="size-4 animate-spin" />
@@ -72,9 +74,11 @@ function RouteComponent() {
 								: "Continue with GitHub"}
 						</Button>
 						<Button
-							className="h-9 w-full gap-2"
+							className="w-full"
+							size="lg"
 							disabled={loadingProvider === "google"}
 							onClick={() => handleLogin("google")}
+							variant="outline"
 						>
 							{loadingProvider === "google" ? (
 								<SpinnerIcon className="size-4 animate-spin" />

@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "convex/_generated/api";
 import { memo, useState } from "react";
 import { toast } from "sonner";
+import { buildUserMessageParts } from "~/lib/build-user-message-parts";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
 import { cn } from "~/lib/utils";
@@ -19,6 +20,7 @@ import UserMessageEditor from "./user-message-editor";
 
 type Props = {
 	chatId: string;
+	latestGeneratedImageUrl?: string | null;
 	message: CustomUIMessage;
 	sendMessage: UseChatHelpers<CustomUIMessage>["sendMessage"];
 	regenerate: UseChatHelpers<CustomUIMessage>["regenerate"];
@@ -27,6 +29,7 @@ type Props = {
 
 export default memo(function UserMessage({
 	chatId,
+	latestGeneratedImageUrl,
 	message,
 	sendMessage,
 	regenerate,
@@ -55,6 +58,11 @@ export default memo(function UserMessage({
 
 	const handleMessageEdit = (input: string) => {
 		const sourceMessageId = generateRandomUUID();
+		const userMessageParts = buildUserMessageParts({
+			latestGeneratedImageUrl,
+			model: selectedModel,
+			prompt: input,
+		});
 
 		deleteMessagesMutation.mutate({
 			currentMessageSourceId: message.id,
@@ -67,7 +75,7 @@ export default memo(function UserMessage({
 				chatId,
 				role: "user",
 				sourceMessageId,
-				parts: JSON.stringify([{ type: "text", text: input }]),
+				parts: JSON.stringify(userMessageParts),
 			},
 		});
 
@@ -75,7 +83,7 @@ export default memo(function UserMessage({
 			{
 				role: "user",
 				id: sourceMessageId,
-				parts: [{ type: "text", text: input }],
+				parts: userMessageParts,
 			},
 			{
 				body: {

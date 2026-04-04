@@ -3,7 +3,7 @@ import { ImagesIcon } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { api } from "convex/_generated/api";
-import GalleryImageItem from "~/components/gallery-image-item";
+import GeneratedImageViewer from "~/components/generated-image-viewer";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Skeleton } from "~/components/ui/skeleton";
 
@@ -41,7 +41,11 @@ function RouteComponent() {
 						<div className="columns-2 gap-3 sm:columns-3 lg:columns-4 lg:gap-4">
 							{imageGenerations?.map((image) => (
 								<div key={image._id} className="break-inside-avoid">
-									<GalleryImageItem image={image} />
+									<GeneratedImageViewer
+										alt="Generated"
+										imageUrl={image.generatedImageUrl}
+										storageId={image.storageId}
+									/>
 								</div>
 							))}
 						</div>

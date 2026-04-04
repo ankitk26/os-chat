@@ -7,6 +7,7 @@ import { api } from "convex/_generated/api";
 import type { Id } from "convex/_generated/dataModel";
 import { useEffect, useRef, useState } from "react";
 import { useIsDesktop } from "~/hooks/use-desktop";
+import { buildUserMessageParts } from "~/lib/build-user-message-parts";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getChatTitle } from "~/server-fns/get-chat-title";
 import { useModelStore } from "~/stores/model-store";
@@ -16,6 +17,7 @@ import PromptActions from "./prompt-actions";
 
 type Props = {
 	chatId: string;
+	latestGeneratedImageUrl?: string | null;
 	status: ChatStatus;
 	stop: UseChatHelpers<CustomUIMessage>["stop"];
 	sendMessage: UseChatHelpers<CustomUIMessage>["sendMessage"];
@@ -24,6 +26,7 @@ type Props = {
 
 export default function UserPromptInput(props: Props) {
 	const { chatId: paramsChatId } = useParams({ strict: false });
+	const { onHeightChange } = props;
 
 	const [input, setInput] = useState("");
 
@@ -64,13 +67,18 @@ export default function UserPromptInput(props: Props) {
 
 		const sourceMessageId = generateRandomUUID();
 		const messageText = input;
+		const userMessageParts = buildUserMessageParts({
+			latestGeneratedImageUrl: props.latestGeneratedImageUrl,
+			model: selectedModel,
+			prompt: messageText,
+		});
 
 		// Send message optimistically BEFORE navigation so it's in state
 		props.sendMessage(
 			{
 				role: "user",
 				id: sourceMessageId,
-				parts: [{ type: "text", text: messageText }],
+				parts: userMessageParts,
 			},
 			{
 				body: {
@@ -104,7 +112,7 @@ export default function UserPromptInput(props: Props) {
 				chatId: props.chatId,
 				role: "user",
 				sourceMessageId,
-				parts: JSON.stringify([{ type: "text", text: messageText }]),
+				parts: JSON.stringify(userMessageParts),
 			},
 		});
 	};
@@ -124,11 +132,11 @@ export default function UserPromptInput(props: Props) {
 
 	// Measure and report height changes
 	useEffect(() => {
-		if (containerRef.current && props.onHeightChange) {
+		if (containerRef.current && onHeightChange) {
 			const height = containerRef.current.getBoundingClientRect().height;
-			props.onHeightChange(height);
+			onHeightChange(height);
 		}
-	}, [input, props.onHeightChange]);
+	}, [input, onHeightChange]);
 
 	// Focus the textarea on desktop for all chats, on mobile/tablet only for new chats.
 	useEffect(() => {
