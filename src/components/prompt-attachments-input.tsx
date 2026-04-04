@@ -10,6 +10,9 @@ type Props = {
 	onRemove: (index: number) => void;
 };
 
+const SUPPORTED_ATTACHMENT_ACCEPT =
+	"image/*,application/pdf,.c,.cc,.cpp,.cxx,.h,.hh,.hpp,.go,.js,.jsx,.ts,.tsx,.json,.md,.txt,.py,.java,.rs,.rb,.php,.css,.scss,.html,.xml,.yaml,.yml,.sh,.sql,.kt,.swift,.toml,.ini,.env";
+
 export default function PromptAttachmentsInput({
 	attachments,
 	fileInputRef,
@@ -28,7 +31,7 @@ export default function PromptAttachmentsInput({
 	return (
 		<>
 			<input
-				accept="image/*,application/pdf,text/*"
+				accept={SUPPORTED_ATTACHMENT_ACCEPT}
 				className="hidden"
 				multiple
 				onChange={onChange}
