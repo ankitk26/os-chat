@@ -1,12 +1,15 @@
 import { useChat } from "@ai-sdk/react";
 import { CaretDownIcon } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
+import { isImageGenerationModel } from "~/lib/is-image-generation-model";
 import { useSharedChatContext } from "~/providers/chat-provider";
+import { useModelStore } from "~/stores/model-store";
 import type { CustomUIMessage } from "~/types";
 import AiResponseAlert from "./ai-response-error";
 import AssistantMessageSkeleton from "./assistant-message-skeleton";
 import ChatMessages from "./chat-messages";
 import EmptyChatContent from "./empty-chat-content";
+import ImageGenerationSkeleton from "./image-generation-skeleton";
 import ThinkingIndicator from "./thinking-indicator";
 import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
@@ -25,6 +28,7 @@ export default function Chat({
 	isMessagesPending = false,
 }: Props) {
 	const { chat } = useSharedChatContext();
+	const selectedModel = useModelStore((store) => store.selectedModel);
 
 	const {
 		messages,
@@ -91,6 +95,7 @@ export default function Chat({
 			setMessages(dbMessages);
 		}
 	}, [setMessages, dbMessages, isMessagesPending]);
+	const isGeneratingImage = isImageGenerationModel(selectedModel);
 
 	return (
 		<div className="relative mx-auto flex h-full min-h-0 w-full flex-col">
@@ -124,7 +129,11 @@ export default function Chat({
 											messages.at(-1)?.role === "user" &&
 											!error && (
 												<div className="px-3 lg:px-0">
-													<ThinkingIndicator />
+													{isGeneratingImage ? (
+														<ImageGenerationSkeleton />
+													) : (
+														<ThinkingIndicator />
+													)}
 												</div>
 											)}
 
