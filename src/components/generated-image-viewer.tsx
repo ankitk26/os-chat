@@ -75,7 +75,7 @@ export default function GeneratedImageViewer({
 				<Dialog open={isOpen} onOpenChange={setIsOpen}>
 					<DialogTrigger
 						render={
-							<button className={triggerClassName}>
+							<button type="button" className={triggerClassName}>
 								<img
 									src={imageUrl}
 									alt={alt}
