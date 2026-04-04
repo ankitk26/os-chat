@@ -112,6 +112,11 @@ export function usePromptAttachments() {
 		const validFiles = Array.from(files).filter((file) => {
 			const mediaType = inferMediaType(file);
 
+			if (file.size === 0) {
+				toast.warning(`${file.name} is empty.`);
+				return false;
+			}
+
 			if (!isSupportedAttachmentType(mediaType)) {
 				toast.warning(`${file.name} is not a supported file, PDF, or image.`);
 				return false;
