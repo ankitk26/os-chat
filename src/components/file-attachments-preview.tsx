@@ -1,4 +1,9 @@
-import { FileIcon, FileTextIcon, XIcon } from "@phosphor-icons/react";
+import {
+	FileIcon,
+	FilePdfIcon,
+	FileTextIcon,
+	XIcon,
+} from "@phosphor-icons/react";
 import type { FileUIPart } from "ai";
 import { cn } from "~/lib/utils";
 import { Button } from "./ui/button";
@@ -32,6 +37,18 @@ const formatFileSize = (size?: number) => {
 
 const getAttachmentLabel = (attachment: AttachmentPart) =>
 	attachment.filename?.trim() || "Untitled file";
+
+const getAttachmentTypeLabel = (attachment: AttachmentPart) => {
+	if (attachment.mediaType === "application/pdf") {
+		return "PDF";
+	}
+
+	if (attachment.mediaType.startsWith("text/")) {
+		return "TEXT";
+	}
+
+	return "FILE";
+};
 
 export default function FileAttachmentsPreview({
 	attachments,
@@ -90,7 +107,7 @@ export default function FileAttachmentsPreview({
 							{attachment.mediaType.startsWith("text/") ? (
 								<FileTextIcon className="text-muted-foreground" />
 							) : attachment.mediaType === "application/pdf" ? (
-								<FileTextIcon className="text-muted-foreground" />
+								<FilePdfIcon className="text-muted-foreground" />
 							) : (
 								<FileIcon className="text-muted-foreground" />
 							)}
@@ -98,7 +115,7 @@ export default function FileAttachmentsPreview({
 						<div className="min-w-0 flex-1">
 							<div className="truncate text-xs font-medium">{label}</div>
 							<div className="mt-1 flex items-center gap-2 text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
-								<span>{attachment.mediaType || "file"}</span>
+								<span>{getAttachmentTypeLabel(attachment)}</span>
 								{fileSize && <span>{fileSize}</span>}
 							</div>
 						</div>
