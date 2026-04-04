@@ -2,6 +2,7 @@ import {
 	GlobeIcon,
 	PaperclipIcon,
 	PaperPlaneRightIcon,
+	SpinnerIcon,
 	StopIcon,
 } from "@phosphor-icons/react";
 import { useHotkey } from "@tanstack/react-hotkeys";
@@ -16,6 +17,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 type Props = {
 	attachmentCount?: number;
 	disabled?: boolean;
+	isUploading?: boolean;
 	onAttachClick?: () => void;
 	status: ChatStatus;
 	stop: () => void;
@@ -24,6 +26,7 @@ type Props = {
 export default function PromptActions({
 	attachmentCount = 0,
 	disabled = false,
+	isUploading = false,
 	onAttachClick,
 	status,
 	stop,
@@ -76,10 +79,19 @@ export default function PromptActions({
 					type="button"
 					variant="outline"
 				>
-					<PaperclipIcon />
-					<span className="hidden sm:inline">Upload</span>
-					<span className="sm:hidden">File</span>
-					{attachmentCount > 0 && (
+					{isUploading ? (
+						<>
+							<SpinnerIcon className="size-4 animate-spin" />
+							<span>Uploading...</span>
+						</>
+					) : (
+						<>
+							<PaperclipIcon />
+							<span className="hidden sm:inline">Upload</span>
+							<span className="sm:hidden">File</span>
+						</>
+					)}
+					{!isUploading && attachmentCount > 0 && (
 						<span className="rounded-full bg-foreground px-1.5 py-0.5 text-[10px] leading-none text-background">
 							{attachmentCount}
 						</span>

@@ -225,6 +225,7 @@ export default function UserPromptInput(props: Props) {
 						createChatMutation.isPending ||
 						createMessageMutation.isPending
 					}
+					isUploading={isUploading}
 					onAttachClick={() => fileInputRef.current?.click()}
 					status={props.status}
 					stop={props.stop}
