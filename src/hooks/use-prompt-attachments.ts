@@ -42,6 +42,8 @@ const TEXT_FILE_EXTENSIONS = new Set([
 	"env",
 ]);
 
+const MAX_ATTACHMENT_SIZE_BYTES = 10 * 1024 * 1024;
+
 export type PendingAttachment = {
 	file: File;
 	filename: string;
@@ -90,6 +92,11 @@ const inferMediaType = (file: File) => {
 	return "application/octet-stream";
 };
 
+const isSupportedAttachmentType = (mediaType: string) =>
+	mediaType.startsWith("text/") ||
+	mediaType.startsWith("image/") ||
+	mediaType === "application/pdf";
+
 export function usePromptAttachments() {
 	const [attachments, setAttachments] = useState<PendingAttachment[]>([]);
 	const [isUploading, setIsUploading] = useState(false);
@@ -102,8 +109,29 @@ export function usePromptAttachments() {
 			return;
 		}
 
+		const validFiles = Array.from(files).filter((file) => {
+			const mediaType = inferMediaType(file);
+
+			if (!isSupportedAttachmentType(mediaType)) {
+				toast.warning(`${file.name} is not a supported file, PDF, or image.`);
+				return false;
+			}
+
+			if (file.size > MAX_ATTACHMENT_SIZE_BYTES) {
+				toast.warning(`${file.name} is larger than 10 MB.`);
+				return false;
+			}
+
+			return true;
+		});
+
+		if (validFiles.length === 0) {
+			event.target.value = "";
+			return;
+		}
+
 		const nextAttachments = await Promise.all(
-			Array.from(files).map(async (file) => {
+			validFiles.map(async (file) => {
 				const mediaType = inferMediaType(file);
 				const textContent =
 					mediaType === "text/plain" ? await file.text() : undefined;

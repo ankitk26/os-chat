@@ -28,6 +28,7 @@ export default function PromptAttachmentsInput({
 	return (
 		<>
 			<input
+				accept="image/*,application/pdf,text/*"
 				className="hidden"
 				multiple
 				onChange={onChange}
