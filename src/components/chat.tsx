@@ -1,5 +1,6 @@
 import { useChat } from "@ai-sdk/react";
 import { CaretDownIcon } from "@phosphor-icons/react";
+import type { FileUIPart } from "ai";
 import { useEffect, useRef, useState } from "react";
 import { isImageGenerationModel } from "~/lib/is-image-generation-model";
 import { useSharedChatContext } from "~/providers/chat-provider";
@@ -21,6 +22,15 @@ type Props = {
 	dbMessages: CustomUIMessage[];
 	isMessagesPending?: boolean;
 };
+
+const isImageFilePart = (
+	part: CustomUIMessage["parts"][number],
+): part is FileUIPart =>
+	part.type === "file" &&
+	"mediaType" in part &&
+	part.mediaType.startsWith("image/") &&
+	"url" in part &&
+	typeof part.url === "string";
 
 export default function Chat({
 	chatId,
@@ -96,6 +106,12 @@ export default function Chat({
 		}
 	}, [setMessages, dbMessages, isMessagesPending]);
 	const isGeneratingImage = isImageGenerationModel(selectedModel);
+	const latestGeneratedImageUrl =
+		[...messages]
+			.reverse()
+			.filter((message) => message.role === "assistant")
+			.flatMap((message) => message.parts)
+			.find(isImageFilePart)?.url ?? null;
 
 	return (
 		<div className="relative mx-auto flex h-full min-h-0 w-full flex-col">
@@ -119,6 +135,7 @@ export default function Chat({
 									<>
 										<ChatMessages
 											chatId={chatId}
+											latestGeneratedImageUrl={latestGeneratedImageUrl}
 											messages={messages}
 											regenerate={regenerate}
 											sendMessage={sendMessage}
@@ -162,6 +179,7 @@ export default function Chat({
 			<div className="absolute right-0 bottom-0 left-0 z-10">
 				<UserPromptInput
 					chatId={chatId}
+					latestGeneratedImageUrl={latestGeneratedImageUrl}
 					sendMessage={sendMessage}
 					status={status}
 					stop={stop}

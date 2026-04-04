@@ -6,6 +6,7 @@ import UserMessage from "./user-message";
 
 type Props = {
 	chatId: string;
+	latestGeneratedImageUrl?: string | null;
 	messages: CustomUIMessage[];
 	regenerate: UseChatHelpers<CustomUIMessage>["regenerate"];
 	sendMessage: UseChatHelpers<CustomUIMessage>["sendMessage"];
@@ -13,6 +14,7 @@ type Props = {
 
 export default memo(function ChatMessages({
 	chatId,
+	latestGeneratedImageUrl,
 	messages,
 	regenerate,
 	sendMessage,
@@ -28,6 +30,7 @@ export default memo(function ChatMessages({
 					{message.role === "user" ? (
 						<UserMessage
 							chatId={chatId}
+							latestGeneratedImageUrl={latestGeneratedImageUrl}
 							message={message}
 							regenerate={regenerate}
 							sendMessage={sendMessage}
