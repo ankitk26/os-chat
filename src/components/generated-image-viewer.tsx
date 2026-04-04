@@ -1,5 +1,4 @@
-import { api } from "convex/_generated/api";
-import { FunctionReturnType } from "convex/server";
+import { Id } from "convex/_generated/dataModel";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -8,28 +7,45 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "~/components/ui/dialog";
-import GalleryImageItemDesktopActions from "./gallery-image-item-desktop-actions";
-import GalleryImageItemMobileActions from "./gallery-image-item-mobile-actions";
+import GeneratedImageViewerDesktopActions from "./generated-image-viewer-desktop-actions";
+import GeneratedImageViewerMobileActions from "./generated-image-viewer-mobile-actions";
 
 type Props = {
-	image: FunctionReturnType<typeof api.imageGenerations.getAll>[0];
+	alt?: string;
+	className?: string;
+	imageUrl: string;
+	imgClassName?: string;
+	loading?: "eager" | "lazy";
+	mobileActionsSide?: "left" | "right";
+	storageId?: Id<"_storage">;
+	triggerClassName?: string;
+	wrapperClassName?: string;
 };
 
-export default function GalleryImageItem({ image }: Props) {
+export default function GeneratedImageViewer({
+	alt = "Generated image",
+	className = "pb-2",
+	imageUrl,
+	imgClassName = "h-auto w-full",
+	loading = "lazy",
+	mobileActionsSide = "right",
+	storageId,
+	triggerClassName = "block w-full cursor-pointer p-0",
+	wrapperClassName = "group relative overflow-hidden rounded-lg border",
+}: Props) {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleDownload = async () => {
 		try {
-			const response = await fetch(image.generatedImageUrl);
+			const response = await fetch(imageUrl);
 			if (!response.ok) {
 				throw new Error("Failed to fetch image");
 			}
+
 			const blob = await response.blob();
 			const blobUrl = URL.createObjectURL(blob);
-
 			const now = new Date();
 			const dateStr = now.toISOString().replace(/[:.]/g, "-").slice(0, 19);
-
 			const link = document.createElement("a");
 			link.href = blobUrl;
 			link.download = `baychat image ${dateStr}.png`;
@@ -46,7 +62,7 @@ export default function GalleryImageItem({ image }: Props) {
 
 	const handleShare = async () => {
 		try {
-			await navigator.clipboard.writeText(image.generatedImageUrl);
+			await navigator.clipboard.writeText(imageUrl);
 			toast.success("Link copied");
 		} catch {
 			toast.error("Something went wrong");
@@ -54,47 +70,46 @@ export default function GalleryImageItem({ image }: Props) {
 	};
 
 	return (
-		<div className="pb-2">
-			<div className="group relative overflow-hidden rounded-lg border">
+		<div className={className}>
+			<div className={wrapperClassName}>
 				<Dialog open={isOpen} onOpenChange={setIsOpen}>
 					<DialogTrigger
 						render={
-							<button className="block w-full cursor-pointer p-0">
+							<button className={triggerClassName}>
 								<img
-									src={image.generatedImageUrl}
-									alt="Generated"
-									className="h-auto w-full"
-									loading="lazy"
+									src={imageUrl}
+									alt={alt}
+									className={imgClassName}
+									loading={loading}
 								/>
 							</button>
 						}
 					/>
 
-					{/* Image Viewer Dialog */}
 					<DialogContent className="w-auto overflow-hidden border-none bg-black/95 p-0 shadow-none sm:max-w-none">
 						<DialogTitle className="sr-only">Image Viewer</DialogTitle>
 						<img
-							src={image.generatedImageUrl}
-							alt="Generated"
+							src={imageUrl}
+							alt={alt}
 							className="max-h-[95vh] max-w-[95vw] rounded-lg object-contain"
 						/>
 					</DialogContent>
 				</Dialog>
 
-				{/* Desktop: Gradient overlay and action buttons on hover */}
 				<div className="absolute right-0 bottom-0 left-0 hidden h-20 bg-linear-to-t from-black/50 to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100 lg:flex" />
 
-				<GalleryImageItemDesktopActions
-					image={image}
+				<GeneratedImageViewerDesktopActions
 					handleDownload={handleDownload}
 					handleShare={handleShare}
+					storageId={storageId}
 				/>
 			</div>
 
-			<GalleryImageItemMobileActions
-				image={image}
+			<GeneratedImageViewerMobileActions
 				handleDownload={handleDownload}
 				handleShare={handleShare}
+				side={mobileActionsSide}
+				storageId={storageId}
 			/>
 		</div>
 	);
