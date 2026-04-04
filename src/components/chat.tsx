@@ -135,6 +135,7 @@ export default function Chat({
 									<>
 										<ChatMessages
 											chatId={chatId}
+											isGeneratingImage={isGeneratingImage}
 											latestGeneratedImageUrl={latestGeneratedImageUrl}
 											messages={messages}
 											regenerate={regenerate}

@@ -6,6 +6,7 @@ import UserMessage from "./user-message";
 
 type Props = {
 	chatId: string;
+	isGeneratingImage?: boolean;
 	latestGeneratedImageUrl?: string | null;
 	messages: CustomUIMessage[];
 	regenerate: UseChatHelpers<CustomUIMessage>["regenerate"];
@@ -14,6 +15,7 @@ type Props = {
 
 export default memo(function ChatMessages({
 	chatId,
+	isGeneratingImage = false,
 	latestGeneratedImageUrl,
 	messages,
 	regenerate,
@@ -37,7 +39,11 @@ export default memo(function ChatMessages({
 							nextMessage={messages[index + 1]}
 						/>
 					) : (
-						<AssistantMessage message={message} regenerate={regenerate} />
+						<AssistantMessage
+							isGeneratingImage={isGeneratingImage}
+							message={message}
+							regenerate={regenerate}
+						/>
 					)}
 				</div>
 			))}

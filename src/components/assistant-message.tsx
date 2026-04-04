@@ -19,17 +19,20 @@ import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Props = {
+	isGeneratingImage?: boolean;
 	message: CustomUIMessage;
 	regenerate?: UseChatHelpers<CustomUIMessage>["regenerate"];
 };
 
 export default React.memo(function AssistantMessage(props: Props) {
-	const { message, regenerate } = props;
+	const { isGeneratingImage = false, message, regenerate } = props;
 	const showTokenUsage = useAppearanceStore((store) => store.showTokenUsage);
-	const isImageMessage = isImageGenerationModel({
-		modelId: message.metadata?.modelId,
-		name: message.metadata?.modelName,
-	});
+	const isImageMessage =
+		isGeneratingImage ||
+		isImageGenerationModel({
+			modelId: message.metadata?.modelId,
+			name: message.metadata?.modelName,
+		});
 	const hasRenderableParts = message.parts.some(
 		(part) => part.type !== "step-start",
 	);
