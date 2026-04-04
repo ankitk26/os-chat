@@ -1,7 +1,7 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
 
-export const getImageUrl = query({
+const getStorageUrl = query({
 	args: {
 		storageId: v.id("_storage"),
 	},
@@ -9,3 +9,6 @@ export const getImageUrl = query({
 		return ctx.storage.getUrl(args.storageId);
 	},
 });
+
+export const getFileUrl = getStorageUrl;
+export const getImageUrl = getStorageUrl;

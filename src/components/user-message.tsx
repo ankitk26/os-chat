@@ -7,12 +7,14 @@ import { memo, useState } from "react";
 import { toast } from "sonner";
 import { buildUserMessageParts } from "~/lib/build-user-message-parts";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
+import { getFilePartsFromMessage } from "~/lib/get-file-parts-from-message";
 import { getMessageContentFromParts } from "~/lib/get-message-content-from-parts";
 import { cn } from "~/lib/utils";
 import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import type { CustomUIMessage } from "~/types";
 import BranchOffButton from "./branch-off-button";
+import FileAttachmentsPreview from "./file-attachments-preview";
 import RetryModelDropdown from "./retry-model-dropdown";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
@@ -36,6 +38,7 @@ export default memo(function UserMessage({
 	nextMessage,
 }: Props) {
 	const messageContent = getMessageContentFromParts(message.parts);
+	const messageAttachments = getFilePartsFromMessage(message.parts);
 
 	const [isEditing, setIsEditing] = useState(false);
 
@@ -59,6 +62,7 @@ export default memo(function UserMessage({
 	const handleMessageEdit = (input: string) => {
 		const sourceMessageId = generateRandomUUID();
 		const userMessageParts = buildUserMessageParts({
+			attachments: messageAttachments,
 			latestGeneratedImageUrl,
 			model: selectedModel,
 			prompt: input,
@@ -118,7 +122,12 @@ export default memo(function UserMessage({
 						onSubmit={handleMessageEdit}
 					/>
 				) : (
-					<span className="whitespace-pre-wrap">{messageContent}</span>
+					<>
+						<FileAttachmentsPreview attachments={messageAttachments} />
+						{messageContent.length > 0 && (
+							<span className="whitespace-pre-wrap">{messageContent}</span>
+						)}
+					</>
 				)}
 			</div>
 			<div className="flex opacity-100 transition-opacity duration-200 md:opacity-0 md:group-hover:opacity-100">

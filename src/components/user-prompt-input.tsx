@@ -7,6 +7,7 @@ import { api } from "convex/_generated/api";
 import type { Id } from "convex/_generated/dataModel";
 import { useEffect, useRef, useState } from "react";
 import { useIsDesktop } from "~/hooks/use-desktop";
+import { usePromptAttachments } from "~/hooks/use-prompt-attachments";
 import { buildUserMessageParts } from "~/lib/build-user-message-parts";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { getChatTitle } from "~/server-fns/get-chat-title";
@@ -14,6 +15,7 @@ import { useModelStore } from "~/stores/model-store";
 import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
 import type { CustomUIMessage } from "~/types";
 import PromptActions from "./prompt-actions";
+import PromptAttachmentsInput from "./prompt-attachments-input";
 
 type Props = {
 	chatId: string;
@@ -29,10 +31,12 @@ export default function UserPromptInput(props: Props) {
 	const { onHeightChange } = props;
 
 	const [input, setInput] = useState("");
+	const [isSubmittingPrompt, setIsSubmittingPrompt] = useState(false);
 
 	const navigate = useNavigate();
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
+	const fileInputRef = useRef<HTMLInputElement>(null);
 	const isDesktop = useIsDesktop();
 	const selectedModel = useModelStore((store) => store.selectedModel);
 	const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
@@ -42,6 +46,14 @@ export default function UserPromptInput(props: Props) {
 	const persistedUseOpenRouter = usePersistedApiKeysStore(
 		(store) => store.persistedUseOpenRouter,
 	);
+	const {
+		attachments,
+		clearAttachments,
+		handleAttachmentChange,
+		isUploading,
+		removeAttachment,
+		uploadAttachments,
+	} = usePromptAttachments();
 
 	const updateChatTitleMutation = useMutation({
 		mutationFn: useConvexMutation(api.chats.updateChatTitle),
@@ -54,6 +66,10 @@ export default function UserPromptInput(props: Props) {
 	});
 
 	const handleChatTitleUpdate = async (dbGeneratedChatId: Id<"chats">) => {
+		if (input.trim().length === 0) {
+			return;
+		}
+
 		const title = await getChatTitle({ data: { userMessage: input } });
 		await updateChatTitleMutation.mutateAsync({
 			chat: { chatId: dbGeneratedChatId, title: title as string },
@@ -61,60 +77,78 @@ export default function UserPromptInput(props: Props) {
 	};
 
 	const handlePromptSubmit = async () => {
-		if (!textareaRef.current?.value) {
+		if (
+			isSubmittingPrompt ||
+			(input.trim().length === 0 && attachments.length === 0)
+		) {
 			return;
 		}
 
-		const sourceMessageId = generateRandomUUID();
-		const messageText = input;
-		const userMessageParts = buildUserMessageParts({
-			latestGeneratedImageUrl: props.latestGeneratedImageUrl,
-			model: selectedModel,
-			prompt: messageText,
-		});
+		setIsSubmittingPrompt(true);
 
-		// Send message optimistically BEFORE navigation so it's in state
-		props.sendMessage(
-			{
-				role: "user",
-				id: sourceMessageId,
-				parts: userMessageParts,
-			},
-			{
-				body: {
-					model: selectedModel,
-					isWebSearchEnabled,
-					apiKeys: persistedApiKeys,
-					useOpenRouter: persistedUseOpenRouter,
-					chatId: props.chatId,
+		try {
+			const sourceMessageId = generateRandomUUID();
+			const messageText = input;
+			const { optimisticAttachments, persistedAttachments } =
+				await uploadAttachments();
+
+			const optimisticUserMessageParts = buildUserMessageParts({
+				attachments: optimisticAttachments,
+				latestGeneratedImageUrl: props.latestGeneratedImageUrl,
+				model: selectedModel,
+				prompt: messageText,
+			});
+			const persistedUserMessageParts = buildUserMessageParts({
+				attachments: persistedAttachments,
+				latestGeneratedImageUrl: props.latestGeneratedImageUrl,
+				model: selectedModel,
+				prompt: messageText,
+			});
+
+			props.sendMessage(
+				{
+					role: "user",
+					id: sourceMessageId,
+					parts: optimisticUserMessageParts,
 				},
-			},
-		);
+				{
+					body: {
+						model: selectedModel,
+						isWebSearchEnabled,
+						apiKeys: persistedApiKeys,
+						useOpenRouter: persistedUseOpenRouter,
+						chatId: props.chatId,
+					},
+				},
+			);
 
-		// Clear input immediately for better UX
-		setInput("");
+			setInput("");
+			clearAttachments();
 
-		if (!paramsChatId) {
-			// Navigate to chat page after optimistic message is sent
-			navigate({
-				to: "/chat/$chatId",
-				params: { chatId: props.chatId },
+			if (!paramsChatId) {
+				navigate({
+					to: "/chat/$chatId",
+					params: { chatId: props.chatId },
+				});
+				const dbGeneratedChatId = await createChatMutation.mutateAsync({
+					uuid: props.chatId,
+				});
+				handleChatTitleUpdate(dbGeneratedChatId);
+			}
+
+			createMessageMutation.mutate({
+				messageBody: {
+					chatId: props.chatId,
+					role: "user",
+					sourceMessageId,
+					parts: JSON.stringify(persistedUserMessageParts),
+				},
 			});
-			const dbGeneratedChatId = await createChatMutation.mutateAsync({
-				uuid: props.chatId,
-			});
-			handleChatTitleUpdate(dbGeneratedChatId);
+		} catch (error) {
+			console.error("Failed to submit prompt with attachments:", error);
+		} finally {
+			setIsSubmittingPrompt(false);
 		}
-
-		// Persist message to database
-		createMessageMutation.mutate({
-			messageBody: {
-				chatId: props.chatId,
-				role: "user",
-				sourceMessageId,
-				parts: JSON.stringify(userMessageParts),
-			},
-		});
 	};
 
 	const resizeTextarea = () => {
@@ -125,20 +159,17 @@ export default function UserPromptInput(props: Props) {
 		}
 	};
 
-	// Resize when the textarea value changes.
 	useEffect(() => {
 		resizeTextarea();
 	}, [input]);
 
-	// Measure and report height changes
 	useEffect(() => {
 		if (containerRef.current && onHeightChange) {
 			const height = containerRef.current.getBoundingClientRect().height;
 			onHeightChange(height);
 		}
-	}, [input, onHeightChange]);
+	}, [attachments.length, input, onHeightChange]);
 
-	// Focus the textarea on desktop for all chats, on mobile/tablet only for new chats.
 	useEffect(() => {
 		if (textareaRef.current && (isDesktop || !paramsChatId)) {
 			textareaRef.current.focus();
@@ -154,15 +185,24 @@ export default function UserPromptInput(props: Props) {
 					handlePromptSubmit();
 				}}
 			>
+				<PromptAttachmentsInput
+					attachments={attachments}
+					fileInputRef={fileInputRef}
+					onChange={handleAttachmentChange}
+					onRemove={removeAttachment}
+				/>
+
 				<div className="flex-1">
 					<textarea
 						className="max-h-80 min-h-8 w-full resize-none text-sm focus:outline-none"
 						disabled={
-							createChatMutation.isPending || createMessageMutation.isPending
+							isSubmittingPrompt ||
+							isUploading ||
+							createChatMutation.isPending ||
+							createMessageMutation.isPending
 						}
 						onChange={(e) => {
 							setInput(e.target.value);
-							// resizeTextarea();
 						}}
 						onKeyDown={(e) => {
 							if (e.key === "Enter" && !e.shiftKey) {
@@ -177,7 +217,18 @@ export default function UserPromptInput(props: Props) {
 					/>
 				</div>
 
-				<PromptActions status={props.status} stop={props.stop} />
+				<PromptActions
+					attachmentCount={attachments.length}
+					disabled={
+						isSubmittingPrompt ||
+						isUploading ||
+						createChatMutation.isPending ||
+						createMessageMutation.isPending
+					}
+					onAttachClick={() => fileInputRef.current?.click()}
+					status={props.status}
+					stop={props.stop}
+				/>
 			</form>
 		</div>
 	);
