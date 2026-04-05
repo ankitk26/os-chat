@@ -6,6 +6,7 @@ import {
 } from "@phosphor-icons/react";
 import type { FileUIPart } from "ai";
 import { cn } from "~/lib/utils";
+import ImageAttachmentPreview from "./image-attachment-preview";
 import { Button } from "./ui/button";
 
 type AttachmentPart = FileUIPart & { size?: number };
@@ -67,34 +68,14 @@ export default function FileAttachmentsPreview({
 
 				if (isImageAttachment(attachment)) {
 					return (
-						<div
-							className="group/attachment relative overflow-hidden rounded-2xl border border-border/70 bg-muted/40 shadow-sm"
+						<ImageAttachmentPreview
+							attachment={attachment}
+							fileSize={fileSize}
+							index={index}
 							key={`${attachment.url}-${index}`}
-						>
-							<img
-								alt={label}
-								className="h-28 w-full object-cover"
-								src={attachment.url}
-							/>
-							<div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background via-background/80 to-transparent px-3 pt-8 pb-3">
-								<div className="truncate text-[11px] font-medium">{label}</div>
-								<div className="mt-0.5 text-[10px] text-muted-foreground">
-									{fileSize ?? "Image"}
-								</div>
-							</div>
-							{onRemove && (
-								<Button
-									aria-label={`Remove ${label}`}
-									className="absolute top-2 right-2 rounded-full bg-background/85 shadow-sm backdrop-blur"
-									onClick={() => onRemove(index)}
-									size="icon-xs"
-									type="button"
-									variant="outline"
-								>
-									<XIcon />
-								</Button>
-							)}
-						</div>
+							label={label}
+							onRemove={onRemove}
+						/>
 					);
 				}
 
