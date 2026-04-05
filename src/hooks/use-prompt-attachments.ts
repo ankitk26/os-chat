@@ -61,6 +61,7 @@ type UploadedAttachment = {
 	textContent?: string;
 };
 
+// Generate a local preview immediately because persisted file URLs are resolved later.
 const fileToDataUrl = (file: File) =>
 	new Promise<string>((resolve, reject) => {
 		const reader = new FileReader();
@@ -69,11 +70,13 @@ const fileToDataUrl = (file: File) =>
 		reader.readAsDataURL(file);
 	});
 
+// Fall back to extensions because browser MIME types are inconsistent for text files.
 const getFileExtension = (filename: string) => {
 	const parts = filename.toLowerCase().split(".");
 	return parts.length > 1 ? (parts.at(-1) ?? "") : "";
 };
 
+// Derive a stable media type so validation and downstream prompt handling stay consistent.
 const inferMediaType = (file: File) => {
 	if (file.type.trim() !== "") {
 		return file.type;
@@ -91,13 +94,14 @@ const inferMediaType = (file: File) => {
 	return "application/octet-stream";
 };
 
+// Limit attachments to types the UI and chat pipeline know how to handle safely.
 const isSupportedAttachmentType = (mediaType: string) =>
 	mediaType.startsWith("text/") ||
 	mediaType.startsWith("image/") ||
 	mediaType === "application/pdf";
 
+// Check extensions as well because some text formats are mislabeled as application/*.
 const isTextAttachment = (file: File, mediaType: string) => {
-	// Some text files are reported as application/* by the browser.
 	if (mediaType.startsWith("text/")) {
 		return true;
 	}
@@ -105,10 +109,12 @@ const isTextAttachment = (file: File, mediaType: string) => {
 	return TEXT_FILE_EXTENSIONS.has(getFileExtension(file.name));
 };
 
+// Keep prompt submission focused on messaging while this hook owns attachment state and uploads.
 export function usePromptAttachments() {
 	const [attachments, setAttachments] = useState<PendingAttachment[]>([]);
 	const [isUploading, setIsUploading] = useState(false);
 
+	// Validate early so unsupported files never enter prompt state and text can be captured once.
 	const handleAttachmentChange = async (
 		event: ChangeEvent<HTMLInputElement>,
 	) => {
@@ -118,13 +124,14 @@ export function usePromptAttachments() {
 		}
 
 		const validFiles = Array.from(files).filter((file) => {
-			const mediaType = inferMediaType(file);
-
 			if (file.size === 0) {
 				toast.warning(`${file.name} is empty.`);
 				return false;
 			}
 
+			const mediaType = inferMediaType(file);
+
+			// Extension-based text files should be allowed even when the browser reports application/*.
 			if (
 				!isSupportedAttachmentType(mediaType) &&
 				!isTextAttachment(file, mediaType)
@@ -149,6 +156,7 @@ export function usePromptAttachments() {
 		const nextAttachments = await Promise.all(
 			validFiles.map(async (file) => {
 				const mediaType = inferMediaType(file);
+				// Capture text once up front so prompt construction does not depend on later file reads.
 				const textContent = isTextAttachment(file, mediaType)
 					? await file.text()
 					: undefined;
@@ -168,16 +176,19 @@ export function usePromptAttachments() {
 		event.target.value = "";
 	};
 
+	// Remove by index to preserve the user-visible ordering of the remaining attachments.
 	const removeAttachment = (index: number) => {
 		setAttachments((current) =>
 			current.filter((_, currentIndex) => currentIndex !== index),
 		);
 	};
 
+	// Reset attachments after send or cancel so the next prompt starts from a clean state.
 	const clearAttachments = () => {
 		setAttachments([]);
 	};
 
+	// Return preview-backed parts for the live UI and storage-backed parts for persisted messages.
 	const uploadAttachments = async (): Promise<{
 		optimisticAttachments: FileUIPart[];
 		persistedAttachments: FileUIPart[];
@@ -194,6 +205,7 @@ export function usePromptAttachments() {
 		try {
 			const uploadedAttachments: UploadedAttachment[] = await Promise.all(
 				attachments.map(async (attachment) => {
+					// Each file gets its own upload URL so storage authorization stays scoped to that upload.
 					const uploadUrl = await getPostUrl();
 					const uploadResponse = await fetch(uploadUrl, {
 						method: "POST",
@@ -216,7 +228,7 @@ export function usePromptAttachments() {
 						mediaType: attachment.mediaType,
 						previewUrl: attachment.previewUrl,
 						storageId,
-						// Persist an empty URL; Convex hydrates the authorized URL on read.
+						// Leave URLs empty here because authorized storage URLs are generated on read.
 						storageUrl: "",
 						textContent: attachment.textContent,
 					};
@@ -230,6 +242,7 @@ export function usePromptAttachments() {
 							type: "file",
 							filename: attachment.filename,
 							mediaType: attachment.mediaType,
+							// Keep the local preview in the optimistic message so the UI updates immediately.
 							url: attachment.previewUrl,
 							providerMetadata: {
 								baychat: {
@@ -247,6 +260,7 @@ export function usePromptAttachments() {
 							type: "file",
 							filename: attachment.filename,
 							mediaType: attachment.mediaType,
+							// Persist storage metadata instead of a transient preview URL.
 							url: attachment.storageUrl,
 							providerMetadata: {
 								baychat: {
