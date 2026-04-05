@@ -26,6 +26,11 @@ export default function PromptAttachmentsInput({
 			mediaType: attachment.mediaType,
 			size: attachment.size,
 			url: attachment.previewUrl,
+			providerMetadata: {
+				baychat: {
+					textContent: attachment.textContent,
+				},
+			},
 		}));
 
 	return (

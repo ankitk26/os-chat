@@ -7,6 +7,7 @@ import {
 import type { FileUIPart } from "ai";
 import { cn } from "~/lib/utils";
 import ImageAttachmentPreview from "./image-attachment-preview";
+import TextFileAttachmentPreview from "./text-file-attachment-preview";
 import { Button } from "./ui/button";
 
 type AttachmentPart = FileUIPart & { size?: number };
@@ -19,6 +20,9 @@ type Props = {
 
 const isImageAttachment = (attachment: AttachmentPart) =>
 	attachment.mediaType.startsWith("image/");
+
+const isPdfAttachment = (attachment: AttachmentPart) =>
+	attachment.mediaType === "application/pdf";
 
 const formatFileSize = (size?: number) => {
 	if (size == null || Number.isNaN(size)) {
@@ -69,6 +73,19 @@ export default function FileAttachmentsPreview({
 				if (isImageAttachment(attachment)) {
 					return (
 						<ImageAttachmentPreview
+							attachment={attachment}
+							fileSize={fileSize}
+							index={index}
+							key={`${attachment.url}-${index}`}
+							label={label}
+							onRemove={onRemove}
+						/>
+					);
+				}
+
+				if (!isPdfAttachment(attachment)) {
+					return (
+						<TextFileAttachmentPreview
 							attachment={attachment}
 							fileSize={fileSize}
 							index={index}
