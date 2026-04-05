@@ -10,7 +10,13 @@ import {
 import { getAuthUserIdOrThrow } from "./model/users";
 
 const hydrateStoredFileParts = async (ctx: QueryCtx, parts: string) => {
-	const parsedParts = JSON.parse(parts);
+	let parsedParts: unknown;
+	try {
+		parsedParts = JSON.parse(parts);
+	} catch {
+		// Keep malformed legacy data readable instead of failing the whole query.
+		return parts;
+	}
 
 	if (!Array.isArray(parsedParts)) {
 		return parts;
@@ -127,6 +133,36 @@ export const createMessage = mutation({
 	},
 	handler: async (ctx, args) => {
 		const userId = await getAuthUserIdOrThrow(ctx);
+		let parsedParts: unknown;
+		try {
+			parsedParts = JSON.parse(args.messageBody.parts);
+		} catch {
+			parsedParts = null;
+		}
+
+		if (Array.isArray(parsedParts)) {
+			for (const part of parsedParts) {
+				const storageId = part?.providerMetadata?.convex?.storageId;
+				if (typeof storageId !== "string") {
+					continue;
+				}
+
+				// Record attachment ownership once so URL lookups can authorize by storageId.
+				const existingFile = await ctx.db
+					.query("uploadedFiles")
+					.withIndex("by_storage_id", (q) =>
+						q.eq("storageId", storageId as any),
+					)
+					.first();
+
+				if (!existingFile) {
+					await ctx.db.insert("uploadedFiles", {
+						userId,
+						storageId: storageId as any,
+					});
+				}
+			}
+		}
 
 		await ctx.db.insert("messages", {
 			sourceMessageId: args.messageBody.sourceMessageId,

@@ -3,7 +3,6 @@ import type { Id } from "convex/_generated/dataModel";
 import type { ChangeEvent } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { getFileUrl } from "~/server-fns/get-file-url";
 import { getPostUrl } from "~/server-fns/get-post-url";
 
 const TEXT_FILE_EXTENSIONS = new Set([
@@ -97,6 +96,15 @@ const isSupportedAttachmentType = (mediaType: string) =>
 	mediaType.startsWith("image/") ||
 	mediaType === "application/pdf";
 
+const isTextAttachment = (file: File, mediaType: string) => {
+	// Some text files are reported as application/* by the browser.
+	if (mediaType.startsWith("text/")) {
+		return true;
+	}
+
+	return TEXT_FILE_EXTENSIONS.has(getFileExtension(file.name));
+};
+
 export function usePromptAttachments() {
 	const [attachments, setAttachments] = useState<PendingAttachment[]>([]);
 	const [isUploading, setIsUploading] = useState(false);
@@ -117,7 +125,10 @@ export function usePromptAttachments() {
 				return false;
 			}
 
-			if (!isSupportedAttachmentType(mediaType)) {
+			if (
+				!isSupportedAttachmentType(mediaType) &&
+				!isTextAttachment(file, mediaType)
+			) {
 				toast.warning(`${file.name} is not a supported file, PDF, or image.`);
 				return false;
 			}
@@ -138,8 +149,9 @@ export function usePromptAttachments() {
 		const nextAttachments = await Promise.all(
 			validFiles.map(async (file) => {
 				const mediaType = inferMediaType(file);
-				const textContent =
-					mediaType === "text/plain" ? await file.text() : undefined;
+				const textContent = isTextAttachment(file, mediaType)
+					? await file.text()
+					: undefined;
 
 				return {
 					file,
@@ -198,20 +210,14 @@ export function usePromptAttachments() {
 					const { storageId } = (await uploadResponse.json()) as {
 						storageId: Id<"_storage">;
 					};
-					const storageUrl = await getFileUrl({
-						data: { storageId },
-					});
-
-					if (!storageUrl) {
-						throw new Error("File URL generation failed");
-					}
 
 					return {
 						filename: attachment.filename,
 						mediaType: attachment.mediaType,
 						previewUrl: attachment.previewUrl,
 						storageId,
-						storageUrl,
+						// Persist an empty URL; Convex hydrates the authorized URL on read.
+						storageUrl: "",
 						textContent: attachment.textContent,
 					};
 				}),

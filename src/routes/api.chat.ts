@@ -10,7 +10,7 @@ import type { FileUIPart, UIMessagePart, UIDataTypes, UITools } from "ai";
 import { api } from "convex/_generated/api";
 import { defaultSelectedModel } from "~/constants/model-providers";
 import { systemMessage } from "~/constants/system-message";
-import { fetchAuthMutation, fetchAuthQuery } from "~/lib/auth-server";
+import { fetchAuthMutation } from "~/lib/auth-server";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { createMessageServerFn } from "~/server-fns/create-message";
 import { getAuthUser } from "~/server-fns/get-auth";
@@ -102,7 +102,10 @@ const uploadImage = async (part: FileUIPart) => {
 	if (!result.ok) throw new Error(`Upload failed: ${result.status}`);
 
 	const { storageId } = await result.json();
-	const imageUrl = await fetchAuthQuery(api.files.getImageUrl, { storageId });
+	// This stores ownership and returns the URL in one authenticated mutation.
+	const imageUrl = await fetchAuthMutation(api.imageGenerations.create, {
+		storageId,
+	});
 
 	return { storageId, imageUrl };
 };
@@ -162,16 +165,8 @@ const processMessageParts = async (
 					if (!uploadedImage) {
 						return null;
 					}
-					const { imageUrl, storageId } = uploadedImage;
+					const { imageUrl } = uploadedImage;
 					if (imageUrl) {
-						try {
-							await fetchAuthMutation(api.imageGenerations.create, {
-								generatedImageUrl: imageUrl,
-								storageId,
-							});
-						} catch (galleryError) {
-							console.error("Failed to save to gallery:", galleryError);
-						}
 						return { ...part, url: imageUrl };
 					}
 				} catch (error) {
@@ -218,10 +213,10 @@ const transformMessagesForModel = (
 				continue;
 			}
 
-			if (
-				part.mediaType.startsWith("image/") ||
-				part.mediaType === "application/pdf"
-			) {
+			const mediaType =
+				typeof part.mediaType === "string" ? part.mediaType : "";
+			// Treat malformed file parts as non-media instead of crashing.
+			if (mediaType.startsWith("image/") || mediaType === "application/pdf") {
 				transformedParts.push(part);
 				continue;
 			}
