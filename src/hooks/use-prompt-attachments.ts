@@ -43,6 +43,15 @@ const TEXT_FILE_EXTENSIONS = new Set([
 
 const MAX_ATTACHMENT_SIZE_BYTES = 10 * 1024 * 1024;
 
+const MIME_TYPE_TO_EXTENSION: Record<string, string> = {
+	"image/gif": "gif",
+	"image/heic": "heic",
+	"image/heif": "heif",
+	"image/jpeg": "jpg",
+	"image/png": "png",
+	"image/webp": "webp",
+};
+
 export type PendingAttachment = {
 	file: File;
 	filename: string;
@@ -94,6 +103,15 @@ const inferMediaType = (file: File) => {
 	return "application/octet-stream";
 };
 
+const getClipboardImageFilename = (file: File) => {
+	if (file.name.trim() !== "") {
+		return file.name;
+	}
+
+	const extension = MIME_TYPE_TO_EXTENSION[file.type] ?? "png";
+	return `clipboard-image-${Date.now()}.${extension}`;
+};
+
 // Limit attachments to types the UI and chat pipeline know how to handle safely.
 const isSupportedAttachmentType = (mediaType: string) =>
 	mediaType.startsWith("text/") ||
@@ -114,16 +132,8 @@ export function usePromptAttachments() {
 	const [attachments, setAttachments] = useState<PendingAttachment[]>([]);
 	const [isUploading, setIsUploading] = useState(false);
 
-	// Validate early so unsupported files never enter prompt state and text can be captured once.
-	const handleAttachmentChange = async (
-		event: ChangeEvent<HTMLInputElement>,
-	) => {
-		const files = event.target.files;
-		if (!files || files.length === 0) {
-			return;
-		}
-
-		const validFiles = Array.from(files).filter((file) => {
+	const queueFiles = async (files: File[]) => {
+		const validFiles = files.filter((file) => {
 			if (file.size === 0) {
 				toast.warning(`${file.name} is empty.`);
 				return false;
@@ -149,7 +159,6 @@ export function usePromptAttachments() {
 		});
 
 		if (validFiles.length === 0) {
-			event.target.value = "";
 			return;
 		}
 
@@ -173,7 +182,29 @@ export function usePromptAttachments() {
 		);
 
 		setAttachments((current) => [...current, ...nextAttachments]);
+	};
+
+	// Validate early so unsupported files never enter prompt state and text can be captured once.
+	const handleAttachmentChange = async (
+		event: ChangeEvent<HTMLInputElement>,
+	) => {
+		const files = event.target.files;
+		if (!files || files.length === 0) {
+			return;
+		}
+
+		await queueFiles(Array.from(files));
 		event.target.value = "";
+	};
+
+	const handleClipboardFiles = async (files: File[]) => {
+		const clipboardFiles = files.map((file) =>
+			file.name.trim() === ""
+				? new File([file], getClipboardImageFilename(file), { type: file.type })
+				: file,
+		);
+
+		await queueFiles(clipboardFiles);
 	};
 
 	// Remove by index to preserve the user-visible ordering of the remaining attachments.
@@ -285,6 +316,7 @@ export function usePromptAttachments() {
 	return {
 		attachments,
 		clearAttachments,
+		handleClipboardFiles,
 		handleAttachmentChange,
 		isUploading,
 		removeAttachment,

@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "@tanstack/react-router";
 import type { ChatStatus } from "ai";
 import { api } from "convex/_generated/api";
 import type { Id } from "convex/_generated/dataModel";
+import type { ClipboardEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import { useIsDesktop } from "~/hooks/use-desktop";
 import { usePromptAttachments } from "~/hooks/use-prompt-attachments";
@@ -49,6 +50,7 @@ export default function UserPromptInput(props: Props) {
 	const {
 		attachments,
 		clearAttachments,
+		handleClipboardFiles,
 		handleAttachmentChange,
 		isUploading,
 		removeAttachment,
@@ -159,6 +161,20 @@ export default function UserPromptInput(props: Props) {
 		}
 	};
 
+	const handlePaste = async (event: ClipboardEvent<HTMLTextAreaElement>) => {
+		const clipboardFiles = Array.from(event.clipboardData.items)
+			.filter((item) => item.kind === "file" && item.type.startsWith("image/"))
+			.map((item) => item.getAsFile())
+			.filter((file): file is File => file !== null);
+
+		if (clipboardFiles.length === 0) {
+			return;
+		}
+
+		event.preventDefault();
+		await handleClipboardFiles(clipboardFiles);
+	};
+
 	useEffect(() => {
 		resizeTextarea();
 	}, [input]);
@@ -209,6 +225,9 @@ export default function UserPromptInput(props: Props) {
 								e.preventDefault();
 								handlePromptSubmit();
 							}
+						}}
+						onPaste={(e) => {
+							handlePaste(e);
 						}}
 						placeholder="Start the conversation..."
 						ref={textareaRef}
