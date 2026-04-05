@@ -15,13 +15,13 @@ export default function InputUploadButton({
 	isUploading,
 	onAttachClick,
 }: Props) {
+	const hasAttachments = (attachmentCount ?? 0) > 0;
+
 	return (
 		<Button
 			className={cn(
 				"transition-all duration-300 ease-out",
-				attachmentCount &&
-					attachmentCount > 0 &&
-					"border-primary/60 bg-primary/8 text-foreground",
+				hasAttachments && "border-primary/60 bg-primary/8 text-foreground",
 			)}
 			disabled={disabled}
 			onClick={onAttachClick}
@@ -40,7 +40,7 @@ export default function InputUploadButton({
 					<span className="sm:hidden">File</span>
 				</>
 			)}
-			{!isUploading && attachmentCount && attachmentCount > 0 && (
+			{!isUploading && hasAttachments && (
 				<span className="rounded-full bg-foreground px-1.5 py-0.5 text-[10px] leading-none text-background">
 					{attachmentCount}
 				</span>
