@@ -18,16 +18,24 @@ export const getAll = query({
 export const create = mutation({
 	args: {
 		storageId: v.id("_storage"),
-		generatedImageUrl: v.string(),
+		generatedImageUrl: v.optional(v.string()),
 	},
 	handler: async (ctx, args) => {
 		const authUserId = await getAuthUserIdOrThrow(ctx);
+		// Allow callers to omit the URL and derive it from storage after upload.
+		const generatedImageUrl =
+			args.generatedImageUrl ?? (await ctx.storage.getUrl(args.storageId));
+		if (!generatedImageUrl) {
+			throw new Error("Could not generate image URL");
+		}
 
 		await ctx.db.insert("imageGenerations", {
 			userId: authUserId,
 			storageId: args.storageId,
-			generatedImageUrl: args.generatedImageUrl,
+			generatedImageUrl,
 		});
+
+		return generatedImageUrl;
 	},
 });
 

@@ -1,8 +1,58 @@
 import { v } from "convex/values";
 import { MessageMetadata } from "~/types";
 import { internal } from "./_generated/api";
-import { internalMutation, mutation, query } from "./_generated/server";
+import { Id } from "./_generated/dataModel";
+import {
+	type QueryCtx,
+	internalMutation,
+	mutation,
+	query,
+} from "./_generated/server";
 import { getAuthUserIdOrThrow } from "./model/users";
+
+const hydrateStoredFileParts = async (ctx: QueryCtx, parts: string) => {
+	let parsedParts: unknown;
+	try {
+		parsedParts = JSON.parse(parts);
+	} catch {
+		// Keep malformed legacy data readable instead of failing the whole query.
+		return parts;
+	}
+
+	if (!Array.isArray(parsedParts)) {
+		return parts;
+	}
+
+	const hydratedParts = await Promise.all(
+		parsedParts.map(async (part) => {
+			if (
+				!part ||
+				typeof part !== "object" ||
+				part.type !== "file" ||
+				typeof part.url !== "string"
+			) {
+				return part;
+			}
+
+			const storageId = part.providerMetadata?.convex?.storageId;
+			if (typeof storageId !== "string") {
+				return part;
+			}
+
+			const freshUrl = await ctx.storage.getUrl(storageId as Id<"_storage">);
+			if (!freshUrl) {
+				return part;
+			}
+
+			return {
+				...part,
+				url: freshUrl,
+			};
+		}),
+	);
+
+	return JSON.stringify(hydratedParts);
+};
 
 export const getMessages = query({
 	args: { chatId: v.string() },
@@ -17,7 +67,12 @@ export const getMessages = query({
 			.order("asc")
 			.collect();
 
-		return messages.map(({ userId: _, ...rest }) => ({ ...rest }));
+		return Promise.all(
+			messages.map(async ({ userId: _, ...rest }) => ({
+				...rest,
+				parts: await hydrateStoredFileParts(ctx, rest.parts),
+			})),
+		);
 	},
 });
 
@@ -56,9 +111,12 @@ export const getSharedChatMessages = query({
 
 		return {
 			sharedChat,
-			messages: messages.map(({ userId: _, ...rest }) => ({
-				...rest,
-			})),
+			messages: await Promise.all(
+				messages.map(async ({ userId: _, ...rest }) => ({
+					...rest,
+					parts: await hydrateStoredFileParts(ctx, rest.parts),
+				})),
+			),
 			parentChatTitle: parentChat?.title,
 		};
 	},
@@ -76,6 +134,36 @@ export const createMessage = mutation({
 	},
 	handler: async (ctx, args) => {
 		const userId = await getAuthUserIdOrThrow(ctx);
+		let parsedParts: unknown;
+		try {
+			parsedParts = JSON.parse(args.messageBody.parts);
+		} catch {
+			parsedParts = null;
+		}
+
+		if (Array.isArray(parsedParts)) {
+			for (const part of parsedParts) {
+				const storageId = part?.providerMetadata?.convex?.storageId;
+				if (typeof storageId !== "string") {
+					continue;
+				}
+
+				// Record attachment ownership once so URL lookups can authorize by storageId.
+				const existingFile = await ctx.db
+					.query("uploadedFiles")
+					.withIndex("by_storage_id", (q) =>
+						q.eq("storageId", storageId as Id<"_storage">),
+					)
+					.first();
+
+				if (!existingFile) {
+					await ctx.db.insert("uploadedFiles", {
+						userId,
+						storageId: storageId as Id<"_storage">,
+					});
+				}
+			}
+		}
 
 		await ctx.db.insert("messages", {
 			sourceMessageId: args.messageBody.sourceMessageId,

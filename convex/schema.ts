@@ -66,4 +66,12 @@ export default defineSchema({
 	})
 		.index("by_user", ["userId"])
 		.index("by_storage_id", ["storageId"]),
+
+	// Ownership map for non-image files uploaded in prompts.
+	uploadedFiles: defineTable({
+		userId: v.id("users"),
+		storageId: v.id("_storage"),
+	})
+		.index("by_user", ["userId"])
+		.index("by_storage_id", ["storageId"]),
 });

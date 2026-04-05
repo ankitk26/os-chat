@@ -1,59 +1,40 @@
-import {
-	GlobeIcon,
-	PaperPlaneRightIcon,
-	StopIcon,
-} from "@phosphor-icons/react";
-import { useHotkey } from "@tanstack/react-hotkeys";
+import { PaperPlaneRightIcon, StopIcon } from "@phosphor-icons/react";
 import type { ChatStatus } from "ai";
-import { cn } from "~/lib/utils";
-import { modelStoreActions, useModelStore } from "~/stores/model-store";
-import { usePersistedApiKeysStore } from "~/stores/persisted-api-keys-store";
+import InputUploadButton from "./input-upload-button";
 import ModelSelector from "./model-selector";
 import { Button } from "./ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import WebSearchButton from "./web-search-button";
 
 type Props = {
+	attachmentCount?: number;
+	disabled?: boolean;
+	isUploading?: boolean;
+	onAttachClick?: () => void;
 	status: ChatStatus;
 	stop: () => void;
 };
 
-export default function PromptActions({ status, stop }: Props) {
-	const isWebSearchEnabled = useModelStore((store) => store.isWebSearchEnabled);
-	const selectedModel = useModelStore((store) => store.selectedModel);
-	const persistedUseOpenRouter = usePersistedApiKeysStore(
-		(store) => store.persistedUseOpenRouter,
-	);
-
-	useHotkey("Mod+Shift+S", modelStoreActions.toggleIsWebSearch);
-
+export default function PromptActions({
+	attachmentCount = 0,
+	disabled = false,
+	isUploading = false,
+	onAttachClick,
+	status,
+	stop,
+}: Props) {
 	return (
 		<div className="mt-3 flex flex-row items-center justify-between gap-2 lg:mt-4">
 			<div className="flex flex-1 flex-wrap items-center gap-2">
 				<ModelSelector />
 
-				{(selectedModel.openRouterModelId.startsWith("google") ||
-					persistedUseOpenRouter) && (
-					<Tooltip>
-						<TooltipTrigger
-							render={
-								<Button
-									className={cn(
-										"transition-all duration-300 ease-out",
-										isWebSearchEnabled ? "border-primary" : "border-border",
-									)}
-									onClick={modelStoreActions.toggleIsWebSearch}
-									type="button"
-									variant={isWebSearchEnabled ? "default" : "outline"}
-								>
-									<GlobeIcon />
-									<span className="hidden sm:inline">Search</span>
-									<span className="sm:hidden">Web</span>
-								</Button>
-							}
-						/>
-						<TooltipContent>Ctrl+Shift+S</TooltipContent>
-					</Tooltip>
-				)}
+				<WebSearchButton />
+
+				<InputUploadButton
+					attachmentCount={attachmentCount}
+					disabled={disabled}
+					isUploading={isUploading}
+					onAttachClick={onAttachClick}
+				/>
 			</div>
 
 			{status === "streaming" || status === "submitted" ? (

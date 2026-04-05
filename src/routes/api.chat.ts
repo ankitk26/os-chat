@@ -10,7 +10,7 @@ import type { FileUIPart, UIMessagePart, UIDataTypes, UITools } from "ai";
 import { api } from "convex/_generated/api";
 import { defaultSelectedModel } from "~/constants/model-providers";
 import { systemMessage } from "~/constants/system-message";
-import { fetchAuthMutation, fetchAuthQuery } from "~/lib/auth-server";
+import { fetchAuthMutation } from "~/lib/auth-server";
 import { generateRandomUUID } from "~/lib/generate-random-uuid";
 import { createMessageServerFn } from "~/server-fns/create-message";
 import { getAuthUser } from "~/server-fns/get-auth";
@@ -102,7 +102,10 @@ const uploadImage = async (part: FileUIPart) => {
 	if (!result.ok) throw new Error(`Upload failed: ${result.status}`);
 
 	const { storageId } = await result.json();
-	const imageUrl = await fetchAuthQuery(api.files.getImageUrl, { storageId });
+	// This stores ownership and returns the URL in one authenticated mutation.
+	const imageUrl = await fetchAuthMutation(api.imageGenerations.create, {
+		storageId,
+	});
 
 	return { storageId, imageUrl };
 };
@@ -162,16 +165,8 @@ const processMessageParts = async (
 					if (!uploadedImage) {
 						return null;
 					}
-					const { imageUrl, storageId } = uploadedImage;
+					const { imageUrl } = uploadedImage;
 					if (imageUrl) {
-						try {
-							await fetchAuthMutation(api.imageGenerations.create, {
-								generatedImageUrl: imageUrl,
-								storageId,
-							});
-						} catch (galleryError) {
-							console.error("Failed to save to gallery:", galleryError);
-						}
 						return { ...part, url: imageUrl };
 					}
 				} catch (error) {
@@ -189,6 +184,54 @@ const processMessageParts = async (
 
 	return { partsToSave };
 };
+
+const getTextAttachmentPromptPart = (part: FileUIPart) => {
+	const textContent = part.providerMetadata?.baychat?.textContent;
+	if (typeof textContent !== "string" || textContent.trim() === "") {
+		return null;
+	}
+
+	return {
+		type: "text" as const,
+		text: `Attached file: ${part.filename ?? "untitled"}\n\n${textContent}`,
+	};
+};
+
+const transformMessagesForModel = (
+	messages: CustomUIMessage[],
+): CustomUIMessage[] =>
+	messages.map((message) => {
+		if (message.role !== "user") {
+			return message;
+		}
+
+		const transformedParts: CustomUIMessage["parts"] = [];
+
+		for (const part of message.parts) {
+			if (part.type !== "file") {
+				transformedParts.push(part);
+				continue;
+			}
+
+			const mediaType =
+				typeof part.mediaType === "string" ? part.mediaType : "";
+			// Treat malformed file parts as non-media instead of crashing.
+			if (mediaType.startsWith("image/") || mediaType === "application/pdf") {
+				transformedParts.push(part);
+				continue;
+			}
+
+			const textPart = getTextAttachmentPromptPart(part);
+			if (textPart) {
+				transformedParts.push(textPart);
+			}
+		}
+
+		return {
+			...message,
+			parts: transformedParts,
+		};
+	});
 
 type ChatRequestBody = {
 	messages: CustomUIMessage[];
@@ -228,7 +271,9 @@ export const Route = createFileRoute("/api/chat")({
 				const result = streamText({
 					model: modelToUse,
 					system: systemMessage,
-					messages: await convertToModelMessages(messages),
+					messages: await convertToModelMessages(
+						transformMessagesForModel(messages),
+					),
 					temperature: 0.7,
 					experimental_transform: smoothStream({ chunking: "line" }),
 					abortSignal: request.signal,
