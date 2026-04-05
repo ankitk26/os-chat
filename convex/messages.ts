@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { MessageMetadata } from "~/types";
 import { internal } from "./_generated/api";
+import { Id } from "./_generated/dataModel";
 import {
 	type QueryCtx,
 	internalMutation,
@@ -38,7 +39,7 @@ const hydrateStoredFileParts = async (ctx: QueryCtx, parts: string) => {
 				return part;
 			}
 
-			const freshUrl = await ctx.storage.getUrl(storageId as any);
+			const freshUrl = await ctx.storage.getUrl(storageId as Id<"_storage">);
 			if (!freshUrl) {
 				return part;
 			}
@@ -151,14 +152,14 @@ export const createMessage = mutation({
 				const existingFile = await ctx.db
 					.query("uploadedFiles")
 					.withIndex("by_storage_id", (q) =>
-						q.eq("storageId", storageId as any),
+						q.eq("storageId", storageId as Id<"_storage">),
 					)
 					.first();
 
 				if (!existingFile) {
 					await ctx.db.insert("uploadedFiles", {
 						userId,
-						storageId: storageId as any,
+						storageId: storageId as Id<"_storage">,
 					});
 				}
 			}
