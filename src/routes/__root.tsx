@@ -163,7 +163,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 					<TooltipProvider delay={0}>
 						<ChatProvider>
 							<div>{children}</div>
-							<Toaster duration={800} style={{ fontFamily: "inherit" }} />
+							<Toaster style={{ fontFamily: "inherit" }} />
 							{/*<ReactQueryDevtools />*/}
 							<Scripts />
 						</ChatProvider>
