@@ -14,7 +14,7 @@ import {
 
 type AttachmentPart = FileUIPart & { size?: number };
 
-const isDirectBrowserUrl = (value: string) => {
+const isSafeBrowserUrl = (value: string) => {
 	try {
 		const url = new URL(value);
 		return (
@@ -40,6 +40,10 @@ export default function PdfAttachmentPreview({
 	label: string;
 	onRemove?: (index: number) => void;
 }) {
+	const inlinePdfUrl = isSafeBrowserUrl(attachment.url)
+		? attachment.url
+		: "about:blank";
+
 	const handleOpenInNewTab = async () => {
 		const newTab = window.open("", "_blank");
 
@@ -56,11 +60,15 @@ export default function PdfAttachmentPreview({
 				const response = await fetch(pdfUrl);
 				const pdfBlob = await response.blob();
 				pdfUrl = URL.createObjectURL(pdfBlob);
-			} else if (!isDirectBrowserUrl(pdfUrl) && typeof storageId === "string") {
+			} else if (!isSafeBrowserUrl(pdfUrl) && typeof storageId === "string") {
 				const freshUrl = await getFileUrl({ data: { storageId } });
 				if (typeof freshUrl === "string" && freshUrl.trim() !== "") {
 					pdfUrl = freshUrl;
 				}
+			}
+
+			if (!isSafeBrowserUrl(pdfUrl)) {
+				throw new Error("Invalid PDF URL");
 			}
 
 			newTab.location.replace(pdfUrl);
@@ -151,7 +159,7 @@ export default function PdfAttachmentPreview({
 				<div className="min-h-0 flex-1 px-5 pb-5">
 					<iframe
 						className="h-full min-h-0 w-full rounded-2xl border border-border/70 bg-background shadow-xs"
-						src={attachment.url}
+						src={inlinePdfUrl}
 						title={label}
 					/>
 				</div>
