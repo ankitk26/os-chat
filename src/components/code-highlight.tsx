@@ -93,7 +93,7 @@ export default function CodeHighlight({
 					delay={150}
 					language={language}
 					showLanguage={false}
-					theme={theme === "light" ? "github-light" : "vesper"}
+					theme={theme === "light" ? "vitesse-light" : "vesper"}
 				>
 					{codeContent}
 				</ShikiHighlighter>
