@@ -1,0 +1,121 @@
+import { ArrowSquareOutIcon, FilePdfIcon, XIcon } from "@phosphor-icons/react";
+import type { FileUIPart } from "ai";
+import { Button } from "./ui/button";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "./ui/dialog";
+
+type AttachmentPart = FileUIPart & { size?: number };
+
+export default function PdfAttachmentPreview({
+	attachment,
+	fileSize,
+	index,
+	label,
+	onRemove,
+}: {
+	attachment: AttachmentPart;
+	fileSize: string | null;
+	index: number;
+	label: string;
+	onRemove?: (index: number) => void;
+}) {
+	return (
+		<Dialog>
+			<div className="relative flex min-h-20 items-center gap-3 rounded-2xl border border-border/70 bg-linear-to-br from-muted/55 to-muted/15 px-3 py-3 shadow-sm">
+				<DialogTrigger
+					render={
+						<button
+							type="button"
+							className="flex w-full min-w-0 cursor-pointer items-center gap-3 rounded-[inherit] text-left outline-none focus:outline-none"
+						>
+							<div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border/70 bg-background/80">
+								<FilePdfIcon className="text-muted-foreground" />
+							</div>
+							<div className="min-w-0 flex-1">
+								<div className="truncate text-xs font-medium">{label}</div>
+								<div className="mt-1 flex items-center gap-2 text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
+									<span>PDF</span>
+									{fileSize && <span>{fileSize}</span>}
+								</div>
+							</div>
+						</button>
+					}
+				/>
+
+				{onRemove && (
+					<Button
+						aria-label={`Remove ${label}`}
+						className="absolute top-2 right-2 rounded-full"
+						onClick={(event) => {
+							event.stopPropagation();
+							onRemove(index);
+						}}
+						size="icon-xs"
+						type="button"
+						variant="ghost"
+					>
+						<XIcon />
+					</Button>
+				)}
+			</div>
+
+			<DialogContent
+				className="flex h-[82vh] max-h-[82vh] flex-col gap-0 overflow-hidden rounded-[2rem] p-0 sm:max-w-[min(92vw,1600px)]"
+				showCloseButton={false}
+			>
+				<DialogHeader className="flex-row items-start justify-between px-7 pt-7 pb-4">
+					<div className="min-w-0">
+						<DialogTitle className="truncate pr-4 text-[1.05rem] font-medium">
+							{label}
+						</DialogTitle>
+						<div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
+							<span>PDF document</span>
+							{fileSize && <span>{fileSize}</span>}
+						</div>
+					</div>
+
+					<div className="flex shrink-0 items-center gap-2">
+						<Button
+							aria-label={`Open ${label} in a new tab`}
+							onClick={() => {
+								window.open(attachment.url, "_blank", "noopener,noreferrer");
+							}}
+							size="icon-sm"
+							type="button"
+							variant="outline"
+						>
+							<ArrowSquareOutIcon />
+						</Button>
+
+						<DialogClose
+							render={
+								<Button
+									aria-label={`Close ${label}`}
+									size="icon-sm"
+									type="button"
+									variant="outline"
+								/>
+							}
+						>
+							<XIcon />
+						</DialogClose>
+					</div>
+				</DialogHeader>
+
+				<div className="min-h-0 flex-1 px-5 pb-5">
+					<iframe
+						className="h-full min-h-0 w-full rounded-2xl border border-border/70 bg-background shadow-xs"
+						src={attachment.url}
+						title={label}
+					/>
+				</div>
+			</DialogContent>
+		</Dialog>
+	);
+}

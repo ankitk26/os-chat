@@ -1,14 +1,8 @@
-import {
-	FileIcon,
-	FilePdfIcon,
-	FileTextIcon,
-	XIcon,
-} from "@phosphor-icons/react";
 import type { FileUIPart } from "ai";
 import { cn } from "~/lib/utils";
 import ImageAttachmentPreview from "./image-attachment-preview";
+import PdfAttachmentPreview from "./pdf-attachment-preview";
 import TextFileAttachmentPreview from "./text-file-attachment-preview";
-import { Button } from "./ui/button";
 
 type AttachmentPart = FileUIPart & { size?: number };
 
@@ -42,18 +36,6 @@ const formatFileSize = (size?: number) => {
 
 const getAttachmentLabel = (attachment: AttachmentPart) =>
 	attachment.filename?.trim() || "Untitled file";
-
-const getAttachmentTypeLabel = (attachment: AttachmentPart) => {
-	if (attachment.mediaType === "application/pdf") {
-		return "PDF";
-	}
-
-	if (attachment.mediaType.startsWith("text/")) {
-		return "TEXT";
-	}
-
-	return "FILE";
-};
 
 export default function FileAttachmentsPreview({
 	attachments,
@@ -97,39 +79,14 @@ export default function FileAttachmentsPreview({
 				}
 
 				return (
-					<div
-						className="relative flex min-h-20 items-center gap-3 rounded-2xl border border-border/70 bg-linear-to-br from-muted/55 to-muted/15 px-3 py-3 shadow-sm"
+					<PdfAttachmentPreview
+						attachment={attachment}
+						fileSize={fileSize}
+						index={index}
 						key={`${attachment.url}-${index}`}
-					>
-						<div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border/70 bg-background/80">
-							{attachment.mediaType.startsWith("text/") ? (
-								<FileTextIcon className="text-muted-foreground" />
-							) : attachment.mediaType === "application/pdf" ? (
-								<FilePdfIcon className="text-muted-foreground" />
-							) : (
-								<FileIcon className="text-muted-foreground" />
-							)}
-						</div>
-						<div className="min-w-0 flex-1">
-							<div className="truncate text-xs font-medium">{label}</div>
-							<div className="mt-1 flex items-center gap-2 text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
-								<span>{getAttachmentTypeLabel(attachment)}</span>
-								{fileSize && <span>{fileSize}</span>}
-							</div>
-						</div>
-						{onRemove && (
-							<Button
-								aria-label={`Remove ${label}`}
-								className="absolute top-2 right-2 rounded-full"
-								onClick={() => onRemove(index)}
-								size="icon-xs"
-								type="button"
-								variant="ghost"
-							>
-								<XIcon />
-							</Button>
-						)}
-					</div>
+						label={label}
+						onRemove={onRemove}
+					/>
 				);
 			})}
 		</div>
