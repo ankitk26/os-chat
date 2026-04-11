@@ -1,5 +1,7 @@
 import { ArrowSquareOutIcon, FilePdfIcon, XIcon } from "@phosphor-icons/react";
 import type { FileUIPart } from "ai";
+import { toast } from "sonner";
+import { getFileUrl } from "~/server-fns/get-file-url";
 import { Button } from "./ui/button";
 import {
 	Dialog,
@@ -25,6 +27,39 @@ export default function PdfAttachmentPreview({
 	label: string;
 	onRemove?: (index: number) => void;
 }) {
+	const handleOpenInNewTab = async () => {
+		const newTab = window.open("", "_blank");
+
+		if (!newTab) {
+			toast.error("Could not open PDF in a new tab");
+			return;
+		}
+
+		try {
+			const storageId = attachment.providerMetadata?.convex?.storageId;
+			let pdfUrl = attachment.url;
+
+			if (typeof storageId === "string") {
+				const freshUrl = await getFileUrl({ data: { storageId } });
+				if (typeof freshUrl === "string" && freshUrl.trim() !== "") {
+					pdfUrl = freshUrl;
+				}
+			}
+
+			if (pdfUrl.startsWith("data:")) {
+				const response = await fetch(pdfUrl);
+				const pdfBlob = await response.blob();
+				pdfUrl = URL.createObjectURL(pdfBlob);
+			}
+
+			newTab.location.replace(pdfUrl);
+		} catch (error) {
+			newTab.close();
+			console.error("Failed to open PDF in a new tab:", error);
+			toast.error("Could not open PDF in a new tab");
+		}
+	};
+
 	return (
 		<Dialog>
 			<div className="relative flex min-h-20 items-center gap-3 rounded-2xl border border-border/70 bg-linear-to-br from-muted/55 to-muted/15 px-3 py-3 shadow-sm">
@@ -74,18 +109,12 @@ export default function PdfAttachmentPreview({
 						<DialogTitle className="truncate pr-4 text-[1.05rem] font-medium">
 							{label}
 						</DialogTitle>
-						<div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
-							<span>PDF document</span>
-							{fileSize && <span>{fileSize}</span>}
-						</div>
 					</div>
 
 					<div className="flex shrink-0 items-center gap-2">
 						<Button
 							aria-label={`Open ${label} in a new tab`}
-							onClick={() => {
-								window.open(attachment.url, "_blank", "noopener,noreferrer");
-							}}
+							onClick={handleOpenInNewTab}
 							size="icon-sm"
 							type="button"
 							variant="outline"
