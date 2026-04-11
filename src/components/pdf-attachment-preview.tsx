@@ -14,6 +14,19 @@ import {
 
 type AttachmentPart = FileUIPart & { size?: number };
 
+const isDirectBrowserUrl = (value: string) => {
+	try {
+		const url = new URL(value);
+		return (
+			url.protocol === "http:" ||
+			url.protocol === "https:" ||
+			url.protocol === "blob:"
+		);
+	} catch {
+		return false;
+	}
+};
+
 export default function PdfAttachmentPreview({
 	attachment,
 	fileSize,
@@ -39,17 +52,15 @@ export default function PdfAttachmentPreview({
 			const storageId = attachment.providerMetadata?.convex?.storageId;
 			let pdfUrl = attachment.url;
 
-			if (typeof storageId === "string") {
-				const freshUrl = await getFileUrl({ data: { storageId } });
-				if (typeof freshUrl === "string" && freshUrl.trim() !== "") {
-					pdfUrl = freshUrl;
-				}
-			}
-
 			if (pdfUrl.startsWith("data:")) {
 				const response = await fetch(pdfUrl);
 				const pdfBlob = await response.blob();
 				pdfUrl = URL.createObjectURL(pdfBlob);
+			} else if (!isDirectBrowserUrl(pdfUrl) && typeof storageId === "string") {
+				const freshUrl = await getFileUrl({ data: { storageId } });
+				if (typeof freshUrl === "string" && freshUrl.trim() !== "") {
+					pdfUrl = freshUrl;
+				}
 			}
 
 			newTab.location.replace(pdfUrl);
