@@ -1,5 +1,5 @@
 - use bun for all script runs
 - never run build
-- use the Shadcn components without any major updates
+- use the Shadcn components without modifying them too much
 - do not run fmt or lint script after every single change
 - one tsx file should have only one component logic
